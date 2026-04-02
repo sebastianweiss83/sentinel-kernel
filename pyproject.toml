@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "sentinel-kernel"
 version = "0.1.0"
-description = "EU-sovereign AI decision middleware. Open source. Foundation governed."
+description = "EU-sovereign decision record layer for AI agents."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
@@ -42,9 +42,6 @@ opa = []  # Requires OPA binary: https://www.openpolicyagent.org/
 # PostgreSQL storage backend
 postgres = ["asyncpg>=0.29", "psycopg2-binary>=2.9"]
 
-# Cloudflare D1 storage backend
-cloudflare = ["httpx>=0.25"]
-
 # OpenTelemetry export
 otel = [
     "opentelemetry-api>=1.20",
@@ -62,8 +59,9 @@ dev = [
     "hatch>=1.9",
 ]
 
-[project.scripts]
-sentinel = "sentinel.cli:main"
+# CLI entry point — not yet implemented
+# [project.scripts]
+# sentinel = "sentinel.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/sebastianweiss83/sentinel-kernel"

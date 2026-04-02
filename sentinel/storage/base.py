@@ -2,7 +2,7 @@
 sentinel.storage.base
 ~~~~~~~~~~~~~~~~~~~~~
 Abstract base for all Sentinel storage backends.
-Swap SQLite for D1, Postgres, or filesystem with one line.
+Swap SQLite for Postgres or filesystem with one line.
 """
 
 from __future__ import annotations
