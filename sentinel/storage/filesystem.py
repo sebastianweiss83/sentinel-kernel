@@ -38,9 +38,8 @@ class FilesystemStorage(StorageBackend):
         storage = FilesystemStorage("/mnt/classified/traces/")
     """
 
-    def __init__(self, path: str | Path, rotate: str = "daily"):
+    def __init__(self, path: str | Path):
         self.base_path = Path(path)
-        self.rotate = rotate
 
     @property
     def backend_name(self) -> str:
@@ -118,6 +117,8 @@ class FilesystemStorage(StorageBackend):
 
         filename = index.get(trace_id)
         if not filename:
+            return None
+        if ".." in filename or filename.startswith("/"):
             return None
 
         file_path = self.base_path / filename

@@ -81,6 +81,8 @@ class LocalRegoEvaluator(PolicyEvaluator):
         import tempfile
 
         policy_file = Path(policy_path)
+        if ".." in policy_file.parts:
+            raise ValueError(f"Policy path must not contain '..': {policy_path}")
         if not policy_file.exists():
             raise FileNotFoundError(f"Policy not found: {policy_path}")
 
@@ -127,7 +129,7 @@ class LocalRegoEvaluator(PolicyEvaluator):
         """Use file modification time as version if no explicit version comment."""
         import hashlib
         content = path.read_bytes()
-        return hashlib.md5(content).hexdigest()[:8]
+        return hashlib.sha256(content).hexdigest()[:12]
 
 
 class SimpleRuleEvaluator(PolicyEvaluator):

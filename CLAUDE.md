@@ -26,8 +26,8 @@ Sentinel is the open, sovereign answer.
 Proprietary platforms are building developer ecosystems with SDKs,
 community registries, and framework connectors — all locked to their
 ontology and jurisdiction. Sentinel is the alternative: open, portable,
-sovereign. The v0.3 LangChain integration is the explicit open alternative
-to proprietary platform connectors.
+sovereign. The v0.3 LangChain integration meets developers where they are —
+automatic trace capture for the most widely-used agent framework.
 
 ## The three invariants
 

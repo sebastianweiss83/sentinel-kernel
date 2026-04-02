@@ -37,11 +37,9 @@ your agent logic.
 
 ### Priority integrations
 
-**LangChain (v0.3 target).** The LangChain integration is the explicit open,
-sovereign alternative to proprietary platform connectors that lock developers
-into US-jurisdicted runtimes. Developers currently using LangChain with
-proprietary platform connectors can switch to Sentinel's LangChain integration
-and retain their existing agent logic while gaining sovereign decision records.
+**LangChain (v0.3 target).** Automatic trace capture for LangChain agent
+workflows. Hooks into LangChain's callback system so every chain step
+produces a decision trace without requiring decorator changes to agent code.
 
 ### Writing an integration
 

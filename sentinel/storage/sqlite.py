@@ -169,15 +169,6 @@ class SQLiteStorage(StorageBackend):
             return None
         return DecisionTrace.from_dict(json.loads(row["payload"]))
 
-    def count(self, project: str | None = None) -> int:
-        conn = self._connection()
-        where = "WHERE project = ?" if project else ""
-        params = [project] if project else []
-        row = conn.execute(
-            f"SELECT COUNT(*) as n FROM decision_traces {where}", params
-        ).fetchone()
-        return row["n"]
-
     def close(self) -> None:
         if self._conn:
             self._conn.close()
