@@ -47,9 +47,7 @@ Sentinel is designed for deployments where the record of what an AI agent decide
 ## Quick start
 
 ```bash
-git clone https://github.com/sebastianweiss83/sentinel-kernel.git
-cd sentinel-kernel
-pip install -e .
+pip install sentinel-kernel
 ```
 
 ```python
