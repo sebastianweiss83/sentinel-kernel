@@ -12,7 +12,7 @@ Sentinel is in public alpha. The core interfaces are stabilising. The API will c
 - Public API may have breaking changes in any minor release before 1.0.
 - The trace schema is a draft. Fields may be added, renamed, or restructured following the RFC process.
 - Error handling is incomplete in some paths.
-- The test suite is in progress. Coverage targets are not yet met.
+- The test suite covers core paths (71 tests, 86% coverage). Edge cases and the OPA evaluator are not yet tested.
 - Documentation reflects intent and current behaviour, but gaps exist.
 
 ---
@@ -41,7 +41,7 @@ Sentinel is in public alpha. The core interfaces are stabilising. The API will c
 
 | Capability | Notes |
 |---|---|
-| CLI (`sentinel` command) | Declared in pyproject.toml, not implemented |
+| CLI (`sentinel` command) | Not implemented |
 | LangChain / LangGraph integration | Planned for v0.3 |
 | PostgreSQL storage backend | Planned for v0.2 |
 | OpenTelemetry export | Planned for v0.3 |
@@ -77,7 +77,7 @@ Changes to optional fields do not require an RFC. Changes to mandatory fields, f
 
 The alpha release is intended for evaluation, experimentation, and early feedback. Specifically:
 
-- The test suite is not complete. Untested edge cases exist.
+- The test suite covers core paths (71 tests, 86% coverage) but the OPA evaluator and some edge cases are untested.
 - Error handling in failure paths (storage unavailable, policy evaluator crash) has not been hardened.
 - The schema is a draft and will change before 1.0.
 - No security audit has been performed.
