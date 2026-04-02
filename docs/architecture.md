@@ -53,14 +53,14 @@ If a proposed feature is not directly in service of capturing a decision trace, 
 
 ## Policy evaluation contract
 
-A `PolicyEvaluator` receives the agent name, project, and a copy of the inputs. It returns a `PolicyEvaluation` with:
+A `PolicyEvaluator` receives a `policy_path`, the `inputs` dict, and the current `DecisionTrace`. It returns a `PolicyEvaluation` with:
 
 - `result` — ALLOW / DENY / EXCEPTION / NOT_EVALUATED
 - `rule_triggered` — which rule caused a DENY (required on DENY, null otherwise)
 - `rationale` — optional human-readable explanation
 - `policy_id` and `policy_version` — for audit provenance
 
-The evaluator must not modify inputs. It must not have side effects. It must return a result within a configurable timeout; a timeout is treated as NOT_EVALUATED with a warning, not a silent pass.
+The evaluator must not modify inputs. It must not have side effects.
 
 Three implementations ship with the kernel:
 
@@ -74,7 +74,7 @@ Three implementations ship with the kernel:
 
 ## Storage abstraction
 
-`StorageBackend` is an abstract interface with two methods: `write(trace)` and `query(**filters)`. No implementation is privileged.
+`StorageBackend` is an abstract class with four methods: `initialise()`, `save(trace)`, `query(project, agent, policy_result, limit, offset)`, and `get(trace_id)`. No implementation is privileged.
 
 Two implementations ship with the kernel:
 

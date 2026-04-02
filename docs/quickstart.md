@@ -9,16 +9,10 @@
 
 ## Install
 
-From PyPI (once published):
+From source (package not yet published to PyPI):
 
 ```bash
-pip install sentinel-kernel
-```
-
-From source:
-
-```bash
-git clone https://github.com/sentinel-kernel/sentinel-kernel.git
+git clone https://github.com/sebastianweiss83/sentinel-kernel.git
 cd sentinel-kernel
 pip install -e .
 ```
@@ -28,6 +22,7 @@ pip install -e .
 ## First trace
 
 ```python
+import asyncio
 from sentinel import Sentinel
 from sentinel.storage import SQLiteStorage
 
@@ -36,18 +31,19 @@ sentinel = Sentinel(
     storage=SQLiteStorage(":memory:"),
 )
 
-@sentinel.trace(agent="greet")
-def greet(name: str) -> dict:
+@sentinel.trace
+async def greet(name: str) -> dict:
     return {"message": f"Hello, {name}"}
 
-greet("Ada")
+async def main():
+    await greet(name="Ada")
+    traces = sentinel.query(project="my-project")
+    print(traces[0].to_json())
 
-traces = sentinel.query()
-for trace in traces:
-    print(trace.to_json())
+asyncio.run(main())
 ```
 
-Output (formatted for readability):
+Output (abbreviated):
 
 ```json
 {
@@ -62,9 +58,12 @@ Output (formatted for readability):
   "inputs": {"name": "Ada"},
   "output": {"message": "Hello, Ada"},
   "output_hash": "...",
-  "policy": {"result": "NOT_EVALUATED", ...},
-  "sovereignty": {"data_residency": "local", "storage_backend": "sqlite"},
-  ...
+  "model": {"provider": null, "name": null, "version": null, ...},
+  "policy": null,
+  "human_override": null,
+  "sovereignty": {"data_residency": "local", "sovereign_scope": "local", "storage_backend": "sqlite"},
+  "tags": {},
+  "precedent_trace_ids": []
 }
 ```
 
@@ -72,7 +71,7 @@ Output (formatted for readability):
 
 ## Offline-first
 
-Sentinel works with zero network access. No cloud account, no API key, no external service required. The SQLite and filesystem backends are implemented using Python's standard library only. This is intentional: the primary deployment target includes air-gapped and classified environments.
+Sentinel works with zero network access. No cloud account, no API key, no external service required. The SQLite and filesystem backends use only Python's standard library. This is intentional: the primary deployment target includes air-gapped and classified environments.
 
 ---
 
@@ -106,18 +105,20 @@ Good for: air-gapped systems, write-once audit storage, log aggregation pipeline
 
 ### Custom backend
 
-Implement the `StorageBackend` abstract interface to plug in any storage layer — PostgreSQL, S3-compatible object storage, an existing audit log system, or anything else:
+Implement the `StorageBackend` abstract class:
 
 ```python
-from sentinel.storage import StorageBackend
-from sentinel.models import DecisionTrace
+from sentinel.storage.base import StorageBackend
 
 class MyStorage(StorageBackend):
-    def write(self, trace: DecisionTrace) -> None:
-        ...
+    @property
+    def backend_name(self) -> str:
+        return "my-backend"
 
-    def query(self, **filters) -> list[DecisionTrace]:
-        ...
+    def initialise(self) -> None: ...
+    def save(self, trace) -> None: ...
+    def query(self, project=None, agent=None, policy_result=None, limit=100, offset=0): ...
+    def get(self, trace_id: str): ...
 ```
 
 Pass your implementation to `Sentinel(storage=MyStorage())`.
@@ -134,7 +135,7 @@ traces = sentinel.query(project="my-project")
 traces = sentinel.query(agent="approve_purchase_order")
 
 # Filter by policy result
-from sentinel.models import PolicyResult
+from sentinel import PolicyResult
 traces = sentinel.query(policy_result=PolicyResult.DENY)
 
 # Serialise a trace
@@ -150,29 +151,27 @@ print(trace.to_json())   # JSON string
 Policies evaluate before the decorated function executes. Use `SimpleRuleEvaluator` for Python callables:
 
 ```python
-from sentinel import Sentinel
+from sentinel import Sentinel, PolicyDeniedError
 from sentinel.storage import SQLiteStorage
 from sentinel.policy import SimpleRuleEvaluator
 
-def procurement_policy(inputs: dict) -> bool:
-    """Return True to ALLOW, False to DENY."""
-    return inputs.get("amount_eur", 0) <= 50_000
+def procurement_policy(inputs: dict) -> tuple[bool, str | None]:
+    """Return (True, None) to ALLOW, (False, "reason") to DENY."""
+    if inputs.get("amount_eur", 0) > 50_000:
+        return False, "exceeds_threshold"
+    return True, None
 
 sentinel = Sentinel(
     project="procurement-agent",
     storage=SQLiteStorage(":memory:"),
-    policy=SimpleRuleEvaluator(
-        policy_id="policies/procurement.py",
-        rule=procurement_policy,
-    ),
+    policy_evaluator=SimpleRuleEvaluator({
+        "policies/procurement": procurement_policy,
+    }),
 )
 
-@sentinel.trace(agent="approve_purchase_order")
-def approve(order_id: str, amount_eur: float) -> dict:
+@sentinel.trace(policy="policies/procurement")
+async def approve(order_id: str, amount_eur: float) -> dict:
     return {"decision": "approved"}
-
-approve(order_id="PO-2026-0042", amount_eur=48_500)   # ALLOW
-approve(order_id="PO-2026-0099", amount_eur=120_000)  # DENY — raises PolicyDeniedError
 ```
 
 ---
@@ -182,12 +181,10 @@ approve(order_id="PO-2026-0099", amount_eur=120_000)  # DENY — raises PolicyDe
 When a policy returns DENY, Sentinel raises `PolicyDeniedError` before the decorated function runs. The trace is still written to storage with `policy.result = "DENY"` and the rule that triggered it.
 
 ```python
-from sentinel.exceptions import PolicyDeniedError
-
 try:
-    approve(order_id="PO-2026-0099", amount_eur=120_000)
+    await approve(order_id="PO-2026-0099", amount_eur=120_000)
 except PolicyDeniedError as e:
-    print(e)  # Policy DENY: policies/procurement.py
+    print(e)  # includes trace ID and rule name
 
 # The DENY trace is stored and queryable
 denied = sentinel.query(policy_result=PolicyResult.DENY)

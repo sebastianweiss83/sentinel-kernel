@@ -1,6 +1,6 @@
 # Decision Trace Schema Reference
 
-**Schema version:** 0.1
+**Schema version:** 1.0.0 (draft)
 **Status:** Draft — subject to RFC process for breaking changes
 
 This document is the canonical reference for the Sentinel decision trace schema.
@@ -10,107 +10,160 @@ Every trace produced by the Sentinel kernel conforms to this specification.
 
 ## Overview
 
-A decision trace is a structured, immutable record of a single AI agent decision.
-Traces are append-only: once written, a trace is never modified. Corrections,
-overrides, and linked decisions are recorded as new trace entries referencing
-the original via `parent_trace_id`.
-
-Traces are serialised as JSON and exported as NDJSON (newline-delimited JSON).
-No binary formats. No proprietary encoding.
+A decision trace is a structured record of a single AI agent decision.
+Traces are serialised as JSON via `DecisionTrace.to_dict()` and exported
+as NDJSON (newline-delimited JSON) by `FilesystemStorage`.
 
 ---
 
-## Mandatory fields
+## Schema structure
 
-Every trace MUST contain the following fields. A trace missing any mandatory
-field is invalid and MUST be rejected by the storage backend.
+The `DecisionTrace.to_dict()` output has this shape:
 
-| Field | Type | Description | Constraints |
-|---|---|---|---|
-| `trace_id` | `string` | Unique identifier for this trace | Immutable after creation. ULID or UUID v4. |
-| `timestamp` | `string` | When the decision was made | ISO 8601 UTC. Always present. |
-| `latency_ms` | `integer` | Wall clock time of the full decision in milliseconds | Non-negative. |
-| `agent` | `string` | Name of the agent or decorated function | Non-empty string. |
-| `agent_version` | `string \| null` | Version of the agent | Null if version is not available. |
-| `model` | `string` | Model identifier (e.g. `mistral/mistral-large-2`) | Non-empty string. |
-| `model_version` | `string \| null` | Model version string | Null if version is not available. |
-| `policy` | `string` | Policy name or path evaluated | Non-empty string. |
-| `policy_version` | `string \| null` | Policy version | Null if policy is not versioned. |
-| `policy_result` | `string` | Result of policy evaluation | One of: `ALLOW`, `DENY`, `EXCEPTION_REQUIRED`. |
-| `policy_rule` | `string \| null` | The specific rule that triggered | Null only when `policy_result` is `ALLOW`. Required for `DENY` and `EXCEPTION_REQUIRED`. |
-| `inputs_hash` | `string` | SHA-256 hash of serialised inputs | Format: `sha256:<hex>`. Always present. |
-| `output` | `object` | The decision output | JSON-serialisable object. |
-| `sovereign_scope` | `string` | Sovereignty jurisdiction assertion | One of: `EU`, `LOCAL`, `CUSTOM`. |
-| `data_residency` | `string` | Where the trace is physically stored | Human-readable string (e.g. `on-premise-de`, `local`, `air-gapped`). |
-| `schema_version` | `string` | Schema version of this trace | Semver string (e.g. `0.1`). |
+```json
+{
+  "schema_version": "1.0.0",
+  "trace_id": "uuid-v4",
+  "parent_trace_id": "uuid-v4 | null",
+  "project": "string",
+  "agent": "string",
+  "started_at": "ISO 8601 UTC",
+  "completed_at": "ISO 8601 UTC | null",
+  "latency_ms": "integer | null",
+  "inputs_hash": "sha256-hex (64 chars)",
+  "inputs": "object (omitted if store_inputs=False)",
+  "output": "object",
+  "output_hash": "sha256-hex (64 chars)",
+  "model": {
+    "provider": "string | null",
+    "name": "string | null",
+    "version": "string | null",
+    "tokens_input": "integer | null",
+    "tokens_output": "integer | null"
+  },
+  "policy": {
+    "policy_id": "string",
+    "policy_version": "string",
+    "result": "ALLOW | DENY | EXCEPTION | NOT_EVALUATED",
+    "rule_triggered": "string | null",
+    "rationale": "string | null",
+    "evaluated_at": "ISO 8601 UTC",
+    "evaluator": "string"
+  },
+  "human_override": {
+    "override_id": "uuid-v4",
+    "approver_id": "string",
+    "approver_role": "string",
+    "justification": "string",
+    "approved_at": "ISO 8601 UTC"
+  },
+  "sovereignty": {
+    "data_residency": "local | EU | EU-DE | EU-FR | air-gapped",
+    "sovereign_scope": "string",
+    "storage_backend": "string"
+  },
+  "tags": "object<string, string>",
+  "precedent_trace_ids": "string[]"
+}
+```
+
+Notes:
+- `policy` is `null` when no policy evaluator is configured (the default `NullPolicyEvaluator` still produces a `PolicyEvaluation` with `result: NOT_EVALUATED` when a policy path is specified via the decorator).
+- `human_override` is `null` unless `add_override()` is called on the trace.
+- `model` fields are `null` unless explicitly set — Sentinel does not auto-detect which model was called.
 
 ---
 
-## Optional fields
-
-Optional fields MAY be present. Adding new optional fields does not require an RFC.
+## Top-level fields
 
 | Field | Type | Description |
 |---|---|---|
-| `parent_trace_id` | `string \| null` | Links this trace to a parent (e.g. for overrides or nested decisions). Null if top-level. |
-| `inputs_raw` | `object \| null` | Raw input data. **Opt-in only.** Never included by default. Must be explicitly enabled. May contain PII — handle accordingly. |
-| `override_by` | `string \| null` | Identity of the person who overrode the policy decision. Null if no override. |
-| `override_reason` | `string \| null` | Justification for the override. Null if no override. |
-| `override_at` | `string \| null` | ISO 8601 UTC timestamp of the override. Null if no override. |
-| `tags` | `object` | Key-value metadata tags. |
-| `precedent_trace_ids` | `string[]` | References to prior traces that informed this decision. |
+| `schema_version` | `string` | Always `"1.0.0"` in this release. |
+| `trace_id` | `string` | UUID v4, generated at trace creation. Unique per trace. |
+| `parent_trace_id` | `string \| null` | Links to a parent trace (for overrides or chained decisions). |
+| `project` | `string` | Project name, set at `Sentinel` initialisation. Default: `"default"`. |
+| `agent` | `string` | Name of the decorated function (from `__qualname__`), or the `agent_name` kwarg. |
+| `started_at` | `string` | ISO 8601 UTC timestamp when the trace was created. |
+| `completed_at` | `string \| null` | ISO 8601 UTC timestamp when `complete()` was called. `null` if trace is incomplete. |
+| `latency_ms` | `integer \| null` | Wall clock milliseconds for the wrapped function execution. |
+| `inputs_hash` | `string` | SHA-256 hex digest of the JSON-serialised inputs. Always computed when inputs are present. |
+| `inputs` | `object` | The captured function arguments. Empty `{}` if `store_inputs=False`. |
+| `output` | `object` | The function return value (must be a dict, or wrapped as `{"result": repr(value)}`). |
+| `output_hash` | `string` | SHA-256 hex digest of the JSON-serialised output. |
+| `tags` | `object` | User-provided key-value metadata, set via `@sentinel.trace(tags={...})`. |
+| `precedent_trace_ids` | `string[]` | References to prior traces that informed this decision. Set via `link_precedent()`. |
 
 ---
 
-## Override semantics
+## `model` object
 
-When a human overrides a policy decision:
+| Field | Type | Description |
+|---|---|---|
+| `provider` | `string \| null` | Model provider identifier. Must be set explicitly. |
+| `name` | `string \| null` | Model name. Must be set explicitly. |
+| `version` | `string \| null` | Model version string. |
+| `tokens_input` | `integer \| null` | Input token count, if available. |
+| `tokens_output` | `integer \| null` | Output token count, if available. |
 
-1. The original trace is **never modified**.
-2. A new trace entry is created with:
-   - `parent_trace_id` set to the original `trace_id`
-   - `override_by`, `override_reason`, and `override_at` populated
-   - Its own unique `trace_id`
-3. The override trace records the final policy result after human intervention.
-
-This produces an immutable, linked chain that satisfies EU AI Act Article 14
-(human oversight) requirements.
+These fields are `null` by default. Sentinel does not auto-detect model metadata. Future framework integrations may populate these automatically.
 
 ---
 
-## Immutability constraint
+## `policy` object
 
-**A trace is permanent once written.**
+Present when a `PolicyEvaluator` produces a `PolicyEvaluation`. `null` when no policy path is specified in the decorator and no evaluator is configured.
 
-- No field may be modified after the trace is persisted.
-- Storage backends MUST NOT expose update or delete operations on traces.
-- Corrections are new entries referencing the original via `parent_trace_id`.
-- This constraint is a legal requirement for EU AI Act Article 12 compliance
-  and a prerequisite for BSI IT-Grundschutz certification.
+| Field | Type | Description |
+|---|---|---|
+| `policy_id` | `string` | The policy path passed to `@sentinel.trace(policy="...")`. |
+| `policy_version` | `string` | Version string from the evaluator (e.g. `"python-callable"`, `"null"`, or a hash). |
+| `result` | `string` | One of: `ALLOW`, `DENY`, `EXCEPTION`, `NOT_EVALUATED`. |
+| `rule_triggered` | `string \| null` | Which rule caused a DENY. `null` on ALLOW or NOT_EVALUATED. |
+| `rationale` | `string \| null` | Human-readable explanation from the evaluator. |
+| `evaluated_at` | `string` | ISO 8601 UTC timestamp of evaluation. |
+| `evaluator` | `string` | Identifier of the evaluator implementation (e.g. `"sentinel-opa"`, `"sentinel-simple"`). |
+
+---
+
+## `human_override` object
+
+Present when `trace.add_override(HumanOverride(...))` is called. `null` otherwise.
+
+| Field | Type | Description |
+|---|---|---|
+| `override_id` | `string` | UUID v4, auto-generated. |
+| `approver_id` | `string` | Identity of the approver. Required. |
+| `approver_role` | `string` | Role of the approver. Required. |
+| `justification` | `string` | Reason for the override. Required. |
+| `approved_at` | `string` | ISO 8601 UTC timestamp. |
+
+---
+
+## `sovereignty` object
+
+| Field | Type | Description |
+|---|---|---|
+| `data_residency` | `string` | Value of the `DataResidency` enum: `local`, `EU`, `EU-DE`, `EU-FR`, or `air-gapped`. |
+| `sovereign_scope` | `string` | Free-text sovereignty scope, set at `Sentinel` initialisation. Default: `"local"`. |
+| `storage_backend` | `string` | Name of the storage backend (e.g. `"sqlite"`, `"filesystem"`). |
+
+---
+
+## Hashing
+
+- `inputs_hash` and `output_hash` are SHA-256 hex digests (64 characters).
+- Computed over `json.dumps(data, sort_keys=True, default=str)`.
+- No `sha256:` prefix in the current implementation — the field contains the raw hex string.
+- Hashing is automatic when inputs or output are set.
 
 ---
 
 ## Serialisation
 
-- **Internal:** JSON objects
-- **Export:** NDJSON (one JSON object per line, newline-terminated)
+- **In-memory:** `DecisionTrace` Python dataclass
+- **JSON:** `trace.to_dict()` returns a Python dict; `trace.to_json()` returns formatted JSON
+- **Export:** `FilesystemStorage` writes NDJSON (one JSON object per line)
 - **Encoding:** UTF-8
-- **No binary formats.** No proprietary encoding. No compression in the
-  canonical format (compression may be applied at the transport or storage layer).
-
----
-
-## Validation rules
-
-A compliant storage backend MUST validate the following before accepting a trace:
-
-1. `trace_id` is present and unique within the storage scope.
-2. `timestamp` is a valid ISO 8601 UTC string.
-3. `policy_result` is one of the three allowed values.
-4. `policy_rule` is non-null when `policy_result` is `DENY` or `EXCEPTION_REQUIRED`.
-5. `inputs_hash` matches the format `sha256:<64 hex characters>`.
-6. `sovereign_scope` is one of: `EU`, `LOCAL`, `CUSTOM`.
-7. `schema_version` is present.
 
 ---
 
@@ -126,14 +179,22 @@ can always be interpreted according to the schema version they declare.
 
 ---
 
+## Known limitations (v0.1.0)
+
+- `DecisionTrace.from_dict()` does not reconstruct `policy_evaluation` from the stored `policy` key. The data is persisted correctly, but deserialised traces have `policy_evaluation = None`. This will be fixed before v0.2.
+- `SQLiteStorage.save()` uses `INSERT OR REPLACE`, meaning a trace with a duplicate `trace_id` will overwrite the previous entry. Append-only enforcement is planned.
+- `model` fields must be set manually. No auto-detection from framework integrations exists yet.
+
+---
+
 ## EU AI Act field mapping
 
 | EU AI Act requirement | Satisfied by |
 |---|---|
-| Art. 12(1) — Automatic logging | `trace_id`, `timestamp`, `agent`, `model`, `policy_result` |
-| Art. 12(2) — Risk identification | `policy_result`, `policy_rule`, queryable traces |
-| Art. 13 — Transparency | `policy`, `policy_version`, `model`, `model_version` |
-| Art. 14 — Human oversight | `override_by`, `override_reason`, `parent_trace_id` |
-| Art. 17 — Quality management | Full trace chain, `schema_version`, append-only storage |
+| Art. 12(1) — Automatic logging | `trace_id`, `started_at`, `agent`, `model`, `policy.result` |
+| Art. 12(2) — Risk identification | `policy.result`, `policy.rule_triggered`, queryable traces |
+| Art. 13 — Transparency | `policy.policy_id`, `policy.policy_version`, `model` |
+| Art. 14 — Human oversight | `human_override`, `parent_trace_id` |
+| Art. 17 — Quality management | Full trace chain, `schema_version`, storage persistence |
 
 See [`eu-ai-act.md`](eu-ai-act.md) for the complete compliance mapping.

@@ -86,8 +86,7 @@ Significant changes to the following require an RFC before implementation:
 
 ### How to open an RFC
 
-1. Create a document at `docs/rfcs/RFC-[NNN]-[title].md` using the template
-   in `.claude/commands/rfc.md`
+1. Create a document at `docs/rfcs/RFC-[NNN]-[title].md`
 2. Open a GitHub Discussion linking your RFC
 3. A 14-day comment period follows
 4. Maintainers vote to accept or reject

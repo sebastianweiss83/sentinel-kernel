@@ -2,7 +2,7 @@
 
 **The EU-sovereign decision record layer for AI agents.**
 
-Sentinel wraps agent execution, evaluates policy rules in-process, and writes tamper-resistant decision traces to local storage. It runs fully offline, has zero hard dependencies, and does not communicate with any external service. You own your data.
+Sentinel wraps agent execution, evaluates policy rules in-process, and writes structured decision traces to local storage. It runs fully offline, has zero hard dependencies, and does not communicate with any external service. You own your data.
 
 > **Status: Alpha.** Core trace schema and storage interfaces are stabilising. Not yet production-ready. API may change.
 
@@ -17,7 +17,7 @@ Sentinel wraps agent execution, evaluates policy rules in-process, and writes ta
 
 - Wraps agent function calls with a thin decorator — sync and async — without modifying agent logic
 - Evaluates policy rules in-process before execution, producing a structured `PolicyResult` per call
-- Records immutable, SHA-256-hashed decision traces capturing inputs, outputs, policy evaluation, latency, and data residency metadata
+- Records structured, SHA-256-hashed decision traces capturing inputs, outputs, policy evaluation, latency, and data residency metadata
 - Works fully offline and in air-gapped environments — no network calls, no external dependencies
 - Ships with pluggable storage: SQLite for structured querying, filesystem NDJSON for append-only log pipelines, or a custom backend via the `StorageBackend` interface
 - Has no dependency on any cloud provider, model vendor, or hosted control plane
@@ -36,7 +36,7 @@ Sentinel wraps agent execution, evaluates policy rules in-process, and writes ta
 
 ## Why it exists
 
-The EU AI Act (Regulation 2024/1689) requires operators of high-risk AI systems to maintain tamper-resistant logs of automated decisions, with records sufficient to reconstruct what happened and why. Article 12 obligations apply from 2 August 2026. Most existing logging approaches — cloud-hosted observability platforms, LLM gateway logs, third-party audit services — place decision records under foreign jurisdiction or create dependencies that conflict with data sovereignty requirements.
+The EU AI Act (Regulation 2024/1689) requires operators of high-risk AI systems to maintain logs of automated decisions, with records sufficient to reconstruct what happened and why. Article 12 obligations apply from 2 August 2026. Most existing logging approaches — cloud-hosted observability platforms, LLM gateway logs, third-party audit services — place decision records under foreign jurisdiction or create dependencies that conflict with data sovereignty requirements.
 
 The US CLOUD Act means US-headquartered providers can be compelled to disclose data stored anywhere in the world. For AI systems deployed in regulated EU sectors — financial services, healthcare, critical infrastructure, public administration — this creates jurisdictional risk that cannot be mitigated by contractual means alone.
 
@@ -47,7 +47,8 @@ Sentinel is designed for deployments where the record of what an AI agent decide
 ## Quick start
 
 ```bash
-pip install sentinel-kernel
+pip install sentinel-kernel          # once published
+pip install -e .                     # from source (current)
 ```
 
 ```python
@@ -83,7 +84,7 @@ Example trace output:
   "started_at": "2026-04-02T09:14:32.104Z",
   "completed_at": "2026-04-02T09:14:32.107Z",
   "latency_ms": 3,
-  "inputs_hash": "sha256:a4c2e1f8b3d7...",
+  "inputs_hash": "a4c2e1f8b3d790ef12c4a5b6d7e8f901...",
   "inputs": {
     "deal_id": "deal-42",
     "amount": 5000.0
@@ -92,7 +93,7 @@ Example trace output:
     "decision": "approve",
     "amount": 5000.0
   },
-  "output_hash": "sha256:f7b1d3c9a2e4...",
+  "output_hash": "f7b1d3c9a2e4561b8c0d3e2f1a4b5c6d...",
   "model": {
     "provider": null,
     "name": null,
