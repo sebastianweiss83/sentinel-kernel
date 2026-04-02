@@ -45,7 +45,6 @@ Sentinel is in public alpha. The core interfaces are stabilising. The API will c
 | LangChain / LangGraph integration | Planned for v0.3 |
 | PostgreSQL storage backend | Planned for v0.2 |
 | OpenTelemetry export | Planned for v0.3 |
-| Comprehensive test suite | In progress; coverage targets not yet met |
 | `SovereigntyViolationError` enforcement | Planned for v0.3 |
 | Schema migration tooling | Planned before v1.0 |
 

@@ -88,7 +88,7 @@ class SQLiteStorage(StorageBackend):
 
         conn.execute(
             """
-            INSERT OR REPLACE INTO decision_traces
+            INSERT INTO decision_traces
                 (trace_id, parent_trace_id, project, agent, started_at,
                  completed_at, latency_ms, inputs_hash, output_hash,
                  model_provider, model_name, policy_result,

@@ -230,4 +230,26 @@ class DecisionTrace:
             trace.sovereign_scope = sov.get("sovereign_scope", "local")
             trace.storage_backend = sov.get("storage_backend", "sqlite")
 
+        if policy := data.get("policy"):
+            trace.policy_evaluation = PolicyEvaluation(
+                policy_id=policy.get("policy_id", ""),
+                policy_version=policy.get("policy_version", ""),
+                result=PolicyResult(policy.get("result", "NOT_EVALUATED")),
+                rule_triggered=policy.get("rule_triggered"),
+                rationale=policy.get("rationale"),
+                evaluator=policy.get("evaluator", "unknown"),
+            )
+            if evaluated_at := policy.get("evaluated_at"):
+                trace.policy_evaluation.evaluated_at = datetime.fromisoformat(evaluated_at)
+
+        if override := data.get("human_override"):
+            trace.human_override = HumanOverride(
+                approver_id=override.get("approver_id", ""),
+                approver_role=override.get("approver_role", ""),
+                justification=override.get("justification", ""),
+                override_id=override.get("override_id", str(uuid.uuid4())),
+            )
+            if approved_at := override.get("approved_at"):
+                trace.human_override.approved_at = datetime.fromisoformat(approved_at)
+
         return trace

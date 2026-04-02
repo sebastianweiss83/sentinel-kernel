@@ -2,7 +2,7 @@
 
 **The EU-sovereign decision record layer for AI agents.**
 
-Sentinel wraps agent execution, evaluates policy rules in-process, and writes structured decision traces to local storage. It runs fully offline, has zero hard dependencies, and does not communicate with any external service. You own your data.
+Sentinel wraps agent execution, evaluates policy rules in-process, and writes append-only decision traces to local storage. It runs fully offline, has zero hard dependencies, and does not communicate with any external service. You own your data.
 
 > **Status: Alpha.** Core trace schema and storage interfaces are stabilising. Not yet production-ready. API may change.
 
@@ -47,8 +47,9 @@ Sentinel is designed for deployments where the record of what an AI agent decide
 ## Quick start
 
 ```bash
-pip install sentinel-kernel          # once published
-pip install -e .                     # from source (current)
+git clone https://github.com/sebastianweiss83/sentinel-kernel.git
+cd sentinel-kernel
+pip install -e .
 ```
 
 ```python
@@ -168,7 +169,7 @@ Your agent function
 | LangChain integration | Planned (v0.3) |
 | PostgreSQL storage | Planned |
 | CLI (`sentinel` command) | Declared, not yet implemented |
-| Test suite | In progress |
+| Test suite | 55 tests, 81% coverage |
 | BSI IT-Grundschutz assessment | Planned (v1.0) |
 
 ---

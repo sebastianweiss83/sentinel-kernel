@@ -181,9 +181,8 @@ can always be interpreted according to the schema version they declare.
 
 ## Known limitations (v0.1.0)
 
-- `DecisionTrace.from_dict()` does not reconstruct `policy_evaluation` from the stored `policy` key. The data is persisted correctly, but deserialised traces have `policy_evaluation = None`. This will be fixed before v0.2.
-- `SQLiteStorage.save()` uses `INSERT OR REPLACE`, meaning a trace with a duplicate `trace_id` will overwrite the previous entry. Append-only enforcement is planned.
 - `model` fields must be set manually. No auto-detection from framework integrations exists yet.
+- `FilesystemStorage` does not enforce uniqueness on `trace_id` — duplicate writes append a second line. Deduplication is the caller's responsibility.
 
 ---
 
