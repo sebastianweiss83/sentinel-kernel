@@ -49,6 +49,18 @@ Framework-specific integration helpers (LangChain, LangGraph) are planned for v0
 
 ---
 
+## Current flow
+
+```
+Agent → sentinel.trace() → SQLite / NDJSON trace
+                ↓ (planned)
+           OTEL → Langfuse / Grafana
+```
+
+Today, traces are written to local storage only. OpenTelemetry export is a planned optional extra (`sentinel-kernel[otel]`) — not yet implemented.
+
+---
+
 ## Why a separate layer
 
 Observability tools record what happened. Sentinel records what was *decided* — and attaches policy evaluation, sovereignty metadata, and human override records that make the trace legally meaningful under EU AI Act Article 12.
