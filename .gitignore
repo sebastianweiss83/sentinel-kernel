@@ -9,6 +9,8 @@ dist/
 build/
 .coverage
 coverage.xml
+htmlcov/
+.pytest_cache/
 *.db
 *.sqlite
 .DS_Store
