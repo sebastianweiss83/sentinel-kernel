@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import functools
+import inspect
 import time
 from contextlib import asynccontextmanager
 from typing import Any, Callable
@@ -98,11 +99,11 @@ class Sentinel:
 
             @functools.wraps(f)
             def sync_wrapper(*args, **kwargs):
-                return asyncio.get_event_loop().run_until_complete(
+                return asyncio.run(
                     self._execute_traced(f, args, kwargs, name, policy, tags or {})
                 )
 
-            if asyncio.iscoroutinefunction(f):
+            if inspect.iscoroutinefunction(f):
                 return async_wrapper
             return sync_wrapper
 
@@ -159,7 +160,7 @@ class Sentinel:
         # Execute the actual agent function
         start = time.monotonic()
         try:
-            if asyncio.iscoroutinefunction(func):
+            if inspect.iscoroutinefunction(func):
                 result = await func(*args, **kwargs)
             else:
                 result = func(*args, **kwargs)

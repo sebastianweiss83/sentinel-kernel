@@ -169,7 +169,7 @@ Your agent function
 | LangChain integration | Planned (v0.3) |
 | PostgreSQL storage | Planned |
 | CLI (`sentinel` command) | Declared, not yet implemented |
-| Test suite | 55 tests, 81% coverage |
+| Test suite | 71 tests, 86% coverage |
 | BSI IT-Grundschutz assessment | Planned (v1.0) |
 
 ---

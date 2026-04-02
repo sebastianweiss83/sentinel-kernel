@@ -125,8 +125,8 @@ recording of events (logs) over the lifetime of the system.
   decision level once Sentinel is configured.
 - Logging is automatic and cannot be bypassed by the agent implementation.
 
-**Relevant trace fields:** `trace_id`, `timestamp`, `agent`, `agent_version`,
-`model`, `model_version`, `inputs_hash`, `output`, `latency_ms`
+**Relevant trace fields:** `trace_id`, `started_at`, `completed_at`, `agent`,
+`model.provider`, `model.name`, `model.version`, `inputs_hash`, `output`, `latency_ms`
 
 ---
 
