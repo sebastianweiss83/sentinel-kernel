@@ -11,19 +11,19 @@ import hashlib
 import json
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Any
 
 
-class PolicyResult(str, Enum):
+class PolicyResult(StrEnum):
     ALLOW = "ALLOW"
     DENY = "DENY"
     EXCEPTION = "EXCEPTION"
     NOT_EVALUATED = "NOT_EVALUATED"
 
 
-class DataResidency(str, Enum):
+class DataResidency(StrEnum):
     LOCAL = "local"
     EU = "EU"
     EU_DE = "EU-DE"
@@ -39,7 +39,7 @@ class PolicyEvaluation:
     result: PolicyResult
     rule_triggered: str | None = None
     rationale: str | None = None
-    evaluated_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    evaluated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     evaluator: str = "sentinel-opa"
 
     def to_dict(self) -> dict:
@@ -60,7 +60,7 @@ class HumanOverride:
     approver_id: str
     approver_role: str
     justification: str
-    approved_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    approved_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     override_id: str = field(default_factory=lambda: str(uuid.uuid4()))
 
     def to_dict(self) -> dict:
@@ -97,7 +97,7 @@ class DecisionTrace:
     agent: str = "unknown"
 
     # Timing
-    started_at: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+    started_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     completed_at: datetime | None = None
     latency_ms: int | None = None
 
@@ -143,7 +143,7 @@ class DecisionTrace:
 
     def complete(self, output: dict[str, Any], latency_ms: int) -> None:
         """Mark the trace as complete with output."""
-        self.completed_at = datetime.now(timezone.utc)
+        self.completed_at = datetime.now(UTC)
         self.output = output
         self.output_hash = self._hash(output)
         self.latency_ms = latency_ms
@@ -195,7 +195,7 @@ class DecisionTrace:
         return json.dumps(self.to_dict(), default=str, indent=2)
 
     @classmethod
-    def from_dict(cls, data: dict) -> "DecisionTrace":
+    def from_dict(cls, data: dict) -> DecisionTrace:
         trace = cls(
             trace_id=data["trace_id"],
             parent_trace_id=data.get("parent_trace_id"),
@@ -212,10 +212,10 @@ class DecisionTrace:
 
         trace.latency_ms = data.get("latency_ms")
         if started := data.get("started_at"):
-            from datetime import datetime, timezone
+            from datetime import datetime
             trace.started_at = datetime.fromisoformat(started)
         if completed := data.get("completed_at"):
-            from datetime import datetime, timezone
+            from datetime import datetime
             trace.completed_at = datetime.fromisoformat(completed)
 
         if model := data.get("model"):

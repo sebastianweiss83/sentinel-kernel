@@ -1,11 +1,11 @@
 from sentinel.core.trace import (
+    DataResidency,
     DecisionTrace,
+    HumanOverride,
     PolicyEvaluation,
     PolicyResult,
-    HumanOverride,
-    DataResidency,
 )
-from sentinel.core.tracer import Sentinel, PolicyDeniedError
+from sentinel.core.tracer import PolicyDeniedError, Sentinel
 
 __all__ = [
     "DecisionTrace",

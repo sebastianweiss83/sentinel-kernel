@@ -34,7 +34,7 @@ class StorageBackend(ABC):
         ...
 
     @abstractmethod
-    def save(self, trace: "DecisionTrace") -> None:
+    def save(self, trace: DecisionTrace) -> None:
         """Persist a decision trace. Must be synchronous — called in hot path."""
         ...
 
@@ -43,14 +43,14 @@ class StorageBackend(ABC):
         self,
         project: str | None = None,
         agent: str | None = None,
-        policy_result: "PolicyResult | None" = None,
+        policy_result: PolicyResult | None = None,
         limit: int = 100,
         offset: int = 0,
-    ) -> list["DecisionTrace"]:
+    ) -> list[DecisionTrace]:
         """Query stored traces with basic filters."""
         ...
 
     @abstractmethod
-    def get(self, trace_id: str) -> "DecisionTrace | None":
+    def get(self, trace_id: str) -> DecisionTrace | None:
         """Retrieve a single trace by ID."""
         ...

@@ -30,7 +30,7 @@ class PolicyEvaluator(ABC):
         self,
         policy_path: str,
         inputs: dict,
-        trace: "DecisionTrace",
+        trace: DecisionTrace,
     ) -> PolicyEvaluation:
         ...
 
@@ -45,7 +45,7 @@ class NullPolicyEvaluator(PolicyEvaluator):
         self,
         policy_path: str,
         inputs: dict,
-        trace: "DecisionTrace",
+        trace: DecisionTrace,
     ) -> PolicyEvaluation:
         return PolicyEvaluation(
             policy_id=policy_path,
@@ -75,7 +75,7 @@ class LocalRegoEvaluator(PolicyEvaluator):
         self,
         policy_path: str,
         inputs: dict,
-        trace: "DecisionTrace",
+        trace: DecisionTrace,
     ) -> PolicyEvaluation:
         import asyncio
         import tempfile
@@ -153,7 +153,7 @@ class SimpleRuleEvaluator(PolicyEvaluator):
         self,
         policy_path: str,
         inputs: dict,
-        trace: "DecisionTrace",
+        trace: DecisionTrace,
     ) -> PolicyEvaluation:
         rule_fn = self.rules.get(policy_path)
         if rule_fn is None:

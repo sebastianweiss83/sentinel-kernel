@@ -79,8 +79,7 @@ class SQLiteStorage(StorageBackend):
         """)
         conn.commit()
 
-    def save(self, trace: "DecisionTrace") -> None:
-        from sentinel.core.trace import DecisionTrace as DT
+    def save(self, trace: DecisionTrace) -> None:
         conn = self._connection()
         policy_result = None
         if trace.policy_evaluation:
@@ -122,10 +121,10 @@ class SQLiteStorage(StorageBackend):
         self,
         project: str | None = None,
         agent: str | None = None,
-        policy_result: "PolicyResult | None" = None,
+        policy_result: PolicyResult | None = None,
         limit: int = 100,
         offset: int = 0,
-    ) -> list["DecisionTrace"]:
+    ) -> list[DecisionTrace]:
         from sentinel.core.trace import DecisionTrace
 
         conditions = []
@@ -157,7 +156,7 @@ class SQLiteStorage(StorageBackend):
 
         return [DecisionTrace.from_dict(json.loads(row["payload"])) for row in rows]
 
-    def get(self, trace_id: str) -> "DecisionTrace | None":
+    def get(self, trace_id: str) -> DecisionTrace | None:
         from sentinel.core.trace import DecisionTrace
 
         conn = self._connection()

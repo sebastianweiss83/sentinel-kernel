@@ -13,14 +13,14 @@ Sentinel — EU-sovereign AI decision middleware.
 Apache 2.0 License. See LICENSE.
 """
 
-from sentinel.core.tracer import Sentinel, PolicyDeniedError
 from sentinel.core.trace import (
+    DataResidency,
     DecisionTrace,
+    HumanOverride,
     PolicyEvaluation,
     PolicyResult,
-    HumanOverride,
-    DataResidency,
 )
+from sentinel.core.tracer import PolicyDeniedError, Sentinel
 
 __version__ = "0.1.0"
 __all__ = [

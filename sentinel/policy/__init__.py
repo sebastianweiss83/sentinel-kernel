@@ -1,7 +1,7 @@
 from sentinel.policy.evaluator import (
-    PolicyEvaluator,
-    NullPolicyEvaluator,
     LocalRegoEvaluator,
+    NullPolicyEvaluator,
+    PolicyEvaluator,
     SimpleRuleEvaluator,
 )
 

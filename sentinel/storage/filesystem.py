@@ -9,7 +9,7 @@ Works in air-gapped and VS-NfD classified environments.
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -53,10 +53,10 @@ class FilesystemStorage(StorageBackend):
             index.write_text("{}")
 
     def _current_file(self) -> Path:
-        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        today = datetime.now(UTC).strftime("%Y-%m-%d")
         return self.base_path / f"{today}.ndjson"
 
-    def save(self, trace: "DecisionTrace") -> None:
+    def save(self, trace: DecisionTrace) -> None:
         line = trace.to_json().replace("\n", " ") + "\n"
         with open(self._current_file(), "a", encoding="utf-8") as f:
             f.write(line)
@@ -74,10 +74,10 @@ class FilesystemStorage(StorageBackend):
         self,
         project: str | None = None,
         agent: str | None = None,
-        policy_result: "PolicyResult | None" = None,
+        policy_result: PolicyResult | None = None,
         limit: int = 100,
         offset: int = 0,
-    ) -> list["DecisionTrace"]:
+    ) -> list[DecisionTrace]:
         from sentinel.core.trace import DecisionTrace
 
         results = []
@@ -107,7 +107,7 @@ class FilesystemStorage(StorageBackend):
 
         return results[offset:offset + limit]
 
-    def get(self, trace_id: str) -> "DecisionTrace | None":
+    def get(self, trace_id: str) -> DecisionTrace | None:
         from sentinel.core.trace import DecisionTrace
 
         index_path = self.base_path / "index.json"

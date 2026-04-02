@@ -11,11 +11,12 @@ import asyncio
 import functools
 import inspect
 import time
+from collections.abc import Callable
 from contextlib import asynccontextmanager
-from typing import Any, Callable
+from typing import Any
 
-from sentinel.core.trace import DataResidency, DecisionTrace, PolicyEvaluation, PolicyResult
-from sentinel.policy.evaluator import PolicyEvaluator, NullPolicyEvaluator
+from sentinel.core.trace import DataResidency, DecisionTrace, PolicyResult
+from sentinel.policy.evaluator import NullPolicyEvaluator, PolicyEvaluator
 from sentinel.storage.base import StorageBackend
 from sentinel.storage.sqlite import SQLiteStorage
 
