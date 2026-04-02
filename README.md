@@ -44,6 +44,22 @@ Sentinel is designed for deployments where the record of what an AI agent decide
 
 ---
 
+## Vision and roadmap
+
+Sentinel's vision is to become the **open standard for AI decision infrastructure in Europe** — the layer that makes AI agents auditable, sovereign, and trustworthy by design. The EU AI Act Article 12 deadline (2 August 2026) sets the pace.
+
+| Phase | Target | Milestone |
+|---|---|---|
+| **v0.1** (now) | Alpha | Decision trace kernel — schema, storage, policy evaluation |
+| **v0.2–v0.4** | 2026 | PostgreSQL, LangChain integration, OTel export, BSI reference architecture, security audit |
+| **v1.0** | End of 2026 | Production release, Linux Foundation Europe, regulated deployments |
+| **2027** | Reference impl. | BSI guidance, VS-NfD profile, co-innovation community, 5+ deployments |
+| **2028+** | EU standard | De facto standard, VS-NfD certified, commercial ecosystem, independent foundation |
+
+Full strategic context: **[VISION.md](VISION.md)** · Detailed milestones: **[ROADMAP.md](ROADMAP.md)**
+
+---
+
 ## Quick start
 
 ```bash
@@ -186,7 +202,8 @@ sentinel-kernel/
 ├── docs/                   # Schema, architecture, compliance, quickstart
 ├── examples/               # Runnable examples
 ├── tests/                  # Test suite
-├── VISION.md               # Project direction and governance intent
+├── VISION.md               # Strategic vision and core beliefs
+├── ROADMAP.md              # Milestones: v0.1 → v1.0 → EU standard
 ├── GOVERNANCE.md           # Decision-making, roles, foundation path
 ├── CONTRIBUTING.md         # Contribution guide
 └── CHANGELOG.md            # Version history
