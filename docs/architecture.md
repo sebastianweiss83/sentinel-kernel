@@ -47,7 +47,7 @@ If a proposed feature is not directly in service of capturing a decision trace, 
 
 **Decision:** Storage, policy evaluation, and LLM provider are all interfaces with multiple implementations. No implementation is privileged.
 
-**Rationale:** An enterprise in Munich may run Postgres on-prem. An autonomous system company may run air-gapped filesystem. A startup may use Cloudflare D1 at the edge. A classified deployment may need a custom backend we haven't built yet. The kernel must be agnostic.
+**Rationale:** An enterprise in Munich may run Postgres on-prem. An autonomous system company may run air-gapped filesystem. A startup may use a sovereign edge database. A classified deployment may need a custom backend we haven't built yet. The kernel must be agnostic.
 
 **Consequence:** `StorageBackend`, `PolicyEvaluator`, and LLM client are abstract interfaces. The kernel owns the orchestration logic; it delegates storage, policy, and LLM to implementations. New backends require no changes to core.
 
@@ -77,7 +77,7 @@ If a proposed feature is not directly in service of capturing a decision trace, 
 
 **Decision:** v0.1 ships with: SQLite storage, filesystem storage, null policy evaluator, simple Python-callable evaluator, and the `@sentinel.trace` decorator. Nothing else.
 
-**Rationale:** The projects that become standards ship a kernel that works immediately, then let real deployment feedback drive the roadmap. Building LangGraph integration, the OPA evaluator, and Postgres backend before anyone is using the kernel is waste. Quantum Systems' deployment shapes v0.2. The community shapes v0.3.
+**Rationale:** The projects that become standards ship a kernel that works immediately, then let real deployment feedback drive the roadmap. Building LangGraph integration, the OPA evaluator, and Postgres backend before anyone is using the kernel is waste. Design partner deployments shape v0.2. The community shapes v0.3.
 
 **Consequence:** We say no to every feature that doesn't serve a deployed user. The issue tracker is not the roadmap.
 

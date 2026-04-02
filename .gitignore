@@ -12,3 +12,7 @@ coverage.xml
 *.db
 *.sqlite
 .DS_Store
+
+# Claude Code — private files, never commit
+CLAUDE.local.md
+.claude/settings.local.json

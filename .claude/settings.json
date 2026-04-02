@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git diff:*)", "Bash(git log:*)", "Bash(git status:*)",
+      "Bash(git add:*)", "Bash(git commit:*)", "Bash(git push:*)",
+      "Bash(grep:*)", "Bash(find:*)", "Bash(cat:*)", "Bash(ls:*)",
+      "Bash(mkdir:*)", "Bash(mv:*)", "Bash(cp:*)",
+      "Read(**)",
+      "Write(sentinel/**)", "Write(tests/**)", "Write(docs/**)",
+      "Write(examples/**)", "Write(policies/**)",
+      "Write(.claude/**)", "Write(CLAUDE.md)"
+    ],
+    "deny": [
+      "Write(.env)", "Write(.env.*)", "Write(**/*.pem)", "Write(**/*.key)"
+    ]
+  }
+}

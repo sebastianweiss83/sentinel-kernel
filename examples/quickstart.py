@@ -87,7 +87,7 @@ async def main():
     print(f"    auditable, and queryable — without leaving your infrastructure.")
     print()
     print("Next steps:")
-    print("  • Replace the simulated LLM with a real Anthropic/Mistral call")
+    print("  • Replace the simulated LLM with a real model provider call")
     print("  • Add a policy: @sentinel.trace(policy='policies/my_policy.rego')")
     print("  • Switch to persistent storage: SQLiteStorage('./decisions.db')")
     print("  • Read the docs: https://github.com/sebastianweiss83/sentinel-kernel")
