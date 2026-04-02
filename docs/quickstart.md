@@ -9,7 +9,11 @@
 
 ## Install
 
-From source (package not yet published to PyPI):
+```bash
+pip install sentinel-kernel
+```
+
+From source:
 
 ```bash
 git clone https://github.com/sebastianweiss83/sentinel-kernel.git
