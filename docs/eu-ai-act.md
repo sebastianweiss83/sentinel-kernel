@@ -222,7 +222,7 @@ lifecycle.
 
 - `latency_ms` tracking enables monitoring of performance consistency.
 - Policy evaluation results over time provide accuracy trend data.
-- The append-only, tamper-resistant trace log contributes to the cybersecurity
+- The append-only, append-only trace log contributes to the cybersecurity
   posture by preventing retroactive alteration of the audit trail.
 - Air-gapped deployment mode eliminates network-based attack vectors.
 
@@ -243,7 +243,7 @@ of processes.
 
 **How Sentinel addresses it:**
 
-- The continuous, tamper-resistant trace log provides a complete record of
+- The continuous, append-only trace log provides a complete record of
   system behaviour in production.
 - Schema versioning ensures traces are always interpretable according to
   the version under which they were created.
