@@ -193,6 +193,7 @@ sentinel-kernel/
 ├── examples/               # Runnable examples
 ├── tests/                  # Test suite
 ├── VISION.md               # Project direction and governance intent
+├── GOVERNANCE.md           # Decision-making, roles, foundation path
 ├── CONTRIBUTING.md         # Contribution guide
 └── CHANGELOG.md            # Version history
 ```
@@ -209,4 +210,4 @@ Sentinel is early-stage. Useful contributions right now: test coverage, schema f
 
 Sentinel is released under the [Apache 2.0 License](LICENSE).
 
-Sentinel is designed for foundation stewardship under Linux Foundation Europe. Formal engagement is planned alongside v1.0. Until then, governance decisions are made transparently through the RFC process.
+Sentinel is designed for foundation stewardship under Linux Foundation Europe. Formal engagement is planned alongside v1.0. Until then, governance decisions are made transparently through the RFC process. See [GOVERNANCE.md](GOVERNANCE.md) for the full governance model, decision-making process, and contributor path.
