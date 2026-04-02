@@ -150,7 +150,7 @@ Your agent function
 
 **Storage backend** — `StorageBackend` is an abstract interface. `SQLiteStorage` provides full CRUD with indexing. `FilesystemStorage` appends NDJSON with daily log rotation. Custom backends implement the interface.
 
-**Optional extras** — LangChain integration, PostgreSQL storage, and OpenTelemetry export are planned as optional extras and will not add to the zero-dependency core.
+**Optional extras** — LangChain integration, PostgreSQL storage, and OpenTelemetry export are planned as optional extras and will not add to the zero-dependency core. See [docs/landscape.md](docs/landscape.md) for how Sentinel relates to the broader LLMOps and agent ecosystem.
 
 ---
 

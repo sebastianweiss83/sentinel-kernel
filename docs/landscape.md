@@ -15,6 +15,8 @@ Sentinel sits at the intersection of LLM tracing and enterprise governance. This
 | **Eval Frameworks** | DeepEval, RAGAS, UpTrain | LLM output quality scoring, RAG evaluation | **No** — does not score LLM quality or run evals |
 | **Observability** | OpenTelemetry, Grafana, Datadog | General infrastructure monitoring, distributed tracing | **Partial** — OTel export planned as optional extra; traces are currently native JSON/NDJSON |
 
+**Relationship key:** *Complementary* = works alongside. *Upstream* = Sentinel wraps or builds on it. *Downstream* = consumes Sentinel output. *Adjacent* = different problem, no overlap. *Designed for* = Sentinel addresses this category's gap.
+
 ---
 
 ## What Sentinel does
