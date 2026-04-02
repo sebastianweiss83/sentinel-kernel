@@ -1,7 +1,7 @@
 # /project:bsi-check
-BSI IT-Grundschutz readiness check. Run before any formal BSI engagement.
 
-## Usage: /project:bsi-check [file or "all"]
+BSI IT-Grundschutz readiness check. Run before any formal BSI engagement.
+Usage: /project:bsi-check [file or "all"]
 
 ## APP.6 — Software
 - [ ] No hardcoded credentials or secrets
@@ -32,4 +32,4 @@ BSI IT-Grundschutz readiness check. Run before any formal BSI engagement.
 - [ ] No mandatory internet connectivity in critical path
 - [ ] Tested in network-isolated environment
 
-## Output: Severity (BLOCKER/HIGH/MEDIUM/LOW) + BSI reference + fix + BSI submission blocker YES/NO
+## Output: Severity (BLOCKER/HIGH/MEDIUM/LOW) + BSI reference + fix + blocks BSI YES/NO

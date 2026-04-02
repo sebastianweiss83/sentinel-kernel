@@ -35,6 +35,14 @@ For frameworks that support middleware, observers, or lifecycle hooks,
 Sentinel provides integration helpers that slot in without changes to
 your agent logic.
 
+### Priority integrations
+
+**LangChain (v0.3 target).** The LangChain integration is the explicit open,
+sovereign alternative to proprietary platform connectors that lock developers
+into US-jurisdicted runtimes. Developers currently using LangChain with
+proprietary platform connectors can switch to Sentinel's LangChain integration
+and retain their existing agent logic while gaining sovereign decision records.
+
 ### Writing an integration
 
 An integration module lives in `sentinel/integrations/<name>/` and must:
@@ -67,6 +75,7 @@ Every integration must include tests that verify:
    the original trace is not modified.
 4. **Offline operation** — all tests pass with no network connectivity
    (mock or disable any network-dependent framework features).
+5. **EU AI Act fields** — all mandatory fields present and correct.
 
 Tests live in `tests/integrations/test_<name>.py`.
 

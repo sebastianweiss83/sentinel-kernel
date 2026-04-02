@@ -39,7 +39,7 @@ If a proposed feature is not directly in service of capturing a decision trace, 
 
 **Rationale:** Classified and air-gapped environments cannot run arbitrary pip install chains. A regulated enterprise's security team must be able to audit every dependency. The kernel must work with Python's standard library alone.
 
-**Consequence:** SQLite backend uses the stdlib `sqlite3` module. Filesystem backend uses `pathlib` and `json`. Optional extras (`[anthropic]`, `[langchain]`, `[postgres]`) are installed explicitly.
+**Consequence:** SQLite backend uses the stdlib `sqlite3` module. Filesystem backend uses `pathlib` and `json`. Optional extras (`[langchain]`, `[postgres]`) are installed explicitly.
 
 ---
 

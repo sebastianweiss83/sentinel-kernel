@@ -1,6 +1,8 @@
 # /project:security-audit
+
 Security audit for classified deployment readiness.
 Think like an attacker targeting an air-gapped environment.
+Usage: /project:security-audit [file or "all"]
 
 ## Trace integrity
 - Can a trace be modified after writing?
@@ -14,11 +16,10 @@ Think like an attacker targeting an air-gapped environment.
 
 ## Secret handling
 - Secrets in logs, traces, or errors?
-- Sensitive values in traces unredacted?
+- Sensitive values flowing into traces unredacted?
 
 ## Supply chain
-- All dependencies pinned?
-- Any dependency fetched over unencrypted transport?
+- All dependencies pinned? Fetched over encrypted transport?
 - Any US-owned dependency in the critical path?
 
 ## Air-gapped readiness
@@ -26,4 +27,4 @@ Think like an attacker targeting an air-gapped environment.
 - DNS lookups that could leak information?
 - System works fully isolated?
 
-## Output: Severity + Location + Attack scenario + Fix + Classified deployment blocker YES/NO
+## Output: Severity + Location + Attack scenario + Fix + Classified blocker YES/NO

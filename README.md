@@ -75,19 +75,55 @@ jurisdiction. The US CLOUD Act means any service owned by a US entity is
 subject to US government access regardless of where the server sits.
 An EU data centre operated by a US company does not solve this.
 
-**The governance layer space is crowded.** Observability tools, content
-filters, policy engines, and agent orchestration frameworks all offer pieces
-of this. None are designed for classified deployments. None produce
-legally-valid audit trails under EU jurisdiction. None have a certification
-path to BSI IT-Grundschutz or VS-NfD. Sentinel does not compete with those
-tools — it sits below them in the stack, recording what actually happened,
-in a place those tools cannot reach.
+---
 
-Standardisation in this space will not happen by consensus alone. It requires
-a neutral governance foundation — which is why Sentinel is pursuing Linux
-Foundation Europe stewardship — and real production deployments that define
-what the protocol actually needs to handle. The first design partners are
-shaping that protocol now.
+## The landscape and where Sentinel sits
+
+Three categories of tooling are converging on the agent governance problem.
+Understanding the distinction matters.
+
+**AI Ops** — observability, tracing, evaluation. Tools that help you understand
+what your agents did after the fact. Excellent for debugging and performance
+monitoring. Not designed for legal compliance. Not sovereign. Not tamper-resistant.
+
+**Policy management and runtime enforcement** — tools that evaluate rules at
+inference time and block or permit actions. Useful for content safety and access
+control. They answer "should this action be allowed?" Sentinel answers "what was
+decided, and can you prove it before a regulator?" These are complementary,
+not competing.
+
+**Decision record infrastructure** — this is what Sentinel is. The layer that
+produces a legally-valid, tamper-resistant, sovereign artifact for every AI
+decision. It does not exist as an open, jurisdiction-neutral standard yet.
+That is the gap.
+
+The crowded space is real. None of it is designed for classified environments,
+air-gapped networks, or EU legal jurisdiction.
+
+**On the ecosystem play.** The leading proprietary platform in this space is
+actively building a developer ecosystem: SDKs, community app registries,
+framework connectors. Every component of that ecosystem deepens the same
+lock-in. Developers who build agent workflows on that platform build against a
+proprietary ontology, a proprietary SDK, and a US-jurisdicted runtime. The
+community registry they curate is growing. The flywheel is real.
+
+Sentinel's answer is not to compete for the same developers in the same market.
+It is to be the open, sovereign alternative for the developers and organisations
+that the proprietary platform structurally cannot serve — those in classified
+environments, sovereign procurement, and regulated EU industries. For those
+organisations, an open LangChain connector to a sovereign decision record layer
+is not a feature. It is the only viable option.
+
+**On standardisation.** General-purpose middleware typically needs a hyperscaler
+or major lab to drive protocol adoption. Sentinel operates in a different
+dynamic. BSI IT-Grundschutz certification creates a mandatory adoption mechanism
+in regulated German and EU defence markets — not by preference, but by
+procurement law. The design partners shaping the v0.1 → v1.0 protocol are the
+same organisations that will be required to comply with it. That is the flywheel.
+
+Linux Foundation Europe provides the neutral governance home that makes this
+credible to regulators, procurement committees, and contributors who will not
+adopt a protocol controlled by a single commercial entity.
 
 ---
 
@@ -100,7 +136,7 @@ pip install sentinel-kernel
 ```python
 from sentinel import Sentinel
 
-# Local storage by default — works with no cloud account, no network
+# Local storage by default — no cloud account, no network required
 sentinel = Sentinel()
 
 @sentinel.trace(policy="policies/default.rego")
@@ -109,21 +145,17 @@ async def evaluate_request(context: dict) -> dict:
     result = await your_model.call(context)
     return result
 
-# Run it
 outcome = await evaluate_request({"action": "approve", "amount": 50000})
 ```
 
-Every call now produces a decision trace. That trace is written to local
-storage, can be exported as NDJSON, and satisfies EU AI Act Article 12
-logging requirements out of the box.
+Every call now produces a decision trace. Written to local storage.
+Exportable as NDJSON. Satisfies EU AI Act Article 12 out of the box.
 
 **Time to first trace: under five minutes.**
 
 ---
 
 ## Example trace output
-
-This is what Sentinel records for every agent decision:
 
 ```json
 {
@@ -143,10 +175,7 @@ This is what Sentinel records for every agent decision:
   "policy_rule": null,
 
   "inputs_hash": "sha256:a3f8c2d19e4b67f0c1a5d8e2b9c3f4a7",
-  "output": {
-    "decision": "approved",
-    "confidence": 0.94
-  },
+  "output": { "decision": "approved", "confidence": 0.94 },
 
   "override_by": null,
   "override_reason": null,
@@ -159,20 +188,18 @@ This is what Sentinel records for every agent decision:
 ```
 
 When a human overrides a policy decision, that override becomes a second
-trace entry — linked to the original by `parent_trace_id`, never replacing
-it. The audit trail is append-only by design.
+trace entry — linked to the original by `parent_trace_id`, never replacing it.
+The audit trail is append-only by design.
 
 ```json
 {
   "trace_id": "01hx8m2n3p4q5r6s7t8u9v0w1x",
   "parent_trace_id": "01hx7k9m2n3p4q5r6s7t8u9v0w",
   "timestamp": "2026-04-01T14:31:17.891Z",
-
   "policy_result": "ALLOW",
   "override_by": "ops-lead@example.eu",
   "override_reason": "Manual review completed — approved under delegated authority",
   "override_at": "2026-04-01T14:31:17.891Z",
-
   "sovereign_scope": "EU",
   "data_residency": "on-premise-de",
   "schema_version": "0.1"
@@ -225,11 +252,13 @@ Phase 1 — Kernel (now)
   Any agent framework, any model, any storage backend.
 
 Phase 2 — Storage abstraction (v0.2)
-  Formal storage interface with reference implementations.
+  Formal storage interface. Reference implementations.
   Air-gapped export validated in isolated environments.
 
 Phase 3 — Framework integrations (v0.3)
-  First-class connectors for major agent orchestration frameworks.
+  First-class connectors for major agent orchestration frameworks,
+  including LangChain — the open, sovereign alternative to
+  proprietary platform connectors.
   Zero changes required to existing agent logic.
 
 Phase 4 — BSI reference implementation (v1.0)
@@ -265,8 +294,7 @@ requirement for EU AI Act Article 12 compliance.
 
 **4. Policy evaluation is in-process.**
 Sentinel evaluates policies synchronously, in the same process as the agent.
-No remote call, no network dependency, no single point of failure outside
-your control.
+No remote call, no network dependency, no external single point of failure.
 
 **5. Apache 2.0, permanently.**
 No licence change, no BSL, no commercial-only features, no relicensing CLA.
@@ -277,21 +305,18 @@ operators, and the open source community.
 
 ## How Sentinel differs
 
-The AI governance space is crowded. Understanding where Sentinel fits
-requires being clear about what it is not.
-
 | Category | What they do | What Sentinel does |
 |---|---|---|
-| **Observability** (e.g. LangFuse, LangSmith) | Debug and monitor agent runs | Produce legally-valid sovereign audit records |
-| **Content filters** (e.g. NeMo Guardrails, LLM Guard) | Filter inputs and outputs at runtime | Record decisions — does not filter them |
-| **Policy engines** (e.g. Open Policy Agent) | Evaluate access policies | Evaluate policies AND record under EU jurisdiction |
-| **AI gateways** | Route traffic between model providers | Capture decision context in-process at the agent level |
+| **Observability** | Debug and monitor agent runs | Produce legally-valid sovereign audit records |
+| **Content filters** | Filter inputs and outputs at runtime | Record decisions — does not filter them |
+| **Policy engines** | Evaluate access policies | Evaluate policies AND record under EU jurisdiction |
+| **Proprietary platforms** | Capture decisions inside a vendor ecosystem | Record decisions in an open, portable, sovereign format you control |
 
 Sentinel is not better or worse than these tools. It is different in kind.
 It answers a different question: not "what did the model say?" but "what was
 decided, by whom, under which policy, and under whose law?"
 
-None of the tools above satisfy EU AI Act Article 12 for high-risk AI.
+None of the categories above satisfy EU AI Act Article 12 for high-risk AI.
 None are designed for classified or air-gapped environments. None produce
 tamper-resistant audit trails portable across jurisdictions. Sentinel does.
 
@@ -303,7 +328,6 @@ Sentinel wraps any function that makes an AI decision. The pattern is the
 same regardless of framework or model.
 
 ```python
-# Decorate the decision function
 @sentinel.trace(policy="policies/your_policy.rego")
 async def your_decision_function(input_context):
     # Your existing logic — unchanged
@@ -320,9 +344,6 @@ that slot in without changes to agent logic. See
 2. Does it work in a network-isolated environment? If not, mark as not
    cleared for air-gapped deployment.
 
-Sentinel itself makes no assumptions about which framework or model you use.
-Every integration must preserve this property.
-
 ---
 
 ## Storage
@@ -337,8 +358,6 @@ class StorageBackend(Protocol):
     async def export(self, format: str) -> AsyncIterator[str]: ...
 ```
 
-Four deployment modes are supported:
-
 | Mode | When to use | Sovereignty |
 |---|---|---|
 | **Local / filesystem** | Development, air-gapped, classified | Full — no network required |
@@ -347,19 +366,18 @@ Four deployment modes are supported:
 | **Sovereign edge** | Distributed EU-resident deployments | Full — verify provider jurisdiction |
 
 Bring your own backend by implementing the `StorageBackend` protocol.
-One requirement applies to every backend: traces are append-only.
-No implementation should support in-place modification of a written trace.
+One requirement applies universally: traces are append-only. No backend
+should support in-place modification of a written trace.
 
 ---
 
 ## Policy as code
 
-Sentinel evaluates policies synchronously at decision time. The policy
-engine is pluggable. The reference implementation uses OPA-compatible Rego,
-but any evaluation function returning ALLOW / DENY / EXCEPTION_REQUIRED works.
+Sentinel evaluates policies synchronously at decision time. The policy engine
+is pluggable. The reference implementation uses OPA-compatible Rego, but any
+evaluation function returning ALLOW / DENY / EXCEPTION_REQUIRED works.
 
 ```rego
-# policies/procurement_approval.rego
 package sentinel.procurement
 
 default allow = false
@@ -375,7 +393,6 @@ exception_required {
 
 When a policy returns DENY, Sentinel records which rule triggered.
 When a human overrides, that override is a new trace entry.
-The complete chain is permanently recorded and queryable.
 Policy version is recorded in every trace — any historical decision
 can be reconstructed against the exact policy state at that time.
 
@@ -389,12 +406,12 @@ For Annex III high-risk AI systems, full compliance is required from
 
 | Article | Requirement | How Sentinel addresses it |
 |---|---|---|
-| **Art. 9** | Risk management system — documented, ongoing | Policy evaluation recorded in every trace; risk posture queryable across all decisions |
-| **Art. 12(1)** | Automatic logging of events over the system's lifetime | Every agent decision produces a trace automatically |
-| **Art. 12(2)** | Logs must enable identification of risk situations and post-market monitoring | Traces are structured, queryable, exportable |
-| **Art. 13** | Transparency — deployers informed about system capabilities | Policy name, version, result recorded in every trace |
-| **Art. 14** | Human oversight — effective intervention capability | Override mechanism produces a linked, immutable trace entry |
-| **Art. 17** | Quality management — traceability of processes | Continuous tamper-resistant record of system behaviour in production |
+| **Art. 9** | Risk management — documented, ongoing | Policy evaluation recorded in every trace; risk posture queryable |
+| **Art. 12(1)** | Automatic logging over the system's lifetime | Every decision produces a trace automatically — no manual step |
+| **Art. 12(2)** | Logs enable identification of risk situations | Traces are structured, queryable, exportable |
+| **Art. 13** | Transparency to deployers | Policy name, version, result recorded in every trace |
+| **Art. 14** | Human oversight — effective intervention | Override mechanism produces a linked, immutable trace entry |
+| **Art. 17** | Quality management — traceability | Continuous tamper-resistant record of system behaviour |
 
 **Scoping note.** Whether your AI system is classified as high-risk under
 Annex III depends on its specific use case. Sentinel does not make that
@@ -418,17 +435,15 @@ sentinel = Sentinel()  # local filesystem, no configuration required
 docker run -v /your/data:/data sentinel-kernel/sentinel:latest
 ```
 
-All traces remain on your infrastructure.
-
 ### Air-gapped / classified
 
 ```bash
 sentinel-cli init --storage filesystem --path /mnt/traces
 ```
 
-Zero network connectivity required. Policies are bundled with the deployment.
-Traces export as NDJSON for offline audit and archival. This is the mode
-validated for classified environments and required for VS-NfD deployment.
+Zero network connectivity required. Policies bundled with the deployment.
+Traces export as NDJSON. The reference mode for classified environments
+and VS-NfD deployment profiles.
 
 ---
 
@@ -436,18 +451,18 @@ validated for classified environments and required for VS-NfD deployment.
 
 | Milestone | Target | What it means |
 |---|---|---|
-| **v0.1 — Kernel** | Q2 2026 | Interceptor, in-process policy eval, and trace emission work. Any agent call can be wrapped and produce a compliant trace. |
+| **v0.1 — Kernel** | Q2 2026 | Interceptor, in-process policy eval, trace emission. Any agent call can be wrapped and produce a compliant trace. |
 | **v0.2 — Storage abstraction** | Q2 2026 | Storage interface formalised. Air-gapped operation validated in network-isolated environments. |
-| **v0.3 — Framework integrations** | Q3 2026 | Integration helpers for major agent frameworks. Zero changes required to existing agent logic. |
-| **v0.4 — Air-gapped validation** | Q3 2026 | Formal test suite for network-isolated deployment. Reference deployment for classified environments is documented and reproducible. |
-| **v1.0 — BSI reference implementation** | Q4 2026 | **The inflection point.** The protocol is assessed against BSI IT-Grundschutz. Claimed sovereign becomes certified sovereign. Unlocks classified government procurement. |
+| **v0.3 — Framework integrations** | Q3 2026 | Integration helpers for major agent frameworks including LangChain — open, sovereign, portable. Zero changes to existing agent logic. |
+| **v0.4 — Air-gapped validation** | Q3 2026 | Formal test suite for network-isolated deployment. Reference deployment for classified environments documented and reproducible. |
+| **v1.0 — BSI reference implementation** | Q4 2026 | **The inflection point.** Protocol assessed against BSI IT-Grundschutz. Claimed sovereign becomes certified sovereign. Unlocks classified government procurement. |
 | **v1.1 — VS-NfD deployment profile** | Q1 2027 | Sentinel cleared for VS-NfD classified German government deployments. |
 
 ---
 
 ## Governance
 
-**License.** Apache 2.0, permanently. Full licence text at
+**License.** Apache 2.0, permanently. Full text at
 [apache.org/licenses/LICENSE-2.0](https://www.apache.org/licenses/LICENSE-2.0).
 No BSL. No commercial-only features. No licence changes. Contributions do not
 grant any party the right to relicence this software.
@@ -465,23 +480,21 @@ policy evaluation contract, or sovereignty assertions go through an open RFC
 process: a GitHub Discussion is opened, a 14-day comment period follows,
 and maintainers vote. The decision and rationale are permanently recorded.
 
-**Funding.** An application to the Sovereign Tech Fund
-(Sovereign Tech Fonds) for non-dilutive funding is in progress. No commercial
-entity controls the roadmap.
+**Funding.** An application to the Sovereign Tech Fund for non-dilutive
+funding is in progress. No commercial entity controls the roadmap.
 
 ---
 
 ## Who is building with Sentinel
 
 Sentinel is in active use by two categories of design partner. Partners are
-not named publicly at this stage. What matters is the stakeholder type and
-the driving force behind adoption.
+not named publicly at this stage.
 
 **Innovation drivers.** Organisations building AI-enabled hardware and
 autonomous systems for regulated markets. They have strong capability at
 the sensor, data, and mission layers but need a sovereign decision record
-layer to unlock government and defence procurement. US-hosted governance
-tools are a structural non-starter for their customer base.
+layer to unlock government and defence procurement. Proprietary US-hosted
+governance tools are a structural non-starter for their customer base.
 
 **Sovereign operators.** Government-adjacent IT infrastructure organisations
 responsible for deploying technology within classified or sovereign networks.
@@ -490,7 +503,7 @@ infrastructure without dependency on external vendors — and which serves as
 the deployment channel into broader government systems.
 
 Both categories are shaping the v0.1 → v1.0 protocol. Their production
-requirements determine what Sentinel actually needs to handle.
+requirements determine what Sentinel needs to handle.
 
 *Your organisation here. Open an issue to discuss design partner status.*
 
@@ -498,15 +511,15 @@ requirements determine what Sentinel actually needs to handle.
 
 ## Why sovereignty matters
 
-The AI governance space will consolidate around well-funded platforms.
-For most organisations, those platforms are the right choice.
+The AI governance space will consolidate around well-funded, proprietary
+platforms. For most organisations, those platforms are the right choice.
 
-For organisations in defence, critical infrastructure, classified
-environments, and European regulated industries, they are not. Not because
-of quality — because of jurisdiction.
+For organisations in defence, critical infrastructure, classified environments,
+and European regulated industries, they are not. Not because of quality —
+because of jurisdiction.
 
-The US CLOUD Act (18 U.S.C. § 2713) requires US-incorporated companies
-to produce data stored anywhere in the world when served with a valid legal
+The US CLOUD Act (18 U.S.C. § 2713) requires US-incorporated companies to
+produce data stored anywhere in the world when served with a valid legal
 process. This applies to EU subsidiaries of US companies. It applies to EU
 data centres operated by US companies. It applies regardless of contractual
 commitments. No contract with a US company eliminates CLOUD Act exposure.
@@ -533,4 +546,4 @@ and organisations.
 first. Every integration must document its sovereignty posture.
 
 **Proposing a schema change?** Open an RFC via GitHub Discussions before
-writing code. See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the full RFC process.
+writing code. See [`CONTRIBUTING.md`](CONTRIBUTING.md).

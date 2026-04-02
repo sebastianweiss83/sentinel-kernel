@@ -14,5 +14,5 @@
 - test_deny_records_triggering_rule
 - test_override_creates_linked_entry
 
-## Coverage
+## Coverage targets
 Core trace emission: 95%+ / Storage interface: 90%+ / Integrations: 80%+

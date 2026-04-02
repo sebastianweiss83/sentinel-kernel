@@ -104,6 +104,14 @@ Significant changes to the following require an RFC before implementation:
 
 ---
 
+## Design partner issues
+
+If your organisation has a deployment context — regulated industry, classified
+environment, public sector — that tests Sentinel's architecture, open an issue
+on GitHub to discuss design partner status.
+
+---
+
 ## Community
 
 - **GitHub Discussions:** For RFCs, architecture questions, and design partner conversations

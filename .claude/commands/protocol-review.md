@@ -1,4 +1,5 @@
 # /project:protocol-review
+
 Review a decision trace or trace-emitting code for EU AI Act compliance and BSI readiness.
 
 ## Trace completeness — EU AI Act Art. 12 + 17
@@ -16,7 +17,7 @@ Review a decision trace or trace-emitting code for EU AI Act compliance and BSI 
 ## Sovereignty
 - [ ] No US-controlled component in the critical path
 - [ ] Works with zero network connectivity
-- [ ] Data residency assertion is accurate and independently verifiable
+- [ ] Data residency assertion independently verifiable
 
 ## Policy evaluation
 - [ ] In-process — no remote call
@@ -29,7 +30,4 @@ Review a decision trace or trace-emitting code for EU AI Act compliance and BSI 
 - [ ] Storage is append-only
 - [ ] Correction is a new entry — never an edit
 
-## Output
-1. PASS / FAIL / NEEDS REVIEW
-2. Issues with file and line references
-3. Suggested fix for each
+## Output: PASS / FAIL / NEEDS REVIEW + issues with location + suggested fix

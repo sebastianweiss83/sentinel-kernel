@@ -15,6 +15,10 @@ The EU AI Act (Regulation EU 2024/1689) establishes a risk-based framework
 for AI systems deployed in the European Union. It was published in the
 Official Journal on 12 July 2024 and entered into force on 1 August 2024.
 
+**Extra-territorial scope:** The regulation applies to any organisation that
+places AI systems on the EU market or whose AI system output is used in the EU,
+regardless of where the organisation is headquartered.
+
 Key compliance dates:
 
 | Date | What applies |
@@ -22,7 +26,7 @@ Key compliance dates:
 | 2 February 2025 | Prohibited AI practices (Title II) |
 | 2 August 2025 | GPAI model obligations (Chapter V) |
 | **2 August 2026** | **Annex III high-risk AI systems (full obligations)** |
-| 2 August 2027 | Annex I high-risk AI systems integrated into regulated products |
+| 2 August 2027 | Annex I high-risk AI systems integrated into regulated products (medical devices, machinery) |
 
 Sentinel is designed for organisations deploying **Annex III high-risk AI systems**,
 where full compliance is required from **2 August 2026**.
@@ -31,13 +35,15 @@ where full compliance is required from **2 August 2026**.
 
 ## Penalties
 
-Non-compliance with high-risk AI system obligations carries penalties of:
+Non-compliance carries penalties of:
 
-- Up to **€15 million** or **3% of global annual turnover** (whichever is higher)
-  for violations of Articles 6–49
-- Up to **€35 million** or **7% of global annual turnover** for prohibited practices
+- Up to **€35 million** or **7% of global annual turnover** for prohibited AI practices
+- Up to **€15 million** or **3% of global annual turnover** for high-risk AI system
+  non-compliance (Articles 6–49)
 - Up to **€7.5 million** or **1.5% of global annual turnover** for supplying
   incorrect information to authorities
+
+Whichever amount is higher applies in each case.
 
 ---
 
@@ -62,6 +68,47 @@ high-risk AI system.
 
 **Relevant trace fields:** `policy`, `policy_version`, `policy_result`,
 `policy_rule`, `timestamp`
+
+---
+
+### Article 10 — Data and data governance
+
+**Requirement:** High-risk AI systems which make use of techniques involving
+the training of AI models with data shall be developed on the basis of training,
+validation and testing data sets that meet quality criteria.
+
+**How Sentinel addresses it:**
+
+- Sentinel records which model and model version was used for each decision,
+  enabling traceability back to the training data governance process.
+- `inputs_hash` provides a verifiable record of what data was presented
+  to the model at decision time without storing raw PII.
+
+**Relevant trace fields:** `model`, `model_version`, `inputs_hash`
+
+**Note:** Data governance for training data is primarily the responsibility of
+the model provider. Sentinel records the decision-time context, not the
+training pipeline.
+
+---
+
+### Article 11 — Technical documentation
+
+**Requirement:** The technical documentation of a high-risk AI system shall
+be drawn up before that system is placed on the market or put into service
+and shall be kept up to date.
+
+**How Sentinel addresses it:**
+
+- The trace schema itself serves as technical documentation of the decision
+  recording mechanism.
+- Policy names, versions, and evaluation results in every trace provide
+  a continuously-updated record of the system's decision logic.
+- Schema versioning ensures documentation remains current with the
+  deployed system.
+
+**Relevant mechanism:** `schema_version`, `policy`, `policy_version`,
+trace schema documentation in `docs/schema.md`.
 
 ---
 
@@ -161,6 +208,29 @@ system is in use.
 
 **Relevant trace fields:** `override_by`, `override_reason`, `override_at`,
 `parent_trace_id`
+
+---
+
+### Article 15 — Accuracy, robustness and cybersecurity
+
+**Requirement:** High-risk AI systems shall be designed and developed in such
+a way that they achieve an appropriate level of accuracy, robustness and
+cybersecurity, and perform consistently in those respects throughout their
+lifecycle.
+
+**How Sentinel addresses it:**
+
+- `latency_ms` tracking enables monitoring of performance consistency.
+- Policy evaluation results over time provide accuracy trend data.
+- The append-only, tamper-resistant trace log contributes to the cybersecurity
+  posture by preventing retroactive alteration of the audit trail.
+- Air-gapped deployment mode eliminates network-based attack vectors.
+
+**Relevant trace fields:** `latency_ms`, `policy_result`, `model_version`
+
+**Note:** Accuracy and robustness of the underlying AI model are primarily the
+responsibility of the model provider. Sentinel records the evidence needed to
+demonstrate consistent performance in production.
 
 ---
 

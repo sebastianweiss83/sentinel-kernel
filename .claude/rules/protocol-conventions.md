@@ -33,4 +33,4 @@ Traces export as NDJSON. No binary formats. No proprietary encoding.
 
 ## Schema changes
 Optional fields: no RFC required.
-Removing/renaming fields or new mandatory fields: RFC required.
+Removing/renaming or new mandatory fields: RFC required.

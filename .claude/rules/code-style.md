@@ -1,14 +1,13 @@
 # Code Style
 
-Trace correctness over performance.
-Interfaces over implementations.
-No silent failures — a missing trace is worse than a crash.
-Offline first — no feature is complete until tested without network.
+Trace correctness over performance. A missing trace is worse than a crash.
+Interfaces over implementations. Storage, policy eval, trace emission are interfaces.
+Offline first. No feature is complete until tested without network.
+No silent failures. No secrets in code, traces, or logs.
 
 Every public interface states:
 - What it does
-- What sovereignty guarantees it provides (or does not)
+- Sovereignty guarantees it provides (or explicitly does not)
 - What happens with no network connection
 
-No secrets in code, traces, or logs. When in doubt: hash it.
 Use /project:rfc before any breaking change to the trace schema.
