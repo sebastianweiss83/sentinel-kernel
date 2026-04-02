@@ -8,7 +8,7 @@ Sentinel makes them sovereign, auditable, and legally yours.
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
 [![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F17-green.svg)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689)
-[![Governance](https://img.shields.io/badge/governance-LF%20Europe%20candidate-003366.svg)](https://linuxfoundation.eu)
+[![Governance](https://img.shields.io/badge/governance-LF%20Europe%20intended-003366.svg)](https://linuxfoundation.eu)
 [![Schema](https://img.shields.io/badge/schema-v0.1-lightgrey.svg)](docs/schema.md)
 
 ---
@@ -121,9 +121,9 @@ in regulated German and EU defence markets — not by preference, but by
 procurement law. The design partners shaping the v0.1 → v1.0 protocol are the
 same organisations that will be required to comply with it. That is the flywheel.
 
-Linux Foundation Europe provides the neutral governance home that makes this
-credible to regulators, procurement committees, and contributors who will not
-adopt a protocol controlled by a single commercial entity.
+Linux Foundation Europe is the intended neutral governance home — the kind of
+structure that makes this credible to regulators, procurement committees, and
+contributors who will not adopt a protocol controlled by a single commercial entity.
 
 ---
 
@@ -467,8 +467,8 @@ and VS-NfD deployment profiles.
 No BSL. No commercial-only features. No licence changes. Contributions do not
 grant any party the right to relicence this software.
 
-**Foundation.** Sentinel is pursuing stewardship under Linux Foundation Europe.
-Application is in progress. Until confirmed, the project is maintained
+**Foundation.** Sentinel is designed for stewardship under Linux Foundation Europe.
+Formal engagement is planned alongside v1.0. Until then, the project is maintained
 independently with all governance decisions made transparently through the
 RFC process.
 

@@ -9,7 +9,7 @@ into a structured, auditable, sovereign artifact.
 The sovereignty is the product. Everything else is implementation detail.
 
 - License: Apache 2.0, permanently
-- Governance: Linux Foundation Europe candidate
+- Governance: Linux Foundation Europe intended (formal engagement planned with v1.0)
 - Target: BSI reference implementation for EU-sovereign AI decision infrastructure
 
 ## Why this exists
