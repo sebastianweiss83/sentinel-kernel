@@ -52,22 +52,18 @@ pip install sentinel-kernel
 
 ```python
 from sentinel import Sentinel
-from sentinel.storage import SQLiteStorage
 
-sentinel = Sentinel(
-    storage=SQLiteStorage(":memory:"),
-    project="demo",
-)
+sentinel = Sentinel("./decisions.db")
 
 @sentinel.trace
-async def approve_discount(deal_id: str, amount: float) -> dict:
-    return {"decision": "approve", "amount": amount}
+async def approve_request(data: dict) -> dict:
+    return {"decision": "approved", "amount": data["amount"]}
 
 # Every call produces a structured decision trace
-result = await approve_discount("deal-42", amount=5000.0)
+result = await approve_request(data={"amount": 5000, "customer": "acme"})
 
 # Query traces
-traces = sentinel.query(project="demo", limit=5)
+traces = sentinel.query(limit=5)
 print(traces[0].to_json())
 ```
 
