@@ -208,11 +208,13 @@ legal counsel will shape the final design.
 
 ## Implementation status
 
-- `sentinel/manifesto/base.py` — v0.9 reference implementation.
-- `examples/manifesto_example.py` — three organisations (defence,
-  hospital, startup).
-- `tests/test_manifesto.py` — 12 tests covering the requirement
-  types, EU AI Act checks, JSON export, and HTML export.
+- `sentinel/manifesto/base.py` — v1.0 reference implementation.
+- `examples/10_manifesto.py` — runnable example with a realistic
+  manifest declaration, `EUOnly` / `Required` / `AcknowledgedGap`
+  requirement mix, and JSON export.
+- `tests/test_manifesto.py` + `tests/test_manifesto_extra.py` —
+  36 tests covering every requirement type, EU AI Act checks, JSON
+  and HTML export, and every branch of the check engine.
 
 ---
 

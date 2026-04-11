@@ -313,7 +313,8 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 - [examples/](examples/) — 13 runnable examples and 5 policy templates
 - [docs/landscape.md](docs/landscape.md) — how Sentinel relates to LLMOps ecosystem
 - [docs/architecture.md](docs/architecture.md) — detailed architecture
-- [docs/quickstart.md](docs/quickstart.md) — extended quickstart guide
+- [docs/releasing.md](docs/releasing.md) — release runbook
+- [CLAUDE_MEGA_PROMPT.md](CLAUDE_MEGA_PROMPT.md) — persistent Claude Code reference
 - [VISION.md](VISION.md) — strategic vision
 - [ROADMAP.md](ROADMAP.md) — detailed milestones
 - [GOVERNANCE.md](GOVERNANCE.md) — governance model

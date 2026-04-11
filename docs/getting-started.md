@@ -191,22 +191,22 @@ sentinel report --output sovereignty.html
 from sentinel.manifesto import (
     SentinelManifesto,
     EUOnly,
-    AirGapRequired,
+    Required,
     AcknowledgedGap,
     Targeting,
 )
 
 class MyPolicy(SentinelManifesto):
     jurisdiction = EUOnly()
-    airgap = AirGapRequired()
+    airgap = Required()             # name "airgap" is checked by convention
     bsi_certification = Targeting(by="2026-Q4")
 
     # Honest acknowledged gap with a migration plan
     cicd = AcknowledgedGap(
-        what="CI/CD pipeline runs on GitHub Actions",
-        why_acceptable="No production-ready EU-sovereign CI alternative",
-        migration_to="Self-hosted Forgejo",
+        provider="GitHub Actions",
+        migrating_to="Forgejo (self-hosted)",
         by="2027-Q2",
+        reason="No production-ready EU-sovereign CI alternative",
     )
 
 report = MyPolicy().check()
