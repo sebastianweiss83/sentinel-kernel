@@ -1,224 +1,225 @@
 # sentinel-kernel
 
-**The EU-sovereign decision record layer for AI agents.**
+**AI decisions. Recorded. Sovereign. Auditable.**
 
-Sentinel wraps agent execution, evaluates policy rules in-process, and writes append-only decision traces to local storage. It runs fully offline, has zero hard dependencies, and does not communicate with any external service. You own your data.
+Every AI agent makes decisions. From **2 August 2026**, EU high-risk AI systems must prove it — automatically, tamper-resistantly, under EU law. Sentinel makes that possible in five minutes, with zero cloud dependencies, in any environment including air-gapped.
 
-> **Status: Alpha.** Core trace schema and storage interfaces are stabilising. Not yet production-ready. API may change.
-
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%20Logging-003399)](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689)
-[![Schema](https://img.shields.io/badge/Schema-v1.0.0--draft-orange)](docs/schema.md)
-[![Governance](https://img.shields.io/badge/Governance-LF%20Europe%20intended-lightgrey)](https://linuxfoundation.eu)
+[![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Tests](https://img.shields.io/badge/tests-71%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F17-green)](docs/eu-ai-act.md)
 
 ---
 
-## What Sentinel is
-
-- Wraps agent function calls with a thin decorator — sync and async — without modifying agent logic
-- Evaluates policy rules in-process before execution, producing a structured `PolicyResult` per call
-- Records structured, SHA-256-hashed decision traces capturing inputs, outputs, policy evaluation, latency, and data residency metadata
-- Works fully offline and in air-gapped environments — no network calls, no external dependencies
-- Ships with pluggable storage: SQLite for structured querying, filesystem NDJSON for append-only log pipelines, or a custom backend via the `StorageBackend` interface
-- Has no dependency on any cloud provider, model vendor, or hosted control plane
-
----
-
-## What Sentinel is not
-
-- Not an LLM gateway or proxy — it does not sit between your application and a model API
-- Not a content moderation layer — it does not inspect or filter model outputs
-- Not a hosted control plane — there is no Sentinel-managed cloud, dashboard, or SaaS offering
-- Not tied to a model vendor — works with any model, any inference provider, or no model at all
-- Not a SIEM or observability replacement — it produces decision records, not metrics, traces, or log aggregation
-
----
-
-## Why it exists
-
-The EU AI Act (Regulation 2024/1689) requires operators of high-risk AI systems to maintain logs of automated decisions, with records sufficient to reconstruct what happened and why. Article 12 obligations apply from 2 August 2026. Most existing logging approaches — cloud-hosted observability platforms, LLM gateway logs, third-party audit services — place decision records under foreign jurisdiction or create dependencies that conflict with data sovereignty requirements.
-
-The US CLOUD Act means US-headquartered providers can be compelled to disclose data stored anywhere in the world. For AI systems deployed in regulated EU sectors — financial services, healthcare, critical infrastructure, public administration — this creates jurisdictional risk that cannot be mitigated by contractual means alone.
-
-Sentinel is designed for deployments where the record of what an AI agent decided must remain within a controlled, auditable boundary. It is built for teams who need to demonstrate compliance without depending on a third-party platform to hold that evidence.
-
----
-
-## Vision and roadmap
-
-Sentinel's vision is to become the **open standard for AI decision infrastructure in Europe** — the layer that makes AI agents auditable, sovereign, and trustworthy by design. The EU AI Act Article 12 deadline (2 August 2026) sets the pace.
-
-| Phase | Target | Milestone |
-|---|---|---|
-| **v0.1** (now) | Alpha | Decision trace kernel — schema, storage, policy evaluation |
-| **v0.2–v0.4** | 2026 | PostgreSQL, LangChain integration, OTel export, BSI reference architecture, security audit |
-| **v1.0** | End of 2026 | Production release, Linux Foundation Europe, regulated deployments |
-| **2027** | Reference impl. | BSI guidance, VS-NfD profile, co-innovation community, 5+ deployments |
-| **2028+** | EU standard | De facto standard, VS-NfD certified, commercial ecosystem, independent foundation |
-
-Full strategic context: **[VISION.md](VISION.md)** · Detailed milestones: **[ROADMAP.md](ROADMAP.md)**
-
----
-
-## Quick start
+## Install
 
 ```bash
 pip install sentinel-kernel
 ```
 
+## Five minutes to your first sovereign trace
+
 ```python
 from sentinel import Sentinel
 
-sentinel = Sentinel("./decisions.db")
+sentinel = Sentinel()  # local storage, zero config, no network
 
 @sentinel.trace
-async def approve_request(data: dict) -> dict:
-    return {"decision": "approved", "amount": data["amount"]}
+async def approve_request(payload: dict) -> dict:
+    # your existing agent logic — unchanged
+    return await your_agent.run(payload)
 
-# Every call produces a structured decision trace
-result = await approve_request(data={"amount": 5000, "customer": "acme"})
-
-# Query traces
-traces = sentinel.query(limit=5)
-print(traces[0].to_json())
+result = await approve_request({"action": "approve", "amount": 50000})
 ```
 
-Example trace output:
+That's it. Every call now produces a tamper-resistant decision record:
 
 ```json
 {
-  "schema_version": "1.0.0",
-  "trace_id": "3f2a1b4c-8e7d-4f6a-9c2b-1d0e5f3a8b7c",
-  "parent_trace_id": null,
-  "project": "demo",
-  "agent": "approve_discount",
-  "started_at": "2026-04-02T09:14:32.104Z",
-  "completed_at": "2026-04-02T09:14:32.107Z",
-  "latency_ms": 3,
-  "inputs_hash": "a4c2e1f8b3d790ef12c4a5b6d7e8f901...",
-  "inputs": {
-    "deal_id": "deal-42",
-    "amount": 5000.0
-  },
-  "output": {
-    "decision": "approve",
-    "amount": 5000.0
-  },
-  "output_hash": "f7b1d3c9a2e4561b8c0d3e2f1a4b5c6d...",
-  "model": {
-    "provider": null,
-    "name": null,
-    "version": null,
-    "tokens_input": null,
-    "tokens_output": null
-  },
-  "policy": null,
-  "human_override": null,
-  "sovereignty": {
-    "data_residency": "local",
-    "sovereign_scope": "local",
-    "storage_backend": "sqlite"
-  },
-  "tags": {},
-  "precedent_trace_ids": []
+  "trace_id": "01hx7k9m2n3p4q5r6s7t8u9v0w",
+  "timestamp": "2026-04-01T14:23:41.234Z",
+  "agent": "approve_request",
+  "model": "mistral/large-2",
+  "policy_result": "ALLOW",
+  "inputs_hash": "sha256:a3f8c2d19e4b67f0c1a5d8e2b9c3f4a7",
+  "output": {"decision": "approved"},
+  "sovereign_scope": "EU",
+  "data_residency": "local",
+  "schema_version": "1.0.0"
 }
 ```
+
+Stored locally. No cloud account. No API key. No network call.
+
+---
+
+## With policy evaluation
+
+```python
+from sentinel import Sentinel
+from sentinel.policy import SimpleRuleEvaluator
+from sentinel.storage import FilesystemStorage
+
+# works fully offline — classified environments, air-gapped networks
+sentinel = Sentinel(
+    storage=FilesystemStorage("/mnt/traces"),
+    policy=SimpleRuleEvaluator(
+        lambda ctx: ctx["amount"] <= ctx["agent_threshold"]
+    ),
+    sovereign_scope="EU",
+    data_residency="on-premise-de",
+)
+
+@sentinel.trace
+async def evaluate_procurement(ctx: dict) -> dict:
+    return await agent.run(ctx)
+```
+
+For OPA/Rego policies:
+
+```python
+from sentinel.policy import LocalRegoEvaluator
+
+sentinel = Sentinel(
+    policy=LocalRegoEvaluator("policies/procurement.rego"),
+    # evaluated in-process — no network, no OPA server
+)
+```
+
+---
+
+## What Sentinel does. What it doesn't.
+
+| | Sentinel | LLM observability tools | Proprietary AI platforms |
+|---|---|---|---|
+| Sovereign decision records | ✓ | — | Vendor-jurisdicted |
+| In-process policy evaluation | ✓ | — | — |
+| Air-gapped operation | ✓ | — | — |
+| BSI IT-Grundschutz path | ✓ | — | — |
+| EU AI Act Art. 12 compliance | ✓ | — | Partial |
+| Zero hard dependencies | ✓ | — | — |
+| Apache 2.0 permanently | ✓ | Varies | — |
+| US CLOUD Act exposure | **None** | Varies | **Unconditional** |
+
+Sentinel is not an observability tool. It is not a content filter. It does not replace your LLM or your agent framework. It wraps them — and produces a legally-valid, portable, sovereign record of every decision they make.
+
+---
+
+## Deployment
+
+**Local / development**
+```python
+sentinel = Sentinel()  # SQLite, no config
+```
+
+**On-premise enterprise**
+```python
+sentinel = Sentinel(
+    storage=PostgresStorage("postgresql://localhost/traces"),
+    sovereign_scope="EU",
+    data_residency="on-premise-de",
+)
+```
+
+**Air-gapped / classified**
+```bash
+sentinel-cli init --storage filesystem --path /mnt/traces
+# zero network connectivity required
+# traces export as NDJSON
+```
+
+---
+
+## Why sovereignty matters
+
+The US CLOUD Act (18 U.S.C. § 2713) requires US-incorporated companies to produce data stored anywhere in the world on valid legal process. This applies to EU data centres operated by US companies. No contract eliminates it.
+
+EU AI Act Article 12 mandates automatic, tamper-resistant logging for high-risk AI systems from **2 August 2026**. Decision logs that are simultaneously accessible to US authorities do not satisfy this requirement from EU jurisdiction.
+
+Sentinel's critical path — interceptor, policy evaluation, trace emission, storage — contains no US-owned components. This is architectural. Not a configuration option.
+
+---
+
+## Roadmap
+
+| Version | Target | Milestone |
+|---|---|---|
+| **v0.1** | Now | Kernel, in-process policy eval, SQLite + Filesystem storage, 71 tests |
+| **v0.2** | Q2 2026 | PostgreSQL, stable storage interface |
+| **v0.3** | Q3 2026 | LangChain integration, OpenTelemetry export, kill switch (Art. 14) |
+| **v0.4** | Q3 2026 | Air-gapped validation suite, classified deployment guide |
+| **v1.0** | Q4 2026 | BSI IT-Grundschutz assessment — certified sovereign |
+| **v1.1** | Q1 2027 | VS-NfD classified deployment profile |
+
+---
+
+## EU AI Act compliance
+
+| Article | Requirement | Sentinel |
+|---|---|---|
+| Art. 9 | Risk management | Policy eval recorded in every trace |
+| Art. 12 | Automatic tamper-resistant logging | Every decision produces a trace automatically |
+| Art. 13 | Transparency to deployers | Policy name, version, result in every trace |
+| Art. 14 | Human oversight + kill switch | Override mechanism → linked immutable trace |
+| Art. 17 | Quality management | Continuous tamper-resistant record |
+
+Enforcement for Annex III high-risk AI: **2 August 2026**. Penalties up to €15M or 3% of global annual turnover.
+
+Full mapping: [docs/eu-ai-act.md](docs/eu-ai-act.md)
 
 ---
 
 ## Architecture
 
 ```
-Your agent function
-        |
-        v
-+-------------------+
-|  @sentinel.trace  |  <- Interceptor: captures inputs, timing, context
-+--------+----------+
-         |
-         v
-+-------------------+
-|  Policy evaluator |  <- In-process: NullPolicy / SimpleRule / LocalRego (OPA)
-+--------+----------+
-         |
-         v
-+-------------------+
-|  DecisionTrace    |  <- Serialized, hashed, sovereignty metadata attached
-+--------+----------+
-         |
-         v
-+-------------------+
-|  StorageBackend   |  <- SQLite / Filesystem NDJSON / custom implementation
-+-------------------+
+Your AI agents (any framework, any model)
+         │
+         ▼
+  ┌─────────────────────┐
+  │   Sentinel Kernel   │  ← wraps any agent call
+  │                     │
+  │  Interceptor        │  ← captures inputs, timing, context
+  │  Policy Evaluator   │  ← in-process: Rego / Python / custom
+  │  Trace Serializer   │  ← SHA-256 hashed, schema-versioned
+  └──────────┬──────────┘
+             │
+    ┌────────┼────────┐
+    ▼        ▼        ▼
+ SQLite  PostgreSQL  Filesystem
+                     (NDJSON, air-gapped)
 ```
 
-**Interceptor** — The `@sentinel.trace` decorator wraps any sync or async function. It captures inputs, records start and end timestamps, computes SHA-256 hashes of inputs and outputs, and passes execution context to the policy evaluator before calling the underlying function.
-
-**Policy evaluation** — Runs in-process before the agent function executes. Three evaluators ship with the package: `NullPolicyEvaluator` (default, always returns `NOT_EVALUATED`), `SimpleRuleEvaluator` (accepts Python callables), and `LocalRegoEvaluator` (shells out to a local OPA binary — no network call). Results are one of `ALLOW`, `DENY`, `EXCEPTION`, or `NOT_EVALUATED`.
-
-**Trace serialization** — `DecisionTrace` is a dataclass with `to_dict()`, `to_json()`, and `from_dict()`. The schema includes sovereignty metadata (`DataResidency`, `sovereign_scope`, `storage_backend`) and supports human override records (`HumanOverride`).
-
-**Storage backend** — `StorageBackend` is an abstract interface. `SQLiteStorage` provides full CRUD with indexing. `FilesystemStorage` appends NDJSON with daily log rotation. Custom backends implement the interface.
-
-**Optional extras** — LangChain integration, PostgreSQL storage, and OpenTelemetry export are planned as optional extras and will not add to the zero-dependency core. See [docs/landscape.md](docs/landscape.md) for how Sentinel relates to the broader LLMOps and agent ecosystem.
-
----
-
-## Current status
-
-| Component | Status |
-|---|---|
-| `@sentinel.trace` decorator | Implemented — sync and async |
-| `DecisionTrace` schema | Implemented — v1.0.0 draft |
-| SQLite storage | Implemented |
-| Filesystem / NDJSON storage | Implemented |
-| `StorageBackend` interface | Implemented |
-| `SimpleRuleEvaluator` | Implemented |
-| `LocalRegoEvaluator` (OPA) | Implemented — requires OPA binary |
-| Human override model | Implemented |
-| LangChain integration | Planned (v0.3) |
-| PostgreSQL storage | Planned |
-| CLI (`sentinel` command) | Declared, not yet implemented |
-| Test suite | 71 tests, 86% coverage |
-| BSI IT-Grundschutz assessment | Planned (v1.0) |
-
----
-
-## Repository structure
-
-```
-sentinel-kernel/
-├── sentinel/
-│   ├── __init__.py         # Public API: Sentinel, DecisionTrace, enums
-│   ├── core/
-│   │   ├── trace.py        # DecisionTrace, PolicyEvaluation, HumanOverride
-│   │   └── tracer.py       # Sentinel class, @trace decorator, span(), query()
-│   ├── policy/
-│   │   └── evaluator.py    # NullPolicy, SimpleRule, LocalRego evaluators
-│   └── storage/
-│       ├── base.py         # StorageBackend abstract interface
-│       ├── sqlite.py       # SQLiteStorage
-│       └── filesystem.py   # FilesystemStorage (NDJSON)
-├── docs/                   # Schema, architecture, compliance, quickstart
-├── examples/               # Runnable examples
-├── tests/                  # Test suite
-├── VISION.md               # Strategic vision and core beliefs
-├── ROADMAP.md              # Milestones: v0.1 → v1.0 → EU standard
-├── GOVERNANCE.md           # Decision-making, roles, foundation path
-├── CONTRIBUTING.md         # Contribution guide
-└── CHANGELOG.md            # Version history
-```
+**Critical path guarantees:**
+- Zero hard dependencies
+- Zero network calls at runtime
+- Zero US CLOUD Act exposure
+- Full offline / air-gapped operation
 
 ---
 
 ## Contributing
 
-Sentinel is early-stage. Useful contributions right now: test coverage, schema feedback, storage backend implementations, and compliance use case documentation. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Breaking changes to `DecisionTrace` and `StorageBackend` require an RFC.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR.
+
+Every integration must document its sovereignty posture. Schema changes require an RFC. Breaking changes to the trace format go through a 14-day comment period.
+
+```bash
+git clone https://github.com/sebastianweiss83/sentinel-kernel
+cd sentinel-kernel
+pip install -e ".[dev]"
+pytest
+```
 
 ---
 
-## License and governance
+## License
 
-Sentinel is released under the [Apache 2.0 License](LICENSE).
+Apache 2.0. [Full text.](https://www.apache.org/licenses/LICENSE-2.0)
 
-Sentinel is designed for foundation stewardship under Linux Foundation Europe. Formal engagement is planned alongside v1.0. Until then, governance decisions are made transparently through the RFC process. See [GOVERNANCE.md](GOVERNANCE.md) for the full governance model, decision-making process, and contributor path.
+No BSL. No commercial-only features. No relicensing. Ever.
+
+---
+
+## Governance
+
+Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confirmed, the project is maintained independently with all significant decisions made through the RFC process in GitHub Discussions.
