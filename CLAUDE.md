@@ -12,15 +12,15 @@
 | Tests | 593 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 17:41 UTC |
+| Last updated | 2026-04-11 19:32 UTC |
 
 ## Last 5 commits
 
+- `eeb61a2` fix: rust fmt compliance, pip install retry for transient SSL flakes
 - `38f928f` feat: v3.0.0 — complete platform, API frozen, BSI assessment ready
 - `f6dce81` docs: README polish for GitHub discoverability
 - `4dcf4da` docs: publishable sovereign AI blog post
 - `e69eae2` feat: v2.4.0 — Rust SovereigntyManifest, RFC-001 implementations table, closes #13
-- `70e9a02` feat: v2.3.0 — LangFuse sovereignty panel, closes #14
 
 ## Open issues
 
