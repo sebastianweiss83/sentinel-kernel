@@ -12,15 +12,15 @@
 | Tests | 421 passing |
 | Coverage | 99% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 15:17 UTC |
+| Last updated | 2026-04-11 13:18 UTC |
 
 ## Last 5 commits
 
+- `29a5041` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `454478c` feat: v1.6.0 — VS-NfD profile, Prometheus textfile, 100% coverage
 - `859dee6` test: 100% coverage across every module
 - `fcd8cf9` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `2cc4ff6` fix: Python 3.11 compat — scope terminal shutil monkeypatch
-- `ab8fd12` fix: gitignore demo report, demo tempdir default, CONTRIBUTING note, close #2
 
 ## Open issues
 
