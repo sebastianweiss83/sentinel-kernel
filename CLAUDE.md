@@ -12,15 +12,15 @@
 | Tests | 304 passing |
 | Coverage | 97% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 13:05 UTC |
+| Last updated | 2026-04-11 13:12 UTC |
 
 ## Last 5 commits
 
+- `3df2546` test: verify CLAUDE.md auto-update
+- `e416afb` feat: auto-update CLAUDE.md state block on every push to main
 - `b87b536` chore: v1.0.1 — coverage, cleanup, release runbook
 - `92b5bc2` refactor: remove legacy examples, consolidate quickstart docs
 - `4f8b703` test: integrations coverage — otel/langchain/langfuse/postgres to 95%+
-- `f696bd7` docs: add CLAUDE_MEGA_PROMPT.md + releasing.md
-- `f0d159f` test: air-gap filesystem backend → 100% coverage
 
 ## Open issues
 
