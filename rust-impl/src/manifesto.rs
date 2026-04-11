@@ -21,6 +21,7 @@ impl SovereigntyManifest {
         }
     }
 
+    #[allow(clippy::should_implement_trait)]
     pub fn add(mut self, requirement: Box<dyn Requirement>) -> Self {
         self.requirements.push(requirement);
         self
