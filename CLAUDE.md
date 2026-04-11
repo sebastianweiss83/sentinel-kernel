@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `2.0.0` |
-| Tests | 504 passing |
+| Tests | 507 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 16:57 UTC |
+| Last updated | 2026-04-11 17:01 UTC |
 
 ## Last 5 commits
 
+- `3ea8d56` feat: manifesto 5 theses as explicit named CI checks
 - `0f5733b` feat: preview data.json for live stats consumption
 - `62ddc44` chore: GitHub community health files — issue templates, PR template
 - `5bf2bfb` test: infrastructure yaml-exclusion branch (CI 99%→100%)
 - `568c702` fix: sync_all idempotency across environments
-- `79bbd40` feat: complete auto-sync — all derived content updates on every push
 
 ## Open issues
 

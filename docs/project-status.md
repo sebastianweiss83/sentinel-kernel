@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-11 16:57 UTC_
+_Last generated from HEAD commit: 2026-04-11 17:01 UTC_
 
 ## Version
 
@@ -18,7 +18,7 @@ EU-sovereign decision record layer for AI agents.
 
 | | |
 |---|---|
-| Tests | 504 passing |
+| Tests | 507 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
 
