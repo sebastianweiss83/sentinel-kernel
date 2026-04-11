@@ -101,6 +101,31 @@ If 2 and 3 are both yes: not in the critical path.
 - Breaking changes to the trace schema require an RFC (/project:rfc)
 - Never swallow errors silently — a missing trace is worse than a crash
 
+## Auto-sync contract (non-negotiable)
+
+After **every** push to main, CI runs `scripts/sync_all.py` and
+commits any changes. The targets are:
+
+- `CLAUDE.md`              — ground truth for Claude Code sessions
+- `README.md`              — badges between `SYNC_ALL_README` markers
+- `docs/project-status.md` — full current state (fully auto-generated)
+- `docs/preview/`          — GitHub Pages preview content
+
+**Never manually edit these files.** They will be overwritten by the
+next sync run. Markers (`SYNC_ALL_*_START/END` or the existing
+`CLAUDE_MD_AUTO_*`) delimit the safe regions.
+
+To trigger a manual sync:
+
+```bash
+python scripts/sync_all.py
+git add -A && git commit -m "chore: manual sync" && git push
+```
+
+The sync is idempotent — running it twice on the same HEAD produces
+byte-identical output. CI enforces this via a regenerate-reset-push
+loop in `.github/workflows/ci.yml:sync-all`.
+
 ## Deployment contexts
 
 - Air-gapped classified (no network, local storage only)

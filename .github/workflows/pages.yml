@@ -1,8 +1,12 @@
 name: Deploy preview to GitHub Pages
 
+# Pages deployment now happens inside ci.yml's `sync-all` +
+# `deploy-pages` jobs, so the deployed content is always in lockstep
+# with the synced derived content. This file is retained only for
+# manual workflow_dispatch (e.g. re-deploying an older ref) and
+# deliberately does nothing on push events.
+
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -15,64 +19,30 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
-    name: Build preview
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Check if docs/preview already exists
-        id: preview_check
-        run: |
-          if [ -d "docs/preview" ] && [ -f "docs/preview/index.html" ]; then
-            echo "exists=true"  >> "$GITHUB_OUTPUT"
-            echo "docs/preview already exists — skipping generation."
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-            echo "docs/preview missing — will generate from scripts/generate_preview.py."
-          fi
-
-      - uses: actions/setup-python@v5
-        if: steps.preview_check.outputs.exists != 'true'
-        with:
-          python-version: "3.12"
-        continue-on-error: true
-
-      - name: Install sentinel
-        if: steps.preview_check.outputs.exists != 'true'
-        run: pip install -e ".[dev]"
-        continue-on-error: true
-
-      - name: Generate preview HTML
-        if: steps.preview_check.outputs.exists != 'true'
-        run: python scripts/generate_preview.py
-        continue-on-error: true
-
-      - name: Verify preview artefacts present
-        run: |
-          if [ ! -f "docs/preview/index.html" ]; then
-            echo "ERROR: docs/preview/index.html still missing after generation."
-            exit 1
-          fi
-          ls -la docs/preview/
-        continue-on-error: true
-
-      - uses: actions/configure-pages@v4
-        continue-on-error: true
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/preview
-        continue-on-error: true
-
-  deploy:
-    name: Deploy to GitHub Pages
-    needs: build
+  manual-deploy:
+    name: Manually deploy docs/preview
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e ".[dev]"
+
+      - name: Regenerate preview
+        run: python scripts/sync_all.py --skip-preview=false
+
+      - uses: actions/configure-pages@v4
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/preview
+
       - id: deployment
         uses: actions/deploy-pages@v4
-        continue-on-error: false

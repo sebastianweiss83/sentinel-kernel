@@ -19,7 +19,7 @@ from __future__ import annotations
 import contextlib
 import random
 import sys
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
 
 from sentinel import DataResidency, Sentinel
@@ -1126,6 +1126,7 @@ docker compose -f docker-compose.minimal.yml up
 
 
 def _footer() -> str:
+    stamp = _head_commit_date()
     return f"""
 <footer>
   <div class="container">
@@ -1138,10 +1139,26 @@ def _footer() -> str:
     </div>
     <div>License: Apache 2.0 · Swentures UG · sentinel-kernel</div>
     <div class="motto">No BSL. No commercial-only features. No relicensing. Ever.</div>
-    <div style="margin-top:1rem;font-size:0.75rem;">Generated {datetime.now().strftime('%Y-%m-%d %H:%M UTC')}</div>
+    <div style="margin-top:1rem;font-size:0.75rem;">Generated from HEAD commit: {stamp}</div>
   </div>
 </footer>
 """
+
+
+def _head_commit_date() -> str:
+    """HEAD commit date so the preview is idempotent across sync_all runs."""
+    import subprocess as _sp
+    try:
+        out = _sp.run(
+            ["git", "log", "-1", "--pretty=format:%cs"],
+            cwd=OUT_DIR.parent.parent,
+            capture_output=True,
+            text=True,
+            check=False,
+        ).stdout.strip()
+        return out or "unknown"
+    except (OSError, FileNotFoundError):
+        return "unknown"
 
 
 def _render_index(
@@ -1182,7 +1199,13 @@ def _render_index(
 
 
 def main() -> int:
+    import os as _os
+
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    # Pin the HTMLReport generated-at timestamp so repeated runs are
+    # byte-identical when no repo state changed.
+    _os.environ.setdefault("SENTINEL_REPORT_TIMESTAMP", _head_commit_date())
 
     sentinel = _build_sentinel_with_sample_data()
     sovereignty_score = RuntimeScanner().scan().sovereignty_score

@@ -28,3 +28,58 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+
+  sync-after-release:
+    # After a tag is pushed and PyPI publishes the new version, force
+    # an immediate sync on main so README badges, project-status, and
+    # the Pages preview reflect the newly-released version within
+    # minutes (instead of waiting for the next unrelated push to main).
+    name: Sync derived content after release
+    runs-on: ubuntu-latest
+    needs: [publish]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install package
+        run: pip install -e ".[dev]"
+
+      - name: Run sync_all + commit with retry
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          for i in 1 2 3 4 5; do
+            python scripts/sync_all.py
+
+            if git diff --quiet; then
+              echo "Nothing to sync on attempt $i."
+              exit 0
+            fi
+
+            git add CLAUDE.md README.md docs/project-status.md docs/preview/
+            git commit -m "chore(auto): sync after release ${GITHUB_REF_NAME} [skip ci]"
+
+            if git push origin HEAD:main; then
+              echo "Pushed on attempt $i."
+              exit 0
+            fi
+
+            echo "Push rejected on attempt $i; resetting to origin/main and retrying."
+            git fetch origin main
+            git reset --hard origin/main
+          done
+
+          echo "Push still failing after retries — giving up."
+          exit 1

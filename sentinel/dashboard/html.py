@@ -359,7 +359,14 @@ def _render_html(
     manifesto_report: Any,
 ) -> str:
     e = html.escape
-    now = datetime.now().isoformat(timespec="seconds")
+    # ``SENTINEL_REPORT_TIMESTAMP`` overrides the generated-at stamp so
+    # that tooling (scripts/sync_all.py, CI) can produce byte-identical
+    # output on repeated runs. Without it, the current wall clock is used.
+    import os as _os
+    now = _os.environ.get(
+        "SENTINEL_REPORT_TIMESTAMP",
+        datetime.now().isoformat(timespec="seconds"),
+    )
     score = runtime.sovereignty_score
     days = compliance.days_to_enforcement
     countdown_cls = _countdown_classes(days)

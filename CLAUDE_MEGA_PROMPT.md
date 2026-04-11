@@ -214,6 +214,40 @@ Full runbook: [`docs/releasing.md`](docs/releasing.md).
   unexpected message containing your diff, do NOT force-push to
   rewrite history — add a follow-up commit with the correct message.
 
+## Auto-sync contract (non-negotiable)
+
+After **every** push to main, CI runs `scripts/sync_all.py` and
+commits any changes. The targets are:
+
+- `CLAUDE.md`              — ground truth for Claude Code sessions
+- `README.md`              — badges between `SYNC_ALL_README` markers
+- `docs/project-status.md` — full current state (fully auto-generated)
+- `docs/preview/`          — GitHub Pages preview content
+
+**Never manually edit these four files.** They will be overwritten
+by the next sync run. Curated prose lives outside the marker
+blocks; touch that and it will stick.
+
+Workflows:
+- `.github/workflows/ci.yml:sync-all` — runs on every push to main
+  after tests are green, uses a regenerate-reset-push loop to
+  survive races, then uploads the GitHub Pages artifact.
+- `.github/workflows/ci.yml:deploy-pages` — runs after `sync-all`
+  and publishes the preview.
+- `.github/workflows/release.yml:sync-after-release` — runs
+  immediately after a PyPI publish so the preview reflects the
+  new version within minutes.
+
+Manual sync:
+```bash
+python scripts/sync_all.py
+git add -A && git commit -m "chore: manual sync" && git push origin main
+```
+
+The sync is idempotent — running it twice on the same HEAD produces
+byte-identical output. Non-determinism must be eliminated at the
+source (e.g. pin timestamps to HEAD commit date, not wall clock).
+
 ---
 
 ## Strategic context
