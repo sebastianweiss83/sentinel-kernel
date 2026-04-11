@@ -81,6 +81,7 @@ dev = [
     "pytest>=8.0",
     "pytest-asyncio>=0.23",
     "pytest-cov>=4.0",
+    "pytest-xdist>=3.0",
     "ruff>=0.3",
     "mypy>=1.9",
     "hatch>=1.9",
@@ -132,7 +133,9 @@ ignore_missing_imports = true
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
-addopts = "--cov=sentinel --cov-report=term-missing"
+# -n auto parallelises across cores; pytest-xdist is a dev dep so CI
+# and local devs both benefit. Wall-clock on a 10-core Mac: ~6s → ~3s.
+addopts = "-n auto --cov=sentinel --cov-report=term-missing"
 
 [tool.coverage.run]
 source = ["sentinel"]
