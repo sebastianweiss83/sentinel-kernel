@@ -12,15 +12,15 @@
 | Tests | 608 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 21:29 UTC |
+| Last updated | 2026-04-11 21:36 UTC |
 
 ## Last 5 commits
 
+- `a806e41` fix: README — remove v0.9 section, complete AI Act table, clean version history
 - `6573139` release: v3.0.3 — sentinel demo prints copy-pasteable open command
 - `140d66b` fix: sentinel demo prints correct open command with full path
 - `215001a` chore: final sync after vision update
 - `b50a725` feat: Sovereign AI Kernel vision — docs, README, preview, BSI, blog
-- `79cea11` feat: world-class GitHub Pages — logo, favicon, full EU AI Act table, roadmap v3
 
 ## Open issues
 
