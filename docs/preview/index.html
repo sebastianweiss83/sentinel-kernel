@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="EU-sovereign AI decision middleware v3.0.2. ML-DSA-65 quantum-safe trace signing. BudgetTracker, attestations, CrewAI + AutoGen. Air-gapped. Apache 2.0.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='%2300d084' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='%2300d084' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='%2300d084' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='%2300d084'/></svg>">
 <title>Sentinel v3.0.2 — Sovereign AI Decision Middleware</title>
 <style>
 :root {
@@ -33,6 +34,22 @@ a { color: var(--green); text-decoration: none; }
 a:hover { text-decoration: underline; }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
 .mono { font-family: ui-monospace, "Cascadia Code", "Fira Code", "Menlo", monospace; }
+
+/* ---------- SENTINEL MARK ---------- */
+.sentinel-mark {
+  width: 52px;
+  height: 62px;
+  margin-bottom: 1.6rem;
+  display: block;
+}
+.sentinel-mark svg { width: 100%; height: 100%; display: block; }
+.sentinel-mark-sm {
+  width: 22px;
+  height: 26px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
 
 /* ---------- HERO ---------- */
 .hero {
@@ -520,6 +537,99 @@ section.block {
 .compliance-table .partial { color: var(--amber); font-weight: 600; }
 .compliance-table .human   { color: var(--blue); font-weight: 600; }
 
+/* ---------- ROADMAP ---------- */
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+.roadmap-col {
+  border-radius: 12px;
+  padding: 1.6rem 1.5rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.roadmap-col.done {
+  background: rgba(0, 208, 132, 0.06);
+  border-color: rgba(0, 208, 132, 0.35);
+}
+.roadmap-col.now {
+  background: rgba(245, 166, 35, 0.06);
+  border-color: rgba(245, 166, 35, 0.35);
+}
+.roadmap-col.future { background: var(--surface); }
+.roadmap-col h3 {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text2);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+.roadmap-col.done h3 { color: var(--green); }
+.roadmap-col.now h3 { color: var(--amber); }
+.roadmap-col.future h3 { color: var(--text2); }
+.roadmap-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+.roadmap-list li {
+  font-size: 0.88rem;
+  color: var(--text2);
+  line-height: 1.5;
+  padding-left: 1.4rem;
+  position: relative;
+  font-family: ui-monospace, monospace;
+}
+.roadmap-list li .tag {
+  color: var(--text);
+  font-weight: 700;
+  display: inline-block;
+  min-width: 3.2rem;
+}
+.roadmap-col.done .roadmap-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 700;
+}
+.roadmap-col.now .roadmap-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--amber);
+  font-weight: 700;
+}
+.roadmap-col.future .roadmap-list li::before {
+  content: "○";
+  position: absolute;
+  left: 0;
+  color: var(--text3);
+}
+.roadmap-col .foot {
+  margin-top: auto;
+  color: var(--text3);
+  font-size: 0.78rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--border);
+}
+.roadmap-bar {
+  margin-top: 1.8rem;
+  padding: 1rem 1.2rem;
+  background: rgba(245, 166, 35, 0.08);
+  border: 1px solid var(--amber);
+  border-radius: 8px;
+  color: #ffd580;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  justify-content: center;
+}
+.roadmap-bar strong { color: var(--amber); }
+
 /* ---------- TRY IT ---------- */
 .try {
   background: var(--surface);
@@ -567,6 +677,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
   .dep-cols { grid-template-columns: 1fr; }
   .enforce-inner { flex-direction: column; align-items: flex-start; }
   .compare { font-size: 0.82rem; }
+  .roadmap-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -575,7 +686,8 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
 <section class="hero">
   <div class="container hero-grid">
     <div>
-      <div class="eyebrow">v3.0.2 · EU AI Act Art. 12/13/14 · ML-DSA-65 signing · Apache 2.0</div>
+      <div class="sentinel-mark"><svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='#00d084' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='#00d084' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='#00d084' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='#00d084'/></svg></div>
+      <div class="eyebrow">v3.0.2 · EU AI Act Art. 12 · 2 Aug 2026 · Apache 2.0 permanent</div>
       <h1>
         <span>AI decisions.</span>
         <span class="underline">Sovereign.</span>
@@ -583,15 +695,15 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
       </h1>
       <p class="lead">
         Sentinel wraps any AI agent and records tamper-resistant decision
-        traces to local sovereign storage. Quantum-safe signing with
-        client-side keys. Zero cloud dependencies, zero US CLOUD Act
-        exposure, air-gapped capable.
+        traces to local sovereign storage. Client-side ML-DSA-65 signing.
+        Zero cloud. Zero US CLOUD Act exposure. Air-gapped capable.
+        <strong><span id="hero-days">113</span> days to EU AI Act enforcement.</strong>
       </p>
       <div class="stats">
-        <span class="stat-pill"><span class="ok">✓</span>v3.0.2</span>
-        <span class="stat-pill"><span class="ok">✓</span>608 passing</span>
-        <span class="stat-pill"><span class="ok">✓</span>100% coverage</span>
-        <span class="stat-pill"><span class="ok">✓</span>40/40 smoke</span>
+        <span class="stat-pill"><span class="ok">✓</span><span id="stat-version">v3.0.2</span></span>
+        <span class="stat-pill"><span class="ok">✓</span><span id="stat-tests">608 passing</span></span>
+        <span class="stat-pill"><span class="ok">✓</span><span id="stat-coverage">100% coverage</span></span>
+        <span class="stat-pill"><span class="ok">✓</span><span id="stat-smoke">40/40 smoke</span></span>
       </div>
       <div class="cta-row">
         <button id="install-btn" class="btn-primary">
@@ -967,7 +1079,7 @@ att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
 <section class="block">
   <div class="container">
     <h2>What's inside</h2>
-    <p class="sub">Every v1 → v3 capability. Seven articles. One honest compliance story.</p>
+    <p class="sub">Every v1 → v3 capability. Eleven articles mapped. One honest compliance story.</p>
 
     <div class="inside-grid">
       <div>
@@ -999,23 +1111,75 @@ att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
       <div>
         <table class="compliance-table">
           <thead>
-            <tr><th>Article</th><th>Requirement</th><th>Sentinel</th></tr>
+            <tr><th>Article</th><th>Requirement</th><th>Sentinel</th><th>What to do</th></tr>
           </thead>
           <tbody>
-            <tr><td class="art">Art. 12</td><td>Auto logging</td><td class="full">✓ Full</td></tr>
-            <tr><td class="art">Art. 13</td><td>Transparency</td><td class="full">✓ Full</td></tr>
-            <tr><td class="art">Art. 14</td><td>Human oversight</td><td class="full">✓ Full</td></tr>
-            <tr><td class="art">Art. 9</td><td>Risk management</td><td class="partial">~ Partial</td></tr>
-            <tr><td class="art">Art. 17</td><td>Quality management</td><td class="partial">~ Partial</td></tr>
-            <tr><td class="art">Art. 10</td><td>Data governance</td><td class="human">→ Human action</td></tr>
-            <tr><td class="art">Art. 15</td><td>Accuracy</td><td class="human">→ Human action</td></tr>
+            <tr><td class="art">Art. 12</td><td>Automatic logging</td><td class="full">✓ Full</td><td>Nothing — automated</td></tr>
+            <tr><td class="art">Art. 13</td><td>Transparency</td><td class="full">✓ Full</td><td>Nothing — automated</td></tr>
+            <tr><td class="art">Art. 14</td><td>Human oversight</td><td class="full">✓ Full</td><td>Name the operator of the kill switch</td></tr>
+            <tr><td class="art">Art. 9</td><td>Risk management</td><td class="partial">~ Partial</td><td>Document risk categories and plan</td></tr>
+            <tr><td class="art">Art. 11</td><td>Technical documentation</td><td class="human">→ Human action</td><td>Write the Annex IV tech doc package</td></tr>
+            <tr><td class="art">Art. 17</td><td>Quality management</td><td class="partial">~ Partial</td><td>Define change control and QMS procedures</td></tr>
+            <tr><td class="art">Art. 16</td><td>Provider obligations</td><td class="partial">~ Partial</td><td>Register, CE mark, conformity assessment</td></tr>
+            <tr><td class="art">Art. 26</td><td>Deployer obligations</td><td class="partial">~ Partial</td><td>Staff training, oversight procedures</td></tr>
+            <tr><td class="art">Art. 10</td><td>Data governance</td><td class="human">→ Human action</td><td>Document training data provenance</td></tr>
+            <tr><td class="art">Art. 15</td><td>Accuracy &amp; robustness</td><td class="human">→ Human action</td><td>Accuracy metrics and pen testing</td></tr>
+            <tr><td class="art">Art. 72</td><td>GPAI post-market</td><td class="partial">~ Conditional</td><td>Model card if deploying GPAI as high-risk</td></tr>
           </tbody>
         </table>
         <div class="note" style="margin-top:1rem;">
           Sentinel is honest about what can and cannot be automated.
-          Articles requiring human action are clearly marked.
+          Articles requiring human action are clearly marked — we never overclaim.
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="block">
+  <div class="container">
+    <h2>Roadmap</h2>
+    <p class="sub">Phase 1 complete. Phase 2 in motion. Every version reflects shipped code, not plans.</p>
+
+    <div class="roadmap-grid">
+      <div class="roadmap-col done">
+        <h3>Phase 1 — Done</h3>
+        <ul class="roadmap-list">
+          <li><span class="tag">v1.0</span> Kill switch · decision traces · policy eval</li>
+          <li><span class="tag">v1.5</span> BSI profile · DORA · NIS2 · VS-NfD guide</li>
+          <li><span class="tag">v2.0</span> Manifesto-as-code · scanner · 5 CI theses</li>
+          <li><span class="tag">v2.1</span> BudgetTracker · attestations · CrewAI · AutoGen</li>
+          <li><span class="tag">v2.2</span> ML-DSA-65 · RFC 3161 · quantum-safe signing</li>
+          <li><span class="tag">v3.0</span> API frozen · BSI pre-engagement package ready</li>
+          <li><span class="tag">v3.0.2</span> Reentrant scanner timeout · workflow concurrency</li>
+        </ul>
+        <div class="foot">Shipped and verified on main.</div>
+      </div>
+      <div class="roadmap-col now">
+        <h3>Phase 2 — In progress</h3>
+        <ul class="roadmap-list">
+          <li><span class="tag">v3.1</span> Linux Foundation Europe application (Q3 2026)</li>
+          <li><span class="tag">v3.2</span> BSI IT-Grundschutz assessment (Q4 2026)</li>
+          <li><span class="tag">v3.x</span> Go + TypeScript RFC-001 implementations</li>
+          <li><span class="tag">v3.x</span> Healthcare &amp; public-sector policy examples</li>
+        </ul>
+        <div class="foot">Issues #19, #20, #16, #17 open on GitHub.</div>
+      </div>
+      <div class="roadmap-col future">
+        <h3>Phase 3 — 2027+</h3>
+        <ul class="roadmap-list">
+          <li><span class="tag">pipe</span> EU-sovereign build pipeline</li>
+          <li><span class="tag">ci</span> Gitea / Forgejo instead of GitHub Actions</li>
+          <li><span class="tag">pkg</span> EU package registry instead of PyPI</li>
+          <li><span class="tag">sig</span> Signed build artifacts end-to-end</li>
+        </ul>
+        <div class="foot">Breaking the American convenience layer completely.</div>
+      </div>
+    </div>
+
+    <div class="roadmap-bar">
+      ⚠ <strong><span id="days-count-3">113</span> days</strong> until EU AI Act Annex III enforcement (2 August 2026)
     </div>
   </div>
 </section>
@@ -1048,7 +1212,7 @@ docker compose -f docker-compose.minimal.yml up
       <a href="https://github.com/sebastianweiss83/sentinel-kernel/blob/main/docs/rfcs/RFC-001-sovereignty-manifest.md">RFC-001</a>
       <a href="https://github.com/sebastianweiss83/sentinel-kernel/discussions">Discussions</a>
     </div>
-    <div>License: Apache 2.0 · Swentures UG · sentinel-kernel</div>
+    <div><span class="sentinel-mark-sm"><svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='#00d084' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='#00d084' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='#00d084' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='#00d084'/></svg></span>sentinel-kernel · Swentures UG · Apache 2.0</div>
     <div class="motto">No BSL. No commercial-only features. No relicensing. Ever.</div>
     <div style="margin-top:1rem;font-size:0.75rem;">Generated from HEAD commit: 2026-04-11</div>
   </div>
@@ -1084,12 +1248,30 @@ docker compose -f docker-compose.minimal.yml up
 
 // Live enforcement countdown (recalculated in browser so it ages gracefully)
 (function() {
-  var el = document.getElementById('days-count');
-  var el2 = document.getElementById('days-count-2');
   var d = Math.ceil((new Date('2026-08-02') - new Date()) / 86400000);
   if (d < 0) d = 0;
-  if (el)  el.textContent  = d;
-  if (el2) el2.textContent = d;
+  ['days-count', 'days-count-2', 'days-count-3', 'hero-days'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = d;
+  });
+})();
+
+// Same-origin data.json refresh — air-gap safe, no external fetch
+(function() {
+  if (!window.fetch) return;
+  fetch('data.json', { cache: 'no-store' }).then(function(r) {
+    return r.ok ? r.json() : null;
+  }).then(function(d) {
+    if (!d) return;
+    var set = function(id, text) {
+      var el = document.getElementById(id);
+      if (el && text != null) el.textContent = text;
+    };
+    if (d.version) set('stat-version', 'v' + d.version);
+    if (d.tests != null)    set('stat-tests', d.tests + ' passing');
+    if (d.coverage)         set('stat-coverage', d.coverage + ' coverage');
+    if (d.smoke)            set('stat-smoke', d.smoke + ' smoke');
+  }).catch(function() { /* offline: static render is already correct */ });
 })();
 </script>
 </body>

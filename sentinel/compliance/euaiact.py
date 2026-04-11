@@ -375,6 +375,66 @@ class EUAIActChecker:
         )
         report.articles["Art. 17"] = art17
 
+        # ----- Art. 16 — Provider obligations (PARTIAL) ---------------------
+        art16 = ArticleReport(
+            article="Art. 16",
+            title="Provider obligations",
+            status="PARTIAL" if has_storage else "NON_COMPLIANT",
+            automated=True,
+            detail=(
+                "Art. 16(d) deployer logging and 16(f) post-market monitoring "
+                "evidence are produced automatically via the trace store."
+                if has_storage
+                else "Storage required for Art. 16(d)/(f) evidence."
+            ),
+            human_action=HumanActionItem(
+                article="Art. 16",
+                action="Complete provider registration, conformity assessment, CE marking",
+                guidance="Art. 16 covers obligations a middleware kernel cannot discharge: EU database registration, CE marking, conformity assessment procedure.",
+            ),
+        )
+        report.articles["Art. 16"] = art16
+
+        # ----- Art. 26 — Deployer obligations (PARTIAL) ---------------------
+        art26 = ArticleReport(
+            article="Art. 26",
+            title="Deployer obligations",
+            status="PARTIAL" if has_kill_switch and has_storage else "NON_COMPLIANT",
+            automated=True,
+            detail=(
+                "Art. 26(5) deployer logging and Art. 26(6) human oversight "
+                "primitives are shipped (kill switch + trace store)."
+                if has_kill_switch and has_storage
+                else "Requires kill switch + storage to cover Art. 26(5)/(6)."
+            ),
+            human_action=HumanActionItem(
+                article="Art. 26",
+                action="Document oversight procedures, train staff, wire incident reporting",
+                guidance="Art. 26 requires organisational controls: named oversight roles, staff training records, incident escalation paths.",
+            ),
+        )
+        report.articles["Art. 26"] = art26
+
+        # ----- Art. 72 — GPAI post-market monitoring (CONDITIONAL) ----------
+        art72 = ArticleReport(
+            article="Art. 72",
+            title="Post-market monitoring (GPAI)",
+            status="PARTIAL" if has_storage else "NON_COMPLIANT",
+            automated=True,
+            detail=(
+                "Records model identity, inputs hash, outputs and decision "
+                "chain for any GPAI call — the raw evidence Art. 72 requires."
+                if has_storage
+                else "Storage required for GPAI post-market records."
+            ),
+            human_action=HumanActionItem(
+                article="Art. 72",
+                action="Publish a GPAI post-market monitoring plan (only if you deploy GPAI as high-risk)",
+                guidance="Only applies if a GPAI model is deployed in a high-risk use. Model card and capability evaluations required alongside the trace record.",
+            ),
+        )
+        report.articles["Art. 72"] = art72
+
         report.human_action_required = [
             a.human_action
             for a in report.articles.values()

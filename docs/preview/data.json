@@ -1,6 +1,33 @@
 {
   "coverage": "100%",
   "days_to_enforcement": 113,
+  "enforcement_date": "2026-08-02",
+  "eu_ai_act": {
+    "Art. 10": "HUMAN_ACTION",
+    "Art. 11": "HUMAN_ACTION",
+    "Art. 12": "COMPLIANT",
+    "Art. 13": "COMPLIANT",
+    "Art. 14": "COMPLIANT",
+    "Art. 15": "HUMAN_ACTION",
+    "Art. 16": "PARTIAL",
+    "Art. 17": "PARTIAL",
+    "Art. 26": "PARTIAL",
+    "Art. 72": "CONDITIONAL",
+    "Art. 9": "PARTIAL"
+  },
+  "integrations": [
+    "LangChain",
+    "CrewAI",
+    "AutoGen",
+    "Haystack",
+    "LangGraph",
+    "OpenTelemetry",
+    "LangFuse",
+    "Jupyter",
+    "FastAPI",
+    "Django",
+    "Prometheus"
+  ],
   "smoke": "40/40",
   "tests": 608,
   "version": "3.0.2"
