@@ -12,15 +12,15 @@
 | Tests | 304 passing |
 | Coverage | 96% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 13:44 UTC |
+| Last updated | 2026-04-11 13:46 UTC |
 
 ## Last 5 commits
 
+- `9f3e512` feat: Grafana dashboard — 7 rows, production quality metrics
+- `f267594` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `13c4840` fix: Docker demo — pinned versions, healthchecks, minimal compose
 - `d0bc053` feat: HTML report redesign — dark theme matching preview
 - `cd6fdfe` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `fd7c596` feat: world-class GitHub Pages preview — complete redesign
-- `a1bbef3` chore(auto): refresh CLAUDE.md state block [skip ci]
 
 ## Open issues
 
