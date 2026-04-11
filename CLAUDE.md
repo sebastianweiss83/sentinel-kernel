@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `1.1.0` |
-| Tests | 324 passing |
+| Version | `1.2.0` |
+| Tests | 331 passing |
 | Coverage | 96% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 14:02 UTC |
+| Last updated | 2026-04-11 14:05 UTC |
 
 ## Last 5 commits
 
+- `b28349b` feat: RFC-001 implementation matches spec, status → ACCEPTED
+- `2ab6a42` chore(auto): refresh CLAUDE.md state block [skip ci]
+- `5ff54c4` feat: v1.2.0 — BSI profile, manifesto depth, 100+ scanner packages
 - `1b99a6b` ci: rebase-and-retry auto-update CLAUDE.md job to survive push races
 - `6da53e8` feat: scanner — 100+ packages, EU alternatives, suggest-alternatives CLI
-- `4eda332` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `11a7582` chore: gitignore .claude/scheduled_tasks.lock
-- `beb5694` feat: manifesto — GDPR, retention, audit integrity, BSI requirements
 
 ## Open issues
 
