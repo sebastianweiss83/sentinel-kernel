@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `1.1.0` |
-| Tests | 315 passing |
+| Tests | 324 passing |
 | Coverage | 96% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 13:58 UTC |
+| Last updated | 2026-04-11 14:02 UTC |
 
 ## Last 5 commits
 
+- `1b99a6b` ci: rebase-and-retry auto-update CLAUDE.md job to survive push races
+- `6da53e8` feat: scanner — 100+ packages, EU alternatives, suggest-alternatives CLI
+- `4eda332` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `11a7582` chore: gitignore .claude/scheduled_tasks.lock
 - `beb5694` feat: manifesto — GDPR, retention, audit integrity, BSI requirements
-- `1473521` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `290d0c8` fix: mypy type args in cli.py — dict → dict[str, Any]
-- `56c05fe` docs: technical co-founder onboarding kit + ADR-001/002/003
 
 ## Open issues
 
