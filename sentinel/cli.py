@@ -63,12 +63,38 @@ def main(argv: list[str] | None = None) -> int:
     )
 
     # --- compliance check ---------------------------------------------------
-    p_comp = sub.add_parser("compliance", help="EU AI Act compliance utilities")
+    p_comp = sub.add_parser("compliance", help="Compliance utilities")
     comp_sub = p_comp.add_subparsers(dest="compliance_command")
-    p_check = comp_sub.add_parser("check", help="Run the EU AI Act automated checker")
+    p_check = comp_sub.add_parser("check", help="Run compliance checkers")
     p_check.add_argument("--html", action="store_true", help="Emit HTML report")
     p_check.add_argument("--json", action="store_true", help="Emit JSON report")
     p_check.add_argument("--output", help="Write output to file instead of stdout")
+    p_check.add_argument(
+        "--all-frameworks",
+        action="store_true",
+        help="Run EU AI Act + DORA + NIS2 (unified report)",
+    )
+    p_check.add_argument(
+        "--financial-sector",
+        action="store_true",
+        help="Include DORA (financial sector)",
+    )
+    p_check.add_argument(
+        "--critical-infrastructure",
+        action="store_true",
+        help="Include NIS2 (critical infrastructure)",
+    )
+
+    # --- dora / nis2 shortcuts ---------------------------------------------
+    p_dora = sub.add_parser("dora", help="DORA compliance utilities")
+    dora_sub = p_dora.add_subparsers(dest="dora_command")
+    p_dora_check = dora_sub.add_parser("check", help="Run the DORA checker")
+    p_dora_check.add_argument("--json", action="store_true")
+
+    p_nis2 = sub.add_parser("nis2", help="NIS2 compliance utilities")
+    nis2_sub = p_nis2.add_subparsers(dest="nis2_command")
+    p_nis2_check = nis2_sub.add_parser("check", help="Run the NIS2 checker")
+    p_nis2_check.add_argument("--json", action="store_true")
 
     # --- report -------------------------------------------------------------
     p_report = sub.add_parser("report", help="Generate a self-contained HTML sovereignty report")
@@ -140,6 +166,16 @@ def main(argv: list[str] | None = None) -> int:
         if args.compliance_command == "check":
             return _cmd_compliance_check(args)
         p_comp.print_help()
+        return 1
+    if args.command == "dora":
+        if args.dora_command == "check":
+            return _cmd_dora_check(args)
+        p_dora.print_help()
+        return 1
+    if args.command == "nis2":
+        if args.nis2_command == "check":
+            return _cmd_nis2_check(args)
+        p_nis2.print_help()
         return 1
     if args.command == "report":
         return _cmd_report(args)
@@ -369,11 +405,40 @@ def _print_scan_text(out: dict[str, Any]) -> None:
 
 
 def _cmd_compliance_check(args: argparse.Namespace) -> int:
-    from sentinel.compliance import EUAIActChecker
+    from sentinel.compliance import EUAIActChecker, UnifiedComplianceChecker
 
     sentinel = _make_default_sentinel()
-    report = EUAIActChecker().check(sentinel)
 
+    run_unified = args.all_frameworks or args.financial_sector or args.critical_infrastructure
+    if run_unified:
+        checker = UnifiedComplianceChecker(
+            financial_sector=args.financial_sector or args.all_frameworks,
+            critical_infrastructure=args.critical_infrastructure or args.all_frameworks,
+        )
+        unified = checker.check(sentinel)
+        if args.html:
+            if args.output:
+                unified.save_html(args.output)
+                print(f"Wrote {args.output}")
+            else:
+                print(unified._render_html())
+        elif args.json:
+            content = json.dumps(unified.as_dict(), indent=2, default=str)
+            if args.output:
+                Path(args.output).write_text(content, encoding="utf-8")
+                print(f"Wrote {args.output}")
+            else:
+                print(content)
+        else:
+            content = unified.as_text()
+            if args.output:
+                Path(args.output).write_text(content, encoding="utf-8")
+                print(f"Wrote {args.output}")
+            else:
+                print(content)
+        return 0
+
+    report = EUAIActChecker().check(sentinel)
     if args.html:
         content = report.as_html()
     elif args.json:
@@ -386,6 +451,30 @@ def _cmd_compliance_check(args: argparse.Namespace) -> int:
         print(f"Wrote {args.output}")
     else:
         print(content)
+    return 0
+
+
+def _cmd_dora_check(args: argparse.Namespace) -> int:
+    from sentinel.compliance import DoraChecker
+
+    sentinel = _make_default_sentinel()
+    report = DoraChecker().check(sentinel)
+    if args.json:
+        print(json.dumps(report.as_dict(), indent=2, default=str))
+    else:
+        print(report.as_text())
+    return 0
+
+
+def _cmd_nis2_check(args: argparse.Namespace) -> int:
+    from sentinel.compliance import NIS2Checker
+
+    sentinel = _make_default_sentinel()
+    report = NIS2Checker().check(sentinel)
+    if args.json:
+        print(json.dumps(report.as_dict(), indent=2, default=str))
+    else:
+        print(report.as_text())
     return 0
 
 

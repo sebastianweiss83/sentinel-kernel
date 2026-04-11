@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.9.0] — 2026-04-11
+
+Minor release. Advanced compliance — DORA and NIS2 checkers with
+a unified compliance command.
+
+### Added
+
+- **`DoraChecker`** — `sentinel.compliance.dora.DoraChecker`. Maps
+  DORA Art. 6, 17, 24, 28 to Sentinel capabilities. EU Regulation
+  2022/2554, in force since 2025-01-17.
+- **`NIS2Checker`** — `sentinel.compliance.nis2.NIS2Checker`. Maps
+  NIS2 Art. 20, 21, 23, 24 to Sentinel capabilities. EU Directive
+  2022/2555, transposition deadline 2024-10-17.
+- **`UnifiedComplianceChecker`** — runs EU AI Act + DORA + NIS2
+  in one call, with per-framework flags (`financial_sector=True`,
+  `critical_infrastructure=True`). HTML/JSON/text output.
+- **`sentinel dora check` / `sentinel nis2 check` CLI commands**.
+- **`sentinel compliance check --all-frameworks`** — runs every
+  applicable framework at once. Also `--financial-sector` and
+  `--critical-infrastructure` flags.
+- **`docs/dora-compliance.md`** and **`docs/nis2-compliance.md`** —
+  framework-specific mapping documents.
+
+### Notes
+
+- 503 tests passing, 100% coverage maintained.
+- Each checker is honest about the automated-vs-operator split —
+  articles that inherently require human action are marked
+  `ACTION_REQUIRED` with a short explanation.
+
 ## [1.8.0] — 2026-04-11
 
 Minor release. Developer experience — Jupyter notebook widget,
