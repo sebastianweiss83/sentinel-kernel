@@ -218,66 +218,38 @@ market thesis, lives in [docs/roadmap.md](docs/roadmap.md).
 ### Version history
 
 | Version | Status | Milestone |
-|---|---|---|
-| **v0.1**   | ✓ shipped | Kernel, in-process policy eval, SQLite + Filesystem storage |
-| **v0.1.1** | ✓ shipped | Kill switch (EU AI Act Art. 14 halt mechanism) |
-| **v0.2**   | ✓ shipped | PostgreSQL storage backend (optional extra) |
-| **v0.3**   | ✓ shipped | LangChain callback handler + OpenTelemetry export + LangFuse enrichment |
-| **v0.4**   | ✓ shipped | Air-gapped validation suite with network blocking |
-| **v0.5**   | ✓ shipped | Sovereignty scanner (runtime, CI/CD, infrastructure) |
-| **v0.6**   | ✓ shipped | Manifesto-as-code (`SentinelManifesto`) |
-| **v0.7**   | ✓ shipped | EU AI Act compliance checker + diff report |
-| **v0.8**   | ✓ shipped | Demo environment (Docker Compose + Grafana dashboard) |
-| **v0.9**   | ✓ shipped | Sovereignty dashboard (terminal + self-contained HTML) |
-| **v1.0**   | ✓ shipped | Core production baseline |
-| **v1.5**   | ✓ shipped | Compliance checkers (EU AI Act, DORA, NIS2) |
-| **v2.0**   | ✓ shipped | Production stable, BSI assessment ready |
-| **v2.1**   | ✓ shipped | BudgetTracker, attestations, CrewAI, AutoGen |
-| **v2.2**   | ✓ shipped | Quantum-safe signing (ML-DSA-65, client-side) |
-| **v2.3**   | ✓ shipped | LangFuse sovereignty panel |
-| **v2.4**   | ✓ shipped | Rust RFC-001 implementation |
-| **v3.0**   | ✓ shipped | API freeze, BSI pre-engagement package ready |
-| **v3.1**   | Q3 2026  | Linux Foundation Europe application |
-| **v3.2**   | Q4 2026  | BSI IT-Grundschutz formal assessment |
-| **v4.0**   | 2026-2027 | SovereignRouter (see [docs/roadmap.md](docs/roadmap.md)) |
-
-## What's in v0.9
-
-v0.9 ships the complete **sovereignty platform**: the decision record
-kernel (v0.1–v0.4) plus everything a regulated team needs to evaluate,
-declare, and verify sovereignty end-to-end.
-
-- **`sentinel scan`** — runtime, CI/CD, and infrastructure scanners
-  that classify every dependency by parent company and jurisdiction.
-- **`SentinelManifesto`** — declare sovereignty requirements as a
-  Python class; run it against reality; get a structured report
-  with gaps, acknowledged gaps, and migration plans.
-- **`EUAIActChecker`** — automated EU AI Act compliance check with
-  honest gap reporting. Distinguishes machine-checkable articles
-  (12, 13, 14, 17) from organisational obligations (10, 11, 15).
-- **`sentinel report`** — generate a self-contained HTML sovereignty
-  report suitable for regulatory review. No CDN, no external
-  resources — air-gapped safe by construction.
-- **`sentinel dashboard`** — live terminal dashboard showing
-  decision traces, policy results, sovereignty score, and kill
-  switch state. Zero dependencies.
-- **Demo package** — `demo/` with Docker Compose (OTel collector,
-  Prometheus, Grafana, self-hosted LangFuse) running three realistic
-  industry scenarios end-to-end.
-- **RFC-001** — `SovereigntyManifest` specification, the first
-  step toward a cross-project standard.
-
----
+|---------|--------|-----------|
+| **v1.0** | ✓ shipped | Core production baseline |
+| **v1.5** | ✓ shipped | DORA, NIS2, VS-NfD compliance |
+| **v2.0** | ✓ shipped | Production stable, BSI ready |
+| **v2.1** | ✓ shipped | BudgetTracker, attestations, CrewAI, AutoGen |
+| **v2.2** | ✓ shipped | ML-DSA-65 quantum-safe signing |
+| **v2.3** | ✓ shipped | LangFuse sovereignty panel |
+| **v2.4** | ✓ shipped | Rust RFC-001 implementation |
+| **v3.0** | ✓ shipped | API frozen, BSI pre-engagement package |
+| **v3.1** | Q3 2026 | LF Europe application |
+| **v3.2** | Q4 2026 | BSI IT-Grundschutz assessment |
+| **v4.0** | 2026-27 | SovereignRouter |
 
 ## EU AI Act compliance
 
 | Article | Requirement | Sentinel |
-|---|---|---|
-| Art. 9 | Risk management | Policy eval recorded in every trace |
-| Art. 12 | Automatic tamper-resistant logging | Every decision produces a trace automatically |
-| Art. 13 | Transparency to deployers | Policy name, version, result in every trace |
-| Art. 14 | Human oversight + kill switch | Override mechanism → linked immutable trace |
-| Art. 17 | Quality management | Continuous tamper-resistant record |
+|---------|------------|---------|
+| Art. 12 | Auto logging | ✓ Full — automated |
+| Art. 13 | Transparency | ✓ Full — automated |
+| Art. 14 | Human oversight | ✓ Full — kill switch |
+| Art. 9  | Risk management | ~ Partial — policy traces |
+| Art. 11 | Technical docs | ~ Partial — traces as evidence |
+| Art. 17 | Quality mgmt | ~ Partial — continuous record |
+| Art. 16 | Provider obligations | ~ Partial — logging covered |
+| Art. 26 | Deployer obligations | ~ Partial — logging + oversight |
+| Art. 10 | Data governance | → Human action |
+| Art. 15 | Accuracy | → Human action |
+| Art. 72 | GPAI (if applicable) | ~ Conditional |
+
+**Sentinel never overclaims.** Articles requiring human action are
+clearly marked. Partial articles are those where Sentinel produces
+the evidence but an organisational deliverable must still be written.
 
 Enforcement for Annex III high-risk AI: **2 August 2026**. Penalties up to €15M or 3% of global annual turnover.
 
