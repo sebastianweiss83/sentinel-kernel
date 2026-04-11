@@ -1,19 +1,22 @@
 ---
 name: Feature request
-about: Suggest a feature or improvement
-title: ''
+about: Suggest a new feature or improvement
+title: '[FEAT] '
 labels: enhancement
 assignees: ''
 ---
 
-**What problem does this solve?**
-Describe the use case or deployment scenario.
+## Problem
+What problem does this feature solve?
 
-**Proposed solution**
-How you think this should work.
+## Proposed solution
+Describe what you want to happen.
 
-**Alternatives considered**
-Other approaches you considered and why they don't work.
+## Sovereignty posture
+If this adds a new integration or dependency:
+- Company/jurisdiction of new dependency:
+- CLOUD Act exposure: yes/no
+- Air-gap capable: yes/no
 
-**Sovereignty impact**
-Does this feature introduce network calls, external dependencies, or data residency concerns? If yes, describe.
+## Alternatives considered
+Any alternative solutions you've considered.

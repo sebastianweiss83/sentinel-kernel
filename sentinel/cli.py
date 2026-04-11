@@ -329,6 +329,8 @@ def _cmd_demo(args: argparse.Namespace) -> int:
 
     print(f"✓ Report saved: {out_path}")
     print()
+    print("If Sentinel helped you: github.com/sebastianweiss83/sentinel-kernel ⭐")
+    print()
 
     # Clean up temp database
     with contextlib.suppress(OSError):

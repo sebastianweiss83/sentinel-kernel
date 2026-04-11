@@ -287,6 +287,13 @@ pytest
 
 ---
 
+---
+
+If Sentinel helps you meet EU AI Act requirements, consider giving
+it a ⭐ on GitHub — it helps others find the project.
+
+---
+
 ## License
 
 Apache 2.0. [Full text.](https://www.apache.org/licenses/LICENSE-2.0)

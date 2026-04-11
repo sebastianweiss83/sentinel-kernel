@@ -1,28 +1,27 @@
 ---
 name: Bug report
-about: Report a bug in sentinel-kernel
-title: ''
+about: Something is not working as expected
+title: '[BUG] '
 labels: bug
 assignees: ''
 ---
 
-**Describe the bug**
+## Describe the bug
 A clear description of what the bug is.
 
-**To reproduce**
-Steps or minimal code to reproduce:
+## To reproduce
 ```python
-# your code here
+# Minimal code to reproduce
+from sentinel import Sentinel
 ```
 
-**Expected behaviour**
+## Expected behavior
 What you expected to happen.
 
-**Actual behaviour**
-What actually happened. Include the full error message if applicable.
+## Environment
+- OS: [e.g. Ubuntu 22.04]
+- Python: [e.g. 3.11.4]
+- sentinel-kernel: [e.g. 2.0.0]
 
-**Environment**
-- Python version:
-- sentinel-kernel version:
-- Storage backend: SQLite / Filesystem / Custom
-- OS:
+## Additional context
+Any other context, logs, or screenshots.
