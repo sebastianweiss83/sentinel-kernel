@@ -11,7 +11,7 @@ from __future__ import annotations
 import os
 import shutil
 import time
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from sentinel.core.tracer import Sentinel
@@ -29,9 +29,7 @@ _COLOR_DIM = "\x1b[2m"
 
 
 def _use_color() -> bool:
-    if os.environ.get("NO_COLOR"):
-        return False
-    return True
+    return not os.environ.get("NO_COLOR")
 
 
 def _c(text: str, colour: str) -> str:

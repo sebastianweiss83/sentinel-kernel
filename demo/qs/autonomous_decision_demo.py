@@ -34,7 +34,6 @@ from sentinel import (
 from sentinel.policy.evaluator import SimpleRuleEvaluator
 from sentinel.storage import FilesystemStorage
 
-
 # ---------------------------------------------------------------------------
 # Safety policy
 # ---------------------------------------------------------------------------

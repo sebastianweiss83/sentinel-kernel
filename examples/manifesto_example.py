@@ -19,7 +19,6 @@ from sentinel.manifesto import (
 from sentinel.policy.evaluator import SimpleRuleEvaluator
 from sentinel.storage import FilesystemStorage
 
-
 # ---------------------------------------------------------------------------
 # 1. Defence contractor — maximum sovereignty, no exceptions
 # ---------------------------------------------------------------------------

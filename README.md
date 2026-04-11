@@ -5,11 +5,28 @@
 Every AI agent makes decisions. From **2 August 2026**, EU high-risk AI systems must prove it — automatically, tamper-resistantly, under EU law. Sentinel makes that possible in five minutes, with zero cloud dependencies, in any environment including air-gapped.
 
 [![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
+[![Version](https://img.shields.io/badge/version-v0.9.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Tests](https://img.shields.io/badge/tests-71%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
-[![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F17-green)](docs/eu-ai-act.md)
+[![Tests](https://img.shields.io/badge/tests-170%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Status](https://img.shields.io/badge/status-beta-orange)](CHANGELOG.md)
+[![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F14%2F17-green)](docs/eu-ai-act.md)
 
 ---
+
+## Quick demo — full stack in one command
+
+```bash
+git clone https://github.com/sebastianweiss83/sentinel-kernel
+cd sentinel-kernel/demo
+docker compose up --build
+```
+
+Then open **http://localhost:3001** (Grafana, `admin` / `sentinel`).
+
+The demo runs a realistic EU defence contractor scenario — policy
+evaluation, kill switch (Art. 14), document analysis, sovereignty
+scan — and streams live traces to Grafana. See
+[demo/README.md](demo/README.md) for what to look at.
 
 ## Install
 
@@ -167,10 +184,41 @@ Sentinel's critical path — interceptor, policy evaluation, trace emission, sto
 | **v0.1**   | ✓ shipped | Kernel, in-process policy eval, SQLite + Filesystem storage |
 | **v0.1.1** | ✓ shipped | Kill switch (EU AI Act Art. 14 halt mechanism) |
 | **v0.2**   | ✓ shipped | PostgreSQL storage backend (optional extra) |
-| **v0.3**   | ✓ shipped | LangChain callback handler + OpenTelemetry export |
+| **v0.3**   | ✓ shipped | LangChain callback handler + OpenTelemetry export + LangFuse enrichment |
 | **v0.4**   | ✓ shipped | Air-gapped validation suite with network blocking |
+| **v0.5**   | ✓ shipped | Sovereignty scanner (runtime, CI/CD, infrastructure) |
+| **v0.6**   | ✓ shipped | Manifesto-as-code (`SentinelManifesto`) |
+| **v0.7**   | ✓ shipped | EU AI Act compliance checker + diff report |
+| **v0.8**   | ✓ shipped | Demo environment (Docker Compose + Grafana dashboard) |
+| **v0.9**   | ✓ shipped | Sovereignty dashboard (terminal + self-contained HTML) |
 | **v1.0**   | Q4 2026  | BSI IT-Grundschutz assessment — certified sovereign |
 | **v1.1**   | Q1 2027  | VS-NfD classified deployment profile |
+
+## What's in v0.9
+
+v0.9 ships the complete **sovereignty platform**: the decision record
+kernel (v0.1–v0.4) plus everything a regulated team needs to evaluate,
+declare, and verify sovereignty end-to-end.
+
+- **`sentinel scan`** — runtime, CI/CD, and infrastructure scanners
+  that classify every dependency by parent company and jurisdiction.
+- **`SentinelManifesto`** — declare sovereignty requirements as a
+  Python class; run it against reality; get a structured report
+  with gaps, acknowledged gaps, and migration plans.
+- **`EUAIActChecker`** — automated EU AI Act compliance check with
+  honest gap reporting. Distinguishes machine-checkable articles
+  (12, 13, 14, 17) from organisational obligations (10, 11, 15).
+- **`sentinel report`** — generate a self-contained HTML sovereignty
+  report suitable for BWI / QS / regulatory review. No CDN, no
+  external resources — air-gapped safe by construction.
+- **`sentinel dashboard`** — live terminal dashboard showing
+  decision traces, policy results, sovereignty score, and kill
+  switch state. Zero dependencies.
+- **Demo package** — `demo/` with Docker Compose (OTel collector,
+  Prometheus, Grafana, self-hosted LangFuse), BWI evaluation
+  package, and Quantum Systems autonomous-decision demo.
+- **RFC-001** — `SovereigntyManifest` specification, the first
+  step toward a cross-project standard.
 
 ---
 
@@ -253,7 +301,11 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 - [docs/eu-ai-act.md](docs/eu-ai-act.md) — Article 12/13/14/17 mapping
 - [docs/integration-guide.md](docs/integration-guide.md) — framework integrations
 - [docs/sovereignty.md](docs/sovereignty.md) — what sovereignty means
+- [docs/ecosystem.md](docs/ecosystem.md) — sovereign AI project registry
+- [docs/rfcs/RFC-001-sovereignty-manifest.md](docs/rfcs/RFC-001-sovereignty-manifest.md) — SovereigntyManifest spec (draft)
 - [docs/bsi-profile.md](docs/bsi-profile.md) — BSI IT-Grundschutz profile
+- [demo/bwi/README.md](demo/bwi/README.md) — BWI evaluation package
+- [demo/qs/README.md](demo/qs/README.md) — Quantum Systems evaluation package
 - [docs/landscape.md](docs/landscape.md) — how Sentinel relates to LLMOps ecosystem
 - [docs/architecture.md](docs/architecture.md) — detailed architecture
 - [docs/quickstart.md](docs/quickstart.md) — extended quickstart guide

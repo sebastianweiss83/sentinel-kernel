@@ -11,7 +11,7 @@ Three layers, one question: where is this system exposed?
 """
 
 from sentinel.scanner.cicd import CICDScanner, CICDScanResult
-from sentinel.scanner.infrastructure import InfrastructureScanner, InfraScanResult
+from sentinel.scanner.infrastructure import InfraScanResult, InfrastructureScanner
 from sentinel.scanner.runtime import (
     PackageReport,
     RuntimeScanner,

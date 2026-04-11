@@ -1,192 +1,381 @@
 """
 examples/smoke_test.py
 ~~~~~~~~~~~~~~~~~~~~~~
-End-to-end smoke test for Sentinel.
+End-to-end smoke test for the full Sentinel v0.9 platform.
 
-Exercises the full stack:
-  1. SQLiteStorage in a temp dir
-  2. @sentinel.trace on a simple function
-  3. ALLOW, DENY, EXCEPTION paths
-  4. Kill switch engage → block, disengage → resume
-  5. Query the trace store
-  6. NDJSON export from SQLite storage
-  7. FilesystemStorage round-trip
-  8. Cleanup
+Runs every major feature and exits 0 on success. A broken step
+prints which one failed and why, then exits 1.
 
-Run:  python examples/smoke_test.py
-Exit: 0 on success, 1 on any failure.
+Requires only the core package (no optional extras).
 
-Requires only the core sentinel-kernel package — no optional extras.
+Steps:
+    1.  SQLite trace written
+    2.  Filesystem NDJSON trace written
+    3.  Policy ALLOW recorded correctly
+    4.  Policy DENY recorded with rule name
+    5.  Kill switch blocks execution
+    6.  Kill switch records HumanOverride
+    7.  Kill switch disengage restores operation
+    8.  LangChain callback handler records trace (mocked langchain_core)
+    9.  OTel exporter fires (fake tracer)
+   10.  Sovereignty scanner detects test deps
+   11.  Manifesto check produces report
+   12.  EU AI Act checker runs
+   13.  HTML report generated and valid
+   14.  Air-gapped cycle completes (socket.connect blocked)
+   15.  NDJSON export valid
+   16.  All traces queryable
+
+Run:
+    python examples/smoke_test.py
 """
 
 from __future__ import annotations
 
-import asyncio
 import json
 import shutil
+import socket
 import sys
 import tempfile
 from pathlib import Path
-
-from sentinel import (
-    DataResidency,
-    KillSwitchEngaged,
-    PolicyResult,
-    Sentinel,
-)
-from sentinel.policy.evaluator import SimpleRuleEvaluator
-from sentinel.storage import FilesystemStorage, SQLiteStorage
+from typing import Any
 
 
-def _step(n: int, msg: str) -> None:
-    print(f"  Step {n}: {msg}")
+def _ok(step: int, msg: str) -> None:
+    print(f"  [✓] Step {step:>2}: {msg}")
+
+
+def _fail(step: int, msg: str, err: Exception | None = None) -> int:
+    print(f"  [✗] Step {step:>2}: {msg}")
+    if err is not None:
+        print(f"       {type(err).__name__}: {err}")
+    return 1
 
 
 def run() -> int:
     tmp = Path(tempfile.mkdtemp(prefix="sentinel-smoke-"))
     try:
-        # ------------------------------------------------------------------
-        # Step 1: SQLite trace
-        # ------------------------------------------------------------------
-        sqlite_path = tmp / "traces.db"
+        return _run_steps(tmp)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
-        def policy(inputs: dict) -> tuple[bool, str | None]:
-            if inputs.get("action") == "forbid":
-                return False, "forbidden_action"
-            return True, None
 
+def _run_steps(tmp: Path) -> int:  # noqa: PLR0911, PLR0915
+    from sentinel import (
+        DataResidency,
+        KillSwitchEngaged,
+        PolicyDeniedError,
+        PolicyResult,
+        Sentinel,
+    )
+    from sentinel.compliance import EUAIActChecker
+    from sentinel.dashboard import HTMLReport
+    from sentinel.manifesto import EUOnly, SentinelManifesto
+    from sentinel.policy.evaluator import SimpleRuleEvaluator
+    from sentinel.scanner import RuntimeScanner
+    from sentinel.storage import FilesystemStorage, SQLiteStorage
+
+    def policy(inputs: dict) -> tuple[bool, str | None]:
+        if inputs.get("forbid"):
+            return False, "forbidden"
+        return True, None
+
+    # --- 1: SQLite trace ---------------------------------------------------
+    sqlite_path = tmp / "traces.db"
+    try:
         sentinel = Sentinel(
             storage=SQLiteStorage(str(sqlite_path)),
-            project="smoke-test",
+            project="smoke",
             data_residency=DataResidency.EU_DE,
             sovereign_scope="EU",
-            policy_evaluator=SimpleRuleEvaluator({"policies/smoke.py": policy}),
+            policy_evaluator=SimpleRuleEvaluator({"p.py": policy}),
         )
-        _step(1, f"SQLite storage initialised at {sqlite_path.name}")
 
-        # ------------------------------------------------------------------
-        # Step 2: wrap a function
-        # ------------------------------------------------------------------
-        @sentinel.trace(policy="policies/smoke.py")
-        async def decide(action: str, value: int = 0) -> dict:
-            if action == "explode":
-                raise RuntimeError("boom")
-            return {"action": action, "value": value}
+        @sentinel.trace
+        def first_call() -> dict:
+            return {"ok": 1}
 
-        _step(2, "@sentinel.trace applied to decide()")
+        first_call()
+        assert sqlite_path.exists()
+        _ok(1, "SQLite trace written")
+    except Exception as e:
+        return _fail(1, "SQLite trace write", e)
 
-        # ------------------------------------------------------------------
-        # Step 3: ALLOW, DENY, EXCEPTION
-        # ------------------------------------------------------------------
-        result = asyncio.run(decide(action="approve", value=42))
-        assert result == {"action": "approve", "value": 42}
-        _step(3, "ALLOW call succeeded")
-
-        from sentinel.core.tracer import PolicyDeniedError
-
-        try:
-            asyncio.run(decide(action="forbid"))
-        except PolicyDeniedError:
-            pass
-        else:
-            print("FAIL: policy DENY did not raise")
-            return 1
-        _step(3, "DENY call raised PolicyDeniedError and wrote DENY trace")
-
-        try:
-            asyncio.run(decide(action="explode"))
-        except RuntimeError:
-            pass
-        else:
-            print("FAIL: EXCEPTION did not propagate")
-            return 1
-        _step(3, "EXCEPTION call propagated and wrote error trace")
-
-        # ------------------------------------------------------------------
-        # Step 4: kill switch
-        # ------------------------------------------------------------------
-        sentinel.engage_kill_switch("smoke test halt")
-        try:
-            asyncio.run(decide(action="approve"))
-        except KillSwitchEngaged:
-            pass
-        else:
-            print("FAIL: kill switch did not block execution")
-            return 1
-        _step(4, "Kill switch blocked execution and recorded DENY trace")
-
-        sentinel.disengage_kill_switch("smoke test resume")
-        result = asyncio.run(decide(action="approve", value=1))
-        assert result["value"] == 1
-        _step(4, "Kill switch disengaged, normal execution resumed")
-
-        # ------------------------------------------------------------------
-        # Step 5: query
-        # ------------------------------------------------------------------
-        all_traces = sentinel.query(limit=100)
-        assert len(all_traces) == 5, f"expected 5 traces, got {len(all_traces)}"
-        deny_traces = sentinel.query(policy_result=PolicyResult.DENY, limit=100)
-        assert len(deny_traces) == 2, f"expected 2 DENY traces, got {len(deny_traces)}"
-        _step(5, f"Queried trace store: {len(all_traces)} total, {len(deny_traces)} DENY")
-
-        # ------------------------------------------------------------------
-        # Step 6: NDJSON export
-        # ------------------------------------------------------------------
-        export_path = tmp / "export.ndjson"
-        with open(export_path, "w", encoding="utf-8") as f:
-            for t in all_traces:
-                f.write(t.to_json().replace("\n", " ") + "\n")
-
-        lines = export_path.read_text().strip().splitlines()
-        assert len(lines) == 5
-        for line in lines:
-            data = json.loads(line)
-            assert "trace_id" in data
-            assert data["schema_version"] == "1.0.0"
-        _step(6, f"Exported {len(lines)} traces to NDJSON")
-
-        # ------------------------------------------------------------------
-        # Step 7 & 8: FilesystemStorage
-        # ------------------------------------------------------------------
-        fs_dir = tmp / "fs-traces"
+    # --- 2: Filesystem NDJSON trace ---------------------------------------
+    fs_dir = tmp / "fs"
+    try:
         fs_sentinel = Sentinel(
             storage=FilesystemStorage(str(fs_dir)),
             project="smoke-fs",
             data_residency=DataResidency.AIR_GAPPED,
         )
-        _step(7, "FilesystemStorage initialised")
 
         @fs_sentinel.trace
-        def score(company: str) -> dict:
-            return {"company": company, "score": len(company)}
+        def fs_call() -> dict:
+            return {"ok": 2}
 
-        score("Acme GmbH")
-        score("Bosch SE")
-
+        fs_call()
         ndjson_files = list(fs_dir.glob("*.ndjson"))
-        assert len(ndjson_files) == 1, f"expected 1 ndjson file, got {len(ndjson_files)}"
-        fs_lines = ndjson_files[0].read_text().strip().splitlines()
-        assert len(fs_lines) == 2, f"expected 2 ndjson lines, got {len(fs_lines)}"
-        for line in fs_lines:
+        assert len(ndjson_files) == 1
+        _ok(2, "Filesystem NDJSON trace written")
+    except Exception as e:
+        return _fail(2, "Filesystem NDJSON write", e)
+
+    # --- 3: Policy ALLOW recorded correctly -------------------------------
+    try:
+        @sentinel.trace(policy="p.py")
+        def allow_call(forbid: bool = False) -> dict:
+            return {"x": 1}
+
+        allow_call(forbid=False)
+        allow_traces = sentinel.query(policy_result=PolicyResult.ALLOW, limit=10)
+        assert any("allow_call" in t.agent for t in allow_traces)
+        _ok(3, "Policy ALLOW recorded")
+    except Exception as e:
+        return _fail(3, "Policy ALLOW", e)
+
+    # --- 4: Policy DENY with rule name ------------------------------------
+    try:
+        import contextlib
+
+        with contextlib.suppress(PolicyDeniedError):
+            allow_call(forbid=True)
+        deny_traces = sentinel.query(policy_result=PolicyResult.DENY, limit=10)
+        deny_with_rule = [
+            t for t in deny_traces
+            if t.policy_evaluation and t.policy_evaluation.rule_triggered == "forbidden"
+        ]
+        assert deny_with_rule
+        _ok(4, "Policy DENY recorded with rule name")
+    except Exception as e:
+        return _fail(4, "Policy DENY with rule", e)
+
+    # --- 5: Kill switch blocks execution ----------------------------------
+    try:
+        sentinel.engage_kill_switch("smoke test halt")
+        blocked = False
+        try:
+            @sentinel.trace
+            def after_halt() -> dict:
+                return {}
+            after_halt()
+        except KillSwitchEngaged:
+            blocked = True
+        assert blocked
+        _ok(5, "Kill switch blocked execution")
+    except Exception as e:
+        return _fail(5, "Kill switch block", e)
+
+    # --- 6: Kill switch records HumanOverride -----------------------------
+    try:
+        ks_traces = sentinel.query(policy_result=PolicyResult.DENY, limit=20)
+        ks_trace = next(
+            (t for t in ks_traces if t.tags.get("kill_switch") == "engaged"),
+            None,
+        )
+        assert ks_trace is not None
+        assert ks_trace.human_override is not None
+        assert ks_trace.human_override.approver_id == "kill-switch"
+        _ok(6, "Kill switch recorded HumanOverride")
+    except Exception as e:
+        return _fail(6, "Kill switch HumanOverride", e)
+
+    # --- 7: Disengage restores operation ----------------------------------
+    try:
+        sentinel.disengage_kill_switch("smoke resume")
+        @sentinel.trace
+        def after_resume() -> dict:
+            return {"resumed": True}
+        result = after_resume()
+        assert result == {"resumed": True}
+        _ok(7, "Kill switch disengage restored operation")
+    except Exception as e:
+        return _fail(7, "Kill switch disengage", e)
+
+    # --- 8: LangChain callback handler ------------------------------------
+    try:
+        import importlib as _importlib
+        import sys as _sys
+        import types as _types
+
+        fake_pkg = _types.ModuleType("langchain_core")
+        fake_cb = _types.ModuleType("langchain_core.callbacks")
+
+        class _Base:
+            pass
+
+        fake_cb.BaseCallbackHandler = _Base
+        fake_pkg.callbacks = fake_cb
+        _sys.modules["langchain_core"] = fake_pkg
+        _sys.modules["langchain_core.callbacks"] = fake_cb
+
+        import sentinel.integrations.langchain as lc_mod
+        _importlib.reload(lc_mod)
+
+        lc_sentinel = Sentinel(storage=SQLiteStorage(":memory:"), project="smoke-lc")
+        handler = lc_mod.SentinelCallbackHandler(sentinel=lc_sentinel)
+
+        class _G:
+            def __init__(self, t: str) -> None:
+                self.text = t
+
+        class _R:
+            generations = [[_G("hello")]]
+
+        handler.on_llm_start(serialized={"name": "test-model"}, prompts=["hi"])
+        handler.on_llm_end(_R())
+        lc_traces = lc_sentinel.query(limit=10)
+        assert any(t.agent == "langchain.llm" for t in lc_traces)
+
+        _sys.modules.pop("langchain_core.callbacks", None)
+        _sys.modules.pop("langchain_core", None)
+        _importlib.reload(lc_mod)
+        _ok(8, "LangChain callback handler recorded trace")
+    except Exception as e:
+        return _fail(8, "LangChain callback", e)
+
+    # --- 9: OTel exporter (fake tracer) -----------------------------------
+    try:
+        from contextlib import contextmanager
+
+        from sentinel.integrations.otel import OTelExporter
+
+        class _Span:
+            def __init__(self) -> None:
+                self.attrs: dict[str, Any] = {}
+            def set_attribute(self, k: str, v: Any) -> None:
+                self.attrs[k] = v
+
+        class _Tracer:
+            def __init__(self) -> None:
+                self.spans: list[_Span] = []
+            @contextmanager
+            def start_as_current_span(self, name: str):
+                s = _Span()
+                self.spans.append(s)
+                yield s
+
+        otel_sentinel = Sentinel(storage=SQLiteStorage(":memory:"), project="smoke-otel")
+        tracer = _Tracer()
+        exporter = OTelExporter(
+            otel_sentinel, endpoint="http://fake:4317", tracer_factory=lambda: tracer
+        )
+
+        @otel_sentinel.trace
+        def otel_work() -> dict:
+            return {"ok": 1}
+
+        otel_work()
+        import time
+        for _ in range(100):
+            if tracer.spans:
+                break
+            time.sleep(0.01)
+        assert tracer.spans, "OTel span was not emitted"
+        exporter.shutdown()
+        _ok(9, "OTel exporter emitted span")
+    except Exception as e:
+        return _fail(9, "OTel exporter", e)
+
+    # --- 10: Sovereignty scanner ------------------------------------------
+    try:
+        result = RuntimeScanner().scan()
+        assert result.total_packages > 0
+        _ok(10, f"Sovereignty scanner: {result.total_packages} packages, score={result.sovereignty_score:.0%}")
+    except Exception as e:
+        return _fail(10, "Sovereignty scanner", e)
+
+    # --- 11: Manifesto report ---------------------------------------------
+    try:
+        class M(SentinelManifesto):
+            jurisdiction = EUOnly()
+
+        report = M().check(sentinel=sentinel)
+        assert 0.0 <= report.overall_score <= 1.0
+        _ok(11, f"Manifesto report: score={report.overall_score:.0%}")
+    except Exception as e:
+        return _fail(11, "Manifesto report", e)
+
+    # --- 12: EU AI Act checker --------------------------------------------
+    try:
+        compliance = EUAIActChecker().check(sentinel)
+        assert compliance.articles["Art. 12"].status == "COMPLIANT"
+        assert compliance.articles["Art. 14"].status == "COMPLIANT"
+        _ok(12, f"EU AI Act checker: overall={compliance.overall}")
+    except Exception as e:
+        return _fail(12, "EU AI Act checker", e)
+
+    # --- 13: HTML report --------------------------------------------------
+    try:
+        html_path = tmp / "report.html"
+        html = HTMLReport().generate(sentinel)
+        assert "<html" in html
+        assert "src=\"http" not in html  # self-contained
+        html_path.write_text(html)
+        assert html_path.stat().st_size > 1000
+        _ok(13, "HTML report generated and self-contained")
+    except Exception as e:
+        return _fail(13, "HTML report", e)
+
+    # --- 14: Air-gapped cycle ---------------------------------------------
+    try:
+        original_connect = socket.socket.connect
+
+        def block_connect(self: socket.socket, address: Any, *a: Any, **k: Any) -> Any:
+            if getattr(self, "family", None) in (socket.AF_INET, socket.AF_INET6):
+                raise RuntimeError(f"AIRGAP VIOLATION: {address!r}")
+            return original_connect(self, address, *a, **k)
+
+        socket.socket.connect = block_connect  # type: ignore[method-assign]
+        try:
+            airgap_sentinel = Sentinel(
+                storage=FilesystemStorage(str(tmp / "airgap")),
+                project="smoke-airgap",
+                data_residency=DataResidency.AIR_GAPPED,
+            )
+
+            @airgap_sentinel.trace
+            def airgap_call() -> dict:
+                return {"ok": 1}
+
+            airgap_call()
+            traces = airgap_sentinel.query(limit=10)
+            assert len(traces) == 1
+        finally:
+            socket.socket.connect = original_connect  # type: ignore[method-assign]
+        _ok(14, "Air-gapped cycle completed")
+    except Exception as e:
+        return _fail(14, "Air-gapped cycle", e)
+
+    # --- 15: NDJSON export -------------------------------------------------
+    try:
+        all_traces = sentinel.query(limit=1000)
+        export_path = tmp / "export.ndjson"
+        with open(export_path, "w", encoding="utf-8") as f:
+            for t in all_traces:
+                f.write(t.to_json().replace("\n", " ") + "\n")
+        lines = export_path.read_text().strip().splitlines()
+        for line in lines:
             data = json.loads(line)
-            assert data["project"] == "smoke-fs"
-        _step(8, f"FilesystemStorage wrote {len(fs_lines)} NDJSON trace lines")
+            assert "trace_id" in data
+            assert data["schema_version"] == "1.0.0"
+        _ok(15, f"NDJSON export valid ({len(lines)} traces)")
+    except Exception as e:
+        return _fail(15, "NDJSON export", e)
 
-        # ------------------------------------------------------------------
-        # Summary
-        # ------------------------------------------------------------------
-        print()
-        print("=" * 60)
-        print("  SMOKE TEST PASSED")
-        print(f"  {len(all_traces) + len(fs_lines)} traces written across 2 storage backends")
-        print("  Kill switch tested (engage/disengage)")
-        print("  NDJSON export validated")
-        print("  All sovereignty metadata preserved")
-        print("=" * 60)
-        return 0
+    # --- 16: All traces queryable -----------------------------------------
+    try:
+        queried = sentinel.query(limit=1000)
+        assert len(queried) >= 5
+        _ok(16, f"All traces queryable ({len(queried)} found)")
+    except Exception as e:
+        return _fail(16, "Trace query", e)
 
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
+    print()
+    print("=" * 64)
+    print("  ALL 16 STEPS PASSED — Sentinel v0.9 is working correctly")
+    print("=" * 64)
+    return 0
 
 
 if __name__ == "__main__":

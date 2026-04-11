@@ -13,7 +13,6 @@ from pathlib import Path
 
 import pytest
 
-
 DEMO_APP_PATH = Path(__file__).resolve().parents[1] / "demo" / "demo_app.py"
 
 
