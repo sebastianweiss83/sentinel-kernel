@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-11 17:37 UTC_
+_Last generated from HEAD commit: 2026-04-11 17:41 UTC_
 
 ## Version
 
@@ -94,6 +94,7 @@ EU-sovereign decision record layer for AI agents.
 
 ## Recent releases
 
+- **v3.0.0** — v3.0.0 — Complete platform · API frozen · BSI assessment ready
 - **v2.4.0** — v2.4.0 — Rust SovereigntyManifest, RFC-001 implementations, closes #13
 - **v2.3.0** — v2.3.0 — LangFuse sovereignty panel, closes #14
 - **v2.2.0** — v2.2.0 — Quantum-safe signing: ML-DSA-65, client-side
@@ -105,7 +106,6 @@ EU-sovereign decision record layer for AI agents.
 - **v1.6.0** — v1.6.0 — VS-NfD deployment profile + Prometheus metrics + 100% coverage
 - **v1.5.0** — v1.5.0 — LF Europe application prep, sovereign AI blog post
 - **v1.4.0** — v1.4.0 — Haystack integration, NDJSON export/import
-- **v1.3.0** — v1.3.0 — RFC-001 accepted, CONTRIBUTING, SECURITY, industry examples
 
 ## Shipped
 
