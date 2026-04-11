@@ -74,3 +74,18 @@ jobs:
       - run: pip install -e .
       - run: python examples/minimal_trace.py
       - run: python examples/policy_deny.py
+      - run: python examples/smoke_test.py
+
+  airgap:
+    name: Air-gapped validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[dev]"
+      - name: Run air-gapped tests
+        run: pytest tests/test_airgap.py -v
+        env:
+          SENTINEL_AIRGAP: "1"

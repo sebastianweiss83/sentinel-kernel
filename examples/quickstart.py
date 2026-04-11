@@ -14,9 +14,8 @@ Time to first trace: under 5 minutes.
 import asyncio
 import json
 
-from sentinel import Sentinel, DataResidency
+from sentinel import DataResidency, Sentinel
 from sentinel.storage import SQLiteStorage
-
 
 # 1. Initialise Sentinel with local storage
 sentinel = Sentinel(
@@ -83,8 +82,8 @@ async def main():
         print()
 
     print(f"✅  {len(traces)} decision traces captured and stored.")
-    print(f"    Every AI decision your agent makes is now sovereign,")
-    print(f"    auditable, and queryable — without leaving your infrastructure.")
+    print("    Every AI decision your agent makes is now sovereign,")
+    print("    auditable, and queryable — without leaving your infrastructure.")
     print()
     print("Next steps:")
     print("  • Replace the simulated LLM with a real model provider call")

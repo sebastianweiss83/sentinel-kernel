@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sentinel-kernel"
-version = "0.1.0"
+version = "0.4.0"
 description = "EU-sovereign decision record layer for AI agents."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -27,8 +27,8 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
-# LangChain / LangGraph integration
-langchain = ["langchain>=0.2", "langgraph>=0.1"]
+# LangChain callback handler integration
+langchain = ["langchain-core>=0.1"]
 
 # Anthropic integration
 anthropic = ["anthropic>=0.25"]
@@ -40,11 +40,10 @@ openai = ["openai>=1.0"]
 opa = []  # Requires OPA binary: https://www.openpolicyagent.org/
 
 # PostgreSQL storage backend
-postgres = ["asyncpg>=0.29", "psycopg2-binary>=2.9"]
+postgres = ["psycopg2-binary>=2.9"]
 
 # OpenTelemetry export
 otel = [
-    "opentelemetry-api>=1.20",
     "opentelemetry-sdk>=1.20",
     "opentelemetry-exporter-otlp>=1.20",
 ]

@@ -20,12 +20,13 @@ from sentinel.core.trace import (
     PolicyEvaluation,
     PolicyResult,
 )
-from sentinel.core.tracer import PolicyDeniedError, Sentinel
+from sentinel.core.tracer import KillSwitchEngaged, PolicyDeniedError, Sentinel
 
-__version__ = "0.1.0"
+__version__ = "0.4.0"
 __all__ = [
     "Sentinel",
     "PolicyDeniedError",
+    "KillSwitchEngaged",
     "DecisionTrace",
     "PolicyEvaluation",
     "PolicyResult",

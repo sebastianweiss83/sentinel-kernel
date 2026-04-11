@@ -162,14 +162,15 @@ Sentinel's critical path — interceptor, policy evaluation, trace emission, sto
 
 ## Roadmap
 
-| Version | Target | Milestone |
+| Version | Status | Milestone |
 |---|---|---|
-| **v0.1** | Now | Kernel, in-process policy eval, SQLite + Filesystem storage, 71 tests |
-| **v0.2** | Q2 2026 | PostgreSQL, stable storage interface |
-| **v0.3** | Q3 2026 | LangChain integration, OpenTelemetry export, kill switch (Art. 14) |
-| **v0.4** | Q3 2026 | Air-gapped validation suite, classified deployment guide |
-| **v1.0** | Q4 2026 | BSI IT-Grundschutz assessment — certified sovereign |
-| **v1.1** | Q1 2027 | VS-NfD classified deployment profile |
+| **v0.1**   | ✓ shipped | Kernel, in-process policy eval, SQLite + Filesystem storage |
+| **v0.1.1** | ✓ shipped | Kill switch (EU AI Act Art. 14 halt mechanism) |
+| **v0.2**   | ✓ shipped | PostgreSQL storage backend (optional extra) |
+| **v0.3**   | ✓ shipped | LangChain callback handler + OpenTelemetry export |
+| **v0.4**   | ✓ shipped | Air-gapped validation suite with network blocking |
+| **v1.0**   | Q4 2026  | BSI IT-Grundschutz assessment — certified sovereign |
+| **v1.1**   | Q1 2027  | VS-NfD classified deployment profile |
 
 ---
 

@@ -10,12 +10,19 @@ from __future__ import annotations
 import asyncio
 import functools
 import inspect
+import threading
 import time
 from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
 from typing import Any
 
-from sentinel.core.trace import DataResidency, DecisionTrace, PolicyResult
+from sentinel.core.trace import (
+    DataResidency,
+    DecisionTrace,
+    HumanOverride,
+    PolicyEvaluation,
+    PolicyResult,
+)
 from sentinel.policy.evaluator import NullPolicyEvaluator, PolicyEvaluator
 from sentinel.storage.base import StorageBackend
 from sentinel.storage.sqlite import SQLiteStorage
@@ -69,7 +76,43 @@ class Sentinel:
         self.store_inputs = store_inputs
         self.store_outputs = store_outputs
 
+        # Kill switch state (EU AI Act Art. 14 — human oversight halt)
+        self._kill_switch_lock = threading.Lock()
+        self._kill_switch_active = False
+        self._kill_switch_reason: str | None = None
+
         self.storage.initialise()
+
+    @property
+    def kill_switch_active(self) -> bool:
+        """True if the kill switch has been engaged."""
+        with self._kill_switch_lock:
+            return self._kill_switch_active
+
+    def engage_kill_switch(self, reason: str) -> None:
+        """
+        Engage the runtime kill switch (EU AI Act Art. 14 halt mechanism).
+
+        Every subsequent @sentinel.trace call will be blocked without
+        executing the wrapped function. Each blocked call produces a
+        DENY trace with a HumanOverride entry naming the reason.
+
+        Takes effect immediately, no restart required.
+        """
+        with self._kill_switch_lock:
+            self._kill_switch_active = True
+            self._kill_switch_reason = reason
+
+    def disengage_kill_switch(self, reason: str) -> None:
+        """
+        Disengage the runtime kill switch. Normal execution resumes.
+
+        The reason is required for auditability — why was the halt lifted?
+        """
+        with self._kill_switch_lock:
+            self._kill_switch_active = False
+            self._kill_switch_reason = None
+        _ = reason  # reserved for future audit logging
 
     def trace(
         self,
@@ -140,6 +183,33 @@ class Sentinel:
             storage_backend=self.storage.backend_name,
             tags=tags,
         )
+
+        # Kill switch check — happens BEFORE policy eval and BEFORE execution
+        with self._kill_switch_lock:
+            ks_active = self._kill_switch_active
+            ks_reason = self._kill_switch_reason or "kill switch engaged"
+
+        if ks_active:
+            trace.policy_evaluation = PolicyEvaluation(
+                policy_id="kill-switch",
+                policy_version="runtime",
+                result=PolicyResult.DENY,
+                rule_triggered="kill_switch_engaged",
+                rationale=ks_reason,
+                evaluator="sentinel-kill-switch",
+            )
+            trace.human_override = HumanOverride(
+                approver_id="kill-switch",
+                approver_role="system-halt",
+                justification=ks_reason,
+            )
+            trace.tags["kill_switch"] = "engaged"
+            trace.complete(output={}, latency_ms=0)
+            self.storage.save(trace)
+            raise KillSwitchEngaged(
+                f"Sentinel kill switch engaged: {ks_reason}. "
+                f"Trace ID: {trace.trace_id}"
+            )
 
         # Policy evaluation — happens BEFORE execution
         if policy:
@@ -238,4 +308,15 @@ class Sentinel:
 
 class PolicyDeniedError(Exception):
     """Raised when a policy evaluation returns DENY and no override is provided."""
+    pass
+
+
+class KillSwitchEngaged(Exception):
+    """
+    Raised when a traced call is blocked because the kill switch is engaged.
+
+    Implements the EU AI Act Art. 14 halt mechanism: human oversight
+    can stop all decisions at runtime without restart. Every blocked
+    call is recorded as a DENY trace with a HumanOverride entry.
+    """
     pass
