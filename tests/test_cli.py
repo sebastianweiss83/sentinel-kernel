@@ -336,3 +336,24 @@ def test_load_manifesto_bad_spec_returns_none(tmp_path: Path) -> None:
     # File does not exist
     missing = tmp_path / "missing.py"
     assert cli._load_manifesto(f"{missing}:Anything") is None
+
+
+def test_dunder_main_module_delegates_to_cli_main() -> None:
+    import sentinel.__main__ as dunder_main
+
+    assert dunder_main.main is cli.main
+
+
+def test_python_dash_m_sentinel_help_exits_zero() -> None:
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [sys.executable, "-m", "sentinel", "--help"],
+        capture_output=True,
+        text=True,
+        timeout=30,
+    )
+    assert result.returncode == 0
+    assert "sentinel" in result.stdout.lower()
+    assert "demo" in result.stdout

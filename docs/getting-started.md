@@ -6,9 +6,27 @@ Two minutes from `pip install` to your first sovereign decision trace.
 
 ## 1. Install
 
+**macOS:**
+```bash
+pip3 install sentinel-kernel
+sentinel demo
+```
+
+**Linux:**
 ```bash
 pip install sentinel-kernel
+sentinel demo
 ```
+
+**If `pip` / `pip3` is not found, or `sentinel` is not on your PATH:**
+```bash
+python3 -m pip install sentinel-kernel
+python3 -m sentinel demo
+```
+
+`python3 -m sentinel` is equivalent to the `sentinel` entry point. Use it
+whenever pip's `--user` bin directory is not on PATH — a common situation
+on fresh macOS installs.
 
 Zero required dependencies. Works with Python 3.11 and 3.12.
 

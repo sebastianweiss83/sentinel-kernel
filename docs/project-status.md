@@ -18,7 +18,7 @@ EU-sovereign decision record layer for AI agents.
 
 | | |
 |---|---|
-| Tests | 608 passing |
+| Tests | 610 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
 
@@ -27,6 +27,7 @@ EU-sovereign decision record layer for AI agents.
 | Module | Coverage | Status |
 |---|---|---|
 | `sentinel/__init__.py` | 100% | ✓ |
+| `sentinel/__main__.py` | 100% | ✓ |
 | `sentinel/cli.py` | 100% | ✓ |
 | `sentinel/compliance/__init__.py` | 100% | ✓ |
 | `sentinel/compliance/dora.py` | 100% | ✓ |

@@ -745,13 +745,13 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
       </p>
       <div class="stats">
         <span class="stat-pill"><span class="ok">✓</span><span id="stat-version">v3.0.3</span></span>
-        <span class="stat-pill"><span class="ok">✓</span><span id="stat-tests">608 passing</span></span>
+        <span class="stat-pill"><span class="ok">✓</span><span id="stat-tests">610 passing</span></span>
         <span class="stat-pill"><span class="ok">✓</span><span id="stat-coverage">100% coverage</span></span>
         <span class="stat-pill"><span class="ok">✓</span><span id="stat-smoke">40/40 smoke</span></span>
       </div>
       <div class="cta-row">
         <button id="install-btn" class="btn-primary">
-          <span class="mono-inline">$ pip install sentinel-kernel</span>
+          <span class="mono-inline">$ pip3 install sentinel-kernel</span>
         </button>
         <a href="https://github.com/sebastianweiss83/sentinel-kernel" class="link-secondary">View on GitHub →</a>
         <a href="report.html" class="link-tertiary">sentinel report ↗</a>
@@ -767,7 +767,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
     <span class="title">~/sentinel — python</span>
   </div>
   <div class="terminal-body">
-    <div class="line l1"><span class="prompt">$</span> pip install sentinel-kernel</div>
+    <div class="line l1"><span class="prompt">$</span> pip3 install sentinel-kernel</div>
     <div class="line l2"><span class="prompt">$</span> python3</div>
     <div class="line l3"><span class="py">&gt;&gt;&gt;</span> <span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel</div>
     <div class="line l4"><span class="py">&gt;&gt;&gt;</span> s = <span class="fn">Sentinel</span>()</div>
@@ -818,7 +818,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
       <div class="industry-card">
         <h3>Quantum-safe trace signing</h3>
         <p><strong>ML-DSA-65 (FIPS 204)</strong>, BSI TR-02102-1 recommended. Keys stay client-side, forever. Same algorithm as cloud competitors — your keys, your infrastructure, your law.</p>
-        <div class="ks-code">pip install sentinel-kernel[pqc] &amp;&amp; sentinel keygen</div>
+        <div class="ks-code">pip3 install sentinel-kernel[pqc] &amp;&amp; sentinel keygen</div>
       </div>
       <div class="industry-card">
         <h3>Attestations · BudgetTracker · Preflight</h3>
@@ -830,7 +830,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
       <div class="industry-card">
         <h3>CrewAI · AutoGen · LangFuse panel</h3>
         <p>New framework integrations: <strong>CrewAI</strong> task callback and <strong>AutoGen</strong> agent hook. LangFuse gains a <strong>sovereignty widget</strong> — self-contained HTML, no CDN.</p>
-        <div class="ks-code">pip install sentinel-kernel[crewai,autogen]</div>
+        <div class="ks-code">pip3 install sentinel-kernel[crewai,autogen]</div>
       </div>
       <div class="industry-card">
         <h3>Rust SovereigntyManifest</h3>
@@ -1340,8 +1340,12 @@ att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
   <div class="container">
     <div class="try">
       <h2>Try it now</h2>
-      <div><div class="step">$ pip install sentinel-kernel</div></div>
+      <div class="small" style="margin-bottom:0.4rem;opacity:0.8">macOS / Linux</div>
+      <div><div class="step">$ pip3 install sentinel-kernel</div></div>
       <div><div class="step">$ sentinel demo</div></div>
+      <div class="sep">Alternative (always works, even without pip on PATH)</div>
+      <div><div class="step">$ python3 -m pip install sentinel-kernel</div></div>
+      <div><div class="step">$ python3 -m sentinel demo</div></div>
       <div class="small">Runs 50 decisions · Kill switch demo · Compliance check<br>
         Generates sovereignty_report.html · No Docker required</div>
       <div class="sep">or — full Grafana demo</div>
@@ -1375,7 +1379,7 @@ docker compose -f docker-compose.minimal.yml up
   var btn = document.getElementById('install-btn');
   if (!btn) return;
   btn.addEventListener('click', function() {
-    var txt = 'pip install sentinel-kernel';
+    var txt = 'pip3 install sentinel-kernel && sentinel demo';
     if (navigator.clipboard) navigator.clipboard.writeText(txt);
     var original = btn.innerHTML;
     btn.innerHTML = '\u2713 Copied!';
