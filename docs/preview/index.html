@@ -3,147 +3,1015 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sentinel — live sovereignty preview</title>
+<meta name="description" content="EU-sovereign AI decision middleware. Tamper-resistant decision traces. Zero cloud dependencies. Apache 2.0.">
+<title>Sentinel — Sovereign AI Decision Middleware</title>
 <style>
- :root { --fg: #111; --muted: #555; --border: #ddd; --accent: #0052cc; }
- * { box-sizing: border-box; }
- body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        max-width: 1100px; margin: 2em auto; padding: 0 1em; color: var(--fg); background: #fff; }
- h1 { font-size: 2em; margin-bottom: 0.1em; }
- h2 { font-size: 1.3em; margin-top: 2.2em; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; }
- .lead { font-size: 1.05em; color: var(--muted); max-width: 68ch; }
- .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1em; margin-top: 1em; }
- .card { border: 1px solid var(--border); border-radius: 8px; padding: 1em; background: #fafafa; }
- .card h3 { margin: 0 0 0.4em 0; font-size: 1em; color: var(--muted); }
- .card .value { font-size: 1.6em; font-weight: 700; }
- pre { background: #f6f8fa; border: 1px solid var(--border); border-radius: 6px; padding: 0.8em; overflow-x: auto; font-size: 0.88em; }
- table { border-collapse: collapse; width: 100%; margin-top: 0.6em; font-size: 0.9em; }
- th, td { border: 1px solid var(--border); padding: 0.4em 0.6em; text-align: left; }
- th { background: #f4f4f4; }
- a { color: var(--accent); }
- .row { display: flex; gap: 2em; align-items: center; flex-wrap: wrap; }
- .install { background: #111; color: #fff; padding: 0.6em 0.9em; border-radius: 6px; display: inline-block; font-family: monospace; }
- footer { margin-top: 3em; padding: 1em 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.85em; }
+:root {
+  --bg: #0a0e14;
+  --surface: #111827;
+  --surface2: #1a2332;
+  --border: #1f2937;
+  --text: #e5e7eb;
+  --text2: #9ca3af;
+  --text3: #6b7280;
+  --green: #00d084;
+  --green-dim: #00a368;
+  --red: #ff3b3b;
+  --amber: #f5a623;
+  --blue: #3b82f6;
+  --purple: #a78bfa;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--green); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+.mono { font-family: ui-monospace, "Cascadia Code", "Fira Code", "Menlo", monospace; }
+
+/* ---------- HERO ---------- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 4rem 0 3rem;
+  border-bottom: 1px solid var(--border);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 55fr 45fr;
+  gap: 3rem;
+  align-items: center;
+  width: 100%;
+}
+.eyebrow {
+  font-size: 0.85rem;
+  color: var(--green);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+}
+.hero h1 {
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.8rem;
+}
+.hero h1 span { display: block; }
+.hero h1 .underline { color: var(--green); }
+.hero p.lead {
+  color: var(--text2);
+  font-size: 1.1rem;
+  max-width: 52ch;
+  margin-bottom: 2rem;
+}
+.stats {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.stat-pill {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--text2);
+}
+.stat-pill .ok { color: var(--green); margin-right: 0.3rem; }
+.cta-row { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--green);
+  color: #001b0e;
+  border: 0;
+  padding: 0.9rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.2s;
+}
+.btn-primary:hover { background: #00ec95; transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary .mono-inline { font-family: ui-monospace, monospace; font-weight: 600; }
+.link-secondary { color: var(--text); font-weight: 500; }
+.link-tertiary { color: var(--text2); }
+
+/* ---------- TERMINAL ---------- */
+.terminal {
+  background: #0d1117;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 208, 132, 0.08), 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.terminal-bar {
+  background: #161b22;
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+.terminal-bar .dot {
+  width: 12px; height: 12px; border-radius: 50%;
+}
+.dot-red { background: #ff5f56; }
+.dot-amber { background: #ffbd2e; }
+.dot-green { background: #27c93f; }
+.terminal-bar .title {
+  margin-left: 0.8rem;
+  font-size: 0.8rem;
+  color: var(--text3);
+  font-family: ui-monospace, monospace;
+}
+.terminal-body {
+  padding: 1.2rem 1.4rem;
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--text);
+  min-height: 420px;
+}
+.terminal-body .line {
+  opacity: 0;
+  animation: fade-in 0.35s ease forwards;
+}
+.terminal-body .prompt { color: var(--green); }
+.terminal-body .py { color: var(--purple); }
+.terminal-body .str { color: #c3e88d; }
+.terminal-body .kw { color: var(--purple); }
+.terminal-body .fn { color: #82aaff; }
+.terminal-body .cm { color: var(--text3); }
+.terminal-body .json { color: #f78c6c; }
+.terminal-body .success { color: var(--green); font-weight: 600; }
+.l1 { animation-delay: 0.2s; }
+.l2 { animation-delay: 1.6s; }
+.l3 { animation-delay: 2.7s; }
+.l4 { animation-delay: 3.7s; }
+.l5 { animation-delay: 4.7s; }
+.l6 { animation-delay: 5.2s; }
+.l7 { animation-delay: 5.7s; }
+.l8 { animation-delay: 6.5s; }
+.l9 { animation-delay: 7.1s; }
+.l10 { animation-delay: 8.1s; }
+.l11 { animation-delay: 9.5s; }
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- ENFORCEMENT BANNER ---------- */
+.enforce {
+  background: #2d1f00;
+  border-top: 1px solid var(--amber);
+  border-bottom: 1px solid var(--amber);
+  padding: 1.1rem 0;
+}
+.enforce-inner {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.enforce-text { color: #ffd580; font-size: 0.95rem; max-width: 80ch; }
+.enforce-text strong { color: var(--amber); }
+.enforce-days {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(245, 166, 35, 0.1);
+  border: 1px solid var(--amber);
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+}
+.enforce-days .n {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--amber);
+  line-height: 1;
+}
+.enforce-days .label { font-size: 0.7rem; color: #ffd580; text-transform: uppercase; }
+
+/* ---------- SECTIONS ---------- */
+section.block {
+  padding: 5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.block h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6rem;
+}
+.block .sub {
+  color: var(--text2);
+  font-size: 1.05rem;
+  margin-bottom: 2.5rem;
+  max-width: 72ch;
+}
+
+/* ---------- COMPARISON TABLE ---------- */
+.compare {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.compare th, .compare td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.92rem;
+}
+.compare thead th {
+  background: var(--surface2);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text2);
+}
+.compare thead th.col-bad { color: var(--red); }
+.compare thead th.col-good { color: var(--green); }
+.compare tbody tr:last-child td { border-bottom: none; }
+.compare .yes { color: var(--green); font-weight: 600; }
+.compare .no { color: var(--red); font-weight: 600; }
+.compare .partial { color: var(--amber); font-weight: 600; }
+.compare .row-label { color: var(--text); font-weight: 500; }
+.compare .col-good-cell {
+  background: rgba(0, 208, 132, 0.04);
+}
+.note {
+  margin-top: 1.5rem;
+  padding: 1rem 1.2rem;
+  background: var(--surface);
+  border-left: 3px solid var(--amber);
+  border-radius: 4px;
+  color: var(--text2);
+  font-size: 0.9rem;
+}
+
+/* ---------- DASHBOARD PANELS ---------- */
+.panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+.panel h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text2);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.panel h3 .big { display: block; font-size: 2.4rem; color: var(--text); margin-top: 0.3rem; text-transform: none; letter-spacing: -0.02em; }
+.gauge-svg { display: block; margin: 0.5rem auto; }
+.gauge-ring { fill: none; stroke: #1f2937; stroke-width: 14; }
+.gauge-fill { fill: none; stroke: var(--green); stroke-width: 14; stroke-linecap: round;
+              stroke-dasharray: 440; stroke-dashoffset: 440; transform: rotate(-90deg); transform-origin: 100px 100px;
+              animation: gauge-draw 2s ease-out forwards; animation-delay: 0.3s; }
+@keyframes gauge-draw { to { stroke-dashoffset: calc(440 - 440 * var(--g, 0.78)); } }
+.gauge-text {
+  font-family: ui-monospace, monospace;
+  font-size: 2.4rem;
+  font-weight: 800;
+  fill: var(--text);
+}
+.gauge-label {
+  text-align: center;
+  color: var(--text2);
+  font-size: 0.9rem;
+  margin-top: 0.4rem;
+}
+.gauge-sub {
+  text-align: center;
+  color: var(--text3);
+  font-size: 0.75rem;
+  margin-top: 0.2rem;
+}
+
+/* Bars panel */
+.bars { display: flex; flex-direction: column; gap: 0.7rem; }
+.bar-row { display: grid; grid-template-columns: 60px 1fr 120px; align-items: center; gap: 0.8rem; font-size: 0.85rem; }
+.bar-row .art { color: var(--text2); font-family: ui-monospace, monospace; font-weight: 600; }
+.bar-track { background: #0a0e14; height: 18px; border-radius: 4px; position: relative; overflow: hidden; }
+.bar-fill {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 0;
+  animation: bar-grow 1.4s ease-out forwards;
+  animation-delay: 0.4s;
+}
+@keyframes bar-grow { to { width: var(--w, 0%); } }
+.bar-fill.green { background: var(--green); }
+.bar-fill.amber { background: var(--amber); }
+.bar-fill.blue  { background: var(--blue); }
+.bar-row .status { font-size: 0.75rem; font-weight: 600; color: var(--text2); letter-spacing: 0.05em; text-transform: uppercase; text-align: right; }
+
+/* Feed table */
+.feed-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+.feed-table th, .feed-table td {
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-family: ui-monospace, monospace;
+}
+.feed-table th { color: var(--text3); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.feed-table td.ms { text-align: right; color: var(--text3); }
+.feed-row {
+  opacity: 0;
+  animation: fade-in 0.5s ease forwards;
+}
+.feed-row:nth-child(1) { animation-delay: 0.1s; }
+.feed-row:nth-child(2) { animation-delay: 0.3s; }
+.feed-row:nth-child(3) { animation-delay: 0.5s; }
+.feed-row:nth-child(4) { animation-delay: 0.7s; }
+.feed-row:nth-child(5) { animation-delay: 0.9s; }
+.feed-row:nth-child(6) { animation-delay: 1.1s; }
+.feed-row:nth-child(7) { animation-delay: 1.3s; }
+.feed-row:nth-child(8) { animation-delay: 1.5s; }
+.pill {
+  display: inline-block;
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.pill.allow { background: rgba(0, 208, 132, 0.15); color: var(--green); }
+.pill.deny { background: rgba(255, 59, 59, 0.15); color: var(--red); }
+.pill.exc  { background: rgba(245, 166, 35, 0.15); color: var(--amber); }
+
+/* Deps list */
+.dep-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.dep-cols h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
+.dep-cols h4.ok { color: var(--green); }
+.dep-cols h4.warn { color: var(--amber); }
+.dep-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.82rem; }
+.dep-list li { font-family: ui-monospace, monospace; color: var(--text2); }
+.dep-list li::before { content: "● "; color: var(--green); margin-right: 0.3rem; }
+.dep-list.warn li::before { content: "○ "; color: var(--amber); }
+.dep-list li .residency { color: var(--text3); font-size: 0.75rem; }
+.dep-note { margin-top: 0.9rem; font-size: 0.75rem; color: var(--text3); }
+
+/* Kill switch */
+.killswitch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1rem 0;
+}
+.ks-indicator {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, var(--green), #006b42);
+  box-shadow: 0 0 0 0 rgba(0, 208, 132, 0.6);
+  animation: pulse 2.2s ease-out infinite;
+}
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(0, 208, 132, 0.5); }
+  70%  { box-shadow: 0 0 0 18px rgba(0, 208, 132, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 208, 132, 0); }
+}
+.ks-label { color: var(--green); font-weight: 700; letter-spacing: 0.05em; }
+.ks-sub { color: var(--text2); font-size: 0.85rem; text-align: center; }
+.ks-code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.78rem;
+  background: #0a0e14;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+
+/* Countdown panel */
+.count-big {
+  font-size: 5rem;
+  font-weight: 800;
+  color: var(--amber);
+  line-height: 1;
+  text-align: center;
+  letter-spacing: -0.03em;
+  font-family: ui-monospace, monospace;
+}
+.count-label { text-align: center; color: var(--text); font-weight: 600; margin-top: 0.4rem; }
+.count-sub { text-align: center; color: var(--text3); font-size: 0.8rem; margin-top: 0.3rem; }
+
+/* ---------- CODE TABS ---------- */
+.tabs { margin-top: 1rem; }
+.tab-headers { display: flex; gap: 0.4rem; margin-bottom: 0; }
+.tab-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  color: var(--text2);
+  padding: 0.7rem 1.2rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+}
+.tab-btn.active { background: var(--surface2); color: var(--text); border-color: var(--border); }
+.tab-panel {
+  display: none;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 0 12px 12px 12px;
+  padding: 1.4rem;
+}
+.tab-panel.active { display: block; }
+.tab-panel pre {
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--text);
+  overflow-x: auto;
+  white-space: pre;
+}
+.kw { color: #c792ea; }
+.fn { color: #82aaff; }
+.st { color: #c3e88d; }
+.cm { color: #546e7a; }
+.nu { color: #f78c6c; }
+.cls { color: #ffcb6b; }
+
+/* ---------- INDUSTRY CARDS ---------- */
+.industry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.industry-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.8rem;
+}
+.industry-card .icon { width: 48px; height: 48px; margin-bottom: 1rem; color: var(--green); }
+.industry-card h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
+.industry-card p { color: var(--text2); font-size: 0.92rem; }
+
+/* ---------- INSIDE SECTION ---------- */
+.inside-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.feature-list li {
+  color: var(--text2);
+  font-size: 0.92rem;
+  padding-left: 1.6rem;
+  position: relative;
+}
+.feature-list li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--green);
+  font-weight: 700;
+}
+.compliance-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+.compliance-table th {
+  background: var(--surface);
+  color: var(--text2);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+.compliance-table td {
+  padding: 0.55rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+}
+.compliance-table .art { color: var(--text); font-family: ui-monospace, monospace; font-weight: 600; }
+.compliance-table .full    { color: var(--green); font-weight: 600; }
+.compliance-table .partial { color: var(--amber); font-weight: 600; }
+.compliance-table .human   { color: var(--blue); font-weight: 600; }
+
+/* ---------- TRY IT ---------- */
+.try {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.try h2 { margin-bottom: 1.5rem; }
+.try .step { font-family: ui-monospace, monospace; background: #0a0e14; padding: 0.9rem 1.4rem;
+             border-radius: 8px; display: inline-block; margin: 0.3rem 0; color: var(--green); font-size: 0.95rem; }
+.try .sep { color: var(--text3); margin: 1.2rem 0 0.8rem; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em; }
+.try pre {
+  text-align: left;
+  max-width: 560px;
+  margin: 0 auto;
+  font-family: ui-monospace, monospace;
+  background: #0a0e14;
+  padding: 1.2rem;
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.85rem;
+  overflow-x: auto;
+}
+.try .small { color: var(--text3); font-size: 0.78rem; margin-top: 0.6rem; }
+
+/* ---------- FOOTER ---------- */
+footer {
+  padding: 3rem 0 4rem;
+  text-align: center;
+  color: var(--text3);
+  font-size: 0.88rem;
+}
+footer .links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+footer .motto { color: var(--text2); margin-top: 0.6rem; }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .hero { min-height: auto; padding: 3rem 0; }
+  .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .hero h1 { font-size: 2.6rem; }
+  .panels { grid-template-columns: 1fr; }
+  .industry-grid { grid-template-columns: 1fr; }
+  .inside-grid { grid-template-columns: 1fr; }
+  .dep-cols { grid-template-columns: 1fr; }
+  .enforce-inner { flex-direction: column; align-items: flex-start; }
+  .compare { font-size: 0.82rem; }
+}
 </style>
 </head>
 <body>
 
-<h1>Sentinel</h1>
-<p class="lead">
- EU-sovereign AI decision middleware. Wraps any AI agent, evaluates
- policy in-process, and writes tamper-resistant decision records to
- local storage. Zero dependencies. Air-gapped capable. Apache 2.0.
-</p>
-
-<p class="install">pip install sentinel-kernel</p>
-&nbsp; &nbsp;
-<a href="https://github.com/sebastianweiss83/sentinel-kernel">GitHub</a> ·
-<a href="https://pypi.org/project/sentinel-kernel/">PyPI</a> ·
-<a href="report.html">Full sample report</a>
-
-<h2>Live sample dashboard</h2>
-<p class="lead">
- The charts below are rendered from a sample Sentinel run with 200
- simulated decisions. Every element is inline SVG — zero external
- resources, zero JavaScript. Safe for air-gapped environments.
-</p>
-
-<div class="cards">
-  <div class="card"><h3>Sovereignty score</h3><svg viewBox="0 0 220 140" width="220" height="140" xmlns="http://www.w3.org/2000/svg">
-  <path d="M 10.0 130 A 100 100 0 0 1 210.0 130"
-        fill="none" stroke="#eee" stroke-width="18"/>
-  <path d="M 10.0 130 A 100 100 0 0 1 210.0 130.0"
-        fill="none" stroke="#167c3c" stroke-width="18" stroke-linecap="round"/>
-  <text x="110.0" y="112" text-anchor="middle"
-        font-family="-apple-system, Segoe UI, sans-serif"
-        font-size="30" font-weight="700" fill="#167c3c">100%</text>
-</svg></div>
-  <div class="card">
-    <h3>Days to EU AI Act enforcement</h3>
-    <div class="value">113</div>
-    <div style="color:var(--muted);font-size:0.85em;">2 August 2026 — Annex III</div>
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="eyebrow">EU AI Act · Art. 12/13/14 · Apache 2.0</div>
+      <h1>
+        <span>AI decisions.</span>
+        <span class="underline">Sovereign.</span>
+        <span>Auditable.</span>
+      </h1>
+      <p class="lead">
+        Sentinel wraps any AI agent and records tamper-resistant decision
+        traces to local sovereign storage. Zero cloud dependencies. Zero
+        US CLOUD Act exposure. Air-gapped capable.
+      </p>
+      <div class="stats">
+        <span class="stat-pill"><span class="ok">✓</span>304 tests</span>
+        <span class="stat-pill"><span class="ok">✓</span>97% coverage</span>
+        <span class="stat-pill"><span class="ok">✓</span>40/40 smoke</span>
+      </div>
+      <div class="cta-row">
+        <button id="install-btn" class="btn-primary">
+          <span class="mono-inline">$ pip install sentinel-kernel</span>
+        </button>
+        <a href="https://github.com/sebastianweiss83/sentinel-kernel" class="link-secondary">View on GitHub →</a>
+        <a href="report.html" class="link-tertiary">sentinel report ↗</a>
+      </div>
+    </div>
+    <div>
+      
+<div class="terminal">
+  <div class="terminal-bar">
+    <span class="dot dot-red"></span>
+    <span class="dot dot-amber"></span>
+    <span class="dot dot-green"></span>
+    <span class="title">~/sentinel — python</span>
   </div>
-  <div class="card">
-    <h3>Sample decisions</h3>
-    <div class="value">200</div>
-    <div style="color:var(--muted);font-size:0.85em;">ALLOW: 139 · DENY: 61</div>
+  <div class="terminal-body">
+    <div class="line l1"><span class="prompt">$</span> pip install sentinel-kernel</div>
+    <div class="line l2"><span class="prompt">$</span> python3</div>
+    <div class="line l3"><span class="py">&gt;&gt;&gt;</span> <span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel</div>
+    <div class="line l4"><span class="py">&gt;&gt;&gt;</span> s = <span class="fn">Sentinel</span>()</div>
+    <div class="line l5"><span class="py">&gt;&gt;&gt;</span> @s.trace</div>
+    <div class="line l6"><span class="py">...</span> <span class="kw">async def</span> <span class="fn">approve</span>(ctx):</div>
+    <div class="line l7"><span class="py">...</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> {<span class="str">"ok"</span>: <span class="kw">True</span>}</div>
+    <div class="line l8"><span class="py">&gt;&gt;&gt;</span> <span class="kw">import</span> asyncio</div>
+    <div class="line l9"><span class="py">&gt;&gt;&gt;</span> asyncio.<span class="fn">run</span>(<span class="fn">approve</span>({<span class="str">"amount"</span>: <span class="nu">5000</span>}))</div>
+    <div class="line l10"><span class="json">{<br>
+&nbsp;&nbsp;"trace_id": "01hx7k9m2n3p",<br>
+&nbsp;&nbsp;"policy_result": "ALLOW",<br>
+&nbsp;&nbsp;"sovereign_scope": "EU",<br>
+&nbsp;&nbsp;"data_residency": "local",<br>
+&nbsp;&nbsp;"inputs_hash": "sha256:a3f8c2d1...",<br>
+&nbsp;&nbsp;"latency_ms": 3,<br>
+&nbsp;&nbsp;"schema_version": "1.0.0"<br>
+}</span></div>
+    <div class="line l11 success">✓ Trace written. Sovereign. Local. Yours.</div>
   </div>
 </div>
 
-<h3 style="margin-top:2em;">Policy result distribution</h3>
-<div style="display:flex;align-items:center;gap:1em;">
-  <svg viewBox="0 0 220 220" width="220" height="220" xmlns="http://www.w3.org/2000/svg">
-    <path d="M 110.0 110.0 L 110.0 10.0 A 100.0 100.0 0 1 1 15.9 143.9 Z" fill="#167c3c"/><path d="M 110.0 110.0 L 15.9 143.9 A 100.0 100.0 0 0 1 110.0 10.0 Z" fill="#a81717"/><path d="M 110.0 110.0 L 110.0 10.0 A 100.0 100.0 0 0 1 110.0 10.0 Z" fill="#888"/>
-  </svg>
-  <div><div style="display:flex;align-items:center;margin:0.2em 0;"><span style="display:inline-block;width:12px;height:12px;background:#167c3c;margin-right:6px;"></span><span style="font-size:0.9em;">ALLOW (69%)</span></div><div style="display:flex;align-items:center;margin:0.2em 0;"><span style="display:inline-block;width:12px;height:12px;background:#a81717;margin-right:6px;"></span><span style="font-size:0.9em;">DENY (30%)</span></div><div style="display:flex;align-items:center;margin:0.2em 0;"><span style="display:inline-block;width:12px;height:12px;background:#888;margin-right:6px;"></span><span style="font-size:0.9em;">OTHER (0%)</span></div></div>
+    </div>
+  </div>
+</section>
+
+
+<div class="enforce">
+  <div class="container enforce-inner">
+    <div class="enforce-text">
+      <strong>⚠ EU AI Act Annex III enforcement: 2 August 2026</strong> —
+      High-risk AI systems must prove automatic tamper-resistant logging.
+      Penalties: up to €15M or 3% of global annual turnover.
+    </div>
+    <div class="enforce-days">
+      <div class="n" id="days-count">113</div>
+      <div class="label">days remaining</div>
+    </div>
+  </div>
 </div>
 
-<h3 style="margin-top:2em;">EU AI Act article coverage</h3>
-<svg viewBox="0 0 420 160" width="420" height="160" xmlns="http://www.w3.org/2000/svg"><text x="0" y="14" font-size="12" fill="#333">Art. 9 — Risk management</text><rect x="160" y="0" width="120" height="20" fill="#a15c00"/><text x="286" y="14" font-size="12" fill="#555">50%</text><text x="0" y="44" font-size="12" fill="#333">Art. 12 — Automatic record keeping</text><rect x="160" y="30" width="240" height="20" fill="#167c3c"/><text x="406" y="44" font-size="12" fill="#555">100%</text><text x="0" y="74" font-size="12" fill="#333">Art. 13 — Transparency &amp; information t</text><rect x="160" y="60" width="240" height="20" fill="#167c3c"/><text x="406" y="74" font-size="12" fill="#555">100%</text><text x="0" y="104" font-size="12" fill="#333">Art. 14 — Human oversight</text><rect x="160" y="90" width="240" height="20" fill="#167c3c"/><text x="406" y="104" font-size="12" fill="#555">100%</text><text x="0" y="134" font-size="12" fill="#333">Art. 17 — Quality management system</text><rect x="160" y="120" width="240" height="20" fill="#167c3c"/><text x="406" y="134" font-size="12" fill="#555">100%</text></svg>
 
-<h3 style="margin-top:2em;">Recent decisions</h3>
-<table><thead><tr>
- <th>Time</th><th>Agent</th><th>Result</th><th>Scope</th><th>Residency</th><th>Latency</th>
-</tr></thead><tbody><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr></tbody></table>
+<section class="block">
+  <div class="container">
+    <h2>Most solutions fail the sovereignty test</h2>
+    <p class="sub">Three ways to log AI decisions. Only one passes the EU AI Act, the CLOUD Act, and the air-gap test.</p>
 
-<h2>Declare your sovereignty requirements in code</h2>
-<pre>from sentinel.manifesto import (
-    SentinelManifesto, EUOnly, Required, OnPremiseOnly,
-    Targeting, AcknowledgedGap,
+    <table class="compare">
+      <thead>
+        <tr>
+          <th>Requirement</th>
+          <th class="col-bad">Cloud observability</th>
+          <th class="col-bad">Proprietary platforms</th>
+          <th class="col-good">Sentinel</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="row-label">Decision records</td><td class="yes">✓</td><td class="yes">✓</td><td class="col-good-cell yes">✓</td></tr>
+        <tr><td class="row-label">EU AI Act Art. 12</td><td class="partial">Partial</td><td class="partial">Partial</td><td class="col-good-cell yes">✓ Full</td></tr>
+        <tr><td class="row-label">US CLOUD Act exposure</td><td class="no">✗ Applies</td><td class="no">✗ Applies</td><td class="col-good-cell yes">✓ None</td></tr>
+        <tr><td class="row-label">Air-gapped capable</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓</td></tr>
+        <tr><td class="row-label">Open source</td><td class="partial">Some</td><td class="no">✗</td><td class="col-good-cell yes">✓ Apache 2.0</td></tr>
+        <tr><td class="row-label">On-premise</td><td class="no">✗</td><td class="partial">Expensive</td><td class="col-good-cell yes">✓ Default</td></tr>
+        <tr><td class="row-label">BSI path</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓ v2.0 roadmap</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      The US CLOUD Act (18 U.S.C. § 2713) requires US-incorporated companies
+      to produce data stored anywhere in the world. No EU data-centre
+      agreement eliminates this obligation.
+    </div>
+  </div>
+</section>
+
+
+<section class="block">
+  <div class="container">
+    <h2>What Sentinel shows you</h2>
+    <p class="sub">Live data from a sample deployment. Every chart is inline SVG — zero external resources.</p>
+
+    <div class="panels">
+
+      <div class="panel">
+        <h3>Sovereignty score</h3>
+        <svg class="gauge-svg" viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+          <circle class="gauge-ring" cx="100" cy="100" r="70"/>
+          <circle class="gauge-fill" cx="100" cy="100" r="70" style="--g: 0.78;"/>
+          <text class="gauge-text" x="100" y="112" text-anchor="middle">78%</text>
+        </svg>
+        <div class="gauge-label">Overall sovereignty</div>
+        <div class="gauge-sub">Runtime: EU ✓ · Storage: On-premise ✓ · CI/CD: ⚠ acknowledged</div>
+      </div>
+
+      <div class="panel">
+        <h3>EU AI Act coverage</h3>
+        <div class="bars">
+          <div class="bar-row"><span class="art">Art. 12</span><div class="bar-track"><div class="bar-fill green" style="--w: 100%;"></div></div><span class="status">compliant</span></div>
+          <div class="bar-row"><span class="art">Art. 13</span><div class="bar-track"><div class="bar-fill green" style="--w: 100%;"></div></div><span class="status">compliant</span></div>
+          <div class="bar-row"><span class="art">Art. 14</span><div class="bar-track"><div class="bar-fill green" style="--w: 100%;"></div></div><span class="status">compliant</span></div>
+          <div class="bar-row"><span class="art">Art. 9</span><div class="bar-track"><div class="bar-fill amber" style="--w: 60%;"></div></div><span class="status">partial</span></div>
+          <div class="bar-row"><span class="art">Art. 17</span><div class="bar-track"><div class="bar-fill amber" style="--w: 70%;"></div></div><span class="status">partial</span></div>
+          <div class="bar-row"><span class="art">Art. 10</span><div class="bar-track"><div class="bar-fill blue" style="--w: 0%;"></div></div><span class="status">human action</span></div>
+          <div class="bar-row"><span class="art">Art. 15</span><div class="bar-track"><div class="bar-fill blue" style="--w: 0%;"></div></div><span class="status">human action</span></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Live decision feed</h3>
+        <table class="feed-table">
+          <thead><tr><th>Time</th><th>Agent</th><th>Result</th><th class="ms">ms</th></tr></thead>
+          <tbody>
+            <tr class="feed-row"><td>12:34:51</td><td>procurement_agent</td><td><span class="pill allow">ALLOW</span></td><td class="ms">3</td></tr>
+            <tr class="feed-row"><td>12:34:52</td><td>access_control</td><td><span class="pill deny">DENY</span></td><td class="ms">2</td></tr>
+            <tr class="feed-row"><td>12:34:53</td><td>doc_classifier</td><td><span class="pill allow">ALLOW</span></td><td class="ms">4</td></tr>
+            <tr class="feed-row"><td>12:34:54</td><td>procurement_agent</td><td><span class="pill allow">ALLOW</span></td><td class="ms">3</td></tr>
+            <tr class="feed-row"><td>12:34:55</td><td>mission_eval</td><td><span class="pill exc">EXCEPTION</span></td><td class="ms">8</td></tr>
+            <tr class="feed-row"><td>12:34:56</td><td>access_control</td><td><span class="pill allow">ALLOW</span></td><td class="ms">2</td></tr>
+            <tr class="feed-row"><td>12:34:57</td><td>doc_classifier</td><td><span class="pill deny">DENY</span></td><td class="ms">3</td></tr>
+            <tr class="feed-row"><td>12:34:58</td><td>procurement_agent</td><td><span class="pill allow">ALLOW</span></td><td class="ms">4</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h3>Dependency map</h3>
+        <div class="dep-cols">
+          <div>
+            <h4 class="ok">Sovereign ✓</h4>
+            <ul class="dep-list">
+              <li>sentinel-kernel <span class="residency">EU · DE</span></li>
+              <li>postgresql <span class="residency">EU-neutral</span></li>
+              <li>langfuse/self <span class="residency">EU · DE (self-hosted)</span></li>
+              <li>prometheus <span class="residency">CNCF · neutral</span></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="warn">Acknowledged gaps ⚠</h4>
+            <ul class="dep-list warn">
+              <li>github-actions <span class="residency">US · Microsoft</span></li>
+              <li>pypi <span class="residency">US-hosted</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="dep-note">Acknowledged gaps are documented. Not violations.</div>
+      </div>
+
+      <div class="panel">
+        <h3>Kill switch</h3>
+        <div class="killswitch">
+          <div class="ks-indicator"></div>
+          <div class="ks-label">● INACTIVE</div>
+          <div class="ks-sub">EU AI Act Art. 14 — human oversight active</div>
+          <div class="ks-code">sentinel.engage_kill_switch("reason")</div>
+          <div class="ks-sub">Halts all agent calls instantly. No restart.</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Enforcement countdown</h3>
+        <div class="count-big" id="days-count-2">113</div>
+        <div class="count-label">Days to EU AI Act Annex III</div>
+        <div class="count-sub">2 August 2026 · Penalties up to €15M</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="block">
+  <div class="container">
+    <h2>Start in 5 minutes</h2>
+    <p class="sub">Three steps. Real working code. No placeholders.</p>
+
+    <div class="tabs">
+      <div class="tab-headers">
+        <button class="tab-btn active" data-tab="minimal">Minimal</button>
+        <button class="tab-btn" data-tab="policy">With Policy</button>
+        <button class="tab-btn" data-tab="full">Full Pipeline</button>
+      </div>
+
+      <div id="tab-minimal" class="tab-panel active"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel
+
+sentinel = <span class="fn">Sentinel</span>()  <span class="cm"># SQLite, zero config</span>
+
+<span class="fn">@sentinel.trace</span>
+<span class="kw">async def</span> <span class="fn">my_agent</span>(context: <span class="cls">dict</span>) -&gt; <span class="cls">dict</span>:
+    <span class="kw">return</span> {<span class="st">"decision"</span>: <span class="st">"approved"</span>}
+
+<span class="cm"># Every call produces a sovereign trace</span>
+result = <span class="kw">await</span> <span class="fn">my_agent</span>({<span class="st">"amount"</span>: <span class="nu">5000</span>})
+<span class="fn">print</span>(result)  <span class="cm"># {"decision": "approved"}</span>
+
+<span class="cm"># Query traces</span>
+traces = sentinel.<span class="fn">query</span>(limit=<span class="nu">1</span>)
+<span class="fn">print</span>(traces[<span class="nu">0</span>].policy_result)  <span class="cm"># ALLOW</span></pre></div>
+
+      <div id="tab-policy" class="tab-panel"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel
+<span class="kw">from</span> sentinel.policy.evaluator <span class="kw">import</span> SimpleRuleEvaluator
+<span class="kw">from</span> sentinel.storage.filesystem <span class="kw">import</span> FilesystemStorage
+
+sentinel = <span class="fn">Sentinel</span>(
+    policy_evaluator=<span class="fn">SimpleRuleEvaluator</span>({
+        <span class="st">"threshold"</span>: <span class="kw">lambda</span> ctx: ctx[<span class="st">"amount"</span>] &lt;= <span class="nu">10_000</span>
+    }),
+    storage=<span class="fn">FilesystemStorage</span>(<span class="st">"/mnt/traces"</span>),
+    sovereign_scope=<span class="st">"EU"</span>,
+    data_residency=<span class="st">"on-premise-de"</span>,
 )
 
-class OurPolicy(SentinelManifesto):
-    jurisdiction = EUOnly()
-    kill_switch = Required()
-    storage = OnPremiseOnly(country="DE")
-    bsi = Targeting(by="2026-12-31")
+<span class="fn">@sentinel.trace</span>
+<span class="kw">async def</span> <span class="fn">approve_procurement</span>(ctx: <span class="cls">dict</span>) -&gt; <span class="cls">dict</span>:
+    <span class="kw">return</span> {<span class="st">"approved"</span>: ctx[<span class="st">"amount"</span>] &lt;= <span class="nu">10_000</span>}
 
-    ci_cd = AcknowledgedGap(
-        provider="Managed SaaS CI",
-        migrating_to="Self-hosted Forgejo",
-        by="2027-Q2",
-        reason="No EU-sovereign CI alternative with comparable UX",
+<span class="cm"># DENY recorded automatically for high-value requests</span>
+<span class="kw">await</span> <span class="fn">approve_procurement</span>({<span class="st">"amount"</span>: <span class="nu">50_000</span>})</pre></div>
+
+      <div id="tab-full" class="tab-panel"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel
+<span class="kw">from</span> sentinel.manifesto <span class="kw">import</span> SentinelManifesto
+<span class="kw">from</span> sentinel.manifesto.requirements <span class="kw">import</span> (
+    EUOnly, Required, AcknowledgedGap,
+)
+<span class="kw">from</span> sentinel.compliance.euaiact <span class="kw">import</span> EUAIActChecker
+
+<span class="kw">class</span> <span class="cls">OurPolicy</span>(SentinelManifesto):
+    name = <span class="st">"Production Sovereignty Policy v1"</span>
+    jurisdiction = <span class="fn">EUOnly</span>()
+    kill_switch = <span class="fn">Required</span>()
+    ci_cd = <span class="fn">AcknowledgedGap</span>(
+        provider=<span class="st">"GitHub Actions (Microsoft/US)"</span>,
+        migrating_to=<span class="st">"Self-hosted Forgejo"</span>,
+        by=<span class="st">"2027-Q2"</span>,
+        reason=<span class="st">"No EU-sovereign CI with comparable UX"</span>,
     )
 
-report = OurPolicy().check()
-print(report.as_text())</pre>
+sentinel = <span class="fn">Sentinel</span>()
 
-<h2>Quick demo</h2>
-<pre># 2-minute local demo
-pip install sentinel-kernel
-python -c "
-from sentinel import Sentinel
-sentinel = Sentinel()
+<span class="cm"># Check EU AI Act compliance</span>
+report = <span class="fn">EUAIActChecker</span>().<span class="fn">check</span>(sentinel)
+<span class="fn">print</span>(report.<span class="fn">diff</span>())
 
-@sentinel.trace
-def decide(req):
-    return {'decision': 'approved'}
+<span class="cm"># Generate self-contained HTML report</span>
+report.<span class="fn">save_html</span>(<span class="st">"sovereignty_report.html"</span>)
 
-decide({'amount': 5000})
-print(sentinel.query(limit=1)[0].to_json())
-"
+<span class="cm"># Check manifesto vs reality</span>
+manifesto_report = <span class="fn">OurPolicy</span>().<span class="fn">check</span>(sentinel_instance=sentinel)
+<span class="fn">print</span>(<span class="st">f"Score: {manifesto_report.overall_score:.0%}"</span>)</pre></div>
 
-# Full Grafana + OTel stack (requires Docker)
-git clone https://github.com/sebastianweiss83/sentinel-kernel
+    </div>
+  </div>
+</section>
+
+
+<section class="block">
+  <div class="container">
+    <h2>Built for regulated industries</h2>
+    <p class="sub">Four scenarios where a missing trace is worse than a crash.</p>
+    <div class="industry-grid">
+      <div class="industry-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        <h3>Defence &amp; Aerospace</h3>
+        <p>Autonomous go/no-go decisions with mission policy evaluation. Kill switch for immediate halt (Art. 14). Air-gapped deployment verified by dedicated test suite. VS-NfD roadmap.</p>
+      </div>
+      <div class="industry-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6v6h6v6h-6v6H9v-6H3V8h6z"/></svg>
+        <h3>Healthcare AI</h3>
+        <p>Treatment recommendation audit trail. GDPR-compliant data residency. Every clinical AI decision recorded with SHA-256 hash. Art. 14 human oversight for escalation workflows.</p>
+      </div>
+      <div class="industry-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
+        <h3>Financial Services</h3>
+        <p>Transaction approval automation with DORA-aligned logging. Append-only tamper-resistant records. Regulators get the full trace: what, when, which model, which policy.</p>
+      </div>
+      <div class="industry-card">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/></svg>
+        <h3>Public Administration</h3>
+        <p>Government AI transparency requirements met by default. Sovereign deployment — no foreign jurisdiction access possible. EU AI Act compliance diff for internal auditors.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="block">
+  <div class="container">
+    <h2>What's inside</h2>
+    <p class="sub">Fourteen features. Seven articles. One honest compliance story.</p>
+
+    <div class="inside-grid">
+      <div>
+        <ul class="feature-list">
+          <li><strong>@sentinel.trace</strong> — any agent, sync or async</li>
+          <li><strong>Kill switch</strong> — Art. 14, no restart, thread-safe</li>
+          <li><strong>SimpleRule + LocalRego (OPA)</strong> policy evaluation</li>
+          <li><strong>SQLite + PostgreSQL + Filesystem</strong> storage backends</li>
+          <li><strong>Air-gapped</strong> — network blocked at socket level in CI</li>
+          <li><strong>LangChain</strong> SentinelCallbackHandler</li>
+          <li><strong>OpenTelemetry</strong> — sovereignty attrs in every span</li>
+          <li><strong>LangFuse</strong> — join key: trace_id</li>
+          <li><strong>Sovereignty scanner</strong> — 60+ packages mapped</li>
+          <li><strong>Manifesto-as-code</strong> — COMPLIANT / ACKNOWLEDGED / TARGETING</li>
+          <li><strong>EU AI Act checker</strong> — Art. 9/12/13/14/17</li>
+          <li><strong>Self-contained HTML report</strong></li>
+          <li><strong>Full CLI</strong> — demo, scan, compliance, report</li>
+          <li><strong>Docker Compose</strong> — Grafana + LangFuse + OTel</li>
+        </ul>
+      </div>
+      <div>
+        <table class="compliance-table">
+          <thead>
+            <tr><th>Article</th><th>Requirement</th><th>Sentinel</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="art">Art. 12</td><td>Auto logging</td><td class="full">✓ Full</td></tr>
+            <tr><td class="art">Art. 13</td><td>Transparency</td><td class="full">✓ Full</td></tr>
+            <tr><td class="art">Art. 14</td><td>Human oversight</td><td class="full">✓ Full</td></tr>
+            <tr><td class="art">Art. 9</td><td>Risk management</td><td class="partial">~ Partial</td></tr>
+            <tr><td class="art">Art. 17</td><td>Quality management</td><td class="partial">~ Partial</td></tr>
+            <tr><td class="art">Art. 10</td><td>Data governance</td><td class="human">→ Human action</td></tr>
+            <tr><td class="art">Art. 15</td><td>Accuracy</td><td class="human">→ Human action</td></tr>
+          </tbody>
+        </table>
+        <div class="note" style="margin-top:1rem;">
+          Sentinel is honest about what can and cannot be automated.
+          Articles requiring human action are clearly marked.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="block">
+  <div class="container">
+    <div class="try">
+      <h2>Try it now</h2>
+      <div><div class="step">$ pip install sentinel-kernel</div></div>
+      <div><div class="step">$ sentinel demo</div></div>
+      <div class="small">Runs 50 decisions · Kill switch demo · Compliance check<br>
+        Generates sovereignty_report.html · No Docker required</div>
+      <div class="sep">or — full Grafana demo</div>
+      <pre>git clone https://github.com/sebastianweiss83/sentinel-kernel
 cd sentinel-kernel/demo
-docker compose up --build</pre>
+docker compose -f docker-compose.minimal.yml up
+# http://localhost:3001 — Grafana dashboard</pre>
+    </div>
+  </div>
+</section>
 
-<h2>What Sentinel answers for you</h2>
-<table>
- <tr><th>Question</th><th>Sentinel answer</th></tr>
- <tr><td>What was decided?</td><td>Append-only DecisionTrace with policy result and rule</td></tr>
- <tr><td>By which model, which policy, which version?</td><td>Every trace records agent, model, policy name/version</td></tr>
- <tr><td>Under whose law is the evidence stored?</td><td>sovereign_scope and data_residency on every record</td></tr>
- <tr><td>Can a human halt it?</td><td>Runtime kill switch (Art. 14) with no restart</td></tr>
- <tr><td>What of this am I compliant with today?</td><td>sentinel compliance check</td></tr>
- <tr><td>Where is my sovereignty leaking?</td><td>sentinel scan (runtime + CI/CD + infrastructure)</td></tr>
-</table>
 
 <footer>
- Generated 2026-04-11T12:20:28 ·
- Apache 2.0 ·
- sentinel-kernel ·
- <a href="https://github.com/sebastianweiss83/sentinel-kernel">github.com/sebastianweiss83/sentinel-kernel</a>
+  <div class="container">
+    <div class="links">
+      <a href="https://github.com/sebastianweiss83/sentinel-kernel">GitHub</a>
+      <a href="https://pypi.org/project/sentinel-kernel/">PyPI</a>
+      <a href="report.html">Documentation</a>
+      <a href="https://github.com/sebastianweiss83/sentinel-kernel/blob/main/docs/rfcs/RFC-001-sovereignty-manifest.md">RFC-001</a>
+      <a href="https://github.com/sebastianweiss83/sentinel-kernel/discussions">Discussions</a>
+    </div>
+    <div>License: Apache 2.0 · Swentures UG · sentinel-kernel</div>
+    <div class="motto">No BSL. No commercial-only features. No relicensing. Ever.</div>
+    <div style="margin-top:1rem;font-size:0.75rem;">Generated 2026-04-11 13:39 UTC</div>
+  </div>
 </footer>
+
+<script>
+// Copy-to-clipboard install button
+(function() {
+  var btn = document.getElementById('install-btn');
+  if (!btn) return;
+  btn.addEventListener('click', function() {
+    var txt = 'pip install sentinel-kernel';
+    if (navigator.clipboard) navigator.clipboard.writeText(txt);
+    var original = btn.innerHTML;
+    btn.innerHTML = '\u2713 Copied!';
+    setTimeout(function() { btn.innerHTML = original; }, 2000);
+  });
+})();
+
+// Tab switching
+(function() {
+  var btns = document.querySelectorAll('.tab-btn');
+  btns.forEach(function(b) {
+    b.addEventListener('click', function() {
+      var target = b.getAttribute('data-tab');
+      document.querySelectorAll('.tab-btn').forEach(function(x) { x.classList.remove('active'); });
+      document.querySelectorAll('.tab-panel').forEach(function(x) { x.classList.remove('active'); });
+      b.classList.add('active');
+      document.getElementById('tab-' + target).classList.add('active');
+    });
+  });
+})();
+
+// Live enforcement countdown (recalculated in browser so it ages gracefully)
+(function() {
+  var el = document.getElementById('days-count');
+  var el2 = document.getElementById('days-count-2');
+  var d = Math.ceil((new Date('2026-08-02') - new Date()) / 86400000);
+  if (d < 0) d = 0;
+  if (el)  el.textContent  = d;
+  if (el2) el2.textContent = d;
+})();
+</script>
 </body>
 </html>
