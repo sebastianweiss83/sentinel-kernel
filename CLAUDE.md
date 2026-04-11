@@ -12,15 +12,15 @@
 | Tests | 608 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 21:11 UTC |
+| Last updated | 2026-04-11 21:15 UTC |
 
 ## Last 5 commits
 
+- `215001a` chore: final sync after vision update
 - `b50a725` feat: Sovereign AI Kernel vision — docs, README, preview, BSI, blog
 - `79cea11` feat: world-class GitHub Pages — logo, favicon, full EU AI Act table, roadmap v3
 - `bcaa739` feat: HTML report — remediation actions per article
 - `5fb4a60` feat: v3.0.2 — reentrant scanner timeout + workflow concurrency guards
-- `e4d2f1c` fix: infrastructure scanner depth limit — prevents hang on large dirs
 
 ## Open issues
 
