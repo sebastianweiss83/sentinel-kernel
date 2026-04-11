@@ -42,7 +42,7 @@ class PolicyEvaluation:
     evaluated_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     evaluator: str = "sentinel-opa"
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "policy_id": self.policy_id,
             "policy_version": self.policy_version,
@@ -63,7 +63,7 @@ class HumanOverride:
     approved_at: datetime = field(default_factory=lambda: datetime.now(UTC))
     override_id: str = field(default_factory=lambda: str(uuid.uuid4()))
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "override_id": self.override_id,
             "approver_id": self.approver_id,
@@ -130,14 +130,14 @@ class DecisionTrace:
     # Integrity
     schema_version: str = "1.0.0"
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.inputs and not self.inputs_hash:
             self.inputs_hash = self._hash(self.inputs)
         if self.output and not self.output_hash:
             self.output_hash = self._hash(self.output)
 
     @staticmethod
-    def _hash(data: dict) -> str:
+    def _hash(data: dict[str, Any]) -> str:
         serialised = json.dumps(data, sort_keys=True, default=str)
         return hashlib.sha256(serialised.encode()).hexdigest()
 
@@ -159,7 +159,7 @@ class DecisionTrace:
         if trace_id not in self.precedent_trace_ids:
             self.precedent_trace_ids.append(trace_id)
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "schema_version": self.schema_version,
             "trace_id": self.trace_id,
@@ -195,7 +195,7 @@ class DecisionTrace:
         return json.dumps(self.to_dict(), default=str, indent=2)
 
     @classmethod
-    def from_dict(cls, data: dict) -> DecisionTrace:
+    def from_dict(cls, data: dict[str, Any]) -> DecisionTrace:
         trace = cls(
             trace_id=data["trace_id"],
             parent_trace_id=data.get("parent_trace_id"),

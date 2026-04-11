@@ -11,7 +11,7 @@ import asyncio
 import functools
 import inspect
 import time
-from collections.abc import Callable
+from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
 from typing import Any
 
@@ -54,6 +54,7 @@ class Sentinel:
         store_outputs: bool = True,
     ):
         # Storage
+        self.storage: StorageBackend
         if storage is None:
             self.storage = SQLiteStorage("./sentinel-traces.db")
         elif isinstance(storage, str):
@@ -72,12 +73,12 @@ class Sentinel:
 
     def trace(
         self,
-        func: Callable | None = None,
+        func: Callable[..., Any] | None = None,
         *,
         policy: str | None = None,
         agent_name: str | None = None,
         tags: dict[str, str] | None = None,
-    ):
+    ) -> Callable[..., Any]:
         """
         Decorator that wraps an agent function with sovereign trace capture.
 
@@ -89,17 +90,17 @@ class Sentinel:
             @sentinel.trace(policy="policies/default.rego", tags={"env": "prod"})
             async def my_agent(): ...
         """
-        def decorator(f: Callable) -> Callable:
+        def decorator(f: Callable[..., Any]) -> Callable[..., Any]:
             name = agent_name or f.__qualname__
 
             @functools.wraps(f)
-            async def async_wrapper(*args, **kwargs):
+            async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
                 return await self._execute_traced(
                     f, args, kwargs, name, policy, tags or {}
                 )
 
             @functools.wraps(f)
-            def sync_wrapper(*args, **kwargs):
+            def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
                 return asyncio.run(
                     self._execute_traced(f, args, kwargs, name, policy, tags or {})
                 )
@@ -117,9 +118,9 @@ class Sentinel:
 
     async def _execute_traced(
         self,
-        func: Callable,
-        args: tuple,
-        kwargs: dict,
+        func: Callable[..., Any],
+        args: tuple[Any, ...],
+        kwargs: dict[str, Any],
         agent_name: str,
         policy: str | None,
         tags: dict[str, str],
@@ -185,7 +186,12 @@ class Sentinel:
         return result
 
     @asynccontextmanager
-    async def span(self, agent_name: str, policy: str | None = None, **tags):
+    async def span(
+        self,
+        agent_name: str,
+        policy: str | None = None,
+        **tags: str,
+    ) -> AsyncIterator[DecisionTrace]:
         """
         Context manager for manual trace control.
 

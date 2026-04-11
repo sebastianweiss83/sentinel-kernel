@@ -61,7 +61,7 @@ jobs:
           python-version: "3.12"
       - run: pip install -e ".[dev]"
       - run: ruff check sentinel/ tests/ scripts/
-      - run: mypy sentinel/ --ignore-missing-imports || true
+      - run: mypy sentinel/ --ignore-missing-imports
 
   quickstart:
     name: Quickstart smoke test

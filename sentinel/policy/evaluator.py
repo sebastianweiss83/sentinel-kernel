@@ -13,8 +13,9 @@ from __future__ import annotations
 
 import json
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from sentinel.core.trace import PolicyEvaluation, PolicyResult
 
@@ -29,7 +30,7 @@ class PolicyEvaluator(ABC):
     async def evaluate(
         self,
         policy_path: str,
-        inputs: dict,
+        inputs: dict[str, Any],
         trace: DecisionTrace,
     ) -> PolicyEvaluation:
         ...
@@ -44,7 +45,7 @@ class NullPolicyEvaluator(PolicyEvaluator):
     async def evaluate(
         self,
         policy_path: str,
-        inputs: dict,
+        inputs: dict[str, Any],
         trace: DecisionTrace,
     ) -> PolicyEvaluation:
         return PolicyEvaluation(
@@ -74,7 +75,7 @@ class LocalRegoEvaluator(PolicyEvaluator):
     async def evaluate(
         self,
         policy_path: str,
-        inputs: dict,
+        inputs: dict[str, Any],
         trace: DecisionTrace,
     ) -> PolicyEvaluation:
         import asyncio
@@ -148,13 +149,13 @@ class SimpleRuleEvaluator(PolicyEvaluator):
         sentinel = Sentinel(policy_evaluator=evaluator)
     """
 
-    def __init__(self, rules: dict[str, callable]):
+    def __init__(self, rules: dict[str, Callable[[dict[str, Any]], tuple[bool, str | None]]]):
         self.rules = rules
 
     async def evaluate(
         self,
         policy_path: str,
-        inputs: dict,
+        inputs: dict[str, Any],
         trace: DecisionTrace,
     ) -> PolicyEvaluation:
         rule_fn = self.rules.get(policy_path)

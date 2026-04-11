@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import sqlite3
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from sentinel.storage.base import StorageBackend
 
@@ -127,8 +127,8 @@ class SQLiteStorage(StorageBackend):
     ) -> list[DecisionTrace]:
         from sentinel.core.trace import DecisionTrace
 
-        conditions = []
-        params: list = []
+        conditions: list[str] = []
+        params: list[Any] = []
 
         if project:
             conditions.append("project = ?")
