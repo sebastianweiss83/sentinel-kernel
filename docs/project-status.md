@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-11 17:28 UTC_
+_Last generated from HEAD commit: 2026-04-11 17:29 UTC_
 
 ## Version
 
@@ -90,10 +90,10 @@ EU-sovereign decision record layer for AI agents.
 - **#7** RFC-001: SovereigntyManifest feedback wanted _(labels: rfc, discussion)_
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
 - **#13** good first issue: Rust implementation of SovereigntyManifest (RFC-001) _(labels: good first issue, rfc)_
-- **#14** enhance: LangFuse integration — dedicated sovereignty panel _(labels: enhancement)_
 
 ## Recent releases
 
+- **v2.3.0** — v2.3.0 — LangFuse sovereignty panel, closes #14
 - **v2.2.0** — v2.2.0 — Quantum-safe signing: ML-DSA-65, client-side
 - **v2.1.0** — v2.1.0 — BudgetTracker, Attestations, CrewAI, AutoGen
 - **v2.0.0** — v2.0.0 — Production stable, BSI assessment ready
@@ -105,7 +105,6 @@ EU-sovereign decision record layer for AI agents.
 - **v1.4.0** — v1.4.0 — Haystack integration, NDJSON export/import
 - **v1.3.0** — v1.3.0 — RFC-001 accepted, CONTRIBUTING, SECURITY, industry examples
 - **v1.2.0** — v1.2.0 — BSI profile, manifesto depth, 100+ scanner packages
-- **v1.1.0** — v1.1.0 — World-class preview, demo command, dashboards
 
 ## Shipped
 

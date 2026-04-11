@@ -12,11 +12,11 @@
 | Tests | 593 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 17:28 UTC |
+| Last updated | 2026-04-11 17:29 UTC |
 
 ## Last 5 commits
 
-- `21d535f` feat: v2.3.0 — LangFuse sovereignty panel, closes #14
+- `70e9a02` feat: v2.3.0 — LangFuse sovereignty panel, closes #14
 - `b62c5b1` feat: v2.2.0 — quantum-safe signing ML-DSA-65, client-side
 - `efcf79d` feat: v2.1.0 — BudgetTracker, attestations, CrewAI, AutoGen
 - `3ea8d56` feat: manifesto 5 theses as explicit named CI checks
@@ -30,7 +30,6 @@
 - **#7** RFC-001: SovereigntyManifest feedback wanted _(labels: rfc, discussion)_
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
 - **#13** good first issue: Rust implementation of SovereigntyManifest (RFC-001) _(labels: good first issue, rfc)_
-- **#14** enhance: LangFuse integration — dedicated sovereignty panel _(labels: enhancement)_
 
 <!-- CLAUDE_MD_AUTO_END -->
 
