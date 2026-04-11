@@ -14,6 +14,7 @@ import threading
 import time
 from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from typing import Any
 
 from sentinel.core.trace import (
@@ -304,6 +305,92 @@ class Sentinel:
             limit=limit,
             offset=offset,
         )
+
+    def verify_integrity(self, trace_id: str) -> IntegrityResult:
+        """
+        Verify a trace has not been tampered with.
+
+        Reads the trace from storage, recomputes ``inputs_hash`` from
+        the stored inputs (if present) and ``output_hash`` from the
+        stored output, and compares with the stored hashes.
+
+        This is the feature that makes Sentinel defensible in court:
+        every trace can be independently verified as unmodified.
+
+        Returns :class:`IntegrityResult` with:
+
+          - ``verified``      — True if every hash matches
+          - ``trace_id``      — the input trace id
+          - ``found``         — True if the trace exists in storage
+          - ``inputs_match``  — True if inputs_hash matches recomputation
+          - ``output_match``  — True if output_hash matches recomputation
+          - ``detail``        — human-readable explanation
+        """
+        trace = self.storage.get(trace_id)
+        if trace is None:
+            return IntegrityResult(
+                verified=False,
+                trace_id=trace_id,
+                found=False,
+                inputs_match=False,
+                output_match=False,
+                detail="trace not found",
+            )
+
+        stored_inputs_hash = trace.inputs_hash
+        stored_output_hash = trace.output_hash
+
+        inputs_match = True
+        if trace.inputs and stored_inputs_hash:
+            recomputed = DecisionTrace._hash(trace.inputs)
+            inputs_match = recomputed == stored_inputs_hash
+
+        output_match = True
+        if trace.output and stored_output_hash:
+            recomputed = DecisionTrace._hash(trace.output)
+            output_match = recomputed == stored_output_hash
+
+        verified = inputs_match and output_match
+        if verified:
+            detail = "all hashes match — trace unmodified"
+        else:
+            bad = []
+            if not inputs_match:
+                bad.append("inputs_hash")
+            if not output_match:
+                bad.append("output_hash")
+            detail = f"hash mismatch: {', '.join(bad)}"
+
+        return IntegrityResult(
+            verified=verified,
+            trace_id=trace_id,
+            found=True,
+            inputs_match=inputs_match,
+            output_match=output_match,
+            detail=detail,
+        )
+
+
+@dataclass
+class IntegrityResult:
+    """Result of a :meth:`Sentinel.verify_integrity` call."""
+
+    verified: bool
+    trace_id: str
+    found: bool
+    inputs_match: bool
+    output_match: bool
+    detail: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "verified": self.verified,
+            "trace_id": self.trace_id,
+            "found": self.found,
+            "inputs_match": self.inputs_match,
+            "output_match": self.output_match,
+            "detail": self.detail,
+        }
 
 
 class PolicyDeniedError(Exception):

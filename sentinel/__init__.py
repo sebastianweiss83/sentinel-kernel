@@ -20,7 +20,12 @@ from sentinel.core.trace import (
     PolicyEvaluation,
     PolicyResult,
 )
-from sentinel.core.tracer import KillSwitchEngaged, PolicyDeniedError, Sentinel
+from sentinel.core.tracer import (
+    IntegrityResult,
+    KillSwitchEngaged,
+    PolicyDeniedError,
+    Sentinel,
+)
 
 __version__ = "1.6.0"
 __all__ = [
@@ -32,4 +37,5 @@ __all__ = [
     "PolicyResult",
     "HumanOverride",
     "DataResidency",
+    "IntegrityResult",
 ]

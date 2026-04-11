@@ -240,7 +240,12 @@ def test_otel_import_returns_modules_when_available() -> None:
 
 
 def test_otel_exporter_flush_placeholder(tmp_path: Path) -> None:
-    """Exercise the flush() method's wait loop (otel.py:198)."""
+    """Exercise the flush() method's wait loop (otel.py:198).
+
+    Stops the background worker first so the queue cannot drain, then
+    enqueues traces and calls flush with a short timeout. The wait loop
+    is guaranteed to execute at least once before the deadline fires.
+    """
     import sentinel.integrations.otel as otel_mod
     from sentinel.core.trace import DecisionTrace
 
@@ -262,18 +267,21 @@ def test_otel_exporter_flush_placeholder(tmp_path: Path) -> None:
         endpoint="http://unused",
         tracer_factory=lambda: _FakeTracer(),
     )
-    try:
-        # Enqueue several traces so flush's wait loop executes at least once.
-        for i in range(20):
-            trace = DecisionTrace(
-                project="flush-test",
-                agent=f"a{i}",
-                inputs={"x": i},
-            )
-            exporter._enqueue(trace)
-        exporter.flush(timeout=0.25)
-    finally:
-        exporter.shutdown()
+    # Stop the worker so the queue doesn't drain.
+    exporter._stop.set()
+    exporter._worker.join(timeout=1.0)
+
+    # Load the queue with a pile of traces.
+    for i in range(50):
+        trace = DecisionTrace(
+            project="flush-test",
+            agent=f"a{i}",
+            inputs={"x": i},
+        )
+        exporter._enqueue(trace)
+
+    # Flush runs the wait loop because queue is non-empty; deadline expires.
+    exporter.flush(timeout=0.05)
 
 
 def test_langchain_callback_init_raises_without_extra(monkeypatch) -> None:

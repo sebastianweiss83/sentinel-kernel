@@ -9,12 +9,37 @@ from __future__ import annotations
 
 import json
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from sentinel.core.trace import DecisionTrace, PolicyResult
+
+
+@dataclass
+class PurgeResult:
+    """Outcome of a :meth:`StorageBackend.purge_before` call.
+
+    ``traces_affected`` is the number of traces removed (or that would
+    be removed if ``dry_run`` is True). ``oldest_remaining`` is the
+    earliest ``started_at`` left in the backend after the operation,
+    or None if the backend is empty.
+    """
+
+    traces_affected: int
+    oldest_remaining: datetime | None
+    dry_run: bool
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "traces_affected": self.traces_affected,
+            "oldest_remaining": (
+                self.oldest_remaining.isoformat() if self.oldest_remaining else None
+            ),
+            "dry_run": self.dry_run,
+        }
 
 
 class StorageBackend(ABC):
@@ -116,6 +141,53 @@ class StorageBackend(ABC):
                 if len(traces) < page_size:
                     break
         return count
+
+    def purge_before(
+        self,
+        cutoff: datetime,
+        *,
+        dry_run: bool = True,
+    ) -> PurgeResult:
+        """
+        Remove traces older than ``cutoff``.
+
+        **IMPORTANT:** This permanently deletes traces. EU AI Act does
+        not specify a retention period — check with legal counsel for
+        your use case. Defaults to ``dry_run=True`` so you can preview
+        the operation.
+
+        Default implementation: iterate all traces, count matches, and
+        optionally mark the oldest remaining. Backends with a native
+        ``DELETE WHERE`` should override this.
+
+        Returns a :class:`PurgeResult`.
+        """
+        traces = self.query(limit=10_000_000)
+        affected = [t for t in traces if t.started_at and t.started_at < cutoff]
+        remaining = [t for t in traces if t.started_at and t.started_at >= cutoff]
+
+        if not dry_run:
+            self._delete_traces([t.trace_id for t in affected])
+
+        oldest_remaining = (
+            min((t.started_at for t in remaining if t.started_at), default=None)
+        )
+        return PurgeResult(
+            traces_affected=len(affected),
+            oldest_remaining=oldest_remaining,
+            dry_run=dry_run,
+        )
+
+    def _delete_traces(self, trace_ids: list[str]) -> None:
+        """
+        Concrete trace deletion. Override in backends that can do
+        this natively. The base implementation raises — backends that
+        want retention management must opt in.
+        """
+        raise NotImplementedError(
+            f"{type(self).__name__} does not implement trace deletion; "
+            "purging is unsupported for this backend."
+        )
 
     def import_ndjson(self, path: str | Path) -> tuple[int, int]:
         """

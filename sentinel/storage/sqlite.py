@@ -169,6 +169,17 @@ class SQLiteStorage(StorageBackend):
             return None
         return DecisionTrace.from_dict(json.loads(row["payload"]))
 
+    def _delete_traces(self, trace_ids: list[str]) -> None:
+        if not trace_ids:
+            return
+        conn = self._connection()
+        placeholders = ",".join("?" * len(trace_ids))
+        conn.execute(
+            f"DELETE FROM decision_traces WHERE trace_id IN ({placeholders})",
+            trace_ids,
+        )
+        conn.commit()
+
     def close(self) -> None:
         if self._conn:
             self._conn.close()

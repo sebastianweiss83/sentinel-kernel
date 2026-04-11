@@ -81,6 +81,34 @@ def main(argv: list[str] | None = None) -> int:
     p_dash.add_argument("--frames", type=int, default=1, help="Number of frames to render")
     p_dash.add_argument("--interval", type=float, default=2.0, help="Seconds between frames")
 
+    # --- verify -------------------------------------------------------------
+    p_verify = sub.add_parser(
+        "verify",
+        help="Verify the integrity of one or all stored traces",
+    )
+    p_verify.add_argument("--trace-id", help="Verify a single trace by ID")
+    p_verify.add_argument("--all", action="store_true", help="Verify all traces")
+    p_verify.add_argument("--db", help="SQLite path (default: in-memory)")
+    p_verify.add_argument("--json", action="store_true", help="Emit JSON report")
+
+    # --- purge --------------------------------------------------------------
+    p_purge = sub.add_parser(
+        "purge",
+        help="Remove traces older than a cutoff date",
+    )
+    p_purge.add_argument("--before", required=True, help="ISO date cutoff")
+    p_purge.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Report what would be purged without deleting",
+    )
+    p_purge.add_argument(
+        "--yes",
+        action="store_true",
+        help="Skip the confirmation prompt",
+    )
+    p_purge.add_argument("--db", help="SQLite path (default: in-memory)")
+
     # --- export / import ----------------------------------------------------
     p_export = sub.add_parser("export", help="Export traces to NDJSON")
     p_export.add_argument("--output", required=True, help="Output NDJSON path")
@@ -121,6 +149,10 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_export(args)
     if args.command == "import":
         return _cmd_import(args)
+    if args.command == "verify":
+        return _cmd_verify(args)
+    if args.command == "purge":
+        return _cmd_purge(args)
     if args.command == "manifesto":
         if args.manifesto_command == "check":
             return _cmd_manifesto_check(args)
@@ -399,6 +431,51 @@ def _cmd_import(args: argparse.Namespace) -> int:
     storage.initialise()
     imported, skipped = storage.import_ndjson(args.input)
     print(f"Imported {imported} traces, skipped {skipped} duplicates")
+    return 0
+
+
+def _cmd_verify(args: argparse.Namespace) -> int:
+    storage = SQLiteStorage(args.db) if args.db else SQLiteStorage(":memory:")
+    storage.initialise()
+    sentinel = Sentinel(storage=storage, project="verify-cli")
+
+    results: list[dict[str, Any]] = []
+    if args.trace_id:
+        result = sentinel.verify_integrity(args.trace_id)
+        results.append(result.to_dict())
+    elif args.all:
+        for trace in storage.query(limit=10_000):
+            result = sentinel.verify_integrity(trace.trace_id)
+            results.append(result.to_dict())
+    else:
+        print("verify: must pass --trace-id or --all", file=sys.stderr)
+        return 2
+
+    failed_rows = [row for row in results if not row["verified"]]
+    if args.json:
+        print(json.dumps({"results": results, "failed": len(failed_rows)}, indent=2))
+    else:
+        print(f"Verified: {len(results) - len(failed_rows)} / {len(results)}")
+        for row in failed_rows:
+            print(f"  FAIL {row['trace_id']}: {row['detail']}")
+    return 0 if not failed_rows else 1
+
+
+def _cmd_purge(args: argparse.Namespace) -> int:
+    from datetime import datetime
+
+    storage = SQLiteStorage(args.db) if args.db else SQLiteStorage(":memory:")
+    storage.initialise()
+    cutoff = datetime.fromisoformat(args.before)
+
+    result = storage.purge_before(cutoff, dry_run=args.dry_run or not args.yes)
+    if result.dry_run:
+        print(f"DRY RUN — would purge {result.traces_affected} traces before {cutoff}")
+        print("  Re-run with --yes to actually delete.")
+    else:
+        print(f"Purged {result.traces_affected} traces before {cutoff}")
+    if result.oldest_remaining is not None:
+        print(f"  Oldest remaining: {result.oldest_remaining.isoformat()}")
     return 0
 
 

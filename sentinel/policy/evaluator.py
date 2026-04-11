@@ -11,9 +11,13 @@ Future: RegoEvaluator (embedded, no OPA server needed).
 
 from __future__ import annotations
 
+import hashlib
+import inspect
 import json
 from abc import ABC, abstractmethod
 from collections.abc import Callable
+from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -21,6 +25,75 @@ from sentinel.core.trace import PolicyEvaluation, PolicyResult
 
 if TYPE_CHECKING:
     from sentinel.core.trace import DecisionTrace
+
+
+@dataclass(frozen=True)
+class PolicyVersion:
+    """Immutable metadata describing a policy version.
+
+    Every DecisionTrace can optionally carry the full PolicyVersion
+    even if the policy later changes — reconstruct the exact ruleset
+    that governed each decision.
+
+    Args:
+        name:            Policy identifier (path or logical name).
+        version:         Human-readable version string (SemVer or ISO date).
+        hash:            SHA-256 of the policy source, hex-encoded.
+        effective_from:  When this version became active.
+        effective_until: When this version was superseded (None if current).
+    """
+
+    name: str
+    version: str
+    hash: str
+    effective_from: datetime | None = None
+    effective_until: datetime | None = None
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "name": self.name,
+            "version": self.version,
+            "hash": self.hash,
+            "effective_from": (
+                self.effective_from.isoformat() if self.effective_from else None
+            ),
+            "effective_until": (
+                self.effective_until.isoformat() if self.effective_until else None
+            ),
+        }
+
+    @classmethod
+    def from_callable(
+        cls,
+        fn: Callable[..., Any],
+        *,
+        name: str,
+        version: str = "1.0.0",
+    ) -> PolicyVersion:
+        """Build a PolicyVersion from a Python callable.
+
+        The hash is computed from the function's source code via
+        :func:`inspect.getsource`, falling back to ``repr(fn)`` if
+        the source is unavailable (e.g. lambdas defined in a shell).
+        """
+        try:
+            source = inspect.getsource(fn)
+        except (OSError, TypeError):
+            source = repr(fn)
+        digest = hashlib.sha256(source.encode("utf-8")).hexdigest()
+        return cls(name=name, version=version, hash=digest)
+
+    @classmethod
+    def from_file(
+        cls,
+        path: str | Path,
+        *,
+        version: str = "1.0.0",
+    ) -> PolicyVersion:
+        p = Path(path)
+        content = p.read_bytes()
+        digest = hashlib.sha256(content).hexdigest()
+        return cls(name=str(p), version=version, hash=digest)
 
 
 class PolicyEvaluator(ABC):
