@@ -705,12 +705,20 @@ JS = r"""
 # ---------------------------------------------------------------------------
 
 
-def _section_hero(days: int, *, tests: str, coverage: str, smoke: str) -> str:
+def _section_hero(
+    days: int,
+    *,
+    version: str,
+    tests: str,
+    coverage: str,
+    smoke: str,
+) -> str:
+    del days
     return f"""
 <section class="hero">
   <div class="container hero-grid">
     <div>
-      <div class="eyebrow">EU AI Act · Art. 12/13/14 · Apache 2.0</div>
+      <div class="eyebrow">v{version} · EU AI Act Art. 12/13/14 · ML-DSA-65 signing · Apache 2.0</div>
       <h1>
         <span>AI decisions.</span>
         <span class="underline">Sovereign.</span>
@@ -718,10 +726,12 @@ def _section_hero(days: int, *, tests: str, coverage: str, smoke: str) -> str:
       </h1>
       <p class="lead">
         Sentinel wraps any AI agent and records tamper-resistant decision
-        traces to local sovereign storage. Zero cloud dependencies. Zero
-        US CLOUD Act exposure. Air-gapped capable.
+        traces to local sovereign storage. Quantum-safe signing with
+        client-side keys. Zero cloud dependencies, zero US CLOUD Act
+        exposure, air-gapped capable.
       </p>
       <div class="stats">
+        <span class="stat-pill"><span class="ok">✓</span>v{version}</span>
         <span class="stat-pill"><span class="ok">✓</span>{tests}</span>
         <span class="stat-pill"><span class="ok">✓</span>{coverage} coverage</span>
         <span class="stat-pill"><span class="ok">✓</span>{smoke} smoke</span>
@@ -794,6 +804,48 @@ def _section_enforcement(days: int) -> str:
 """
 
 
+def _section_v3_highlights(version: str) -> str:
+    return f"""
+<section class="block">
+  <div class="container">
+    <h2>What's new in v{version}</h2>
+    <p class="sub">Sovereign-first governance primitives. Quantum-safe signing. Multi-language. No external services for any of it.</p>
+
+    <div class="industry-grid">
+      <div class="industry-card">
+        <h3>Quantum-safe trace signing</h3>
+        <p><strong>ML-DSA-65 (FIPS 204)</strong>, BSI TR-02102-1 recommended. Keys stay client-side, forever. Same algorithm as cloud competitors — your keys, your infrastructure, your law.</p>
+        <div class="ks-code">pip install sentinel-kernel[pqc] &amp;&amp; sentinel keygen</div>
+      </div>
+      <div class="industry-card">
+        <h3>Attestations · BudgetTracker · Preflight</h3>
+        <p><strong>Attestations</strong> — portable self-contained governance JSON, verifiable offline.
+        <strong>BudgetTracker</strong> — spend recorded as sovereign traces.
+        <strong>Preflight</strong> — check before you act, without writing a trace.</p>
+        <div class="ks-code">sentinel attestation generate --output governance.json</div>
+      </div>
+      <div class="industry-card">
+        <h3>CrewAI · AutoGen · LangFuse panel</h3>
+        <p>New framework integrations: <strong>CrewAI</strong> task callback and <strong>AutoGen</strong> agent hook. LangFuse gains a <strong>sovereignty widget</strong> — self-contained HTML, no CDN.</p>
+        <div class="ks-code">pip install sentinel-kernel[crewai,autogen]</div>
+      </div>
+      <div class="industry-card">
+        <h3>Rust SovereigntyManifest</h3>
+        <p>RFC-001 is <strong>ACCEPTED</strong>. Python reference plus a <strong>Rust implementation</strong> (<code>sentinel-manifest</code> v0.1.0). Go and TypeScript are wanted as good-first-issues.</p>
+        <div class="ks-code">cargo add sentinel-manifest</div>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:1.5rem;">
+      Manifesto-as-code now runs as <strong>5 named CI theses</strong> on every PR: no US-owned deps,
+      air-gap proven, Apache 2.0 enforced, Sentinel passes its own manifesto,
+      trace immutability verified. The project dogfoods its own check.
+    </div>
+  </div>
+</section>
+"""
+
+
 def _section_problem() -> str:
     return """
 <section class="block">
@@ -817,7 +869,9 @@ def _section_problem() -> str:
         <tr><td class="row-label">Air-gapped capable</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓</td></tr>
         <tr><td class="row-label">Open source</td><td class="partial">Some</td><td class="no">✗</td><td class="col-good-cell yes">✓ Apache 2.0</td></tr>
         <tr><td class="row-label">On-premise</td><td class="no">✗</td><td class="partial">Expensive</td><td class="col-good-cell yes">✓ Default</td></tr>
-        <tr><td class="row-label">BSI path</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓ v2.0 roadmap</td></tr>
+        <tr><td class="row-label">BSI path</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓ v3.0 ready</td></tr>
+        <tr><td class="row-label">Quantum-safe signing</td><td class="no">✗</td><td class="partial">Server-side</td><td class="col-good-cell yes">✓ ML-DSA-65, client-side</td></tr>
+        <tr><td class="row-label">Manifesto-as-code CI</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓ 5 theses, every PR</td></tr>
       </tbody>
     </table>
 
@@ -933,13 +987,14 @@ def _section_code() -> str:
 <section class="block">
   <div class="container">
     <h2>Start in 5 minutes</h2>
-    <p class="sub">Three steps. Real working code. No placeholders.</p>
+    <p class="sub">Four snippets. Real working code. No placeholders.</p>
 
     <div class="tabs">
       <div class="tab-headers">
         <button class="tab-btn active" data-tab="minimal">Minimal</button>
         <button class="tab-btn" data-tab="policy">With Policy</button>
         <button class="tab-btn" data-tab="full">Full Pipeline</button>
+        <button class="tab-btn" data-tab="governance">Governance v3.0</button>
       </div>
 
       <div id="tab-minimal" class="tab-panel active"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel
@@ -1009,6 +1064,33 @@ report.<span class="fn">save_html</span>(<span class="st">"sovereignty_report.ht
 manifesto_report = <span class="fn">OurPolicy</span>().<span class="fn">check</span>(sentinel_instance=sentinel)
 <span class="fn">print</span>(<span class="st">f"Score: {manifesto_report.overall_score:.0%}"</span>)</pre></div>
 
+      <div id="tab-governance" class="tab-panel"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> (
+    Sentinel, BudgetTracker,
+    generate_attestation, verify_attestation,
+)
+<span class="kw">from</span> sentinel.crypto <span class="kw">import</span> QuantumSafeSigner
+
+<span class="cm"># Quantum-safe signing — keys stay on your infrastructure</span>
+signer = <span class="fn">QuantumSafeSigner</span>(
+    key_path=<span class="st">"/etc/sentinel/keys/signing.key"</span>,
+    public_key_path=<span class="st">"/etc/sentinel/keys/signing.pub"</span>,
+)
+sentinel = <span class="fn">Sentinel</span>(signer=signer)
+
+<span class="cm"># Preflight — check before you act, no trace written</span>
+result = sentinel.<span class="fn">preflight</span>(<span class="st">"data:delete:production"</span>)
+<span class="kw">if not</span> result.cleared:
+    <span class="kw">raise</span> <span class="cls">RuntimeError</span>(result.reasons)
+
+<span class="cm"># BudgetTracker — every cost entry is a sovereign trace</span>
+budget = <span class="fn">BudgetTracker</span>(sentinel=sentinel, limit=<span class="nu">10.0</span>)
+check = budget.<span class="fn">check</span>(estimated_cost=<span class="nu">0.25</span>)
+budget.<span class="fn">record</span>(<span class="st">"api:mistral"</span>, actual_cost=<span class="nu">0.23</span>)
+
+<span class="cm"># Portable attestation — verifiable offline, no service needed</span>
+att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
+<span class="kw">assert</span> <span class="fn">verify_attestation</span>(att).valid</pre></div>
+
     </div>
   </div>
 </section>
@@ -1057,24 +1139,32 @@ def _section_inside() -> str:
 <section class="block">
   <div class="container">
     <h2>What's inside</h2>
-    <p class="sub">Fourteen features. Seven articles. One honest compliance story.</p>
+    <p class="sub">Every v1 → v3 capability. Seven articles. One honest compliance story.</p>
 
     <div class="inside-grid">
       <div>
         <ul class="feature-list">
           <li><strong>@sentinel.trace</strong> — any agent, sync or async</li>
           <li><strong>Kill switch</strong> — Art. 14, no restart, thread-safe</li>
+          <li><strong>Preflight</strong> — check before you act, no trace written</li>
+          <li><strong>BudgetTracker</strong> — spend as sovereign DecisionTrace</li>
+          <li><strong>Attestations</strong> — portable, verifiable offline</li>
+          <li><strong>Output verification</strong> — hash-check any stored output</li>
+          <li><strong>Quantum-safe signing</strong> — ML-DSA-65, client-side keys</li>
+          <li><strong>RFC 3161 timestamping</strong> — EU TSAs only (DFN, D-Trust)</li>
           <li><strong>SimpleRule + LocalRego (OPA)</strong> policy evaluation</li>
           <li><strong>SQLite + PostgreSQL + Filesystem</strong> storage backends</li>
           <li><strong>Air-gapped</strong> — network blocked at socket level in CI</li>
-          <li><strong>LangChain</strong> SentinelCallbackHandler</li>
+          <li><strong>LangChain · CrewAI · AutoGen</strong> callbacks &amp; hooks</li>
+          <li><strong>Haystack · LangGraph</strong> integrations</li>
           <li><strong>OpenTelemetry</strong> — sovereignty attrs in every span</li>
-          <li><strong>LangFuse</strong> — join key: trace_id</li>
+          <li><strong>LangFuse sovereignty panel</strong> — self-contained HTML widget</li>
+          <li><strong>Jupyter · FastAPI · Django · Prometheus</strong> integrations</li>
           <li><strong>Sovereignty scanner</strong> — 60+ packages mapped</li>
-          <li><strong>Manifesto-as-code</strong> — COMPLIANT / ACKNOWLEDGED / TARGETING</li>
-          <li><strong>EU AI Act checker</strong> — Art. 9/12/13/14/17</li>
-          <li><strong>Self-contained HTML report</strong></li>
-          <li><strong>Full CLI</strong> — demo, scan, compliance, report</li>
+          <li><strong>Manifesto-as-code</strong> — 5 theses as named CI checks</li>
+          <li><strong>EU AI Act · DORA · NIS2</strong> compliance checkers</li>
+          <li><strong>RFC-001 SovereigntyManifest</strong> — Python + Rust impls</li>
+          <li><strong>Full CLI</strong> — demo, scan, compliance, report, attestation, keygen</li>
           <li><strong>Docker Compose</strong> — Grafana + LangFuse + OTel</li>
         </ul>
       </div>
@@ -1167,6 +1257,7 @@ def _render_index(
     sovereignty_score: float,
     compliance: object,
     days_to_enforcement: int,
+    version: str,
     tests: str,
     coverage: str,
     smoke: str,
@@ -1181,13 +1272,14 @@ def _render_index(
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="EU-sovereign AI decision middleware. Tamper-resistant decision traces. Zero cloud dependencies. Apache 2.0.">
-<title>Sentinel — Sovereign AI Decision Middleware</title>
+<meta name="description" content="EU-sovereign AI decision middleware v{version}. ML-DSA-65 quantum-safe trace signing. BudgetTracker, attestations, CrewAI + AutoGen. Air-gapped. Apache 2.0.">
+<title>Sentinel v{version} — Sovereign AI Decision Middleware</title>
 <style>{CSS}</style>
 </head>
 <body>
-{_section_hero(days, tests=tests, coverage=coverage, smoke=smoke)}
+{_section_hero(days, version=version, tests=tests, coverage=coverage, smoke=smoke)}
 {_section_enforcement(days)}
+{_section_v3_highlights(version)}
 {_section_problem()}
 {_section_dashboard(days)}
 {_section_code()}
@@ -1265,11 +1357,14 @@ def main() -> int:
     # terse label for the pill so it reads "40/40 smoke" not "40/40 ✓ smoke".
     smoke = smoke_raw.replace(" ✓", "").strip()
 
+    from sentinel import __version__ as _version
+
     index_html = _render_index(
         sentinel=sentinel,
         sovereignty_score=sovereignty_score,
         compliance=compliance,
         days_to_enforcement=days,
+        version=_version,
         tests=tests,
         coverage=coverage,
         smoke=smoke,
