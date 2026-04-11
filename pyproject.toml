@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sentinel-kernel"
-version = "2.1.0"
+version = "2.2.0"
 description = "EU-sovereign decision record layer for AI agents."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -71,6 +71,9 @@ crewai = ["crewai>=0.1"]
 
 # Microsoft AutoGen integration (US-owned; runtime uses local LLM)
 autogen = ["pyautogen>=0.2"]
+
+# Quantum-safe signing (ML-DSA-65 via liboqs)
+pqc = ["oqs-python>=0.8"]
 
 # Development — pulls every optional extra so `pytest --cov` hits the
 # happy-path branches of all optional-dep guards.

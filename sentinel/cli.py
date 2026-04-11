@@ -164,6 +164,19 @@ def main(argv: list[str] | None = None) -> int:
     p_att_ver = att_sub.add_parser("verify", help="Verify an attestation offline")
     p_att_ver.add_argument("--input", required=True, help="Attestation JSON path")
 
+    # --- keygen -------------------------------------------------------------
+    p_key = sub.add_parser("keygen", help="Generate a quantum-safe signing keypair")
+    p_key.add_argument(
+        "--algorithm",
+        default="ML-DSA-65",
+        choices=sorted({"ML-DSA-44", "ML-DSA-65", "ML-DSA-87"}),
+    )
+    p_key.add_argument(
+        "--output-dir",
+        default="./sentinel-keys/",
+        help="Directory to write signing.key and signing.pub",
+    )
+
     # --- manifesto check ----------------------------------------------------
     p_man = sub.add_parser("manifesto", help="Manifesto utilities")
     man_sub = p_man.add_subparsers(dest="manifesto_command")
@@ -217,6 +230,8 @@ def main(argv: list[str] | None = None) -> int:
             return _cmd_attestation_verify(args)
         p_att.print_help()
         return 1
+    if args.command == "keygen":
+        return _cmd_keygen(args)
 
     parser.print_help()
     return 1
@@ -620,6 +635,26 @@ def _cmd_manifesto_check(args: argparse.Namespace) -> int:
         print(report.as_json())
     else:
         print(report.as_text())
+    return 0
+
+
+def _cmd_keygen(args: argparse.Namespace) -> int:
+    try:
+        from sentinel.crypto import QuantumSafeSigner
+    except ImportError as exc:  # pragma: no cover - only fires on truly broken install
+        print(str(exc), file=sys.stderr)
+        return 2
+    try:
+        QuantumSafeSigner.generate_keypair(
+            output_dir=args.output_dir,
+            algorithm=args.algorithm,
+        )
+    except ImportError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
+    except ValueError as exc:  # pragma: no cover - argparse choices prevents this
+        print(f"keygen: {exc}", file=sys.stderr)
+        return 2
     return 0
 
 

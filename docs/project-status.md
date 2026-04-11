@@ -10,7 +10,7 @@ _Last generated from HEAD commit: 2026-04-11 17:14 UTC_
 
 ## Version
 
-**`2.1.0`** — Production/Stable
+**`2.2.0`** — Production/Stable
 
 EU-sovereign decision record layer for AI agents.
 
@@ -18,7 +18,7 @@ EU-sovereign decision record layer for AI agents.
 
 | | |
 |---|---|
-| Tests | 568 passing |
+| Tests | 589 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
 
@@ -38,6 +38,9 @@ EU-sovereign decision record layer for AI agents.
 | `sentinel/core/budget.py` | 100% | ✓ |
 | `sentinel/core/trace.py` | 100% | ✓ |
 | `sentinel/core/tracer.py` | 100% | ✓ |
+| `sentinel/crypto/__init__.py` | 100% | ✓ |
+| `sentinel/crypto/signing.py` | 100% | ✓ |
+| `sentinel/crypto/timestamp.py` | 100% | ✓ |
 | `sentinel/dashboard/__init__.py` | 100% | ✓ |
 | `sentinel/dashboard/html.py` | 100% | ✓ |
 | `sentinel/dashboard/terminal.py` | 100% | ✓ |
@@ -106,6 +109,7 @@ EU-sovereign decision record layer for AI agents.
 
 ## Shipped
 
+- **2.2.0 (2026-04-11)** — **Quantum-safe trace signing.**
 - **2.1.0 (2026-04-11)** — **Sovereign-first governance primitives.**
 - **2.0.0 (2026-04-11)** — **Major release. Production stable. BSI assessment ready.**
 - **1.9.0 (2026-04-11)** — Minor release. Advanced compliance — DORA and NIS2 checkers with
@@ -117,6 +121,5 @@ EU-sovereign decision record layer for AI agents.
 - **1.3.0 (2026-04-11)** — Minor release. Ecosystem and community — RFC-001 accepted,
 - **1.2.0 (2026-04-11)** — Minor release. Depth across onboarding, governance, manifesto, and
 - **1.1.0 (2026-04-11)** — Minor release. Major visual overhaul of the public surface, new CLI
-- **1.0.1 (2026-04-11)** — Patch release. No public API changes. Coverage hardened across the
 
 <!-- SYNC_ALL_STATUS_END -->

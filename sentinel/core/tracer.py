@@ -60,6 +60,7 @@ class Sentinel:
         policy_evaluator: PolicyEvaluator | None = None,
         store_inputs: bool = True,
         store_outputs: bool = True,
+        signer: Any | None = None,
     ):
         # Storage
         self.storage: StorageBackend
@@ -76,6 +77,7 @@ class Sentinel:
         self.policy_evaluator = policy_evaluator or NullPolicyEvaluator()
         self.store_inputs = store_inputs
         self.store_outputs = store_outputs
+        self._signer = signer
 
         # Kill switch state (EU AI Act Art. 14 — human oversight halt)
         self._kill_switch_lock = threading.Lock()
@@ -242,6 +244,7 @@ class Sentinel:
             trace.tags["error_message"] = str(exc)[:500]
             elapsed = int((time.monotonic() - start) * 1000)
             trace.complete(output={}, latency_ms=elapsed)
+            self._sign_trace(trace)
             self.storage.save(trace)
             raise
 
@@ -253,8 +256,24 @@ class Sentinel:
             latency_ms=elapsed,
         )
 
+        self._sign_trace(trace)
         self.storage.save(trace)
         return result
+
+    def _sign_trace(self, trace: DecisionTrace) -> None:
+        """Sign the trace in place, if a signer is configured.
+
+        Failures are non-fatal: a missing signature is recorded as
+        ``signature=None`` so storage never blocks on a crypto error.
+        """
+        if self._signer is None:
+            return
+        try:
+            payload = trace.to_json().encode("utf-8")
+            trace.signature = self._signer.sign(payload)
+            trace.signature_algorithm = getattr(self._signer, "algorithm", None)
+        except Exception as exc:  # pragma: no cover - defensive
+            trace.tags["signing_error"] = f"{type(exc).__name__}:{exc}"[:200]
 
     @asynccontextmanager
     async def span(

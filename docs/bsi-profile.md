@@ -191,3 +191,17 @@ IT-Grundschutz.
 | v1.4 — Haystack integration | 2026-Q2 | EU-sovereign agent framework coverage |
 | v2.0 — BSI reference implementation | 2026-Q4 | Formal assessment against IT-Grundschutz |
 | v2.1 — VS-NfD deployment profile | 2027-Q1 | Cleared for classified German government deployments |
+
+---
+
+## Post-quantum cryptography
+
+Sentinel supports ML-DSA-65 (FIPS 204) for trace signing via the
+optional `sentinel-kernel[pqc]` extra. ML-DSA-65 meets BSI TR-02102-1
+recommendations for quantum-resistant digital signatures.
+
+**Key material is stored operator-side — never on external servers.**
+All cryptographic operations run in-process. There is no API key, no
+cloud service, no network call. RFC 3161 timestamping via EU-sovereign
+TSAs only (DFN-CERT, D-Trust); US-based TSAs are rejected at
+construction time.

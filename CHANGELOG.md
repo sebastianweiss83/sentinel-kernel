@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.2.0] — 2026-04-11
+
+**Quantum-safe trace signing.**
+
+### Added
+
+- **`QuantumSafeSigner`** — ML-DSA-65 (FIPS 204) trace signing via
+  the `sentinel-kernel[pqc]` optional extra. Keys stored operator-side,
+  never on external servers. BSI TR-02102-1 compliant algorithm.
+- **`RFC3161Timestamper`** — timestamping via EU-sovereign TSAs only
+  (DFN-CERT, D-Trust). Rejects US-based TSAs at construction time.
+  Air-gap fallback: local timestamp when network is unavailable.
+- **`sentinel keygen`** CLI — generate `signing.key` / `signing.pub`
+  without ever printing key material. Private key mode set to 0600.
+- **`Sentinel(signer=...)`** parameter — every trace is signed
+  in-process before storage. Signature fields added to
+  `DecisionTrace`: `signature`, `signature_algorithm`.
+- **BSI TR-02102-1 algorithm compliance** documented in
+  `docs/bsi-profile.md`.
+
 ## [2.1.0] — 2026-04-11
 
 **Sovereign-first governance primitives.**

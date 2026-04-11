@@ -129,6 +129,8 @@ class DecisionTrace:
 
     # Integrity
     schema_version: str = "1.0.0"
+    signature: str | None = None
+    signature_algorithm: str | None = None
 
     def __post_init__(self) -> None:
         if self.inputs and not self.inputs_hash:
@@ -203,6 +205,8 @@ class DecisionTrace:
             },
             "tags": self.tags,
             "precedent_trace_ids": self.precedent_trace_ids,
+            "signature": self.signature,
+            "signature_algorithm": self.signature_algorithm,
         }
 
     def to_json(self) -> str:
@@ -225,6 +229,8 @@ class DecisionTrace:
         )
 
         trace.latency_ms = data.get("latency_ms")
+        trace.signature = data.get("signature")
+        trace.signature_algorithm = data.get("signature_algorithm")
         if started := data.get("started_at"):
             from datetime import datetime
             trace.started_at = datetime.fromisoformat(started)

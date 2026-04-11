@@ -75,6 +75,8 @@ def test_to_dict_produces_correct_structure():
         "sovereignty",
         "tags",
         "precedent_trace_ids",
+        "signature",
+        "signature_algorithm",
     }
     assert expected_keys == set(d.keys())
 
