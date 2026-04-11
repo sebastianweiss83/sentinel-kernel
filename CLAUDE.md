@@ -12,15 +12,15 @@
 | Tests | 331 passing |
 | Coverage | 96% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 14:10 UTC |
+| Last updated | 2026-04-11 12:11 UTC |
 
 ## Last 5 commits
 
+- `8e1fa61` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `b665a3b` feat: v1.3.0 — RFC-001 accepted, CONTRIBUTING, SECURITY, industry examples
 - `2e5da73` feat: examples — 13_full_pipeline and 10_manifesto substantially improved
 - `e55253f` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `2a58701` docs+ci: CONTRIBUTING refresh, SECURITY.md, CLAUDE.md auto-update regenerate-on-conflict
-- `8b7f394` chore(auto): refresh CLAUDE.md state block [skip ci]
 
 ## Open issues
 
