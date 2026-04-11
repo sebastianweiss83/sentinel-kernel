@@ -1,0 +1,37 @@
+name: Rust (sentinel-manifest)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'rust-impl/**'
+      - '.github/workflows/rust.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'rust-impl/**'
+      - '.github/workflows/rust.yml'
+
+jobs:
+  rust:
+    name: cargo test + clippy + fmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install stable toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: cargo fmt --check
+        working-directory: rust-impl
+        run: cargo fmt --check
+
+      - name: cargo clippy
+        working-directory: rust-impl
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: cargo test
+        working-directory: rust-impl
+        run: cargo test --all-targets

@@ -10,7 +10,7 @@ _Last generated from HEAD commit: 2026-04-11 17:29 UTC_
 
 ## Version
 
-**`2.3.0`** — Production/Stable
+**`2.4.0`** — Production/Stable
 
 EU-sovereign decision record layer for AI agents.
 
@@ -108,6 +108,7 @@ EU-sovereign decision record layer for AI agents.
 
 ## Shipped
 
+- **2.4.0 (2026-04-11)** — **Rust RFC-001 implementation. Closes #13. Multi-language spec.**
 - **2.3.0 (2026-04-11)** — **LangFuse sovereignty panel. Closes #14.**
 - **2.2.0 (2026-04-11)** — **Quantum-safe trace signing.**
 - **2.1.0 (2026-04-11)** — **Sovereign-first governance primitives.**
@@ -119,6 +120,5 @@ EU-sovereign decision record layer for AI agents.
 - **1.5.0 (2026-04-11)** — Minor release. Governance and community — Linux Foundation Europe
 - **1.4.0 (2026-04-11)** — Minor release. Integration depth — Haystack integration, integration
 - **1.3.0 (2026-04-11)** — Minor release. Ecosystem and community — RFC-001 accepted,
-- **1.2.0 (2026-04-11)** — Minor release. Depth across onboarding, governance, manifesto, and
 
 <!-- SYNC_ALL_STATUS_END -->

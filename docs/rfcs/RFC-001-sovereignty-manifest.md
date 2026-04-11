@@ -8,6 +8,15 @@
 | Comment period | Closed — 14 days elapsed                |
 | Implementation | `sentinel/manifesto/base.py` (v1.2.0+)  |
 
+### Implementations
+
+| Language   | Package             | Status                       |
+|------------|---------------------|------------------------------|
+| Python     | `sentinel-kernel`   | Reference, v2.x stable       |
+| Rust       | `sentinel-manifest` | v0.1.0 (`rust-impl/`)        |
+| Go         | —                   | Wanted — see issues          |
+| TypeScript | —                   | Wanted — see issues          |
+
 ---
 
 ## Summary

@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.4.0] — 2026-04-11
+
+**Rust RFC-001 implementation. Closes #13. Multi-language spec.**
+
+### Added
+
+- **`rust-impl/`** — Rust implementation of RFC-001
+  SovereigntyManifest (`sentinel-manifest` crate). Mirrors the Python
+  reference API. Runnable via `cargo run --example basic`.
+- **`.github/workflows/rust.yml`** — `cargo fmt`, `cargo clippy -D warnings`,
+  `cargo test --all-targets` on every PR that touches `rust-impl/`.
+- **RFC-001 Implementations table** — documents Python reference
+  (stable) and Rust (v0.1.0). Go and TypeScript are wanted.
+
 ## [2.3.0] — 2026-04-11
 
 **LangFuse sovereignty panel. Closes #14.**

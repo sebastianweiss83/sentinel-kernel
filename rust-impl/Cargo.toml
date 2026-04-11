@@ -1,0 +1,19 @@
+[package]
+name = "sentinel-manifest"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "Rust implementation of RFC-001 SovereigntyManifest"
+repository = "https://github.com/sebastianweiss83/sentinel-kernel"
+keywords = ["sovereignty", "eu-ai-act", "compliance", "manifesto", "rfc-001"]
+categories = ["config"]
+rust-version = "1.70"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+
+[[example]]
+name = "basic"
+path = "examples/basic.rs"
