@@ -1201,6 +1201,41 @@ def _render_index(
 """
 
 
+def _write_data_json(
+    *,
+    out_dir: Path,
+    tests: str,
+    coverage: str,
+    smoke: str,
+    days: int,
+) -> None:
+    """Emit docs/preview/data.json — live metrics for the preview page.
+
+    Same-origin, no external fetch. Air-gap safe.
+    """
+    import json as _json
+
+    from sentinel import __version__ as _version
+
+    tests_n: int | str
+    try:
+        tests_n = int("".join(ch for ch in tests if ch.isdigit()))
+    except ValueError:
+        tests_n = tests
+
+    payload = {
+        "version": _version,
+        "tests": tests_n,
+        "coverage": coverage,
+        "smoke": smoke,
+        "days_to_enforcement": days,
+    }
+    (out_dir / "data.json").write_text(
+        _json.dumps(payload, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+
 def main() -> int:
     import os as _os
 
@@ -1244,11 +1279,20 @@ def main() -> int:
     report_html = HTMLReport().generate(sentinel, manifesto=PreviewPolicy())
     (OUT_DIR / "report.html").write_text(report_html, encoding="utf-8")
 
+    _write_data_json(
+        out_dir=OUT_DIR,
+        tests=tests,
+        coverage=coverage,
+        smoke=smoke,
+        days=days,
+    )
+
     # .nojekyll so GitHub Pages serves files as-is
     (OUT_DIR / ".nojekyll").write_text("", encoding="utf-8")
 
     print(f"Generated {OUT_DIR / 'index.html'}")
     print(f"Generated {OUT_DIR / 'report.html'}")
+    print(f"Generated {OUT_DIR / 'data.json'}")
     return 0
 
 
