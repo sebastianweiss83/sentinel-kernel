@@ -12,15 +12,15 @@
 | Tests | 608 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 20:32 UTC |
+| Last updated | 2026-04-11 20:42 UTC |
 
 ## Last 5 commits
 
+- `bcaa739` feat: HTML report — remediation actions per article
 - `5fb4a60` feat: v3.0.2 — reentrant scanner timeout + workflow concurrency guards
 - `e4d2f1c` fix: infrastructure scanner depth limit — prevents hang on large dirs
 - `05c782e` feat(preview): thorough v3.0 refresh — new capabilities surface on landing page
 - `e4c9ee8` fix(rust): allow clippy::should_implement_trait on builder add()
-- `eeb61a2` fix: rust fmt compliance, pip install retry for transient SSL flakes
 
 ## Open issues
 
