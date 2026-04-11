@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `1.9.0` |
+| Version | `2.0.0` |
 | Tests | 503 passing |
-| Coverage | 99% |
+| Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 15:40 UTC |
+| Last updated | 2026-04-11 15:45 UTC |
 
 ## Last 5 commits
 
+- `8d0e5b1` feat: v2.0.0 — production stable, BSI assessment ready
+- `c5a1059` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `1f59eca` feat: v1.9.0 — DORA + NIS2 + unified compliance checker
 - `e3c200b` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `dca9974` feat: v1.8.0 — Jupyter, FastAPI, Django integrations
-- `48179e1` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `5197ecf` feat: v1.7.0 — trace verify, retention purge, policy versioning, benchmarks
 
 ## Open issues
 
