@@ -56,21 +56,26 @@ Stored locally. No cloud account. No API key. No network call.
 ## With policy evaluation
 
 ```python
-from sentinel import Sentinel
+from sentinel import Sentinel, DataResidency
 from sentinel.policy import SimpleRuleEvaluator
 from sentinel.storage import FilesystemStorage
+
+def within_threshold(ctx: dict) -> tuple[bool, str | None]:
+    if ctx.get("amount", 0) > ctx.get("agent_threshold", 0):
+        return False, "amount_exceeds_threshold"
+    return True, None
 
 # works fully offline — classified environments, air-gapped networks
 sentinel = Sentinel(
     storage=FilesystemStorage("/mnt/traces"),
-    policy=SimpleRuleEvaluator(
-        lambda ctx: ctx["amount"] <= ctx["agent_threshold"]
-    ),
+    policy_evaluator=SimpleRuleEvaluator({
+        "policies/procurement.py": within_threshold,
+    }),
     sovereign_scope="EU",
-    data_residency="on-premise-de",
+    data_residency=DataResidency.EU_DE,
 )
 
-@sentinel.trace
+@sentinel.trace(policy="policies/procurement.py")
 async def evaluate_procurement(ctx: dict) -> dict:
     return await agent.run(ctx)
 ```
@@ -78,12 +83,17 @@ async def evaluate_procurement(ctx: dict) -> dict:
 For OPA/Rego policies:
 
 ```python
+from sentinel import Sentinel
 from sentinel.policy import LocalRegoEvaluator
 
 sentinel = Sentinel(
-    policy=LocalRegoEvaluator("policies/procurement.rego"),
-    # evaluated in-process — no network, no OPA server
+    policy_evaluator=LocalRegoEvaluator(opa_binary="opa"),
+    # OPA runs in-process — no network, no OPA server
 )
+
+@sentinel.trace(policy="policies/procurement.rego")
+async def evaluate_procurement(ctx: dict) -> dict:
+    return await agent.run(ctx)
 ```
 
 ---
@@ -114,18 +124,28 @@ sentinel = Sentinel()  # SQLite, no config
 
 **On-premise enterprise**
 ```python
+from sentinel import Sentinel, DataResidency
+from sentinel.storage import SQLiteStorage
+
 sentinel = Sentinel(
-    storage=PostgresStorage("postgresql://localhost/traces"),
+    storage=SQLiteStorage("/var/lib/sentinel/traces.db"),
     sovereign_scope="EU",
-    data_residency="on-premise-de",
+    data_residency=DataResidency.EU_DE,
 )
+# PostgreSQL storage planned for v0.2
 ```
 
 **Air-gapped / classified**
-```bash
-sentinel-cli init --storage filesystem --path /mnt/traces
+```python
+from sentinel import Sentinel, DataResidency
+from sentinel.storage import FilesystemStorage
+
+sentinel = Sentinel(
+    storage=FilesystemStorage("/mnt/traces"),
+    data_residency=DataResidency.AIR_GAPPED,
+)
 # zero network connectivity required
-# traces export as NDJSON
+# traces written as NDJSON, one file per day
 ```
 
 ---
