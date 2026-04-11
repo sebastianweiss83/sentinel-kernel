@@ -25,8 +25,9 @@ Sovereignty is the product. Everything else is implementation detail.
 | | |
 |---|---|
 | Version | `1.0.1` |
-| Tests | 275+ passing |
-| Coverage | 93%+ |
+| Tests | **304 passing** |
+| Coverage | **97%** |
+| Smoke test | 40/40 |
 | Python | `>=3.11` |
 | License | Apache 2.0 |
 | Status | `Development Status :: 5 - Production/Stable` |

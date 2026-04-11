@@ -7,6 +7,92 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.1] — 2026-04-11
+
+Patch release. No public API changes. Coverage hardened across the
+integration layer and the storage backends, two missing reference
+documents added, legacy examples removed, and duplicate issues
+closed.
+
+### Added
+
+- `CLAUDE_MEGA_PROMPT.md` — persistent Claude Code reference at the
+  repo root. Captures the real API, module map, CLI surface, release
+  process, three sovereignty invariants, current version/test state,
+  and roadmap. Update on every release so the next Claude Code
+  session starts from a correct map.
+- `docs/releasing.md` — release runbook. PyPI trusted-publisher setup
+  (one-time), three-command flow, pre-tag checklist, SemVer rules for
+  this codebase, and troubleshooting for every failure mode hit so
+  far (invalid-publisher, 403 overwrite, wrong tag prefix, tag on
+  wrong SHA, smoke-test ruff step).
+- `tests/test_cli.py` — 25 tests covering every subcommand branch.
+- `tests/test_storage_filesystem.py` — 29 tests covering every
+  branch of the air-gap reference backend.
+
+### Changed — coverage
+
+- `sentinel/cli.py`: 70% → 97%. Defensive `_load_manifesto` now
+  returns `None` on a missing file path instead of raising
+  `FileNotFoundError`.
+- `sentinel/storage/filesystem.py`: 78% → 100%.
+- `sentinel/integrations/otel.py`: 73% → 95%. New tests cover the
+  wrapper delegation (`initialise`, `get`), the policy-result span
+  attribute when a policy evaluator is wired, `flush()`, the real
+  `_import_otel()` ImportError path, and `_build_real_tracer()` via
+  stubbed OTel classes.
+- `sentinel/integrations/langchain.py`: 76% → 99%. New tests cover
+  every branch of `_extract_model_name` and `_serialise_llm_result`,
+  chain end with non-dict output, and the direct
+  `_import_base_callback_handler` ImportError path.
+- `sentinel/integrations/langfuse.py`: 78% → 98%. Covers the generic
+  `update(trace_id=)` SDK shape, the `AttributeError` for unknown
+  clients, the default-client path via `_import_langfuse_client()`,
+  and the direct ImportError path.
+- `sentinel/storage/postgres.py`: 84% → 99%. Covers the
+  `policy_result` query filter, `get()` miss, `close()`, `__repr__`,
+  `_coerce_payload` with JSON-string input, the direct
+  `_import_psycopg2` ImportError path, and the default `connect_fn`
+  path.
+- Total tests: 275 → **304**. Overall coverage: 93% → **97%**.
+
+### Changed — alignment with mega-prompt spec
+
+- `sentinel/dashboard/terminal.py`: added public `TerminalReport`
+  alias for `TerminalDashboard` and a `print_summary()` convenience
+  wrapper around `render_once()`.
+- `demo/grafana/`: reorganised to the canonical layout with
+  `grafana/provisioning/{datasources,dashboards}/*.yaml` and
+  `grafana/dashboards/sentinel_sovereignty.json`. Docker Compose
+  mounts simplified to the two standard paths.
+- `examples/policies/data_classification.rego` — UNCLASSIFIED → SECRET
+  lattice with explicit deny reasons and three inline `opa test`
+  cases.
+
+### Removed — legacy duplication
+
+- `examples/minimal_trace.py`, `examples/policy_deny.py`,
+  `examples/quickstart.py`, `examples/manifesto_example.py` — all
+  duplicated content already in the numbered 01-13 examples.
+- `docs/quickstart.md` — consolidated into `docs/getting-started.md`.
+
+### Fixed
+
+- `docs/getting-started.md`: imported a non-existent `AirGapRequired`
+  class. Switched to the real idiom (`Required()` with an attribute
+  name starting with `airgap`). Also fixed the `AcknowledgedGap`
+  constructor kwargs to match the real dataclass fields
+  (`provider` / `migrating_to` / `by` / `reason`).
+- `docs/rfcs/RFC-001-sovereignty-manifest.md`: the implementation-
+  status section referenced the deleted
+  `examples/manifesto_example.py`. Updated to `examples/10_manifesto.py`
+  and refreshed the test count.
+- `.github/workflows/ci.yml`: was still invoking the deleted
+  `examples/minimal_trace.py` and `examples/policy_deny.py`. Switched
+  to `examples/01_minimal_trace.py` and
+  `examples/03_policy_simple_rule.py`.
+- Duplicate issues #1 and #4 closed (superseded by #5 and #9).
+
 ## [1.0.0] — 2026-04-11
 
 Stable release. The full v0.9.x feature set — kill switch, PostgreSQL
