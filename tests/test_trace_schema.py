@@ -9,11 +9,9 @@ inputs_hash auto-computation, and complete() side effects.
 
 import hashlib
 import json
-from datetime import datetime, timezone
+from datetime import datetime
 
-import pytest
-
-from sentinel.core.trace import DataResidency, DecisionTrace, PolicyResult
+from sentinel.core.trace import DataResidency, DecisionTrace
 
 
 def test_trace_creation_has_required_fields():

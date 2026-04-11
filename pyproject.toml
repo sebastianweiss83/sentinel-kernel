@@ -81,6 +81,7 @@ dependencies = [
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+exclude = [".venv", "dist", "build", ".ruff_cache", ".pytest_cache"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]

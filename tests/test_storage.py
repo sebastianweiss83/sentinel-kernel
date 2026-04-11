@@ -7,11 +7,9 @@ Covers: save/get roundtrip, query with project filter, and filesystem
 NDJSON persistence verified via tmp_path fixture.
 """
 
-import pytest
 
-from sentinel.core.trace import DataResidency, DecisionTrace, PolicyResult
+from sentinel.core.trace import DecisionTrace
 from sentinel.storage import FilesystemStorage, SQLiteStorage
-
 
 # ---------------------------------------------------------------------------
 # Helpers

@@ -7,11 +7,10 @@ and store_inputs/store_outputs flags.
 
 import pytest
 
-from sentinel import DataResidency, PolicyDeniedError, Sentinel
+from sentinel import PolicyDeniedError, Sentinel
 from sentinel.core.trace import DecisionTrace, HumanOverride
 from sentinel.policy import SimpleRuleEvaluator
 from sentinel.storage import SQLiteStorage
-
 
 # --- Sync function wrapping ---
 

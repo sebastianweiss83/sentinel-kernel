@@ -6,9 +6,9 @@ have been introduced into the critical path.
 This is the manifesto as code.
 """
 
-import sys
 import importlib
 import inspect
+import sys
 
 # Packages with US-incorporated parent companies
 # that would introduce CLOUD Act exposure if in the critical path
@@ -24,9 +24,10 @@ US_OWNED_PACKAGES = {
 }
 
 CRITICAL_PATH_MODULES = [
-    "sentinel.interceptor",
-    "sentinel.policy",
-    "sentinel.trace",
+    "sentinel.core.tracer",
+    "sentinel.core.trace",
+    "sentinel.policy.evaluator",
+    "sentinel.storage.base",
     "sentinel.storage.sqlite",
     "sentinel.storage.filesystem",
 ]
