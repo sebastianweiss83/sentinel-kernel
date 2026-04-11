@@ -10,7 +10,7 @@ _Last generated from HEAD commit: 2026-04-11 20:10 UTC_
 
 ## Version
 
-**`3.0.0`** — Production/Stable
+**`3.0.1`** — Production/Stable
 
 EU-sovereign decision record layer for AI agents.
 
@@ -18,7 +18,7 @@ EU-sovereign decision record layer for AI agents.
 
 | | |
 |---|---|
-| Tests | 593 passing |
+| Tests | 596 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
 
@@ -112,6 +112,7 @@ EU-sovereign decision record layer for AI agents.
 
 ## Shipped
 
+- **3.0.1 (2026-04-11)** — **Bug fix: infrastructure scanner no longer hangs on large directories.**
 - **3.0.0 (2026-04-11)** — **Complete platform · API frozen · BSI assessment ready.**
 - **2.4.0 (2026-04-11)** — **Rust RFC-001 implementation. Closes #13. Multi-language spec.**
 - **2.3.0 (2026-04-11)** — **LangFuse sovereignty panel. Closes #14.**
@@ -123,6 +124,5 @@ EU-sovereign decision record layer for AI agents.
 - **1.7.0 (2026-04-11)** — Minor release. Production hardening — trace integrity, retention,
 - **1.6.0 (2026-04-11)** — Minor release. VS-NfD deployment profile, Prometheus textfile
 - **1.5.0 (2026-04-11)** — Minor release. Governance and community — Linux Foundation Europe
-- **1.4.0 (2026-04-11)** — Minor release. Integration depth — Haystack integration, integration
 
 <!-- SYNC_ALL_STATUS_END -->

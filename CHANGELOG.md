@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.0.1] — 2026-04-11
+
+**Bug fix: infrastructure scanner no longer hangs on large directories.**
+
+### Fixed
+
+- **`InfrastructureScanner.scan()`** used `Path.rglob()` which walks the
+  entire tree before filtering. Running `sentinel demo` from a large
+  directory (user home, a cloned monorepo, anywhere containing a big
+  `.venv`/`node_modules`) could hang for minutes. Replaced with
+  `os.walk()` + in-place directory pruning and a `max_depth=3` default
+  so excluded directories are never descended into and the walk
+  terminates quickly regardless of repo size.
+- **`sentinel demo`** now creates a dedicated empty temp directory and
+  scopes all filesystem-walking scanners to it, so the demo runs in
+  <0.2s regardless of the caller's cwd.
+- **`InfraScanResult`** gains `max_depth_scanned` and a `scan_note`
+  in its JSON output so the bounded-walk semantics are explicit.
+
+### Also added
+
+- GitHub Pages preview thoroughly refreshed to surface v3.0 capabilities:
+  quantum-safe signing, BudgetTracker, Preflight, attestations,
+  CrewAI, AutoGen, LangFuse sovereignty widget, Rust RFC-001. New
+  "What's new in v3.0" section. New Governance code tab.
+
 ## [3.0.0] — 2026-04-11
 
 **Complete platform · API frozen · BSI assessment ready.**

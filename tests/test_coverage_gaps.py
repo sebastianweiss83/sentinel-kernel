@@ -461,6 +461,55 @@ def test_infra_scanner_excludes_yaml_inside_venv(tmp_path: Path) -> None:
     assert k8s_findings[0].file == "real.yaml"
 
 
+def test_infra_walk_files_returns_nothing_for_missing_root(tmp_path: Path) -> None:
+    """_walk_files must short-circuit on a path that doesn't exist."""
+    from sentinel.scanner.infrastructure import _walk_files
+
+    missing = tmp_path / "does-not-exist"
+    assert list(_walk_files(missing, ("*.tf",))) == []
+
+
+def test_infra_walk_files_respects_max_depth(tmp_path: Path) -> None:
+    """Files buried past max_depth must not be yielded."""
+    from sentinel.scanner.infrastructure import _walk_files
+
+    # depth 0: shallow.tf
+    (tmp_path / "shallow.tf").write_text('provider "aws" {}\n')
+    # depth 4: a/b/c/d/deep.tf — beyond default max_depth=3
+    deep = tmp_path / "a" / "b" / "c" / "d"
+    deep.mkdir(parents=True)
+    (deep / "deep.tf").write_text('provider "aws" {}\n')
+
+    results = sorted(p.name for p in _walk_files(tmp_path, ("*.tf",), max_depth=3))
+    assert "shallow.tf" in results
+    assert "deep.tf" not in results
+
+
+def test_infra_scan_does_not_hang_on_large_dir(tmp_path: Path) -> None:
+    """Sanity: scanning a tree with thousands of non-matching files finishes fast."""
+    import time
+
+    from sentinel.scanner import InfrastructureScanner
+
+    # Create many irrelevant files in deeply nested dirs — pruning must
+    # keep this bounded.
+    for i in range(20):
+        d = tmp_path / f"dir{i}" / "a" / "b" / "c"
+        d.mkdir(parents=True)
+        for j in range(50):
+            (d / f"file{j}.py").write_text("# irrelevant\n")
+    (tmp_path / "main.tf").write_text('provider "hetzner" {}\n')
+
+    start = time.monotonic()
+    result = InfrastructureScanner().scan(tmp_path)
+    elapsed = time.monotonic() - start
+    # Should complete in well under a second even with 1000 noise files.
+    assert elapsed < 2.0
+    assert result.max_depth_scanned == 3
+    # Only the top-level .tf matters
+    assert result.files_scanned == 1
+
+
 def test_infra_looks_like_k8s_handles_os_error(monkeypatch: pytest.MonkeyPatch) -> None:
     from sentinel.scanner.infrastructure import _looks_like_k8s
 

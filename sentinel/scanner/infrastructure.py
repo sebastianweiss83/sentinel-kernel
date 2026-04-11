@@ -7,11 +7,37 @@ posture. We read files as text, we do not execute them.
 
 from __future__ import annotations
 
+import fnmatch
 import json
+import os
 import re
+from collections.abc import Iterator
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
+
+# Directories we never enumerate — pruned at walk time, not after yield,
+# so scanning a home-dir-sized tree never crawls ~/Library, ~/node_modules,
+# or a gigabyte-scale .venv.
+_EXCLUDED_DIRS = frozenset(
+    {
+        ".venv",
+        "venv",
+        ".git",
+        "node_modules",
+        ".tox",
+        "dist",
+        "build",
+        "__pycache__",
+        ".mypy_cache",
+        ".ruff_cache",
+        ".pytest_cache",
+    }
+)
+
+# Hard cap on directory depth. Prevents unbounded walks if the scanner is
+# accidentally pointed at a large directory (e.g. the user's home dir).
+_DEFAULT_MAX_DEPTH = 3
 
 
 @dataclass
@@ -31,6 +57,7 @@ class InfraFinding:
 class InfraScanResult:
     findings: list[InfraFinding] = field(default_factory=list)
     files_scanned: int = 0
+    max_depth_scanned: int = _DEFAULT_MAX_DEPTH
 
     @property
     def us_controlled_components(self) -> int:
@@ -41,6 +68,12 @@ class InfraScanResult:
             "files_scanned": self.files_scanned,
             "total_findings": len(self.findings),
             "us_controlled_components": self.us_controlled_components,
+            "max_depth_scanned": self.max_depth_scanned,
+            "scan_note": (
+                f"Scanned up to {self.max_depth_scanned} directory levels "
+                "deep from repo_root. Excluded dirs (.venv, node_modules, "
+                ".git, etc.) are pruned at walk time."
+            ),
             "findings": [f.to_dict() for f in self.findings],
         }
 
@@ -62,20 +95,29 @@ class InfrastructureScanner:
       - .env files referencing cloud endpoints (we warn, we never print values)
     """
 
-    def scan(self, repo_root: str | Path = ".") -> InfraScanResult:
-        root = Path(repo_root)
-        result = InfraScanResult()
+    def scan(
+        self,
+        repo_root: str | Path = ".",
+        *,
+        max_depth: int = _DEFAULT_MAX_DEPTH,
+    ) -> InfraScanResult:
+        """Scan IaC files under ``repo_root``.
 
-        for tf in sorted(root.rglob("*.tf")):
-            if _is_excluded(tf, root):
-                continue
+        The walk is pruned at traversal time: it never descends into
+        excluded directories (``.venv``, ``node_modules``, ``.git`` …)
+        and never goes deeper than ``max_depth`` levels. This bounds
+        scan cost even when ``repo_root`` is accidentally pointed at a
+        large tree like the user's home directory.
+        """
+        root = Path(repo_root)
+        result = InfraScanResult(max_depth_scanned=max_depth)
+
+        for tf in sorted(_walk_files(root, ("*.tf", "*.tfvars"), max_depth)):
             result.files_scanned += 1
             for finding in _scan_terraform(tf, root):
                 result.findings.append(finding)
 
-        for yaml_path in sorted(root.rglob("*.yaml")):
-            if _is_excluded(yaml_path, root):
-                continue
+        for yaml_path in sorted(_walk_files(root, ("*.yaml", "*.yml"), max_depth)):
             if not _looks_like_k8s(yaml_path):
                 continue
             result.files_scanned += 1
@@ -91,10 +133,37 @@ class InfrastructureScanner:
         return result
 
 
-def _is_excluded(path: Path, root: Path) -> bool:
-    parts = path.resolve().relative_to(root.resolve()).parts
-    excluded = {".venv", "venv", ".git", "node_modules", ".tox", "dist", "build"}
-    return any(p in excluded for p in parts)
+def _walk_files(
+    root: Path,
+    patterns: tuple[str, ...],
+    max_depth: int = _DEFAULT_MAX_DEPTH,
+) -> Iterator[Path]:
+    """Yield files under ``root`` matching any glob in ``patterns``.
+
+    Uses :func:`os.walk` with in-place ``dirs`` pruning so excluded
+    directories and directories past ``max_depth`` are never entered.
+    Symlinks are not followed.
+    """
+    root_resolved = root.resolve(strict=False)
+    if not root_resolved.exists():
+        return
+    root_str = str(root_resolved)
+
+    for current, dirs, files in os.walk(root_str, followlinks=False):
+        rel = os.path.relpath(current, root_str)
+        depth = 0 if rel == "." else rel.count(os.sep) + 1
+
+        # Prune excluded directories in-place so walk never descends
+        dirs[:] = [d for d in dirs if d not in _EXCLUDED_DIRS]
+        # Stop descending past max_depth
+        if depth >= max_depth:
+            dirs[:] = []
+
+        for fname in files:
+            for pattern in patterns:
+                if fnmatch.fnmatch(fname, pattern):
+                    yield Path(current) / fname
+                    break
 
 
 def _scan_terraform(path: Path, root: Path) -> list[InfraFinding]:

@@ -264,8 +264,11 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     from sentinel.policy.evaluator import SimpleRuleEvaluator
     from sentinel.scanner import CICDScanner, RuntimeScanner
 
-    with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp:
-        db_path = _Path(tmp.name)
+    # Create a dedicated empty temp directory for the demo. Using this as
+    # repo_root for the scanners keeps `sentinel demo` O(1) regardless of
+    # where the user invokes it from — we never walk their home dir.
+    demo_dir = _Path(tempfile.mkdtemp(prefix="sentinel-demo-"))
+    db_path = demo_dir / "demo.db"
 
     print("━" * 64)
     print("  SENTINEL DEMO — End-to-end sovereignty walkthrough")
@@ -326,9 +329,12 @@ def _cmd_demo(args: argparse.Namespace) -> int:
         print()
 
     # Scenario 3: Sovereignty scanners
+    # Scope every filesystem-walking scanner to the empty demo dir so the
+    # demo is fast and deterministic regardless of the caller's cwd.
+    demo_root = str(demo_dir)
     print("[3/5] Running sovereignty scanners...")
     runtime = RuntimeScanner().scan()
-    cicd = CICDScanner().scan(".")
+    cicd = CICDScanner().scan(demo_root)
     print(f"      Runtime: {runtime.total_packages} packages, "
           f"score={runtime.sovereignty_score:.0%}")
     print(f"      CI/CD:   {len(cicd.findings)} findings")
@@ -344,7 +350,7 @@ def _cmd_demo(args: argparse.Namespace) -> int:
 
     # Scenario 5: HTML report
     print("[5/5] Generating HTML sovereignty report...")
-    html = HTMLReport().generate(sentinel, repo_root=".")
+    html = HTMLReport().generate(sentinel, repo_root=demo_root)
     if args.output is None:
         out_path = _Path(tempfile.gettempdir()) / "sentinel_demo_report.html"
     else:
@@ -373,9 +379,11 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     print("If Sentinel helped you: ⭐ github.com/sebastianweiss83/sentinel-kernel")
     print()
 
-    # Clean up temp database
+    # Clean up temp database and demo dir
+    import shutil as _shutil
+
     with contextlib.suppress(OSError):
-        db_path.unlink(missing_ok=True)
+        _shutil.rmtree(demo_dir, ignore_errors=True)
 
     return 0
 
