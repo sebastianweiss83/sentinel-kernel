@@ -117,7 +117,11 @@ jobs:
           cache: 'pip'
           cache-dependency-path: pyproject.toml
       - run: pip install -e .
-      - run: pip install ruff pytest pytest-asyncio pytest-cov
+      # pytest-xdist is required because pyproject.toml sets
+      # `addopts = "-n auto ..."` — step 40 of smoke_test.py shells
+      # out to `pytest tests/` and would otherwise fail with an
+      # unrecognized argument.
+      - run: pip install ruff pytest pytest-asyncio pytest-cov pytest-xdist
       - run: python examples/01_minimal_trace.py
       - run: python examples/03_policy_simple_rule.py
       - run: python examples/smoke_test.py
