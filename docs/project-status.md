@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-11 17:12 UTC_
+_Last generated from HEAD commit: 2026-04-11 17:14 UTC_
 
 ## Version
 
@@ -91,6 +91,7 @@ EU-sovereign decision record layer for AI agents.
 
 ## Recent releases
 
+- **v2.1.0** — v2.1.0 — BudgetTracker, Attestations, CrewAI, AutoGen
 - **v2.0.0** — v2.0.0 — Production stable, BSI assessment ready
 - **v1.9.0** — v1.9.0 — DORA + NIS2 compliance
 - **v1.8.0** — v1.8.0 — Jupyter, FastAPI, Django integrations
@@ -102,7 +103,6 @@ EU-sovereign decision record layer for AI agents.
 - **v1.2.0** — v1.2.0 — BSI profile, manifesto depth, 100+ scanner packages
 - **v1.1.0** — v1.1.0 — World-class preview, demo command, dashboards
 - **v1.0.1** — v1.0.1 — Coverage hardening + cleanup
-- **v1.0.0** — v1.0.0 — Stable EU-sovereign AI decision platform
 
 ## Shipped
 
