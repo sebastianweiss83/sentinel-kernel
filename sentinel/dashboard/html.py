@@ -255,7 +255,54 @@ tr.unknown td:first-child { border-left: 3px solid var(--text3); }
 .action.medium   { border-left-color: var(--blue); }
 .action.low      { border-left-color: var(--text3); }
 .action .title { color: var(--text); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
-.action .what { color: var(--text2); font-size: 0.88rem; }
+.action .summary { color: var(--text); font-size: 0.9rem; margin-bottom: 0.35rem; }
+.action .what { color: var(--text2); font-size: 0.85rem; margin-bottom: 0.5rem; }
+.action .action-meta {
+  font-size: 0.75rem;
+  color: var(--text3);
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  border-top: 1px dashed var(--border);
+  padding-top: 0.5rem;
+  margin-top: 0.2rem;
+}
+.action .action-meta-label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text3);
+}
+.action .action-meta-value { color: var(--text2); font-weight: 600; }
+.action .action-meta-sep { color: var(--border); }
+
+/* ---------- NEXT STEPS ---------- */
+.next-steps {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--blue);
+  border-radius: 8px;
+  padding: 1.4rem 1.8rem;
+  margin-top: 1rem;
+}
+.next-steps ol {
+  margin: 0.8rem 0 0 1.4rem;
+  padding: 0;
+  color: var(--text2);
+}
+.next-steps li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+.next-steps li strong { color: var(--text); }
+.next-steps code {
+  font-family: ui-monospace, monospace;
+  background: #0a0e14;
+  padding: 0.12rem 0.45rem;
+  border-radius: 3px;
+  color: var(--green);
+  font-size: 0.85rem;
+  border: 1px solid var(--border);
+}
 
 /* ---------- MANIFESTO ---------- */
 .manifesto-score {
@@ -313,15 +360,93 @@ def _countdown_classes(days: int) -> str:
     return "countdown"
 
 
-_ACTION_GUIDANCE = {
-    "Art. 9": "Configure a PolicyEvaluator — SimpleRuleEvaluator or LocalRegoEvaluator.",
-    "Art. 12": "Enable storage backend for append-only trace persistence.",
-    "Art. 13": "Populate agent, model, and policy metadata on every trace.",
-    "Art. 14": "Test the kill switch with engage_kill_switch() before go-live.",
-    "Art. 17": "Run sentinel compliance check as part of CI on every release.",
-    "Art. 10": "Data governance is a human process — see docs/bsi-profile.md.",
-    "Art. 15": "Configure accuracy thresholds and human review workflows.",
+_ACTION_GUIDANCE: dict[str, dict[str, str]] = {
+    "Art. 9": {
+        "summary": "Implement a formal risk management process.",
+        "detail": (
+            "Document risk categories for each AI use case, assign risk "
+            "owners, and wire a PolicyEvaluator (SimpleRuleEvaluator or "
+            "LocalRegoEvaluator) into Sentinel so every decision is "
+            "checked against the documented risks."
+        ),
+        "deadline": "Before deployment",
+        "owner": "Engineering + Risk",
+    },
+    "Art. 12": {
+        "summary": "Enable tamper-resistant trace persistence.",
+        "detail": (
+            "Configure a StorageBackend (SQLite, PostgreSQL, or "
+            "Filesystem) so every @sentinel.trace call is stored "
+            "append-only. Verify with sentinel verify --all."
+        ),
+        "deadline": "Before deployment",
+        "owner": "Engineering",
+    },
+    "Art. 13": {
+        "summary": "Populate transparency metadata on every trace.",
+        "detail": (
+            "Ensure agent, model, model_version, and policy fields are "
+            "set on every DecisionTrace. Run sentinel compliance check "
+            "to confirm Art. 13 shows as COMPLIANT."
+        ),
+        "deadline": "Before deployment",
+        "owner": "Engineering",
+    },
+    "Art. 14": {
+        "summary": "Prove the kill switch works end-to-end.",
+        "detail": (
+            "Test engage_kill_switch() in a staging environment. "
+            "Confirm blocked calls raise KillSwitchEngaged and produce "
+            "DENY traces with a HumanOverride entry."
+        ),
+        "deadline": "Before deployment",
+        "owner": "Engineering + Ops",
+    },
+    "Art. 17": {
+        "summary": "Establish a quality management system for AI outputs.",
+        "detail": (
+            "Define accuracy thresholds and monitoring intervals. Wire "
+            "sentinel compliance check into CI on every release so "
+            "quality metrics are versioned alongside the code."
+        ),
+        "deadline": "Before deployment",
+        "owner": "Quality + Engineering",
+    },
+    "Art. 10": {
+        "summary": "Document training data governance end-to-end.",
+        "detail": (
+            "Record training data sources, quality controls, bias "
+            "assessments, and data governance policies. This is a "
+            "human process — Sentinel cannot automate it. See "
+            "docs/bsi-profile.md for the BSI-aligned template."
+        ),
+        "deadline": "Your team must implement",
+        "owner": "Data + Legal",
+    },
+    "Art. 15": {
+        "summary": "Define accuracy metrics for your specific use case.",
+        "detail": (
+            "Choose accuracy, robustness, and cybersecurity metrics "
+            "that match the domain risk. Implement monitoring and "
+            "drift alerting. This is a human process — Sentinel "
+            "cannot automate the metric choice."
+        ),
+        "deadline": "Your team must implement",
+        "owner": "Data + Engineering",
+    },
 }
+
+
+def _action_for(article: str) -> dict[str, str]:
+    return _ACTION_GUIDANCE.get(
+        article,
+        {
+            "summary": "Review manually.",
+            "detail": "No automated guidance available for this article.",
+            "deadline": "—",
+            "owner": "Team",
+        },
+    )
 
 
 _CLOUD_ACT_YES = '<span class="badge badge-yes">YES</span>'
@@ -385,22 +510,39 @@ def _render_html(
 
     # Compliance table with "what to do" column
     compliance_rows = []
-    action_items: list[tuple[str, str, str, str]] = []
+    # Each action_item: (priority_cls, priority_label, title, summary, detail, deadline, owner)
+    action_items: list[tuple[str, str, str, str, str, str, str]] = []
     for a in compliance.articles.values():
         status_cls = f"badge-{a.status.lower()}"
-        action = _ACTION_GUIDANCE.get(a.article, "Review manually.")
+        guidance = _action_for(a.article)
+        what_to_do_cell = (
+            f"<div class='strong' style='color:var(--text);margin-bottom:0.2rem;'>{e(guidance['summary'])}</div>"
+            f"<div style='font-size:0.82rem;color:var(--text3);'>"
+            f"{e(guidance['deadline'])} · {e(guidance['owner'])}"
+            f"</div>"
+        )
         compliance_rows.append(
             f"<tr>"
             f"<td class='strong mono'>{e(a.article)}</td>"
             f"<td>{e(a.title)}</td>"
             f"<td><span class='badge {status_cls}'>{e(a.status)}</span></td>"
             f"<td>{e(a.detail)}</td>"
-            f"<td>{e(action)}</td>"
+            f"<td>{what_to_do_cell}</td>"
             f"</tr>"
         )
         if a.status.upper() in {"NON_COMPLIANT", "PARTIAL", "ACTION_REQUIRED"}:
             pcls, plabel = _status_priority(a.status)
-            action_items.append((pcls, plabel, f"{a.article} — {a.title}", action))
+            action_items.append(
+                (
+                    pcls,
+                    plabel,
+                    f"{a.article} — {a.title}",
+                    guidance["summary"],
+                    guidance["detail"],
+                    guidance["deadline"],
+                    guidance["owner"],
+                )
+            )
     compliance_tbody = "".join(compliance_rows)
 
     # Runtime package table — coloured by jurisdiction
@@ -468,7 +610,7 @@ def _render_html(
 </table>
 """
 
-    # Recommended actions block (priority badges)
+    # Recommended actions block (priority badges + structured remediation)
     if action_items:
         action_items.sort(
             key=lambda x: {"critical": 0, "high": 1, "medium": 2, "low": 3}[x[0]]
@@ -479,11 +621,19 @@ def _render_html(
   <span class="badge priority-{cls}">{plabel}</span>
   <div>
     <div class="title">{e(title)}</div>
-    <div class="what">{e(what)}</div>
+    <div class="summary">{e(summary)}</div>
+    <div class="what">{e(detail)}</div>
+    <div class="action-meta">
+      <span class="action-meta-label">Deadline</span>
+      <span class="action-meta-value">{e(deadline)}</span>
+      <span class="action-meta-sep">·</span>
+      <span class="action-meta-label">Owner</span>
+      <span class="action-meta-value">{e(owner)}</span>
+    </div>
   </div>
 </div>
 """
-            for cls, plabel, title, what in action_items
+            for cls, plabel, title, summary, detail, deadline, owner in action_items
         )
     else:
         actions_html = (
@@ -564,6 +714,21 @@ def _render_html(
 <h2>Recommended actions</h2>
 <div class="actions">
 {actions_html}
+</div>
+
+<h2>Next steps</h2>
+<div class="next-steps">
+  <p>Once the actions above are resolved, proceed in this order:</p>
+  <ol>
+    <li><strong>Generate an attestation</strong> you can share with auditors:<br>
+        <code>sentinel attestation generate --output governance.json</code></li>
+    <li><strong>Run the manifesto + compliance check</strong> and attach the output to your change request:<br>
+        <code>sentinel compliance check --all-frameworks</code></li>
+    <li><strong>Schedule BSI pre-engagement</strong> — the pre-engagement package is already in
+        <code>docs/bsi-pre-engagement/</code>. Contact BSI Referat KI-Sicherheit.</li>
+    <li><strong>EU AI Act Annex III enforcement: {max(0, days)} days</strong> remaining
+        (2 August 2026). Penalties up to €15M or 3% of global annual turnover.</li>
+  </ol>
 </div>
 
 {manifesto_section}

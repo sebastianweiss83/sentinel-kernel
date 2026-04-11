@@ -89,6 +89,38 @@ def test_html_report_includes_all_sections() -> None:
     assert "Infrastructure findings" in html
 
 
+def test_html_report_recommended_actions_have_remediation_and_priority() -> None:
+    html = HTMLReport().generate(_sentinel())
+    # Priority badge classes present
+    assert "priority-high" in html or "priority-medium" in html
+    # Structured remediation present — deadline + owner labels
+    assert "Deadline" in html
+    assert "Owner" in html
+    # Richer text for each non-compliant article
+    assert "Implement a formal risk management process" in html  # Art. 9
+    assert "quality management system" in html.lower()  # Art. 17
+    assert "training data governance" in html.lower()  # Art. 10
+    assert "accuracy metrics" in html.lower()  # Art. 15
+
+
+def test_html_report_next_steps_section() -> None:
+    html = HTMLReport().generate(_sentinel())
+    assert "Next steps" in html
+    assert "sentinel attestation generate" in html
+    assert "sentinel compliance check" in html
+    assert "BSI pre-engagement" in html
+    assert "2 August 2026" in html
+
+
+def test_html_report_what_to_do_column_is_structured() -> None:
+    html = HTMLReport().generate(_sentinel())
+    # The column header is still there and cells carry both a summary
+    # and a deadline/owner line.
+    assert "What to do" in html
+    assert "Before deployment" in html
+    assert "Your team must implement" in html
+
+
 def test_html_report_with_manifesto() -> None:
     class Clean(SentinelManifesto):
         jurisdiction = EUOnly()

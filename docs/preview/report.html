@@ -185,7 +185,54 @@ tr.unknown td:first-child { border-left: 3px solid var(--text3); }
 .action.medium   { border-left-color: var(--blue); }
 .action.low      { border-left-color: var(--text3); }
 .action .title { color: var(--text); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
-.action .what { color: var(--text2); font-size: 0.88rem; }
+.action .summary { color: var(--text); font-size: 0.9rem; margin-bottom: 0.35rem; }
+.action .what { color: var(--text2); font-size: 0.85rem; margin-bottom: 0.5rem; }
+.action .action-meta {
+  font-size: 0.75rem;
+  color: var(--text3);
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  border-top: 1px dashed var(--border);
+  padding-top: 0.5rem;
+  margin-top: 0.2rem;
+}
+.action .action-meta-label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text3);
+}
+.action .action-meta-value { color: var(--text2); font-weight: 600; }
+.action .action-meta-sep { color: var(--border); }
+
+/* ---------- NEXT STEPS ---------- */
+.next-steps {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--blue);
+  border-radius: 8px;
+  padding: 1.4rem 1.8rem;
+  margin-top: 1rem;
+}
+.next-steps ol {
+  margin: 0.8rem 0 0 1.4rem;
+  padding: 0;
+  color: var(--text2);
+}
+.next-steps li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+.next-steps li strong { color: var(--text); }
+.next-steps code {
+  font-family: ui-monospace, monospace;
+  background: #0a0e14;
+  padding: 0.12rem 0.45rem;
+  border-radius: 3px;
+  color: var(--green);
+  font-size: 0.85rem;
+  border: 1px solid var(--border);
+}
 
 /* ---------- MANIFESTO ---------- */
 .manifesto-score {
@@ -268,7 +315,7 @@ footer {
       <th>What to do</th>
     </tr>
   </thead>
-  <tbody><tr><td class='strong mono'>Art. 9</td><td>Risk management</td><td><span class='badge badge-partial'>PARTIAL</span></td><td>Policy evaluator configured; every decision records the policy result.</td><td>Configure a PolicyEvaluator — SimpleRuleEvaluator or LocalRegoEvaluator.</td></tr><tr><td class='strong mono'>Art. 10</td><td>Data governance</td><td><span class='badge badge-action_required'>ACTION_REQUIRED</span></td><td>Data governance is not automatable by a middleware kernel.</td><td>Data governance is a human process — see docs/bsi-profile.md.</td></tr><tr><td class='strong mono'>Art. 11</td><td>Technical documentation</td><td><span class='badge badge-action_required'>ACTION_REQUIRED</span></td><td>Annex IV technical documentation is a human deliverable.</td><td>Review manually.</td></tr><tr><td class='strong mono'>Art. 12</td><td>Automatic record keeping</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Every wrapped call produces a DecisionTrace automatically, stored append-only.</td><td>Enable storage backend for append-only trace persistence.</td></tr><tr><td class='strong mono'>Art. 13</td><td>Transparency &amp; information to deployers</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Traces record agent, model, policy name/version, and result per decision.</td><td>Populate agent, model, and policy metadata on every trace.</td></tr><tr><td class='strong mono'>Art. 14</td><td>Human oversight</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Kill switch implemented; every override recorded as linked trace entry.</td><td>Test the kill switch with engage_kill_switch() before go-live.</td></tr><tr><td class='strong mono'>Art. 15</td><td>Accuracy, robustness, cybersecurity</td><td><span class='badge badge-action_required'>ACTION_REQUIRED</span></td><td>Model evaluation and adversarial testing are outside the trace layer.</td><td>Configure accuracy thresholds and human review workflows.</td></tr><tr><td class='strong mono'>Art. 17</td><td>Quality management system</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Continuous, append-only trace record satisfies the traceability requirement.</td><td>Run sentinel compliance check as part of CI on every release.</td></tr></tbody>
+  <tbody><tr><td class='strong mono'>Art. 9</td><td>Risk management</td><td><span class='badge badge-partial'>PARTIAL</span></td><td>Policy evaluator configured; every decision records the policy result.</td><td><div class='strong' style='color:var(--text);margin-bottom:0.2rem;'>Implement a formal risk management process.</div><div style='font-size:0.82rem;color:var(--text3);'>Before deployment · Engineering + Risk</div></td></tr><tr><td class='strong mono'>Art. 10</td><td>Data governance</td><td><span class='badge badge-action_required'>ACTION_REQUIRED</span></td><td>Data governance is not automatable by a middleware kernel.</td><td><div class='strong' style='color:var(--text);margin-bottom:0.2rem;'>Document training data governance end-to-end.</div><div style='font-size:0.82rem;color:var(--text3);'>Your team must implement · Data + Legal</div></td></tr><tr><td class='strong mono'>Art. 11</td><td>Technical documentation</td><td><span class='badge badge-action_required'>ACTION_REQUIRED</span></td><td>Annex IV technical documentation is a human deliverable.</td><td><div class='strong' style='color:var(--text);margin-bottom:0.2rem;'>Review manually.</div><div style='font-size:0.82rem;color:var(--text3);'>— · Team</div></td></tr><tr><td class='strong mono'>Art. 12</td><td>Automatic record keeping</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Every wrapped call produces a DecisionTrace automatically, stored append-only.</td><td><div class='strong' style='color:var(--text);margin-bottom:0.2rem;'>Enable tamper-resistant trace persistence.</div><div style='font-size:0.82rem;color:var(--text3);'>Before deployment · Engineering</div></td></tr><tr><td class='strong mono'>Art. 13</td><td>Transparency &amp; information to deployers</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Traces record agent, model, policy name/version, and result per decision.</td><td><div class='strong' style='color:var(--text);margin-bottom:0.2rem;'>Populate transparency metadata on every trace.</div><div style='font-size:0.82rem;color:var(--text3);'>Before deployment · Engineering</div></td></tr><tr><td class='strong mono'>Art. 14</td><td>Human oversight</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Kill switch implemented; every override recorded as linked trace entry.</td><td><div class='strong' style='color:var(--text);margin-bottom:0.2rem;'>Prove the kill switch works end-to-end.</div><div style='font-size:0.82rem;color:var(--text3);'>Before deployment · Engineering + Ops</div></td></tr><tr><td class='strong mono'>Art. 15</td><td>Accuracy, robustness, cybersecurity</td><td><span class='badge badge-action_required'>ACTION_REQUIRED</span></td><td>Model evaluation and adversarial testing are outside the trace layer.</td><td><div class='strong' style='color:var(--text);margin-bottom:0.2rem;'>Define accuracy metrics for your specific use case.</div><div style='font-size:0.82rem;color:var(--text3);'>Your team must implement · Data + Engineering</div></td></tr><tr><td class='strong mono'>Art. 17</td><td>Quality management system</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Continuous, append-only trace record satisfies the traceability requirement.</td><td><div class='strong' style='color:var(--text);margin-bottom:0.2rem;'>Establish a quality management system for AI outputs.</div><div style='font-size:0.82rem;color:var(--text3);'>Before deployment · Quality + Engineering</div></td></tr></tbody>
 </table>
 
 <h2>Recommended actions</h2>
@@ -278,7 +325,15 @@ footer {
   <span class="badge priority-high">HIGH</span>
   <div>
     <div class="title">Art. 9 — Risk management</div>
-    <div class="what">Configure a PolicyEvaluator — SimpleRuleEvaluator or LocalRegoEvaluator.</div>
+    <div class="summary">Implement a formal risk management process.</div>
+    <div class="what">Document risk categories for each AI use case, assign risk owners, and wire a PolicyEvaluator (SimpleRuleEvaluator or LocalRegoEvaluator) into Sentinel so every decision is checked against the documented risks.</div>
+    <div class="action-meta">
+      <span class="action-meta-label">Deadline</span>
+      <span class="action-meta-value">Before deployment</span>
+      <span class="action-meta-sep">·</span>
+      <span class="action-meta-label">Owner</span>
+      <span class="action-meta-value">Engineering + Risk</span>
+    </div>
   </div>
 </div>
 
@@ -287,7 +342,15 @@ footer {
   <span class="badge priority-medium">MEDIUM</span>
   <div>
     <div class="title">Art. 10 — Data governance</div>
-    <div class="what">Data governance is a human process — see docs/bsi-profile.md.</div>
+    <div class="summary">Document training data governance end-to-end.</div>
+    <div class="what">Record training data sources, quality controls, bias assessments, and data governance policies. This is a human process — Sentinel cannot automate it. See docs/bsi-profile.md for the BSI-aligned template.</div>
+    <div class="action-meta">
+      <span class="action-meta-label">Deadline</span>
+      <span class="action-meta-value">Your team must implement</span>
+      <span class="action-meta-sep">·</span>
+      <span class="action-meta-label">Owner</span>
+      <span class="action-meta-value">Data + Legal</span>
+    </div>
   </div>
 </div>
 
@@ -296,7 +359,15 @@ footer {
   <span class="badge priority-medium">MEDIUM</span>
   <div>
     <div class="title">Art. 11 — Technical documentation</div>
-    <div class="what">Review manually.</div>
+    <div class="summary">Review manually.</div>
+    <div class="what">No automated guidance available for this article.</div>
+    <div class="action-meta">
+      <span class="action-meta-label">Deadline</span>
+      <span class="action-meta-value">—</span>
+      <span class="action-meta-sep">·</span>
+      <span class="action-meta-label">Owner</span>
+      <span class="action-meta-value">Team</span>
+    </div>
   </div>
 </div>
 
@@ -305,10 +376,33 @@ footer {
   <span class="badge priority-medium">MEDIUM</span>
   <div>
     <div class="title">Art. 15 — Accuracy, robustness, cybersecurity</div>
-    <div class="what">Configure accuracy thresholds and human review workflows.</div>
+    <div class="summary">Define accuracy metrics for your specific use case.</div>
+    <div class="what">Choose accuracy, robustness, and cybersecurity metrics that match the domain risk. Implement monitoring and drift alerting. This is a human process — Sentinel cannot automate the metric choice.</div>
+    <div class="action-meta">
+      <span class="action-meta-label">Deadline</span>
+      <span class="action-meta-value">Your team must implement</span>
+      <span class="action-meta-sep">·</span>
+      <span class="action-meta-label">Owner</span>
+      <span class="action-meta-value">Data + Engineering</span>
+    </div>
   </div>
 </div>
 
+</div>
+
+<h2>Next steps</h2>
+<div class="next-steps">
+  <p>Once the actions above are resolved, proceed in this order:</p>
+  <ol>
+    <li><strong>Generate an attestation</strong> you can share with auditors:<br>
+        <code>sentinel attestation generate --output governance.json</code></li>
+    <li><strong>Run the manifesto + compliance check</strong> and attach the output to your change request:<br>
+        <code>sentinel compliance check --all-frameworks</code></li>
+    <li><strong>Schedule BSI pre-engagement</strong> — the pre-engagement package is already in
+        <code>docs/bsi-pre-engagement/</code>. Contact BSI Referat KI-Sicherheit.</li>
+    <li><strong>EU AI Act Annex III enforcement: 113 days</strong> remaining
+        (2 August 2026). Penalties up to €15M or 3% of global annual turnover.</li>
+  </ol>
 </div>
 
 
