@@ -1,8 +1,34 @@
 # API Stability Guarantees
 
-Sentinel 2.0 commits to API stability across the 2.x line. This
+Sentinel 3.0 freezes the public API for the 3.x line. This
 document names every public API and classifies it as **STABLE**,
 **BETA**, or **EXPERIMENTAL**.
+
+## 3.x stability commitments
+
+Everything listed as STABLE below will not break without a major
+version bump and a minimum six-month deprecation notice:
+
+- `Sentinel` class — all public methods and signatures
+- `DecisionTrace` dataclass — all fields (new optional fields may
+  be added; existing fields remain)
+- `StorageBackend` ABC — all abstract methods
+- `PolicyEvaluator` ABC — all abstract methods
+- `SentinelManifesto` base class and all requirement classes
+- `EUAIActChecker.check()` and the `ComplianceReport` structure
+- All CLI commands: `sentinel scan/compliance/report/demo/
+  attestation/keygen/manifesto/verify/purge/export/import`
+- All integration class names and constructor signatures
+- `trace_id` format (UUIDv4 string)
+- NDJSON export format
+- `schema_version` field (currently `"1.0.0"`)
+- Attestation schema version (currently `"1.0.0"`)
+
+**Experimental in 3.x** (may change without notice):
+
+- `QuantumSafeSigner` — pending stability of upstream liboqs-python
+- Rust `sentinel-manifest` — pre-1.0, API may change
+- `BudgetTracker` — new in 2.1, gathering feedback
 
 ## Definitions
 

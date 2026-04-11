@@ -7,6 +7,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.0.0] — 2026-04-11
+
+**Complete platform · API frozen · BSI assessment ready.**
+
+v3.0 is an API freeze, not a feature release. Everything listed in
+[`docs/api-stability.md`](docs/api-stability.md) as STABLE is
+frozen for the 3.x series. Breaking changes require a major
+version bump and a minimum six-month deprecation notice.
+
+### Summary of everything shipped since v1.0
+
+**Core infrastructure**
+- Kill switch (Art. 14), in-process policy evaluation, tamper-resistant
+  trace schema, SQLite + PostgreSQL + filesystem backends,
+  air-gapped validation, manifesto-as-code, EU AI Act checker,
+  DORA compliance, NIS2 compliance.
+
+**Integrations**
+- LangChain, LangGraph, OpenTelemetry, LangFuse (with sovereignty
+  panel), Haystack, AutoGen, CrewAI, Jupyter, FastAPI, Django,
+  Prometheus.
+
+**Cryptography**
+- Quantum-safe trace signing (ML-DSA-65, FIPS 204, client-side keys).
+- RFC 3161 timestamping via EU-sovereign TSAs only (DFN, D-Trust).
+
+**Developer experience**
+- `sentinel demo`, `sentinel attestation`, `sentinel keygen`.
+- Full CLI, self-contained HTML report, Grafana dashboard,
+  Docker Compose demo.
+- BudgetTracker, Preflight, Output verification, Attestations.
+
+**Governance**
+- RFC-001 accepted, Rust `sentinel-manifest` implementation
+  (v0.1.0), BSI pre-engagement package, VS-NfD deployment profile,
+  LF Europe application preparation, manifesto 5 theses as named
+  CI checks.
+
+### API stability
+All public APIs frozen for 3.x. See `docs/api-stability.md`.
+
 ## [2.4.0] — 2026-04-11
 
 **Rust RFC-001 implementation. Closes #13. Multi-language spec.**
