@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sentinel — live sovereignty preview</title>
+<style>
+ :root { --fg: #111; --muted: #555; --border: #ddd; --accent: #0052cc; }
+ * { box-sizing: border-box; }
+ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        max-width: 1100px; margin: 2em auto; padding: 0 1em; color: var(--fg); background: #fff; }
+ h1 { font-size: 2em; margin-bottom: 0.1em; }
+ h2 { font-size: 1.3em; margin-top: 2.2em; border-bottom: 1px solid var(--border); padding-bottom: 0.3em; }
+ .lead { font-size: 1.05em; color: var(--muted); max-width: 68ch; }
+ .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1em; margin-top: 1em; }
+ .card { border: 1px solid var(--border); border-radius: 8px; padding: 1em; background: #fafafa; }
+ .card h3 { margin: 0 0 0.4em 0; font-size: 1em; color: var(--muted); }
+ .card .value { font-size: 1.6em; font-weight: 700; }
+ pre { background: #f6f8fa; border: 1px solid var(--border); border-radius: 6px; padding: 0.8em; overflow-x: auto; font-size: 0.88em; }
+ table { border-collapse: collapse; width: 100%; margin-top: 0.6em; font-size: 0.9em; }
+ th, td { border: 1px solid var(--border); padding: 0.4em 0.6em; text-align: left; }
+ th { background: #f4f4f4; }
+ a { color: var(--accent); }
+ .row { display: flex; gap: 2em; align-items: center; flex-wrap: wrap; }
+ .install { background: #111; color: #fff; padding: 0.6em 0.9em; border-radius: 6px; display: inline-block; font-family: monospace; }
+ footer { margin-top: 3em; padding: 1em 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.85em; }
+</style>
+</head>
+<body>
+
+<h1>Sentinel</h1>
+<p class="lead">
+ EU-sovereign AI decision middleware. Wraps any AI agent, evaluates
+ policy in-process, and writes tamper-resistant decision records to
+ local storage. Zero dependencies. Air-gapped capable. Apache 2.0.
+</p>
+
+<p class="install">pip install sentinel-kernel</p>
+&nbsp; &nbsp;
+<a href="https://github.com/sebastianweiss83/sentinel-kernel">GitHub</a> ·
+<a href="https://pypi.org/project/sentinel-kernel/">PyPI</a> ·
+<a href="report.html">Full sample report</a>
+
+<h2>Live sample dashboard</h2>
+<p class="lead">
+ The charts below are rendered from a sample Sentinel run with 200
+ simulated decisions. Every element is inline SVG — zero external
+ resources, zero JavaScript. Safe for air-gapped environments.
+</p>
+
+<div class="cards">
+  <div class="card"><h3>Sovereignty score</h3><svg viewBox="0 0 220 140" width="220" height="140" xmlns="http://www.w3.org/2000/svg">
+  <path d="M 10.0 130 A 100 100 0 0 1 210.0 130"
+        fill="none" stroke="#eee" stroke-width="18"/>
+  <path d="M 10.0 130 A 100 100 0 0 1 210.0 130.0"
+        fill="none" stroke="#167c3c" stroke-width="18" stroke-linecap="round"/>
+  <text x="110.0" y="112" text-anchor="middle"
+        font-family="-apple-system, Segoe UI, sans-serif"
+        font-size="30" font-weight="700" fill="#167c3c">100%</text>
+</svg></div>
+  <div class="card">
+    <h3>Days to EU AI Act enforcement</h3>
+    <div class="value">113</div>
+    <div style="color:var(--muted);font-size:0.85em;">2 August 2026 — Annex III</div>
+  </div>
+  <div class="card">
+    <h3>Sample decisions</h3>
+    <div class="value">200</div>
+    <div style="color:var(--muted);font-size:0.85em;">ALLOW: 139 · DENY: 61</div>
+  </div>
+</div>
+
+<h3 style="margin-top:2em;">Policy result distribution</h3>
+<div style="display:flex;align-items:center;gap:1em;">
+  <svg viewBox="0 0 220 220" width="220" height="220" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 110.0 110.0 L 110.0 10.0 A 100.0 100.0 0 1 1 15.9 143.9 Z" fill="#167c3c"/><path d="M 110.0 110.0 L 15.9 143.9 A 100.0 100.0 0 0 1 110.0 10.0 Z" fill="#a81717"/><path d="M 110.0 110.0 L 110.0 10.0 A 100.0 100.0 0 0 1 110.0 10.0 Z" fill="#888"/>
+  </svg>
+  <div><div style="display:flex;align-items:center;margin:0.2em 0;"><span style="display:inline-block;width:12px;height:12px;background:#167c3c;margin-right:6px;"></span><span style="font-size:0.9em;">ALLOW (69%)</span></div><div style="display:flex;align-items:center;margin:0.2em 0;"><span style="display:inline-block;width:12px;height:12px;background:#a81717;margin-right:6px;"></span><span style="font-size:0.9em;">DENY (30%)</span></div><div style="display:flex;align-items:center;margin:0.2em 0;"><span style="display:inline-block;width:12px;height:12px;background:#888;margin-right:6px;"></span><span style="font-size:0.9em;">OTHER (0%)</span></div></div>
+</div>
+
+<h3 style="margin-top:2em;">EU AI Act article coverage</h3>
+<svg viewBox="0 0 420 160" width="420" height="160" xmlns="http://www.w3.org/2000/svg"><text x="0" y="14" font-size="12" fill="#333">Art. 9 — Risk management</text><rect x="160" y="0" width="120" height="20" fill="#a15c00"/><text x="286" y="14" font-size="12" fill="#555">50%</text><text x="0" y="44" font-size="12" fill="#333">Art. 12 — Automatic record keeping</text><rect x="160" y="30" width="240" height="20" fill="#167c3c"/><text x="406" y="44" font-size="12" fill="#555">100%</text><text x="0" y="74" font-size="12" fill="#333">Art. 13 — Transparency &amp; information t</text><rect x="160" y="60" width="240" height="20" fill="#167c3c"/><text x="406" y="74" font-size="12" fill="#555">100%</text><text x="0" y="104" font-size="12" fill="#333">Art. 14 — Human oversight</text><rect x="160" y="90" width="240" height="20" fill="#167c3c"/><text x="406" y="104" font-size="12" fill="#555">100%</text><text x="0" y="134" font-size="12" fill="#333">Art. 17 — Quality management system</text><rect x="160" y="120" width="240" height="20" fill="#167c3c"/><text x="406" y="134" font-size="12" fill="#555">100%</text></svg>
+
+<h3 style="margin-top:2em;">Recent decisions</h3>
+<table><thead><tr>
+ <th>Time</th><th>Agent</th><th>Result</th><th>Scope</th><th>Residency</th><th>Latency</th>
+</tr></thead><tbody><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>ALLOW</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr><tr><td>10:20:28</td><td>_build_sentinel_with_sample_da</td><td>DENY</td><td>EU</td><td>EU-DE</td><td>0 ms</td></tr></tbody></table>
+
+<h2>Declare your sovereignty requirements in code</h2>
+<pre>from sentinel.manifesto import (
+    SentinelManifesto, EUOnly, Required, OnPremiseOnly,
+    Targeting, AcknowledgedGap,
+)
+
+class OurPolicy(SentinelManifesto):
+    jurisdiction = EUOnly()
+    kill_switch = Required()
+    storage = OnPremiseOnly(country="DE")
+    bsi = Targeting(by="2026-12-31")
+
+    ci_cd = AcknowledgedGap(
+        provider="Managed SaaS CI",
+        migrating_to="Self-hosted Forgejo",
+        by="2027-Q2",
+        reason="No EU-sovereign CI alternative with comparable UX",
+    )
+
+report = OurPolicy().check()
+print(report.as_text())</pre>
+
+<h2>Quick demo</h2>
+<pre># 2-minute local demo
+pip install sentinel-kernel
+python -c "
+from sentinel import Sentinel
+sentinel = Sentinel()
+
+@sentinel.trace
+def decide(req):
+    return {'decision': 'approved'}
+
+decide({'amount': 5000})
+print(sentinel.query(limit=1)[0].to_json())
+"
+
+# Full Grafana + OTel stack (requires Docker)
+git clone https://github.com/sebastianweiss83/sentinel-kernel
+cd sentinel-kernel/demo
+docker compose up --build</pre>
+
+<h2>What Sentinel answers for you</h2>
+<table>
+ <tr><th>Question</th><th>Sentinel answer</th></tr>
+ <tr><td>What was decided?</td><td>Append-only DecisionTrace with policy result and rule</td></tr>
+ <tr><td>By which model, which policy, which version?</td><td>Every trace records agent, model, policy name/version</td></tr>
+ <tr><td>Under whose law is the evidence stored?</td><td>sovereign_scope and data_residency on every record</td></tr>
+ <tr><td>Can a human halt it?</td><td>Runtime kill switch (Art. 14) with no restart</td></tr>
+ <tr><td>What of this am I compliant with today?</td><td>sentinel compliance check</td></tr>
+ <tr><td>Where is my sovereignty leaking?</td><td>sentinel scan (runtime + CI/CD + infrastructure)</td></tr>
+</table>
+
+<footer>
+ Generated 2026-04-11T12:20:28 ·
+ Apache 2.0 ·
+ sentinel-kernel ·
+ <a href="https://github.com/sebastianweiss83/sentinel-kernel">github.com/sebastianweiss83/sentinel-kernel</a>
+</footer>
+</body>
+</html>

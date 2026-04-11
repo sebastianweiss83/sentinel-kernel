@@ -7,6 +7,90 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.9.1] — 2026-04-11
+
+Public-repo hardening and user-manual release. All v0.9.0 capabilities
+are retained; this release focuses on making the project usable for
+any developer in 5 minutes and removing any named-partner content
+from the public repository.
+
+### Changed
+
+- **Public-repo compliance (P0).** Removed `demo/bwi/` and `demo/qs/`
+  directories and all textual references to named partners from
+  `README.md`, `CHANGELOG.md`, and `docs/ecosystem.md`. The public
+  repository contains zero named partners, customers, or
+  organisations. Industry scenarios in documentation are generic so
+  any regulated organisation recognises their own situation.
+
+### Added — User manual
+
+- `docs/getting-started.md` — two-minute quickstart from
+  `pip install` to first sovereign trace, policy, kill switch,
+  compliance check, and manifesto.
+- `docs/real-world-examples.md` — five generic industry scenarios
+  (defence / aerospace, healthcare, financial services, public
+  administration, enterprise procurement) each mapped to runnable
+  examples and reference policies.
+
+### Added — 13 runnable examples
+
+Progressive complexity from minimal trace to full pipeline:
+
+- `examples/01_minimal_trace.py` — 15-line first trace
+- `examples/02_async_trace.py` — async function tracing
+- `examples/03_policy_simple_rule.py` — SimpleRuleEvaluator ALLOW/DENY
+- `examples/04_policy_rego.py` — LocalRegoEvaluator (graceful skip without OPA)
+- `examples/05_kill_switch.py` — engage / block / disengage / resume
+- `examples/06_filesystem_storage.py` — NDJSON air-gapped backend
+- `examples/07_postgresql_storage.py` — PG backend (graceful skip without psycopg2)
+- `examples/08_langchain_agent.py` — callback handler with a mocked LC
+- `examples/09_otel_export.py` — OTel export with a fake tracer
+- `examples/10_manifesto.py` — `SentinelManifesto` declaration and check
+- `examples/11_compliance_report.py` — EU AI Act diff + HTML
+- `examples/12_sovereignty_scan.py` — runtime / CI/CD / infra scan
+- `examples/13_full_pipeline.py` — full stack end-to-end in one script
+
+### Added — Policy templates
+
+Five reference Rego policies covering common regulated domains:
+
+- `examples/policies/procurement_approval.rego` — amount + requester-level
+- `examples/policies/access_control.rego` — RBAC with audit-friendly denies
+- `examples/policies/medical_escalation.rego` — risk-based escalation template
+- `examples/policies/financial_transaction.rego` — amount / velocity / sanctions
+- `examples/policies/mission_safety.rego` — autonomous-system go/no-go
+
+### Added — Testing
+
+- `tests/test_examples.py` — 17 tests that smoke-test every example
+  via subprocess. Tests requiring external services (OPA binary,
+  PostgreSQL) skip gracefully.
+- `examples/smoke_test.py` expanded from 16 steps to **40 steps**.
+  Now covers: scanner, manifesto, compliance checker, HTML report
+  (self-contained check), example subprocess runs, sovereignty check,
+  ruff clean, and full test suite. Exits 1 with a precise step and
+  error message on any failure.
+
+### Added — GitHub Pages preview
+
+- `scripts/generate_preview.py` — builds a static preview page with
+  inline SVG gauges / pie charts / bar charts using sample data.
+  Zero external resource loads.
+- `docs/preview/index.html` — landing page with live sample
+  dashboard rendered from a 200-decision sample run.
+- `docs/preview/report.html` — full self-contained HTML sovereignty
+  report.
+- `.github/workflows/pages.yml` — auto-deploys `docs/preview/` to
+  GitHub Pages on every push to `main`.
+
+### Notes
+
+- `examples/smoke_test.py` is now the canonical release gate for
+  this repository. A green smoke test means: every capability works,
+  every example runs, the sovereignty check passes, lint is clean,
+  and the full pytest suite is green.
+
 ## [0.9.0] — 2026-04-11
 
 Status: Alpha → **Beta**.

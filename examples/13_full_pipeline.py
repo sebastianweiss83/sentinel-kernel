@@ -17,6 +17,7 @@ Run:
 
 from __future__ import annotations
 
+import contextlib
 import shutil
 import tempfile
 from pathlib import Path
@@ -79,17 +80,13 @@ def main() -> None:
 
         # Normal operation
         approve(request={"amount": 5_000})
-        try:
+        with contextlib.suppress(PolicyDeniedError):
             approve(request={"amount": 50_000})
-        except PolicyDeniedError:
-            pass
 
         # Kill switch
         sentinel.engage_kill_switch("mid-pipeline drill")
-        try:
+        with contextlib.suppress(KillSwitchEngaged):
             approve(request={"amount": 100})
-        except KillSwitchEngaged:
-            pass
         sentinel.disengage_kill_switch("drill complete")
         approve(request={"amount": 1_500})
 

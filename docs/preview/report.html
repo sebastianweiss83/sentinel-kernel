@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sentinel Sovereignty Report — sentinel-preview</title>
+<style>
+ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        max-width: 1100px; margin: 2em auto; padding: 0 1em; color: #111;
+        background: #fff; }
+ h1 { font-size: 1.8em; margin-bottom: .2em; }
+ h2 { font-size: 1.3em; margin-top: 2.2em; border-bottom: 1px solid #ccc;
+       padding-bottom: .3em; }
+ .meta { color: #555; font-size: .9em; }
+ .score { font-size: 3em; font-weight: 700; margin: .4em 0; }
+ .score-green { color: #167c3c; }
+ .score-amber { color: #a15c00; }
+ .score-red   { color: #a81717; }
+ table { border-collapse: collapse; width: 100%; margin-top: .6em; }
+ th, td { border: 1px solid #ddd; padding: .4em .6em; text-align: left;
+          font-size: .92em; vertical-align: top; }
+ th { background: #f4f4f4; font-weight: 600; }
+ .status-compliant { background: #e6f4ea; color: #167c3c; }
+ .status-partial { background: #fff4e5; color: #a15c00; }
+ .status-non_compliant { background: #fce8e6; color: #a81717; }
+ .status-action_required { background: #f6f0ff; color: #53229c; }
+ .pill { display: inline-block; padding: .1em .5em; border-radius: .4em;
+         font-size: .8em; background: #eee; }
+ footer { margin-top: 3em; padding-top: 1em; border-top: 1px solid #ccc;
+          color: #888; font-size: .82em; }
+</style>
+</head>
+<body>
+
+<h1>Sentinel Sovereignty Report</h1>
+<p class="meta">
+ Project: <b>sentinel-preview</b> ·
+ Storage: <b>sqlite</b> ·
+ Data residency: <b>EU-DE</b> ·
+ Sovereign scope: <b>EU</b>
+</p>
+<p class="meta">Generated: 2026-04-11T12:20:28 · Days to EU AI Act enforcement: 113</p>
+
+<div class="score score-green">100%</div>
+<p>Runtime sovereignty score — fraction of installed packages with no CLOUD Act exposure.</p>
+
+<h2>EU AI Act compliance</h2>
+<p>Overall: <span class="pill">PARTIAL</span> · Automated coverage: 50%</p>
+<table><thead><tr>
+ <th>Article</th><th>Title</th><th>Status</th><th>Coverage</th><th>Detail</th>
+</tr></thead><tbody><tr><td>Art. 9</td><td>Risk management</td><td class='status-partial'>PARTIAL</td><td>auto</td><td>Policy evaluator configured; every decision records the policy result.</td></tr><tr><td>Art. 10</td><td>Data governance</td><td class='status-action_required'>ACTION_REQUIRED</td><td>manual</td><td>Data governance is not automatable by a middleware kernel.</td></tr><tr><td>Art. 11</td><td>Technical documentation</td><td class='status-action_required'>ACTION_REQUIRED</td><td>manual</td><td>Annex IV technical documentation is a human deliverable.</td></tr><tr><td>Art. 12</td><td>Automatic record keeping</td><td class='status-compliant'>COMPLIANT</td><td>auto</td><td>Every wrapped call produces a DecisionTrace automatically, stored append-only.</td></tr><tr><td>Art. 13</td><td>Transparency &amp; information to deployers</td><td class='status-compliant'>COMPLIANT</td><td>auto</td><td>Traces record agent, model, policy name/version, and result per decision.</td></tr><tr><td>Art. 14</td><td>Human oversight</td><td class='status-compliant'>COMPLIANT</td><td>auto</td><td>Kill switch implemented; every override recorded as linked trace entry.</td></tr><tr><td>Art. 15</td><td>Accuracy, robustness, cybersecurity</td><td class='status-action_required'>ACTION_REQUIRED</td><td>manual</td><td>Model evaluation and adversarial testing are outside the trace layer.</td></tr><tr><td>Art. 17</td><td>Quality management system</td><td class='status-compliant'>COMPLIANT</td><td>auto</td><td>Continuous, append-only trace record satisfies the traceability requirement.</td></tr></tbody></table>
+
+
+<h2>Manifesto status</h2>
+<p>Overall score: <b>100%</b></p>
+<table><thead><tr><th></th><th>Dimension</th><th>Detail</th></tr></thead>
+<tbody><tr><td>✅</td><td>jurisdiction</td><td>0 critical-path violations</td></tr><tr><td>✅</td><td>kill_switch</td><td>kill switch API present</td></tr><tr><td>✅</td><td>storage</td><td>backend: sqlite</td></tr><tr><td>✅</td><td>bsi</td><td>targeting 2026-12-31</td></tr></tbody></table>
+
+
+<h2>Runtime packages (59 total, showing first 50)</h2>
+<p>
+ Sovereign: <b>59</b> ·
+ US-owned: <b>1</b> ·
+ Unknown: <b>46</b>
+</p>
+<table><thead><tr>
+ <th>Package</th><th>Version</th><th>Parent</th><th>Jurisdiction</th>
+ <th>CLOUD Act</th><th>Critical path</th>
+</tr></thead><tbody><tr><td>shellingham</td><td>1.5.4</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>requests</td><td>2.33.1</td><td>Python Software Foundation</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>more-itertools</td><td>10.8.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>pexpect</td><td>4.9.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>platformdirs</td><td>4.9.4</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>rfc3986</td><td>2.0.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>jaraco.classes</td><td>3.4.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>click</td><td>8.3.1</td><td>Pallets</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>ptyprocess</td><td>0.7.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>certifi</td><td>2026.2.25</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>iniconfig</td><td>2.3.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>jaraco.context</td><td>6.1.2</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>virtualenv</td><td>21.2.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>pytest-cov</td><td>7.1.0</td><td>pytest-cov</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>uv</td><td>0.11.3</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>tomlkit</td><td>0.14.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>hyperlink</td><td>21.0.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>idna</td><td>3.11</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>distlib</td><td>0.4.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>build</td><td>1.4.2</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>rich</td><td>14.3.3</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>userpath</td><td>1.9.2</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>librt</td><td>0.8.1</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>tomli_w</td><td>1.2.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>httpcore</td><td>1.0.9</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>filelock</td><td>3.25.2</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>nh3</td><td>0.3.4</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>markdown-it-py</td><td>4.0.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>sentinel-kernel</td><td>0.1.0</td><td>sentinel-kernel</td><td>EU</td><td>no</td><td>yes</td></tr><tr><td>docutils</td><td>0.22.4</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>hatchling</td><td>1.29.0</td><td>Ofek Lev</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>twine</td><td>6.2.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>h11</td><td>0.16.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>coverage</td><td>7.13.5</td><td>Coverage.py</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>Pygments</td><td>2.20.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>mdurl</td><td>0.1.2</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>pathspec</td><td>1.0.4</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>pytest-asyncio</td><td>1.3.0</td><td>pytest-dev</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>id</td><td>1.6.1</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>urllib3</td><td>2.6.3</td><td>urllib3</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>readme_renderer</td><td>44.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>typing_extensions</td><td>4.15.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>jaraco.functools</td><td>4.4.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>trove-classifiers</td><td>2026.1.14.14</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>hatch</td><td>1.16.5</td><td>Ofek Lev</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>charset-normalizer</td><td>3.4.7</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>ruff</td><td>0.15.8</td><td>Astral</td><td>US</td><td>no</td><td>no</td></tr><tr><td>mypy</td><td>1.20.0</td><td>Python Software Foundation</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>pluggy</td><td>1.6.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>python-discovery</td><td>1.2.1</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr></tbody></table>
+
+<h2>CI/CD findings</h2>
+<table><thead><tr>
+ <th>File</th><th>Component</th><th>Vendor</th><th>Jurisdiction</th><th>CLOUD Act</th>
+</tr></thead><tbody><tr><td>.github/workflows/ci.yml</td><td>github_actions</td><td>GitHub (Microsoft)</td><td>US</td><td>yes</td></tr><tr><td>.github/workflows/pages.yml</td><td>github_actions</td><td>GitHub (Microsoft)</td><td>US</td><td>yes</td></tr><tr><td>.github/workflows/release.yml</td><td>github_actions</td><td>GitHub (Microsoft)</td><td>US</td><td>yes</td></tr><tr><td>pyproject.toml</td><td>pypi</td><td>Python Package Index</td><td>US</td><td>no</td></tr></tbody></table>
+
+<h2>Infrastructure findings</h2>
+<table><thead><tr>
+ <th>File</th><th>Component</th><th>Vendor</th><th>Jurisdiction</th><th>CLOUD Act</th>
+</tr></thead><tbody><tr><td colspan='5'>No infrastructure findings</td></tr></tbody></table>
+
+<footer>
+ Generated by sentinel-kernel. Apache 2.0. This report is fully
+ self-contained; it loads no external resources and is safe to
+ distribute in air-gapped environments.
+</footer>
+</body>
+</html>

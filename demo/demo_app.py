@@ -17,12 +17,10 @@ from __future__ import annotations
 
 import asyncio
 import os
-import time
 from pathlib import Path
 
 from sentinel import DataResidency, KillSwitchEngaged, PolicyDeniedError, Sentinel
 from sentinel.compliance import EUAIActChecker
-from sentinel.core.trace import DecisionTrace
 from sentinel.dashboard import HTMLReport, TerminalDashboard
 from sentinel.manifesto import (
     EUOnly,
@@ -39,7 +37,6 @@ from sentinel.scanner import (
     RuntimeScanner,
 )
 from sentinel.storage import SQLiteStorage
-
 
 # ---------------------------------------------------------------------------
 # Manifesto: what this organisation demands
