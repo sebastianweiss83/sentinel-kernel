@@ -9,8 +9,8 @@
 | | |
 |---|---|
 | Version | `2.0.0` |
-| Tests | 503 passing |
-| Coverage | 99% |
+| Tests | 504 passing |
+| Coverage | 100% |
 | Smoke test | 40/40 ✓ |
 | Last updated | 2026-04-11 16:30 UTC |
 

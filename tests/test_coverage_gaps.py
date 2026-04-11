@@ -427,6 +427,40 @@ def test_infra_scanner_is_excluded_skips_venv_paths(tmp_path: Path) -> None:
     assert tf_findings[0].file == "main.tf"
 
 
+def test_infra_scanner_excludes_yaml_inside_venv(tmp_path: Path) -> None:
+    """Line 78: the yaml loop's _is_excluded continue branch.
+
+    CI's clean workspace has no yaml files under .venv/, so this
+    branch was previously uncovered there (local devs hit it
+    incidentally via their real .venv). Force it deterministically.
+    """
+    from sentinel.scanner import InfrastructureScanner
+
+    venv_lib = tmp_path / ".venv" / "lib"
+    venv_lib.mkdir(parents=True)
+    # A k8s-looking yaml buried in .venv — must be skipped.
+    (venv_lib / "ignored.yaml").write_text(
+        "apiVersion: storage.k8s.io/v1\n"
+        "kind: StorageClass\n"
+        "parameters:\n"
+        "  storageClassName: gp3\n"
+    )
+    # A real k8s yaml at the repo root — must be picked up.
+    (tmp_path / "real.yaml").write_text(
+        "apiVersion: storage.k8s.io/v1\n"
+        "kind: StorageClass\n"
+        "parameters:\n"
+        "  storageClassName: gp3\n"
+    )
+
+    result = InfrastructureScanner().scan(tmp_path)
+    k8s_findings = [
+        f for f in result.findings if f.component == "kubernetes_storage_class"
+    ]
+    assert len(k8s_findings) == 1
+    assert k8s_findings[0].file == "real.yaml"
+
+
 def test_infra_looks_like_k8s_handles_os_error(monkeypatch: pytest.MonkeyPatch) -> None:
     from sentinel.scanner.infrastructure import _looks_like_k8s
 
