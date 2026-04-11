@@ -30,6 +30,9 @@ dependencies = []
 # LangChain callback handler integration
 langchain = ["langchain-core>=0.1"]
 
+# Haystack integration (deepset GmbH, Berlin — EU-sovereign)
+haystack = ["haystack-ai>=2.0"]
+
 # Anthropic integration
 anthropic = ["anthropic>=0.25"]
 
