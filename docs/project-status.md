@@ -6,11 +6,11 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-11 21:15 UTC_
+_Last generated from HEAD commit: 2026-04-11 21:25 UTC_
 
 ## Version
 
-**`3.0.2`** — Production/Stable
+**`3.0.3`** — Production/Stable
 
 EU-sovereign decision record layer for AI agents.
 
@@ -113,6 +113,7 @@ EU-sovereign decision record layer for AI agents.
 
 ## Shipped
 
+- **3.0.3 (2026-04-11)** — **Tiny UX fix: `sentinel demo` now prints a copy-pasteable `open`
 - **3.0.2 (2026-04-11)** — **Scanner gets a reentrant cooperative timeout. Workflow concurrency
 - **3.0.1 (2026-04-11)** — **Bug fix: infrastructure scanner no longer hangs on large directories.**
 - **3.0.0 (2026-04-11)** — **Complete platform · API frozen · BSI assessment ready.**
@@ -124,6 +125,5 @@ EU-sovereign decision record layer for AI agents.
 - **1.9.0 (2026-04-11)** — Minor release. Advanced compliance — DORA and NIS2 checkers with
 - **1.8.0 (2026-04-11)** — Minor release. Developer experience — Jupyter notebook widget,
 - **1.7.0 (2026-04-11)** — Minor release. Production hardening — trace integrity, retention,
-- **1.6.0 (2026-04-11)** — Minor release. VS-NfD deployment profile, Prometheus textfile
 
 <!-- SYNC_ALL_STATUS_END -->

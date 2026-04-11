@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.0.3] — 2026-04-11
+
+**Tiny UX fix: `sentinel demo` now prints a copy-pasteable `open`
+command with the full tempfile path, so the report is one click
+away from the terminal.**
+
+### Fixed
+
+- **`sentinel demo` open hint** — after writing the HTML report, the
+  command now prints `Open it:` followed by `open <full path>`. The
+  previous output gave the path but no ready-to-paste command, which
+  confused users who expected the file under the working directory.
+
 ## [3.0.2] — 2026-04-11
 
 **Scanner gets a reentrant cooperative timeout. Workflow concurrency

@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `3.0.2` |
+| Version | `3.0.3` |
 | Tests | 608 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 21:15 UTC |
+| Last updated | 2026-04-11 21:25 UTC |
 
 ## Last 5 commits
 
+- `140d66b` fix: sentinel demo prints correct open command with full path
 - `215001a` chore: final sync after vision update
 - `b50a725` feat: Sovereign AI Kernel vision — docs, README, preview, BSI, blog
 - `79cea11` feat: world-class GitHub Pages — logo, favicon, full EU AI Act table, roadmap v3
 - `bcaa739` feat: HTML report — remediation actions per article
-- `5fb4a60` feat: v3.0.2 — reentrant scanner timeout + workflow concurrency guards
 
 ## Open issues
 
