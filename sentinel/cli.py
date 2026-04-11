@@ -142,7 +142,7 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     print(f"  Temp database: {db_path}")
     print()
 
-    def _policy(inputs: dict) -> tuple[bool, str | None]:
+    def _policy(inputs: dict[str, Any]) -> tuple[bool, str | None]:
         req = inputs.get("request", {})
         amount = req.get("amount", 0)
         if amount > 10_000:
@@ -158,7 +158,7 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     )
 
     @sentinel.trace(policy="policies/approval.py")
-    def approve(request: dict) -> dict:
+    def approve(request: dict[str, Any]) -> dict[str, Any]:
         return {"decision": "approved", "amount": request["amount"]}
 
     # Scenario 1: 50 realistic decisions
