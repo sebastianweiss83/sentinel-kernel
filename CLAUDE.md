@@ -9,22 +9,21 @@
 | | |
 |---|---|
 | Version | `1.5.0` |
-| Tests | 364 passing |
-| Coverage | 96% |
+| Tests | 396 passing |
+| Coverage | 98% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 14:55 UTC |
+| Last updated | 2026-04-11 15:03 UTC |
 
 ## Last 5 commits
 
+- `2cc4ff6` fix: Python 3.11 compat — scope terminal shutil monkeypatch
+- `ab8fd12` fix: gitignore demo report, demo tempdir default, CONTRIBUTING note, close #2
+- `5cd7edc` test: all modules to 95%+ coverage
+- `1bf7a41` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `aaf8b01` feat: Prometheus textfile exporter — Grafana metrics now real
-- `b23a2d5` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `3c3f73f` chore: refresh CLAUDE.md for v1.5.0 [skip ci]
-- `bb9dee2` feat: v1.5.0 — LF Europe application prep + sovereign AI blog draft
-- `a985679` chore(auto): refresh CLAUDE.md state block [skip ci]
 
 ## Open issues
 
-- **#2** v0.5: LangFuse integration _(labels: roadmap, integration)_
 - **#3** good first issue: add more policy examples _(labels: good first issue)_
 - **#5** v1.0: BSI IT-Grundschutz formal assessment _(labels: roadmap, bsi)_
 - **#6** v1.0: Linux Foundation Europe application _(labels: roadmap, governance)_
