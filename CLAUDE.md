@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `1.4.0` |
+| Version | `1.5.0` |
 | Tests | 344 passing |
 | Coverage | 96% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 12:17 UTC |
+| Last updated | 2026-04-11 14:18 UTC |
 
 ## Last 5 commits
 
+- `bb9dee2` feat: v1.5.0 — LF Europe application prep + sovereign AI blog draft
+- `a985679` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `7002374` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `bfe4bfe` feat: v1.4.0 — Haystack integration, NDJSON export/import
 - `d5aebf0` feat: trace export/import — NDJSON with filters, sentinel export/import CLI
-- `d10f804` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `a2ae57a` feat: Haystack integration — EU-based agent framework, closes #12
 
 ## Open issues
 
