@@ -1,8 +1,21 @@
 # sentinel-kernel
 
-**AI decisions. Recorded. Sovereign. Auditable.**
+**The Sovereign AI Kernel.**
 
-Every AI agent makes decisions. From **2 August 2026**, EU high-risk AI systems must prove it — automatically, tamper-resistantly, under EU law. Sentinel makes that possible in five minutes, with zero cloud dependencies, in any environment including air-gapped.
+Three layers between your business logic and your AI models:
+
+- **Trace** — every decision recorded, sovereign, tamper-resistant
+- **Govern** — what AI may decide, policy-as-code, kill switch
+- **Route** *(v4.0)* — which model decides what, based on sovereignty policy
+
+No vendor lock-in. No US CLOUD Act. No deployment strategists.
+Apache 2.0, permanently.
+
+EU AI Act Annex III enforcement: **2 August 2026**. Sentinel turns that
+legal requirement into a technical fact — in five minutes, with zero
+cloud dependencies, in any environment including air-gapped.
+
+→ Full vision: [docs/vision.md](docs/vision.md) · Full roadmap: [docs/roadmap.md](docs/roadmap.md)
 
 <!-- SYNC_ALL_README_START -->
 [![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
@@ -192,6 +205,18 @@ Sentinel's critical path — interceptor, policy evaluation, trace emission, sto
 
 ## Roadmap
 
+| Phase | Status | What |
+|---|---|---|
+| **Trace + Govern** | ✓ v3.0 | Sovereign traces, policy-as-code, kill switch |
+| **Certify** | → 2026 | BSI IT-Grundschutz, LF Europe |
+| **Route** | → v4.0 | Sovereign model router |
+| **Ecosystem** | 2027+ | EU build pipeline, multi-language |
+
+Full phase detail, including the SovereignRouter design and the
+market thesis, lives in [docs/roadmap.md](docs/roadmap.md).
+
+### Version history
+
 | Version | Status | Milestone |
 |---|---|---|
 | **v0.1**   | ✓ shipped | Kernel, in-process policy eval, SQLite + Filesystem storage |
@@ -211,8 +236,10 @@ Sentinel's critical path — interceptor, policy evaluation, trace emission, sto
 | **v2.2**   | ✓ shipped | Quantum-safe signing (ML-DSA-65, client-side) |
 | **v2.3**   | ✓ shipped | LangFuse sovereignty panel |
 | **v2.4**   | ✓ shipped | Rust RFC-001 implementation |
-| **v3.0**   | Q3 2026  | BSI assessment submission + LF Europe application |
-| **v3.1**   | Q1 2027  | VS-NfD classified deployment profile |
+| **v3.0**   | ✓ shipped | API freeze, BSI pre-engagement package ready |
+| **v3.1**   | Q3 2026  | Linux Foundation Europe application |
+| **v3.2**   | Q4 2026  | BSI IT-Grundschutz formal assessment |
+| **v4.0**   | 2026-2027 | SovereignRouter (see [docs/roadmap.md](docs/roadmap.md)) |
 
 ## What's in v0.9
 
@@ -261,28 +288,54 @@ Full mapping: [docs/eu-ai-act.md](docs/eu-ai-act.md)
 ## Architecture
 
 ```
-Your AI agents (any framework, any model)
-         │
-         ▼
-  ┌─────────────────────┐
-  │   Sentinel Kernel   │  ← wraps any agent call
-  │                     │
-  │  Interceptor        │  ← captures inputs, timing, context
-  │  Policy Evaluator   │  ← in-process: Rego / Python / custom
-  │  Trace Serializer   │  ← SHA-256 hashed, schema-versioned
-  └──────────┬──────────┘
-             │
-    ┌────────┼────────┐
-    ▼        ▼        ▼
- SQLite  PostgreSQL  Filesystem
-                     (NDJSON, air-gapped)
+Your business logic
+        │
+        ▼
+┌─────────────────────────────────────────┐
+│           SENTINEL KERNEL               │
+│                                         │
+│  ┌───────────────┐  ┌─────────────────┐ │
+│  │    GOVERN ✓   │  │   ROUTE → v4.0  │ │
+│  │  Policy-code  │  │  Which model?   │ │
+│  │  Kill switch  │  │  Sovereignty?   │ │
+│  │  Preflight    │  │  Data class?    │ │
+│  └───────────────┘  └─────────────────┘ │
+│                                         │
+│  ┌─────────────────────────────────┐    │
+│  │          TRACE ✓                │    │
+│  │  Sovereign · Tamper-resistant   │    │
+│  └─────────────────────────────────┘    │
+└─────────────────────────────────────────┘
+        │
+        ▼
+  MODEL LAYER (your choice)
+  Claude · Mistral · Llama · Kimi · local
+  Switch anytime. No lock-in.
+        │
+        ▼
+  SOVEREIGN STORAGE
+  SQLite · PostgreSQL · NDJSON
+  Your infrastructure. Always.
 ```
 
-**Critical path guarantees:**
+**Critical-path guarantees:**
 - Zero hard dependencies
 - Zero network calls at runtime
 - Zero US CLOUD Act exposure
 - Full offline / air-gapped operation
+
+## Why not Palantir AIP
+
+Palantir AIP costs €5–20M per year. It is US-incorporated (CLOUD Act
+applies to all your data). It requires deployment strategists. It is
+proprietary.
+
+When LLMs guide their own integration — and that is already happening —
+the deployment-strategist model collapses. What survives is the trusted
+kernel underneath: policy, audit trail, model router, sovereignty proof.
+
+Sentinel is that kernel. Open source. EU sovereign. Self-service.
+Apache 2.0, permanently. The full argument is in [docs/vision.md](docs/vision.md).
 
 ---
 
@@ -324,6 +377,8 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 
 ## Documentation
 
+- [docs/vision.md](docs/vision.md) — the Sovereign AI Kernel, in full
+- [docs/roadmap.md](docs/roadmap.md) — three phases, Router design
 - [docs/getting-started.md](docs/getting-started.md) — two-minute quickstart
 - [docs/real-world-examples.md](docs/real-world-examples.md) — industry scenarios
 - [docs/schema.md](docs/schema.md) — full trace schema reference

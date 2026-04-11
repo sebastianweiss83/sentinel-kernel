@@ -37,6 +37,30 @@
 
 <!-- CLAUDE_MD_AUTO_END -->
 
+## THE SENTINEL VISION
+
+Sentinel = **The Sovereign AI Kernel.**
+
+Three layers:
+
+- **TRACE (v3.0 ✓)** — sovereign decision records, Art. 12 automated
+- **GOVERN (v3.0 ✓)** — what AI may decide, policy-as-code, kill switch
+- **ROUTE (v4.0 →)** — which model decides what, driven by manifesto
+
+The Palantir thesis: when LLMs guide their own integration — and that is
+already happening — the deployment-strategist model collapses. The
+sovereign kernel underneath is what survives and scales. That is Sentinel:
+open source, EU sovereign, Apache 2.0, self-service.
+
+**Market:** EU AI Act enforcement 2 August 2026. Empty field — nobody
+else is building EU-sovereign, open-source, model-agnostic decision
+kernel. Every European bank, insurer, defence contractor, healthcare
+provider, and government agency needs what Phase 2 + Phase 3 will
+deliver.
+
+Full strategy: [docs/vision.md](docs/vision.md) · Phases:
+[docs/roadmap.md](docs/roadmap.md).
+
 ## What this project is
 
 Sentinel is an EU-sovereign AI decision middleware kernel.

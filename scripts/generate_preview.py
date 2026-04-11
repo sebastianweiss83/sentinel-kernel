@@ -621,6 +621,50 @@ section.block {
 .compliance-table .partial { color: var(--amber); font-weight: 600; }
 .compliance-table .human   { color: var(--blue); font-weight: 600; }
 
+/* ---------- KERNEL DIAGRAM ---------- */
+.kernel-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.kernel-wrap svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.kernel-taglines {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.tagline-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--green);
+  border-radius: 8px;
+  padding: 1rem 1.1rem;
+}
+.tagline-card.govern  { border-left-color: var(--green); }
+.tagline-card.route   { border-left-color: var(--blue); }
+.tagline-card.trace   { border-left-color: var(--green-dim); }
+.tagline-card h4 {
+  font-size: 0.92rem;
+  color: var(--text);
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+.tagline-card p {
+  color: var(--text2);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+@media (max-width: 900px) {
+  .kernel-taglines { grid-template-columns: 1fr; }
+}
+
 /* ---------- ROADMAP ---------- */
 .roadmap-grid {
   display: grid;
@@ -1047,6 +1091,123 @@ def _section_problem() -> str:
 """
 
 
+def _section_kernel() -> str:
+    """The Sovereign AI Kernel — three-layer architecture diagram."""
+    # SVG diagram: single viewBox, all elements positioned absolutely.
+    # Dimensions chosen so width scales to container up to 760px.
+    svg = """
+<svg viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Three-layer Sentinel kernel: business logic, kernel (Govern, Route, Trace), model layer, sovereign storage.">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#00d084"/>
+    </marker>
+    <style>
+      .lbl        { font: 600 14px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #e5e7eb; }
+      .lbl-sm     { font: 500 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #9ca3af; }
+      .lbl-xs     { font: 500 10px ui-monospace, monospace; letter-spacing: 0.05em; fill: #6b7280; }
+      .lbl-big    { font: 800 18px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #e5e7eb; letter-spacing: 0.02em; }
+      .tag        { font: 700 11px ui-monospace, monospace; fill: #00d084; }
+      .tag-blue   { font: 700 11px ui-monospace, monospace; fill: #3b82f6; }
+      .mono       { font: 500 11px ui-monospace, monospace; fill: #9ca3af; }
+    </style>
+  </defs>
+
+  <!-- Box 1: Your business logic -->
+  <rect x="220" y="14" width="280" height="52" rx="8"
+        fill="#111827" stroke="#1f2937" stroke-width="1"/>
+  <text x="360" y="40" text-anchor="middle" class="lbl">Your business logic</text>
+  <text x="360" y="56" text-anchor="middle" class="lbl-xs">any agent, any framework</text>
+
+  <!-- Arrow down -->
+  <line x1="360" y1="72" x2="360" y2="108"
+        stroke="#00d084" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Box 2: SENTINEL KERNEL (big green border) -->
+  <rect x="40" y="116" width="640" height="298" rx="14"
+        fill="#0a0e14" stroke="#00d084" stroke-width="2"/>
+  <text x="60" y="148" class="lbl-big">SENTINEL KERNEL</text>
+  <text x="60" y="168" class="lbl-xs">EU-SOVEREIGN · OPEN SOURCE · APACHE 2.0</text>
+
+  <!-- Inner GOVERN box -->
+  <rect x="64" y="186" width="292" height="112" rx="10"
+        fill="#111827" stroke="#00d084" stroke-width="1.5"/>
+  <text x="80" y="212" class="lbl">GOVERN</text>
+  <text x="326" y="212" text-anchor="end" class="tag">v3.0 ✓</text>
+  <text x="80" y="240" class="lbl-sm">Policy-as-code</text>
+  <text x="80" y="258" class="lbl-sm">Kill switch (Art. 14)</text>
+  <text x="80" y="276" class="lbl-sm">Preflight · Manifesto</text>
+
+  <!-- Inner ROUTE box -->
+  <rect x="364" y="186" width="292" height="112" rx="10"
+        fill="#111827" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="380" y="212" class="lbl">ROUTE</text>
+  <text x="626" y="212" text-anchor="end" class="tag-blue">v4.0 →</text>
+  <text x="380" y="240" class="lbl-sm">Which model?</text>
+  <text x="380" y="258" class="lbl-sm">Which sovereignty?</text>
+  <text x="380" y="276" class="lbl-sm">Which data class?</text>
+
+  <!-- Inner TRACE box (full width) -->
+  <rect x="64" y="314" width="592" height="82" rx="10"
+        fill="#111827" stroke="#00a368" stroke-width="1.5"/>
+  <text x="80" y="340" class="lbl">TRACE</text>
+  <text x="626" y="340" text-anchor="end" class="tag">v3.0 ✓</text>
+  <text x="80" y="364" class="lbl-sm">Every decision · sovereign · tamper-resistant · auditable</text>
+  <text x="80" y="382" class="lbl-xs">EU AI ACT ART. 12 AUTOMATED · ML-DSA-65 SIGNED · NDJSON PORTABLE</text>
+
+  <!-- Arrow down -->
+  <line x1="360" y1="418" x2="360" y2="454"
+        stroke="#00d084" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Box 3: MODEL LAYER -->
+  <rect x="120" y="462" width="480" height="72" rx="10"
+        fill="#2d1f00" stroke="#f5a623" stroke-width="1"/>
+  <text x="360" y="490" text-anchor="middle" class="lbl">MODEL LAYER (your choice)</text>
+  <text x="360" y="510" text-anchor="middle" class="mono">Claude · Mistral · Llama · Kimi · local model</text>
+  <text x="360" y="526" text-anchor="middle" class="lbl-xs">SWITCH ANYTIME. NO LOCK-IN.</text>
+
+  <!-- Arrow down -->
+  <line x1="360" y1="540" x2="360" y2="576"
+        stroke="#00d084" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Box 4: SOVEREIGN STORAGE -->
+  <rect x="120" y="584" width="480" height="72" rx="10"
+        fill="#111827" stroke="#1f2937" stroke-width="1"/>
+  <text x="360" y="612" text-anchor="middle" class="lbl">SOVEREIGN STORAGE</text>
+  <text x="360" y="632" text-anchor="middle" class="mono">SQLite · PostgreSQL · NDJSON</text>
+  <text x="360" y="648" text-anchor="middle" class="lbl-xs">YOUR INFRASTRUCTURE. ALWAYS.</text>
+</svg>
+"""
+    return f"""
+<section class="block">
+  <div class="container">
+    <h2>The Sovereign AI Kernel</h2>
+    <p class="sub">Three layers between your business logic and your AI models. One thin kernel you can read end-to-end.</p>
+
+    <div class="kernel-wrap">
+      {svg}
+    </div>
+
+    <div class="kernel-taglines">
+      <div class="tagline-card trace">
+        <h4>Trace</h4>
+        <p>What was decided. EU AI Act Art. 12, automated.</p>
+      </div>
+      <div class="tagline-card govern">
+        <h4>Govern</h4>
+        <p>What may be decided. Policy-as-code, kill switch, preflight.</p>
+      </div>
+      <div class="tagline-card route">
+        <h4>Route</h4>
+        <p>Which model decides. Coming v4.0 — RFC-002 in discussion.</p>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+
 def _section_dashboard(days: int) -> str:
     return f"""
 <section class="block">
@@ -1365,39 +1526,36 @@ def _section_roadmap(days: int) -> str:
 <section class="block">
   <div class="container">
     <h2>Roadmap</h2>
-    <p class="sub">Phase 1 complete. Phase 2 in motion. Every version reflects shipped code, not plans.</p>
+    <p class="sub">Phase 1 done. Phase 2 in motion. Phase 3 designed. Every version reflects shipped code, not plans.</p>
 
     <div class="roadmap-grid">
       <div class="roadmap-col done">
-        <h3>Phase 1 — Done</h3>
+        <h3>Trace + Govern · v3.0 ✓</h3>
         <ul class="roadmap-list">
-          <li><span class="tag">v1.0</span> Kill switch · decision traces · policy eval</li>
-          <li><span class="tag">v1.5</span> BSI profile · DORA · NIS2 · VS-NfD guide</li>
-          <li><span class="tag">v2.0</span> Manifesto-as-code · scanner · 5 CI theses</li>
-          <li><span class="tag">v2.1</span> BudgetTracker · attestations · CrewAI · AutoGen</li>
-          <li><span class="tag">v2.2</span> ML-DSA-65 · RFC 3161 · quantum-safe signing</li>
-          <li><span class="tag">v3.0</span> API frozen · BSI pre-engagement package ready</li>
-          <li><span class="tag">v3.0.2</span> Reentrant scanner timeout · workflow concurrency</li>
+          <li><span class="tag">trace</span> Sovereign decision records</li>
+          <li><span class="tag">gov</span> Policy-as-code · manifesto-as-code</li>
+          <li><span class="tag">safe</span> Kill switch (Art. 14)</li>
+          <li><span class="tag">bsi</span> BSI pre-engagement ready · 608 tests · 100% cov</li>
         </ul>
         <div class="foot">Shipped and verified on main.</div>
       </div>
       <div class="roadmap-col now">
-        <h3>Phase 2 — In progress</h3>
+        <h3>Certify + Route · 2026 →</h3>
         <ul class="roadmap-list">
-          <li><span class="tag">v3.1</span> Linux Foundation Europe application (Q3 2026)</li>
-          <li><span class="tag">v3.2</span> BSI IT-Grundschutz assessment (Q4 2026)</li>
-          <li><span class="tag">v3.x</span> Go + TypeScript RFC-001 implementations</li>
-          <li><span class="tag">v3.x</span> Healthcare &amp; public-sector policy examples</li>
+          <li><span class="tag">v3.1</span> Linux Foundation Europe application</li>
+          <li><span class="tag">v3.2</span> BSI IT-Grundschutz assessment</li>
+          <li><span class="tag">v4.0</span> SovereignRouter — policy-driven model selection</li>
+          <li><span class="tag">v4.1</span> Local adapters: Ollama · vLLM · llama.cpp</li>
         </ul>
-        <div class="foot">Issues #19, #20, #16, #17 open on GitHub.</div>
+        <div class="foot">RFC-002 in discussion. Issues #19, #20 open.</div>
       </div>
       <div class="roadmap-col future">
-        <h3>Phase 3 — 2027+</h3>
+        <h3>Ecosystem · 2027+</h3>
         <ul class="roadmap-list">
           <li><span class="tag">pipe</span> EU-sovereign build pipeline</li>
-          <li><span class="tag">ci</span> Gitea / Forgejo instead of GitHub Actions</li>
+          <li><span class="tag">ml</span> Multi-language: Python · Rust · Go · TS</li>
+          <li><span class="tag">llm</span> LLM-guided deployment</li>
           <li><span class="tag">pkg</span> EU package registry instead of PyPI</li>
-          <li><span class="tag">sig</span> Signed build artifacts end-to-end</li>
         </ul>
         <div class="foot">Breaking the American convenience layer completely.</div>
       </div>
@@ -1499,6 +1657,7 @@ def _render_index(
 {_section_enforcement(days)}
 {_section_v3_highlights(version)}
 {_section_problem()}
+{_section_kernel()}
 {_section_dashboard(days)}
 {_section_code()}
 {_section_industry()}

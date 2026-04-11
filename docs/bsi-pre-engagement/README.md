@@ -5,6 +5,29 @@ IT-Grundschutz assessment of `sentinel-kernel`. It is generic —
 no named customers, no classified information — and is meant to
 be handed to BSI in the first meeting.
 
+## The three-layer kernel
+
+`sentinel-kernel` is the **Sovereign AI Kernel**. It sits between
+business logic and AI models and implements three layers:
+
+1. **Trace (v3.0 shipped).** Every AI decision becomes a structured,
+   append-only sovereign record. EU AI Act Art. 12 is an automated
+   side-effect of the interceptor. Optional ML-DSA-65 (FIPS 204)
+   signing, with keys on the operator's own infrastructure.
+2. **Govern (v3.0 shipped).** What the AI may decide is policy-as-code,
+   evaluated in-process, recorded in every trace. Art. 14 human
+   oversight is implemented as a kill switch. Manifesto-as-code runs
+   as five named CI theses on every pull request.
+3. **Route (v4.0 roadmap).** The SovereignRouter — the same policy
+   engine that governs what may be decided selects which model
+   handles each decision, based on data classification and
+   sovereignty requirements. RFC-002 is in discussion.
+
+All three layers share a single DecisionTrace schema, a single policy
+engine, and a single kill switch. There are no black boxes in the
+critical path. See [docs/vision.md](../vision.md) for the full
+architecture and [docs/roadmap.md](../roadmap.md) for phase detail.
+
 ## Contents
 
 - **`README.md`** — this file

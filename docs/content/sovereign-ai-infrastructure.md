@@ -225,3 +225,35 @@ also the one where the architectural choice — US-incorporated
 provider versus sovereign stack — is binary, not a slider.
 
 Pick sovereign. Write it down. Run the check in CI. Ship it.
+
+## What comes after logging
+
+Decision traces are the foundation, not the destination. Art. 12
+compliance is the entry ticket — the question a regulated buyer asks
+once the interceptor is in place is different, and harder: *which model
+is even legal for this data class, and how do we prove the choice was
+correct?* A trace that says "we sent this VS-NfD document to an API in
+Oregon" is a well-logged mistake, not a sovereign decision.
+
+The real question, one layer up, is model independence. The leading
+proprietary platforms — we will not name them again — answer that
+question by locking the buyer in: one ontology, one deployment
+strategist, one jurisdiction, one vendor for the next decade. European
+buyers who go that route are trading one structural dependency for
+another, and paying €5–20M per year for the privilege. When LLMs guide
+their own integration — and that is already happening at the agent
+layer — the deployment-strategist moat evaporates. What survives is the
+trusted kernel underneath: policy, audit trail, model router,
+sovereignty proof.
+
+That is where Sentinel is going in v4.0 with the `SovereignRouter`. The
+same manifesto that already declares which dependencies and which
+jurisdictions are acceptable will also declare which models are
+permitted for each data class — and the kernel will select the model
+automatically, record the choice and the reason in the sovereign trace,
+and fall back if the preferred model is unavailable. The interface is
+one call: `sentinel.route(task, context)`. The guarantee is that the
+choice of model is a configuration of your manifesto, not a rewrite of
+your code. That closes the loop. Sovereign trace (what), sovereign
+governance (whether), sovereign routing (which model). One thin kernel.
+Apache 2.0. Permanently. RFC-002 is open for comment.
