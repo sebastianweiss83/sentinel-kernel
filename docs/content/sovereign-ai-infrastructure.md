@@ -205,8 +205,9 @@ things that are not yet done are marked as not done.
 ## What to do now
 
 ```bash
-pip install sentinel-kernel
+pip3 install sentinel-kernel
 sentinel demo
+# or: python3 -m pip install sentinel-kernel && python3 -m sentinel demo
 ```
 
 That runs 50 decisions, engages the kill switch for five more,

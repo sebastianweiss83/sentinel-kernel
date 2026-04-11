@@ -105,7 +105,7 @@ integration as reference:
        import langchain  # or whatever
    except ImportError as exc:
        raise ImportError(
-           "Install with: pip install sentinel-kernel[langchain]"
+           "Install with: pip3 install sentinel-kernel[langchain]"
        ) from exc
    ```
 

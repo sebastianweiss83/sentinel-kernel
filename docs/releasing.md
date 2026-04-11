@@ -57,7 +57,7 @@ git push origin vX.Y.Z
 GitHub Actions publishes to PyPI automatically. Watch it at
 https://github.com/sebastianweiss83/sentinel-kernel/actions.
 Typical time: ~2 minutes from `git push` to
-`pip install sentinel-kernel==X.Y.Z` working.
+`pip3 install sentinel-kernel==X.Y.Z` working.
 
 > The workflow only runs on **tag pushes**, not on the main-branch
 > push. If you forget to push the tag the release will not happen.

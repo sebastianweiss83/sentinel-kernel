@@ -96,9 +96,9 @@ The critical path — trace creation, policy evaluation, storage write — has z
 Everything else is optional and must be installed explicitly:
 
 ```
-pip install sentinel-kernel[langchain]   # LangChain integration (planned v0.3)
-pip install sentinel-kernel[postgres]    # PostgreSQL backend (planned v0.2)
-pip install sentinel-kernel[otel]        # OpenTelemetry export (planned v0.3)
+pip3 install sentinel-kernel[langchain]   # LangChain integration
+pip3 install sentinel-kernel[postgres]    # PostgreSQL backend
+pip3 install sentinel-kernel[otel]        # OpenTelemetry export
 ```
 
 Optional integrations may depend on US-incorporated services or third-party packages. They are clearly labelled as non-sovereign where applicable. They must never appear in the critical path.

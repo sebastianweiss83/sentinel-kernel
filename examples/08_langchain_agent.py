@@ -5,7 +5,7 @@ SentinelCallbackHandler records every LangChain LLM, chain, and
 tool call as a sovereign decision trace. Zero changes to the agent
 logic. Optional dependency:
 
-    pip install sentinel-kernel[langchain]
+    pip3 install sentinel-kernel[langchain]
 
 To keep this example self-contained and API-key-free, it uses a
 minimal fake BaseCallbackHandler injected into sys.modules before

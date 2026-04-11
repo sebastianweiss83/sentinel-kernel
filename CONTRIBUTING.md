@@ -107,7 +107,7 @@ try:
     import your_framework  # type: ignore
 except ImportError as exc:
     raise ImportError(
-        "Install with: pip install sentinel-kernel[your-framework]"
+        "Install with: pip3 install sentinel-kernel[your-framework]"
     ) from exc
 ```
 

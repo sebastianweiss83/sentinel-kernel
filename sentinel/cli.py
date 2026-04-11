@@ -358,7 +358,7 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     print(f"      Wrote {out_path} ({len(html):,} bytes)")
     print()
 
-    # Terminal summary
+    # Terminal summary (sovereignty widget from the live dashboard)
     print("━" * 64)
     print("  TERMINAL SUMMARY")
     print("━" * 64)
@@ -369,15 +369,44 @@ def _cmd_demo(args: argparse.Namespace) -> int:
         print(f"  (dashboard render skipped: {exc})")
     print()
 
-    print(f"✓ Report saved: {out_path}")
+    # Structured completion block — what just happened, where the report
+    # is, and what to do next. Designed for a first-time user who has
+    # never seen Sentinel before.
+    total_decisions = allow + deny
+    score_pct = int(round(runtime.sovereignty_score * 100))
+
+    def _row(label: str, detail: str, mark: str = "✓") -> str:
+        # Fixed label column for visual alignment on a 64-wide block.
+        return f"  {mark} {label:<32} {detail}"
+
+    ks_row = (
+        _row("Kill switch tested", "(EU AI Act Art. 14)")
+        if not args.no_kill_switch
+        else _row("Kill switch demo skipped", "(--no-kill-switch)", mark="·")
+    )
+    print("═" * 64)
+    print("  SENTINEL DEMO COMPLETE")
+    print("═" * 64)
     print()
-    print("Open it:")
-    print(f"  open '{out_path}'")
+    print(_row(f"{total_decisions} decisions traced", "(EU sovereign, local storage)"))
+    print(ks_row)
+    print(_row("Sovereignty scan", f"({score_pct}% score)"))
+    print(_row(
+        "EU AI Act compliance check",
+        f"({compliance.overall} — {compliance.days_to_enforcement} days remaining)",
+    ))
+    print(_row("HTML report generated", ""))
     print()
-    print("Attestation: sentinel attestation generate")
-    print("Report:      sentinel report --output sovereignty_report.html")
+    print(f"  Report saved: {out_path}")
+    print(f"  Open it:      open '{out_path}'")
     print()
-    print("If Sentinel helped you: ⭐ github.com/sebastianweiss83/sentinel-kernel")
+    print("  Next steps:   sentinel attestation generate")
+    print("                sentinel report --output sovereignty_report.html")
+    print()
+    print(f"  EU AI Act enforcement: 2 August 2026 · "
+          f"{compliance.days_to_enforcement} days")
+    print("  If Sentinel helped you: ⭐  github.com/sebastianweiss83/sentinel-kernel")
+    print("═" * 64)
     print()
 
     # Clean up temp database and demo dir

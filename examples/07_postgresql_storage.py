@@ -2,7 +2,7 @@
 07 — PostgresStorage (on-premise enterprise backend).
 
 Requires psycopg2. Install:
-    pip install sentinel-kernel[postgres]
+    pip3 install sentinel-kernel[postgres]
 
 Requires a running PostgreSQL (or compatible) instance. For a local
 throwaway database:
@@ -31,7 +31,7 @@ def main() -> int:
     try:
         import psycopg2  # noqa: F401
     except ImportError:
-        print("psycopg2 not installed. Install: pip install sentinel-kernel[postgres]")
+        print("psycopg2 not installed. Install: pip3 install sentinel-kernel[postgres]")
         print("Skipping.")
         return 0
 

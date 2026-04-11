@@ -5,7 +5,7 @@ OTelExporter wraps the Sentinel storage so every decision trace
 also produces a `sentinel.decision` OTel span with sovereignty
 metadata as span attributes. Optional dependency:
 
-    pip install sentinel-kernel[otel]
+    pip3 install sentinel-kernel[otel]
 
 IMPORTANT: local storage is always written FIRST. OTel is additive
 observability; it never replaces the sovereign record. If the OTel

@@ -32,19 +32,12 @@ cloud dependencies, in any environment including air-gapped.
 
 ## Quick demo
 
-**macOS:**
 ```bash
 pip3 install sentinel-kernel
 sentinel demo  # 50 decisions, kill switch, compliance check, report
 ```
 
-**Linux:**
-```bash
-pip install sentinel-kernel
-sentinel demo
-```
-
-**If `pip` / `pip3` is not found, or `sentinel` is not on your PATH:**
+**If `pip3` is not found, or `sentinel` is not on your PATH:**
 ```bash
 python3 -m pip install sentinel-kernel
 python3 -m sentinel demo
@@ -69,19 +62,12 @@ scan — and streams live traces to Grafana. See
 
 ## Install
 
-**macOS:**
 ```bash
 pip3 install sentinel-kernel
 sentinel demo
 ```
 
-**Linux:**
-```bash
-pip install sentinel-kernel
-sentinel demo
-```
-
-**If `pip` / `pip3` is not found:**
+**If `pip3` is not found, or `sentinel` is not on your PATH:**
 ```bash
 python3 -m pip install sentinel-kernel
 python3 -m sentinel demo
@@ -89,7 +75,7 @@ python3 -m sentinel demo
 
 `python3 -m sentinel` is equivalent to the `sentinel` entry point and always
 works, even on systems where `pip`'s `--user` bin directory is not on PATH
-(common on macOS).
+(common on fresh macOS installs).
 
 ## Five minutes to your first sovereign trace
 

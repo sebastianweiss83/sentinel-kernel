@@ -128,7 +128,7 @@ v2.0 deprecates nothing. Every v1.x API is intact.
 ## Smoke test before upgrading production
 
 ```bash
-pip install sentinel-kernel==2.0.0 --dry-run
+pip3 install sentinel-kernel==2.0.0 --dry-run
 pytest                                     # your existing suite
 python examples/smoke_test.py              # if you vendor it
 sentinel demo                              # end-to-end sanity check
