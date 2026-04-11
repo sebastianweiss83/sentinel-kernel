@@ -7,6 +7,60 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.6.0] — 2026-04-11
+
+Minor release. VS-NfD deployment profile, Prometheus textfile
+exporter, and 100% test coverage across every module.
+
+### Added
+
+- **VS-NfD deployment guide** — `docs/vsnfd-deployment.md`.
+  Complete mapping of VSA requirements to Sentinel capabilities,
+  deployment architecture, step-by-step instructions, and a
+  20-item operator checklist. Closes #9.
+- **`VSNfDReady` manifesto requirement** — checks the automatable
+  subset of the VS-NfD profile: approved storage backend, German
+  data residency, EU/LOCAL sovereign scope, kill switch presence,
+  and policy evaluator configured. Explicitly documents what it
+  does **not** check (physical security, personnel clearances).
+- **Prometheus textfile exporter** — `sentinel.integrations.prometheus.PrometheusExporter`
+  writes a `.prom` file readable by node-exporter's textfile
+  collector. Metrics: sovereignty score, days to enforcement,
+  kill switch state, decision counts per agent, latency p50/p95/p99,
+  test coverage, manifesto score. Background thread with atomic
+  file writes.
+- **Docker compose integration** for Prometheus textfile metrics.
+  Both `docker-compose.yml` and `docker-compose.minimal.yml` now
+  mount a `sentinel-metrics` volume between the sentinel-demo
+  container and a `node-exporter` container, so the Grafana
+  dashboard panels show real data.
+- **Optional extra** `pip install sentinel-kernel[prometheus]`.
+
+### Changed
+
+- **100% test coverage** across every module in `sentinel/`.
+  421 tests passing (up from 344). Dev extras now pull every
+  optional integration dep (langchain-core, opentelemetry-sdk,
+  opentelemetry-exporter-otlp-proto-grpc, langfuse, psycopg2-binary,
+  prometheus-client, rich) so the happy-path branches of every
+  optional-dep import guard get exercised in CI.
+
+### Fixed
+
+- **`sentinel demo` default output path** — now uses
+  `tempfile.gettempdir()` instead of the repo root, so repeated
+  demo runs don't clutter the working tree.
+- **`update-claude-md` CI race** — regenerate-reset-push loop
+  (from v1.3.0) extended to cover the Python 3.11 terminal
+  monkeypatch race that surfaced in #58.
+- **Test terminal-width monkeypatch** now scopes its patch to the
+  `sentinel.dashboard.terminal` module instead of replacing the
+  global `shutil.get_terminal_size`, which used to crash pytest's
+  own progress writer on the Python 3.11 CI runner.
+- **Unused `statistics` import** and dead percentile branches
+  removed from `sentinel.integrations.prometheus`.
+- **Issue #2** (LangFuse integration) closed — delivered in v0.3.
+
 ## [1.5.0] — 2026-04-11
 
 Minor release. Governance and community — Linux Foundation Europe
