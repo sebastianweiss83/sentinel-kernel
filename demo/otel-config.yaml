@@ -9,20 +9,44 @@ receivers:
 processors:
   batch:
 
+# Convert sentinel.decision spans into RED metrics (Rate, Errors, Duration)
+# while preserving sovereignty attributes as Prometheus labels.
+connectors:
+  spanmetrics:
+    histogram:
+      explicit:
+        buckets: [1ms, 5ms, 10ms, 25ms, 50ms, 100ms, 250ms, 500ms, 1s, 2s]
+    dimensions:
+      - name: sentinel.agent
+      - name: sentinel.policy_result
+      - name: sentinel.sovereign_scope
+      - name: sentinel.data_residency
+      - name: sentinel.schema_version
+    exclude_dimensions: ['status.code']
+    metrics_flush_interval: 5s
+    namespace: sentinel
+
 exporters:
   debug:
     verbosity: basic
   prometheus:
     endpoint: 0.0.0.0:8889
     namespace: sentinel
+    resource_to_telemetry_conversion:
+      enabled: true
+
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
 
 service:
+  extensions: [health_check]
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [debug, spanmetrics]
     metrics:
-      receivers: [otlp]
+      receivers: [otlp, spanmetrics]
       processors: [batch]
       exporters: [debug, prometheus]

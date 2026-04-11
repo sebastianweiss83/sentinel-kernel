@@ -3,45 +3,24 @@
   "title": "Sentinel Sovereignty Dashboard",
   "tags": ["sentinel", "sovereignty", "eu-ai-act"],
   "schemaVersion": 38,
-  "version": 1,
+  "version": 2,
   "refresh": "5s",
   "time": {"from": "now-30m", "to": "now"},
   "timepicker": {},
   "templating": {"list": []},
   "annotations": {"list": []},
   "panels": [
+
     {
       "id": 1,
-      "type": "stat",
-      "title": "Decisions per minute",
-      "gridPos": {"h": 5, "w": 8, "x": 0, "y": 0},
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "targets": [
-        {
-          "expr": "rate(sentinel_decisions_total[1m])",
-          "legendFormat": "decisions/min",
-          "refId": "A"
-        }
-      ],
-      "options": {"reduceOptions": {"calcs": ["lastNotNull"]}}
-    },
-    {
-      "id": 2,
-      "type": "piechart",
-      "title": "Policy result distribution",
-      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 0},
-      "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "targets": [
-        {"expr": "sum by (policy_result) (sentinel_policy_result_total)", "legendFormat": "{{policy_result}}", "refId": "A"}
-      ]
-    },
-    {
-      "id": 3,
       "type": "gauge",
       "title": "Sovereignty score",
-      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 0},
+      "description": "Runtime sovereignty — fraction of installed packages with no CLOUD Act exposure.",
+      "gridPos": {"h": 6, "w": 6, "x": 0, "y": 0},
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "targets": [{"expr": "sentinel_sovereignty_score", "refId": "A"}],
+      "targets": [
+        {"expr": "sentinel_sovereignty_score", "refId": "A"}
+      ],
       "fieldConfig": {
         "defaults": {
           "unit": "percentunit",
@@ -56,29 +35,50 @@
             ]
           }
         }
-      }
+      },
+      "options": {"showThresholdLabels": false, "showThresholdMarkers": true}
     },
+
     {
-      "id": 4,
-      "type": "bargauge",
-      "title": "EU AI Act article coverage",
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "id": 2,
+      "type": "stat",
+      "title": "Days to EU AI Act enforcement",
+      "description": "Days until 2 August 2026 (Annex III).",
+      "gridPos": {"h": 6, "w": 6, "x": 6, "y": 0},
       "datasource": {"type": "prometheus", "uid": "prometheus"},
       "targets": [
-        {"expr": "sentinel_eu_ai_act_article_compliant", "legendFormat": "{{article}}", "refId": "A"}
-      ]
+        {"expr": "sentinel_days_to_enforcement", "refId": "A"}
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "d",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": 0, "color": "red"},
+              {"value": 90, "color": "orange"},
+              {"value": 180, "color": "green"}
+            ]
+          },
+          "color": {"mode": "thresholds"}
+        }
+      }
     },
+
     {
-      "id": 5,
+      "id": 3,
       "type": "stat",
       "title": "Kill switch",
-      "gridPos": {"h": 8, "w": 4, "x": 12, "y": 8},
+      "description": "EU AI Act Art. 14 — human oversight.",
+      "gridPos": {"h": 6, "w": 6, "x": 12, "y": 0},
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "targets": [{"expr": "sentinel_kill_switch_active", "refId": "A"}],
+      "targets": [
+        {"expr": "sentinel_kill_switch_active", "refId": "A"}
+      ],
       "fieldConfig": {
         "defaults": {
           "mappings": [
-            {"type": "value", "options": {"0": {"text": "NORMAL"}, "1": {"text": "ENGAGED"}}}
+            {"type": "value", "options": {"0": {"text": "NORMAL", "color": "green"}, "1": {"text": "ENGAGED", "color": "red"}}}
           ],
           "color": {"mode": "thresholds"},
           "thresholds": {
@@ -91,29 +91,266 @@
         }
       }
     },
+
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Total traces",
+      "description": "Total decision traces recorded.",
+      "gridPos": {"h": 6, "w": 6, "x": 18, "y": 0},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {"expr": "sum(sentinel_calls_total)", "refId": "A"}
+      ],
+      "fieldConfig": {"defaults": {"unit": "short", "color": {"mode": "fixed", "fixedColor": "blue"}}}
+    },
+
+    {
+      "id": 5,
+      "type": "table",
+      "title": "Live decision feed (last 50)",
+      "description": "Real-time stream of decisions from sentinel.decision spans.",
+      "gridPos": {"h": 10, "w": 24, "x": 0, "y": 6},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {
+          "expr": "topk(50, sum by (sentinel_agent, sentinel_policy_result, sentinel_sovereign_scope, sentinel_data_residency) (rate(sentinel_calls_total[5m])))",
+          "format": "table",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "displayMode": "auto"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "sentinel_policy_result"},
+            "properties": [
+              {"id": "custom.cellOptions", "value": {"type": "color-text"}},
+              {
+                "id": "mappings",
+                "value": [
+                  {"type": "value", "options": {"ALLOW": {"color": "green", "text": "ALLOW"}}},
+                  {"type": "value", "options": {"DENY": {"color": "red", "text": "DENY"}}},
+                  {"type": "value", "options": {"EXCEPTION_REQUIRED": {"color": "orange", "text": "EXCEPTION"}}}
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "transformations": [
+        {"id": "organize", "options": {"excludeByName": {"Time": true, "Value": true}}}
+      ]
+    },
+
     {
       "id": 6,
-      "type": "stat",
-      "title": "Days to EU AI Act enforcement",
-      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 8},
+      "type": "piechart",
+      "title": "Policy result distribution",
+      "description": "Share of ALLOW / DENY / EXCEPTION across the window.",
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 16},
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "targets": [{"expr": "sentinel_days_to_enforcement", "refId": "A"}]
+      "targets": [
+        {
+          "expr": "sum by (sentinel_policy_result) (increase(sentinel_calls_total[$__range]))",
+          "legendFormat": "{{sentinel_policy_result}}",
+          "refId": "A"
+        }
+      ],
+      "options": {"pieType": "donut", "legend": {"placement": "right", "showLegend": true}}
     },
+
     {
       "id": 7,
       "type": "timeseries",
-      "title": "Latency (ms)",
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+      "title": "Traces per minute",
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 16},
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "targets": [{"expr": "histogram_quantile(0.95, rate(sentinel_latency_ms_bucket[1m]))", "legendFormat": "p95", "refId": "A"}]
+      "targets": [
+        {
+          "expr": "sum by (sentinel_policy_result) (rate(sentinel_calls_total[1m]))",
+          "legendFormat": "{{sentinel_policy_result}}",
+          "refId": "A"
+        }
+      ]
     },
+
     {
       "id": 8,
-      "type": "table",
-      "title": "Acknowledged gaps (migration plans)",
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+      "type": "timeseries",
+      "title": "Latency (p50/p95/p99)",
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 16},
       "datasource": {"type": "prometheus", "uid": "prometheus"},
-      "targets": [{"expr": "sentinel_acknowledged_gap", "format": "table", "refId": "A"}]
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum by (le) (rate(sentinel_duration_milliseconds_bucket[1m])))",
+          "legendFormat": "p50",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum by (le) (rate(sentinel_duration_milliseconds_bucket[1m])))",
+          "legendFormat": "p95",
+          "refId": "B"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum by (le) (rate(sentinel_duration_milliseconds_bucket[1m])))",
+          "legendFormat": "p99",
+          "refId": "C"
+        }
+      ],
+      "fieldConfig": {"defaults": {"unit": "ms"}}
+    },
+
+    {
+      "id": 9,
+      "type": "bargauge",
+      "title": "EU AI Act article coverage",
+      "description": "Per-article compliance — 0 = non-compliant, 0.5 = partial, 1 = compliant.",
+      "gridPos": {"h": 8, "w": 16, "x": 0, "y": 24},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {"expr": "sentinel_eu_ai_act_article_compliant", "legendFormat": "{{article}}", "refId": "A"}
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "min": 0, "max": 1, "unit": "percentunit",
+          "thresholds": {"mode": "absolute", "steps": [{"value": 0, "color": "red"}, {"value": 0.5, "color": "orange"}, {"value": 1, "color": "green"}]}
+        }
+      },
+      "options": {"displayMode": "gradient", "orientation": "horizontal"}
+    },
+
+    {
+      "id": 10,
+      "type": "table",
+      "title": "Human action required",
+      "description": "Articles that cannot be automated and require operator attention.",
+      "gridPos": {"h": 8, "w": 8, "x": 16, "y": 24},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {"expr": "sentinel_human_action_required", "format": "table", "instant": true, "refId": "A"}
+      ]
+    },
+
+    {
+      "id": 11,
+      "type": "table",
+      "title": "Runtime packages by jurisdiction",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {"expr": "sum by (jurisdiction) (sentinel_runtime_packages)", "format": "table", "instant": true, "refId": "A"}
+      ]
+    },
+
+    {
+      "id": 12,
+      "type": "table",
+      "title": "CI/CD findings",
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {"expr": "sentinel_cicd_findings", "format": "table", "instant": true, "refId": "A"}
+      ]
+    },
+
+    {
+      "id": 13,
+      "type": "stat",
+      "title": "Schema version",
+      "gridPos": {"h": 5, "w": 6, "x": 0, "y": 40},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {"expr": "sentinel_schema_version_info", "format": "table", "instant": true, "refId": "A"}
+      ]
+    },
+
+    {
+      "id": 14,
+      "type": "stat",
+      "title": "Storage backend",
+      "gridPos": {"h": 5, "w": 6, "x": 6, "y": 40},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {"expr": "sentinel_storage_backend_info", "format": "table", "instant": true, "refId": "A"}
+      ]
+    },
+
+    {
+      "id": 15,
+      "type": "stat",
+      "title": "Air-gap status",
+      "description": "0 = network reachable · 1 = air-gapped.",
+      "gridPos": {"h": 5, "w": 6, "x": 12, "y": 40},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {"expr": "sentinel_airgap_status", "refId": "A"}
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [{"type": "value", "options": {"0": {"text": "CONNECTED"}, "1": {"text": "AIR-GAPPED"}}}],
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [{"value": 0, "color": "blue"}, {"value": 1, "color": "green"}]}
+        }
+      }
+    },
+
+    {
+      "id": 16,
+      "type": "stat",
+      "title": "Test coverage",
+      "gridPos": {"h": 5, "w": 6, "x": 18, "y": 40},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {"expr": "sentinel_test_coverage_ratio", "refId": "A"}
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "thresholds": {"mode": "absolute", "steps": [{"value": 0, "color": "red"}, {"value": 0.8, "color": "orange"}, {"value": 0.95, "color": "green"}]}
+        }
+      }
+    },
+
+    {
+      "id": 17,
+      "type": "gauge",
+      "title": "Manifesto score",
+      "description": "Fraction of manifesto dimensions satisfied.",
+      "gridPos": {"h": 7, "w": 8, "x": 0, "y": 45},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {"expr": "sentinel_manifesto_score", "refId": "A"}
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "thresholds": {"mode": "absolute", "steps": [{"value": 0, "color": "red"}, {"value": 0.7, "color": "orange"}, {"value": 0.9, "color": "green"}]}
+        }
+      }
+    },
+
+    {
+      "id": 18,
+      "type": "table",
+      "title": "Manifesto requirements",
+      "description": "COMPLIANT / ACKNOWLEDGED / TARGETING state per dimension.",
+      "gridPos": {"h": 7, "w": 16, "x": 8, "y": 45},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {"expr": "sentinel_manifesto_dimension", "format": "table", "instant": true, "refId": "A"}
+      ]
     }
+
   ]
 }
