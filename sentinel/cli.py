@@ -4,6 +4,7 @@ sentinel.cli
 Command-line interface for Sentinel.
 
 Commands:
+    sentinel demo                 — full end-to-end demo (no Docker)
     sentinel scan                 — run the sovereignty scanner
     sentinel compliance check     — run the EU AI Act checker
     sentinel report               — generate an HTML sovereignty report
@@ -30,6 +31,19 @@ def main(argv: list[str] | None = None) -> int:
         description="Sentinel — EU-sovereign AI decision middleware",
     )
     sub = parser.add_subparsers(dest="command")
+
+    # --- demo ---------------------------------------------------------------
+    p_demo = sub.add_parser("demo", help="Run the full end-to-end demo (no Docker)")
+    p_demo.add_argument(
+        "--output",
+        default="demo_sovereignty_report.html",
+        help="Output path for the generated HTML report",
+    )
+    p_demo.add_argument(
+        "--no-kill-switch",
+        action="store_true",
+        help="Skip the kill-switch demonstration",
+    )
 
     # --- scan ---------------------------------------------------------------
     p_scan = sub.add_parser("scan", help="Run the sovereignty scanner")
@@ -69,6 +83,8 @@ def main(argv: list[str] | None = None) -> int:
 
     args = parser.parse_args(argv)
 
+    if args.command == "demo":
+        return _cmd_demo(args)
     if args.command == "scan":
         return _cmd_scan(args)
     if args.command == "compliance":
@@ -93,6 +109,145 @@ def main(argv: list[str] | None = None) -> int:
 # ---------------------------------------------------------------------------
 # Commands
 # ---------------------------------------------------------------------------
+
+
+def _cmd_demo(args: argparse.Namespace) -> int:
+    """
+    Run an end-to-end demo:
+      - 50 realistic decisions with a policy evaluator
+      - kill-switch demonstration (5 blocked calls)
+      - runtime & CI/CD sovereignty scanners
+      - EU AI Act automated check
+      - self-contained HTML report
+      - terminal summary
+
+    Exits 0 on success. Temp database is cleaned up automatically.
+    """
+    import contextlib
+    import random
+    import tempfile
+    from pathlib import Path as _Path
+
+    from sentinel.compliance import EUAIActChecker
+    from sentinel.dashboard import HTMLReport, TerminalDashboard
+    from sentinel.policy.evaluator import SimpleRuleEvaluator
+    from sentinel.scanner import CICDScanner, RuntimeScanner
+
+    with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp:
+        db_path = _Path(tmp.name)
+
+    print("━" * 64)
+    print("  SENTINEL DEMO — End-to-end sovereignty walkthrough")
+    print("━" * 64)
+    print(f"  Temp database: {db_path}")
+    print()
+
+    def _policy(inputs: dict) -> tuple[bool, str | None]:
+        req = inputs.get("request", {})
+        amount = req.get("amount", 0)
+        if amount > 10_000:
+            return False, "amount_exceeds_cap"
+        return True, None
+
+    sentinel = Sentinel(
+        storage=SQLiteStorage(str(db_path)),
+        project="sentinel-demo",
+        data_residency=DataResidency.EU_DE,
+        sovereign_scope="EU",
+        policy_evaluator=SimpleRuleEvaluator({"policies/approval.py": _policy}),
+    )
+
+    @sentinel.trace(policy="policies/approval.py")
+    def approve(request: dict) -> dict:
+        return {"decision": "approved", "amount": request["amount"]}
+
+    # Scenario 1: 50 realistic decisions
+    print("[1/5] Running 50 realistic decisions...")
+    rng = random.Random(42)
+    allow = deny = 0
+    for i in range(50):
+        amount = int(rng.triangular(100, 25_000, 5_000))
+        try:
+            approve(request={"amount": amount, "requester": f"user{i}"})
+            allow += 1
+        except Exception:
+            deny += 1
+        _bar(i + 1, 50)
+    print(f"      ALLOW: {allow} · DENY: {deny}")
+    print()
+
+    # Scenario 2: Kill switch
+    if not args.no_kill_switch:
+        print("[2/5] Engaging kill switch (EU AI Act Art. 14)...")
+        sentinel.engage_kill_switch("demo halt")
+        blocked = 0
+        for i in range(5):
+            try:
+                approve(request={"amount": 1000, "requester": f"halted{i}"})
+            except Exception:
+                blocked += 1
+        print(f"      Blocked {blocked} calls while engaged")
+        sentinel.disengage_kill_switch("demo resume")
+        print("      Kill switch disengaged")
+        print()
+    else:
+        print("[2/5] (kill-switch demo skipped)")
+        print()
+
+    # Scenario 3: Sovereignty scanners
+    print("[3/5] Running sovereignty scanners...")
+    runtime = RuntimeScanner().scan()
+    cicd = CICDScanner().scan(".")
+    print(f"      Runtime: {runtime.total_packages} packages, "
+          f"score={runtime.sovereignty_score:.0%}")
+    print(f"      CI/CD:   {len(cicd.findings)} findings")
+    print()
+
+    # Scenario 4: EU AI Act compliance
+    print("[4/5] Running EU AI Act compliance checker...")
+    compliance = EUAIActChecker().check(sentinel)
+    print(f"      Overall: {compliance.overall}")
+    print(f"      Automated coverage: {compliance.automated_coverage:.0%}")
+    print(f"      Days to enforcement: {compliance.days_to_enforcement}")
+    print()
+
+    # Scenario 5: HTML report
+    print("[5/5] Generating HTML sovereignty report...")
+    html = HTMLReport().generate(sentinel, repo_root=".")
+    out_path = _Path(args.output).resolve()
+    out_path.write_text(html, encoding="utf-8")
+    print(f"      Wrote {out_path} ({len(html):,} bytes)")
+    print()
+
+    # Terminal summary
+    print("━" * 64)
+    print("  TERMINAL SUMMARY")
+    print("━" * 64)
+    try:
+        dash = TerminalDashboard(sentinel)
+        print(dash.render_once())
+    except Exception as exc:
+        print(f"  (dashboard render skipped: {exc})")
+    print()
+
+    print(f"✓ Report saved: {out_path}")
+    print()
+
+    # Clean up temp database
+    with contextlib.suppress(OSError):
+        db_path.unlink(missing_ok=True)
+
+    return 0
+
+
+def _bar(done: int, total: int, width: int = 40) -> None:
+    """Simple inline progress bar (no rich dependency)."""
+    filled = int(width * done / total)
+    bar = "█" * filled + "░" * (width - filled)
+    sys.stdout.write(f"\r      [{bar}] {done}/{total}")
+    sys.stdout.flush()
+    if done == total:
+        sys.stdout.write("\n")
 
 
 def _cmd_scan(args: argparse.Namespace) -> int:

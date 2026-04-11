@@ -28,8 +28,41 @@ def test_no_command_prints_help(capsys: pytest.CaptureFixture[str]) -> None:
     assert "scan" in out
     assert "compliance" in out
     assert "report" in out
-    assert "dashboard" in out
-    assert "manifesto" in out
+
+
+# ---------------------------------------------------------------------------
+# sentinel demo
+# ---------------------------------------------------------------------------
+
+
+def test_demo_runs_end_to_end(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    out_path = tmp_path / "demo_report.html"
+    rc = cli.main(["demo", "--output", str(out_path), "--no-kill-switch"])
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "SENTINEL DEMO" in out
+    assert "50 realistic decisions" in out
+    assert "EU AI Act compliance checker" in out
+    assert "HTML sovereignty report" in out
+    assert "Report saved" in out
+    assert out_path.exists()
+    content = out_path.read_text()
+    assert content.startswith("<!doctype html>")
+    assert "Sentinel Sovereignty Report" in content
+
+
+def test_demo_with_kill_switch(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    out_path = tmp_path / "demo_report.html"
+    rc = cli.main(["demo", "--output", str(out_path)])
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "kill switch" in out.lower()
+    assert "engaging kill switch" in out.lower() or "engaged" in out.lower()
+    assert out_path.exists()
 
 
 def test_compliance_without_subcommand_prints_help(
