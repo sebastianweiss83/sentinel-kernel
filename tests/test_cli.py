@@ -65,6 +65,82 @@ def test_demo_with_kill_switch(
     assert out_path.exists()
 
 
+def test_demo_default_output_lands_in_cwd(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """
+    Without --output, `sentinel demo` must write the report to the
+    current working directory and print an `open 'PATH'` command that
+    names the exact same path. This is the regression guard for the
+    v3.0.2 UX bug where the open command pointed at a different file.
+    """
+    monkeypatch.chdir(tmp_path)
+    rc = cli.main(["demo", "--no-kill-switch"])
+    assert rc == 0
+
+    # File must be physically present in the CWD
+    expected = (tmp_path / "sentinel_demo_report.html").resolve()
+    assert expected.exists()
+
+    out = capsys.readouterr().out
+
+    # The "Report saved" line and the "open" line must name the SAME path
+    assert f"Report saved: {expected}" in out
+    assert f"open '{expected}'" in out
+
+
+def test_demo_falls_back_to_tempdir_when_cwd_not_writable(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """
+    If the CWD is not writable (read-only mount, unusual sandbox), the
+    demo must not crash. It must write into tempdir and say so clearly.
+    """
+    monkeypatch.chdir(tmp_path)
+
+    import os as _os
+
+    real_access = _os.access
+
+    def fake_access(path: object, mode: int) -> bool:
+        # Deny write to the current CWD only
+        try:
+            if Path(str(path)).resolve() == tmp_path.resolve() and mode & _os.W_OK:
+                return False
+        except Exception:
+            pass
+        return real_access(path, mode)
+
+    monkeypatch.setattr(_os, "access", fake_access)
+
+    rc = cli.main(["demo", "--no-kill-switch"])
+    assert rc == 0
+
+    # File must NOT be in CWD
+    assert not (tmp_path / "sentinel_demo_report.html").exists()
+
+    out = capsys.readouterr().out
+    assert "CWD not writable" in out
+    # Open line must still quote an absolute path
+    assert "open '" in out
+
+
+def test_resolve_demo_output_honours_explicit_path(tmp_path: Path) -> None:
+    explicit = tmp_path / "custom.html"
+    resolved, reason = cli._resolve_demo_output(str(explicit))
+    assert resolved == explicit.resolve()
+    assert reason is None
+
+
+def test_resolve_demo_output_defaults_to_cwd(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    resolved, reason = cli._resolve_demo_output(None)
+    assert resolved == (tmp_path / "sentinel_demo_report.html").resolve()
+    assert reason is None
+
+
 def test_compliance_without_subcommand_prints_help(
     capsys: pytest.CaptureFixture[str],
 ) -> None:

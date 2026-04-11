@@ -525,23 +525,60 @@ def test_vsnfd_ready_rejects_missing_kill_switch(tmp_path: Path) -> None:
 # ===========================================================================
 
 
-def test_cli_demo_default_output_uses_tempdir(
+def test_cli_demo_default_output_uses_cwd(
     tmp_path: Path, monkeypatch, capsys
 ) -> None:
-    """Line 243: sentinel demo with no --output writes to gettempdir()."""
-    import tempfile
+    """
+    `sentinel demo` with no --output writes the report into the
+    current working directory. Covers the CWD branch of
+    _resolve_demo_output and the printed open command.
+    """
+    from sentinel import cli
+
+    monkeypatch.chdir(tmp_path)
+    rc = cli.main(["demo", "--no-kill-switch"])
+    assert rc == 0
+    out = capsys.readouterr().out
+    default_path = (tmp_path / "sentinel_demo_report.html").resolve()
+    assert default_path.exists()
+    assert f"Report saved: {default_path}" in out
+    assert f"open '{default_path}'" in out
+
+
+def test_cli_demo_falls_back_to_tempdir_when_cwd_read_only(
+    tmp_path: Path, monkeypatch, capsys
+) -> None:
+    """
+    When the CWD is not writable, `sentinel demo` must fall back to
+    the tempdir and announce the fallback. Covers the tempdir branch
+    of _resolve_demo_output.
+    """
+    import os as _os
+    import tempfile as _tempfile
 
     from sentinel import cli
 
-    # Redirect gettempdir to our test tmp_path so we don't pollute the real temp
-    monkeypatch.setattr(tempfile, "gettempdir", lambda: str(tmp_path))
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(_tempfile, "gettempdir", lambda: str(tmp_path))
+
+    real_access = _os.access
+
+    def fake_access(path, mode):
+        try:
+            if Path(str(path)).resolve() == tmp_path.resolve() and mode & _os.W_OK:
+                return False
+        except Exception:
+            pass
+        return real_access(path, mode)
+
+    monkeypatch.setattr(_os, "access", fake_access)
 
     rc = cli.main(["demo", "--no-kill-switch"])
     assert rc == 0
     out = capsys.readouterr().out
-    default_path = tmp_path / "sentinel_demo_report.html"
-    assert default_path.exists()
-    assert "sentinel_demo_report.html" in out
+    assert "CWD not writable" in out
+    # Fallback path is under the patched gettempdir (== tmp_path)
+    assert (tmp_path / "sentinel_demo_report.html").exists()
 
 
 def test_cli_demo_dashboard_render_failure_is_swallowed(

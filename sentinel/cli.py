@@ -351,12 +351,10 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     # Scenario 5: HTML report
     print("[5/5] Generating HTML sovereignty report...")
     html = HTMLReport().generate(sentinel, repo_root=demo_root)
-    if args.output is None:
-        out_path = _Path(tempfile.gettempdir()) / "sentinel_demo_report.html"
-    else:
-        out_path = _Path(args.output)
-    out_path = out_path.resolve()
+    out_path, fallback_reason = _resolve_demo_output(args.output)
     out_path.write_text(html, encoding="utf-8")
+    if fallback_reason is not None:
+        print(f"      (CWD not writable — {fallback_reason})")
     print(f"      Wrote {out_path} ({len(html):,} bytes)")
     print()
 
@@ -374,7 +372,7 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     print(f"✓ Report saved: {out_path}")
     print()
     print("Open it:")
-    print(f"  open {out_path}")
+    print(f"  open '{out_path}'")
     print()
     print("Attestation: sentinel attestation generate")
     print("Report:      sentinel report --output sovereignty_report.html")
@@ -399,6 +397,37 @@ def _bar(done: int, total: int, width: int = 40) -> None:
     sys.stdout.flush()
     if done == total:
         sys.stdout.write("\n")
+
+
+def _resolve_demo_output(
+    explicit: str | None,
+) -> tuple[Path, str | None]:
+    """
+    Pick where `sentinel demo` writes its HTML report.
+
+    Priority:
+      1. --output (honoured verbatim; caller owns any write failure)
+      2. CWD / sentinel_demo_report.html — so users see the file where
+         they invoked the command
+      3. tempdir fallback when CWD is not writable (read-only mount,
+         unusual sandboxes, etc.) — returns a human-readable reason so
+         the CLI can surface it.
+
+    Returns (resolved_path, fallback_reason_or_none).
+    """
+    import os
+    import tempfile as _tempfile
+
+    if explicit is not None:
+        return Path(explicit).resolve(), None
+
+    filename = "sentinel_demo_report.html"
+    cwd = Path.cwd()
+    if os.access(cwd, os.W_OK):
+        return (cwd / filename).resolve(), None
+
+    tmp = Path(_tempfile.gettempdir()) / filename
+    return tmp.resolve(), f"writing to {tmp}"
 
 
 def _cmd_scan(args: argparse.Namespace) -> int:
