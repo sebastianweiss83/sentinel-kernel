@@ -185,6 +185,36 @@ class BSIProfile(Requirement):
         }
 
 
+class VSNfDReady(Requirement):
+    """System meets VS-NfD deployment requirements.
+
+    Checks a deployment against the automatable subset of the
+    VS-NfD (Verschlusssache — Nur für den Dienstgebrauch)
+    profile. The checks are:
+
+      - Storage backend is one of: ``postgres`` | ``filesystem``.
+        SQLite is *not* suitable for VS-NfD multi-user deployments.
+      - ``data_residency`` is within the Federal Republic of Germany
+        (``EU_DE`` or equivalent).
+      - ``sovereign_scope`` is ``EU`` or ``LOCAL``.
+      - Kill switch API is present on the Sentinel instance.
+      - A policy evaluator is configured (not ``NullPolicyEvaluator``).
+
+    This requirement does **not** check:
+      - Physical security of the deployment environment.
+      - Network segmentation / air-gap at the host level.
+      - Personnel security clearances.
+      - HSM / PKI / certificate management.
+
+    Those remain operator responsibilities documented in
+    ``docs/vsnfd-deployment.md``.
+    """
+    kind = "vsnfd_ready"
+
+    def as_dict(self) -> dict[str, Any]:
+        return {"kind": self.kind}
+
+
 # ---------------------------------------------------------------------------
 # Report dataclasses
 # ---------------------------------------------------------------------------
@@ -624,6 +654,47 @@ class SentinelManifesto:
                     f"status={req.status} evidence={req.evidence} "
                     f"{'(present)' if exists else '(MISSING)'}"
                 ),
+            )
+
+        if isinstance(req, VSNfDReady):
+            if sentinel is None:
+                return DimensionStatus(
+                    name=name,
+                    expected="VS-NfD deployment profile",
+                    satisfied=False,
+                    detail="No Sentinel instance provided",
+                )
+            from sentinel.policy.evaluator import NullPolicyEvaluator
+
+            issues: list[str] = []
+
+            backend = sentinel.storage.backend_name
+            if backend == "sqlite":
+                issues.append("SQLite not suitable for VS-NfD — use PostgreSQL")
+            elif backend not in ("postgres", "filesystem"):
+                issues.append(f"storage backend '{backend}' not approved for VS-NfD")
+
+            residency = sentinel.data_residency.value.upper()
+            if "EU-DE" not in residency and "LOCAL" not in residency:
+                issues.append(
+                    f"data_residency '{residency}' is not EU-DE or LOCAL"
+                )
+
+            scope = sentinel.sovereign_scope.upper()
+            if scope not in ("EU", "LOCAL"):
+                issues.append(f"sovereign_scope '{scope}' is not EU or LOCAL")
+
+            if not hasattr(sentinel, "engage_kill_switch"):
+                issues.append("kill switch API missing")
+
+            if isinstance(sentinel.policy_evaluator, NullPolicyEvaluator):
+                issues.append("no policy evaluator configured")
+
+            return DimensionStatus(
+                name=name,
+                expected="VS-NfD deployment profile",
+                satisfied=not issues,
+                detail=("; ".join(issues) if issues else "all automatable VS-NfD checks pass"),
             )
 
         return DimensionStatus(

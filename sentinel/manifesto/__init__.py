@@ -20,6 +20,7 @@ from sentinel.manifesto.base import (
     RetentionPolicy,
     SentinelManifesto,
     Targeting,
+    VSNfDReady,
     ZeroExposure,
 )
 
@@ -35,6 +36,7 @@ __all__ = [
     "RetentionPolicy",
     "AuditTrailIntegrity",
     "BSIProfile",
+    "VSNfDReady",
     "ManifestoReport",
     "Gap",
     "DimensionStatus",

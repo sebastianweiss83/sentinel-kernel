@@ -22,6 +22,7 @@ from sentinel.manifesto import (
     RetentionPolicy,
     SentinelManifesto,
     Targeting,
+    VSNfDReady,
     ZeroExposure,
 )
 from sentinel.manifesto.base import EU_AI_ACT_ENFORCEMENT_DATE
@@ -357,6 +358,101 @@ def test_bsi_profile_fails_when_evidence_missing(tmp_path: Path) -> None:
     dim = report.sovereignty_dimensions["bsi"]
     assert dim.satisfied is False
     assert "MISSING" in dim.detail
+
+
+# ---------------------------------------------------------------------------
+# VSNfDReady — VS-NfD deployment profile requirement
+# ---------------------------------------------------------------------------
+
+
+def test_vsnfd_ready_fails_without_sentinel() -> None:
+    class M(SentinelManifesto):
+        vsnfd = VSNfDReady()
+
+    runtime, cicd, infra = _clean_scans()
+    report = M().check(
+        sentinel=None,
+        runtime_scan=runtime,
+        cicd_scan=cicd,
+        infra_scan=infra,
+    )
+    assert report.sovereignty_dimensions["vsnfd"].satisfied is False
+
+
+def test_vsnfd_ready_fails_for_sqlite_backend() -> None:
+    class M(SentinelManifesto):
+        vsnfd = VSNfDReady()
+
+    runtime, cicd, infra = _clean_scans()
+    report = M().check(
+        sentinel=_make_sentinel(with_policy=True),
+        runtime_scan=runtime,
+        cicd_scan=cicd,
+        infra_scan=infra,
+    )
+    dim = report.sovereignty_dimensions["vsnfd"]
+    assert dim.satisfied is False
+    assert "SQLite" in dim.detail
+
+
+def test_vsnfd_ready_passes_for_filesystem_backend(tmp_path: Path) -> None:
+    from sentinel import DataResidency, Sentinel
+    from sentinel.policy.evaluator import SimpleRuleEvaluator
+    from sentinel.storage.filesystem import FilesystemStorage
+
+    class M(SentinelManifesto):
+        vsnfd = VSNfDReady()
+
+    def policy(inputs: dict) -> tuple[bool, str | None]:
+        return True, None
+
+    sentinel = Sentinel(
+        storage=FilesystemStorage(str(tmp_path / "fs")),
+        project="vsnfd-test",
+        data_residency=DataResidency.EU_DE,
+        sovereign_scope="EU",
+        policy_evaluator=SimpleRuleEvaluator({"p.py": policy}),
+    )
+    runtime, cicd, infra = _clean_scans()
+    report = M().check(
+        sentinel=sentinel,
+        runtime_scan=runtime,
+        cicd_scan=cicd,
+        infra_scan=infra,
+    )
+    dim = report.sovereignty_dimensions["vsnfd"]
+    assert dim.satisfied is True
+    assert "all automatable VS-NfD checks pass" in dim.detail
+
+
+def test_vsnfd_ready_fails_without_policy_evaluator(tmp_path: Path) -> None:
+    from sentinel import DataResidency, Sentinel
+    from sentinel.storage.filesystem import FilesystemStorage
+
+    class M(SentinelManifesto):
+        vsnfd = VSNfDReady()
+
+    sentinel = Sentinel(
+        storage=FilesystemStorage(str(tmp_path / "fs2")),
+        project="vsnfd-nopolicy",
+        data_residency=DataResidency.EU_DE,
+        sovereign_scope="EU",
+        # no policy_evaluator => NullPolicyEvaluator
+    )
+    runtime, cicd, infra = _clean_scans()
+    report = M().check(
+        sentinel=sentinel,
+        runtime_scan=runtime,
+        cicd_scan=cicd,
+        infra_scan=infra,
+    )
+    dim = report.sovereignty_dimensions["vsnfd"]
+    assert dim.satisfied is False
+    assert "no policy evaluator" in dim.detail
+
+
+def test_vsnfd_ready_serialises_to_dict() -> None:
+    assert VSNfDReady().as_dict() == {"kind": "vsnfd_ready"}
 
 
 def test_new_requirement_types_serialize_to_dict() -> None:

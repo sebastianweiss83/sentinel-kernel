@@ -248,12 +248,21 @@ def test_terminal_c_helper_respects_no_color(monkeypatch: pytest.MonkeyPatch) ->
 
 
 def test_terminal_width_handles_oserror(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Replace the whole ``shutil`` binding on the terminal module only,
+    so pytest's own terminal writer still sees the real ``shutil``.
+
+    Previous version patched ``shutil.get_terminal_size`` globally,
+    which crashed pytest's ``pytest_runtest_logreport`` when it tried
+    to compute progress width.
+    """
+    import types
+
     from sentinel.dashboard import terminal
 
-    def boom(*args, **kwargs):
-        raise OSError("no tty")
-
-    monkeypatch.setattr(terminal.shutil, "get_terminal_size", boom)
+    fake_shutil = types.SimpleNamespace(
+        get_terminal_size=lambda *a, **kw: (_ for _ in ()).throw(OSError("no tty")),
+    )
+    monkeypatch.setattr(terminal, "shutil", fake_shutil)
     assert terminal._terminal_width() == 80
 
 
