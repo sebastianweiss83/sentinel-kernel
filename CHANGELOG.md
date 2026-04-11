@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-04-11
+
+Stable release. The full v0.9.x feature set — kill switch, PostgreSQL
+and filesystem storage, LangChain / OTel / LangFuse integrations,
+air-gapped validation suite, sovereignty scanner, manifesto-as-code,
+EU AI Act compliance checker, Docker Compose + Grafana demo, self-
+contained HTML report, full CLI, 13 runnable examples, ecosystem
+registry, and RFC-001 — promoted to `1.0.0` with test coverage
+hardened around previously thin modules.
+
+### Changed
+
+- Marked as `Development Status :: 5 - Production/Stable`.
+- `__version__` bumped to `1.0.0` in `sentinel/__init__.py` and
+  `pyproject.toml`.
+
+### Added — Coverage hardening
+
+- `tests/test_policy_evaluator.py` — 14 new unit tests for
+  `NullPolicyEvaluator`, `LocalRegoEvaluator`, and
+  `SimpleRuleEvaluator`. Mocks `asyncio.create_subprocess_exec` so
+  the Rego evaluator is exercised without requiring the OPA binary.
+  `sentinel.policy.evaluator` coverage: 45% → 100%.
+- `tests/test_manifesto_extra.py` — 22 new unit tests covering
+  `Requirement.as_dict` serialisation for every requirement type,
+  `Gap` / `MigrationPlan` / `DimensionStatus` to-dict conversion,
+  `ManifestoReport.as_text` with and without gaps, the
+  `OnPremiseOnly` / `Targeting` / unknown-requirement branches in
+  `_check_requirement`, every branch of `_check_required_by_name`,
+  and `_check_eu_ai_act_articles` with `sentinel=None`.
+  `sentinel.manifesto.base` coverage: 73% → 100%.
+- Total test count: 183 → 221. Overall coverage: 84% → 89%.
+
 ## [0.9.1] — 2026-04-11
 
 Public-repo hardening and user-manual release. All v0.9.0 capabilities
