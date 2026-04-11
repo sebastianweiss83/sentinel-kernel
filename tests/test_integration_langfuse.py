@@ -214,6 +214,57 @@ def test_langfuse_default_client_uses_import(
 # ---------------------------------------------------------------------------
 
 
+def test_sovereignty_widget_generates_html() -> None:
+    """The widget produces self-contained HTML with no external resources."""
+    from sentinel.integrations.langfuse import generate_langfuse_panel
+
+    sentinel, _ = _make_sentinel_with_trace()
+    html = generate_langfuse_panel(sentinel)
+
+    assert "<svg" in html
+    assert "Sentinel sovereignty" in html
+    assert "KILL SWITCH INACTIVE" in html
+    # No external resources
+    for forbidden in ("cdn.", "googleapis", "jsdelivr", "unpkg", "<script"):
+        assert forbidden not in html
+
+
+def test_sovereignty_widget_when_kill_switch_active() -> None:
+    from sentinel.integrations.langfuse import generate_langfuse_panel
+
+    sentinel, _ = _make_sentinel_with_trace()
+    sentinel.engage_kill_switch("test halt")
+    html = generate_langfuse_panel(sentinel)
+    assert "KILL SWITCH ACTIVE" in html
+
+
+def test_sovereignty_widget_method_on_enricher() -> None:
+    """The method on LangFuseEnricher must produce the same HTML."""
+    from sentinel.integrations.langfuse import generate_langfuse_panel
+
+    sentinel, _ = _make_sentinel_with_trace()
+    client = FakeLangfuseClient()
+    enricher = LangFuseEnricher(sentinel, client=client)
+    html = enricher.create_sovereignty_widget(sentinel)
+    assert html == generate_langfuse_panel(sentinel)
+
+
+def test_sovereignty_widget_handles_query_failure(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from sentinel.integrations.langfuse import generate_langfuse_panel
+
+    sentinel, _ = _make_sentinel_with_trace()
+
+    def _raise(*_a: object, **_kw: object) -> None:
+        raise RuntimeError("storage down")
+
+    monkeypatch.setattr(sentinel, "query", _raise)
+    html = generate_langfuse_panel(sentinel)
+    assert "Sentinel sovereignty" in html
+    assert "0</div>\n      <div>traces" in html
+
+
 def test_import_langfuse_client_raises_without_extra() -> None:
     """When langfuse is not installed, the helper raises with the hint."""
     import sentinel.integrations.langfuse as lf_mod

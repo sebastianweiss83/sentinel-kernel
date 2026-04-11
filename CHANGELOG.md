@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.3.0] — 2026-04-11
+
+**LangFuse sovereignty panel. Closes #14.**
+
+### Added
+
+- **`LangFuseEnricher.create_sovereignty_widget(sentinel)`** — generate
+  a self-contained HTML sovereignty widget for LangFuse custom panels.
+  No CDN, no external resources. SVG gauge, kill switch status,
+  EU AI Act coverage bars, trace counts.
+- **`generate_langfuse_panel(sentinel)`** — module-level function for
+  standalone use without a full LangFuse client.
+
 ## [2.2.0] — 2026-04-11
 
 **Quantum-safe trace signing.**

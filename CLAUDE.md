@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `2.2.0` |
-| Tests | 589 passing |
+| Version | `2.3.0` |
+| Tests | 593 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 17:24 UTC |
+| Last updated | 2026-04-11 17:28 UTC |
 
 ## Last 5 commits
 
+- `21d535f` feat: v2.3.0 — LangFuse sovereignty panel, closes #14
 - `b62c5b1` feat: v2.2.0 — quantum-safe signing ML-DSA-65, client-side
 - `efcf79d` feat: v2.1.0 — BudgetTracker, attestations, CrewAI, AutoGen
 - `3ea8d56` feat: manifesto 5 theses as explicit named CI checks
 - `0f5733b` feat: preview data.json for live stats consumption
-- `62ddc44` chore: GitHub community health files — issue templates, PR template
 
 ## Open issues
 
