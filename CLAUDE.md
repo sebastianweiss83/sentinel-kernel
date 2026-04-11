@@ -12,15 +12,15 @@
 | Tests | 615 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 22:03 UTC |
+| Last updated | 2026-04-11 22:07 UTC |
 
 ## Last 5 commits
 
+- `fde60f7` fix: sentinel demo saves report to CWD, prints correct open command
 - `40cd630` fix: install instructions — pip3, python3 -m sentinel for macOS
 - `650fc55` fix: final audit — stale README ref, unverified partner names, trademark stub
 - `a806e41` fix: README — remove v0.9 section, complete AI Act table, clean version history
 - `6573139` release: v3.0.3 — sentinel demo prints copy-pasteable open command
-- `140d66b` fix: sentinel demo prints correct open command with full path
 
 ## Open issues
 
