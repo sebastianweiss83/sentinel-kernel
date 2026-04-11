@@ -99,6 +99,7 @@ class ScanResult:
 _SENTINEL_OPTIONAL_EXTRAS = {
     "psycopg2-binary", "psycopg2",
     "langchain-core", "langchain",
+    "langsmith",  # transitively pulled by langchain/langfuse — never in critical path
     "opentelemetry-sdk", "opentelemetry-exporter-otlp",
     "opentelemetry-exporter-otlp-proto-grpc", "opentelemetry-api",
     "langfuse",
