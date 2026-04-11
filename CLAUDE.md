@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `1.1.0` |
-| Tests | 306 passing |
+| Tests | 315 passing |
 | Coverage | 96% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 13:53 UTC |
+| Last updated | 2026-04-11 13:58 UTC |
 
 ## Last 5 commits
 
+- `11a7582` chore: gitignore .claude/scheduled_tasks.lock
+- `beb5694` feat: manifesto — GDPR, retention, audit integrity, BSI requirements
+- `1473521` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `290d0c8` fix: mypy type args in cli.py — dict → dict[str, Any]
 - `56c05fe` docs: technical co-founder onboarding kit + ADR-001/002/003
-- `5ed05be` chore: refresh CLAUDE.md for v1.1.0 [skip ci]
-- `1f27d48` feat: v1.1.0 — world-class preview, demo command, dashboards
-- `44777cd` feat: sentinel demo command — full demo without Docker
 
 ## Open issues
 
