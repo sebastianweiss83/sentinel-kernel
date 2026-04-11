@@ -19,3 +19,9 @@ htmlcov/
 CLAUDE.local.md
 .claude/settings.local.json
 .claude/scheduled_tasks.lock
+
+# Generated demo artifacts
+demo_sovereignty_report.html
+sovereignty_report.html
+*.prom
+

@@ -36,8 +36,11 @@ def main(argv: list[str] | None = None) -> int:
     p_demo = sub.add_parser("demo", help="Run the full end-to-end demo (no Docker)")
     p_demo.add_argument(
         "--output",
-        default="demo_sovereignty_report.html",
-        help="Output path for the generated HTML report",
+        default=None,
+        help=(
+            "Output path for the generated HTML report. "
+            "Defaults to a tempfile under the OS temp dir."
+        ),
     )
     p_demo.add_argument(
         "--no-kill-switch",
@@ -236,7 +239,11 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     # Scenario 5: HTML report
     print("[5/5] Generating HTML sovereignty report...")
     html = HTMLReport().generate(sentinel, repo_root=".")
-    out_path = _Path(args.output).resolve()
+    if args.output is None:
+        out_path = _Path(tempfile.gettempdir()) / "sentinel_demo_report.html"
+    else:
+        out_path = _Path(args.output)
+    out_path = out_path.resolve()
     out_path.write_text(html, encoding="utf-8")
     print(f"      Wrote {out_path} ({len(html):,} bytes)")
     print()

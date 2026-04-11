@@ -26,6 +26,15 @@ python examples/smoke_test.py
 
 All tests should pass. If they don't, open an issue before proceeding.
 
+> **Note on editable installs and console scripts.** If you pull
+> changes that modify `[project.scripts]` in `pyproject.toml` —
+> for example adding a new `sentinel` subcommand — you must re-run
+> `pip install -e .` to refresh the entry-point registration. An
+> unrefreshed venv will have a stale `sentinel` script on PATH
+> that does not match the source tree. Similarly, when bumping
+> the package version in a local venv, re-run the editable
+> install to keep `pip show sentinel-kernel` in sync.
+
 ## What we need
 
 - **Storage backends** — implementations of the `StorageBackend`
