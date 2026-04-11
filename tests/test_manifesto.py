@@ -13,9 +13,13 @@ from pathlib import Path
 from sentinel import Sentinel
 from sentinel.manifesto import (
     AcknowledgedGap,
+    AuditTrailIntegrity,
+    BSIProfile,
     EUOnly,
+    GDPRCompliant,
     OnPremiseOnly,
     Required,
+    RetentionPolicy,
     SentinelManifesto,
     Targeting,
     ZeroExposure,
@@ -209,6 +213,164 @@ def test_days_to_enforcement_calculated_correctly() -> None:
     report = M().check(sentinel=_make_sentinel(), runtime_scan=_clean_scans()[0])
     expected = (EU_AI_ACT_ENFORCEMENT_DATE - date.today()).days
     assert report.days_to_enforcement == expected
+
+
+# ---------------------------------------------------------------------------
+# New requirement types — GDPR, retention, audit integrity, BSI
+# ---------------------------------------------------------------------------
+
+
+def test_gdpr_compliant_passes_for_eu_residency() -> None:
+    from sentinel import DataResidency
+
+    class M(SentinelManifesto):
+        gdpr = GDPRCompliant()
+
+    eu_sentinel = Sentinel(
+        storage=SQLiteStorage(":memory:"),
+        project="gdpr-test",
+        data_residency=DataResidency.EU_DE,
+        sovereign_scope="EU",
+    )
+    runtime, cicd, infra = _clean_scans()
+    report = M().check(
+        sentinel=eu_sentinel,
+        runtime_scan=runtime,
+        cicd_scan=cicd,
+        infra_scan=infra,
+    )
+    assert report.sovereignty_dimensions["gdpr"].satisfied is True
+
+
+def test_gdpr_compliant_fails_without_sentinel() -> None:
+    class M(SentinelManifesto):
+        gdpr = GDPRCompliant()
+
+    runtime, cicd, infra = _clean_scans()
+    report = M().check(
+        sentinel=None,
+        runtime_scan=runtime,
+        cicd_scan=cicd,
+        infra_scan=infra,
+    )
+    assert report.sovereignty_dimensions["gdpr"].satisfied is False
+
+
+def test_retention_policy_reports_documented_days() -> None:
+    class M(SentinelManifesto):
+        retention = RetentionPolicy(max_days=2555)
+
+    runtime, cicd, infra = _clean_scans()
+    report = M().check(
+        sentinel=_make_sentinel(),
+        runtime_scan=runtime,
+        cicd_scan=cicd,
+        infra_scan=infra,
+    )
+    dim = report.sovereignty_dimensions["retention"]
+    assert dim.satisfied is True
+    assert "2555" in dim.detail
+
+
+def test_retention_policy_default_is_seven_years() -> None:
+    rp = RetentionPolicy()
+    assert rp.max_days == 365 * 7
+
+
+def test_audit_trail_integrity_passes_for_append_only_storage() -> None:
+    class M(SentinelManifesto):
+        audit = AuditTrailIntegrity()
+
+    runtime, cicd, infra = _clean_scans()
+    report = M().check(
+        sentinel=_make_sentinel(),
+        runtime_scan=runtime,
+        cicd_scan=cicd,
+        infra_scan=infra,
+    )
+    dim = report.sovereignty_dimensions["audit"]
+    assert dim.satisfied is True
+    assert "sqlite" in dim.detail
+
+
+def test_audit_trail_integrity_fails_when_storage_has_delete() -> None:
+    from sentinel.storage import SQLiteStorage as _SQLite
+
+    class _MutableStorage(_SQLite):
+        def delete(self, trace_id: str) -> None:  # noqa: ARG002
+            """Simulated mutable API — should be flagged."""
+
+    class M(SentinelManifesto):
+        audit = AuditTrailIntegrity()
+
+    sentinel = Sentinel(
+        storage=_MutableStorage(":memory:"),
+        policy_evaluator=None,
+        project="mutable-test",
+    )
+    runtime, cicd, infra = _clean_scans()
+    report = M().check(
+        sentinel=sentinel,
+        runtime_scan=runtime,
+        cicd_scan=cicd,
+        infra_scan=infra,
+    )
+    dim = report.sovereignty_dimensions["audit"]
+    assert dim.satisfied is False
+    assert "delete" in dim.detail
+
+
+def test_bsi_profile_passes_when_evidence_exists(tmp_path: Path, monkeypatch) -> None:
+    evidence = tmp_path / "my-bsi-profile.md"
+    evidence.write_text("BSI profile content")
+
+    class M(SentinelManifesto):
+        bsi = BSIProfile(status="pursuing", by="2026-Q4", evidence=str(evidence))
+
+    runtime, cicd, infra = _clean_scans()
+    report = M().check(
+        sentinel=_make_sentinel(),
+        runtime_scan=runtime,
+        cicd_scan=cicd,
+        infra_scan=infra,
+    )
+    dim = report.sovereignty_dimensions["bsi"]
+    assert dim.satisfied is True
+    assert "2026-Q4" in dim.expected
+
+
+def test_bsi_profile_fails_when_evidence_missing(tmp_path: Path) -> None:
+    class M(SentinelManifesto):
+        bsi = BSIProfile(
+            status="pursuing",
+            by="2026-Q4",
+            evidence=str(tmp_path / "nope.md"),
+        )
+
+    runtime, cicd, infra = _clean_scans()
+    report = M().check(
+        sentinel=_make_sentinel(),
+        runtime_scan=runtime,
+        cicd_scan=cicd,
+        infra_scan=infra,
+    )
+    dim = report.sovereignty_dimensions["bsi"]
+    assert dim.satisfied is False
+    assert "MISSING" in dim.detail
+
+
+def test_new_requirement_types_serialize_to_dict() -> None:
+    assert GDPRCompliant().as_dict() == {"kind": "gdpr_compliant"}
+    assert RetentionPolicy(max_days=1000).as_dict() == {
+        "kind": "retention_policy",
+        "max_days": 1000,
+    }
+    assert AuditTrailIntegrity().as_dict() == {"kind": "audit_trail_integrity"}
+    bsi = BSIProfile(status="pursuing", by="2026-Q4", evidence="docs/bsi-profile.md")
+    d = bsi.as_dict()
+    assert d["kind"] == "bsi_profile"
+    assert d["status"] == "pursuing"
+    assert d["by"] == "2026-Q4"
 
 
 def test_manifesto_reports_gap_for_github_actions(tmp_path: Path) -> None:

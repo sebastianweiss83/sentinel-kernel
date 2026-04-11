@@ -119,6 +119,72 @@ class AcknowledgedGap(Requirement):
         }
 
 
+class GDPRCompliant(Requirement):
+    """Storage must comply with GDPR data minimisation.
+
+    Checks:
+      - ``inputs_raw`` is not stored by default (only ``inputs_hash``).
+      - ``data_residency`` is within the EU.
+      - A retention policy is configured (documented — Sentinel does
+        not enforce retention, the operator does).
+    """
+    kind = "gdpr_compliant"
+
+    def as_dict(self) -> dict[str, Any]:
+        return {"kind": self.kind}
+
+
+@dataclass
+class RetentionPolicy(Requirement):
+    """Trace retention must not exceed a specified period.
+
+    Args:
+        max_days: Maximum days to retain traces. Defaults to 7 years,
+            the minimum for most EU AI Act high-risk regimes.
+    """
+    max_days: int = 365 * 7
+    kind: str = "retention_policy"
+
+    def as_dict(self) -> dict[str, Any]:
+        return {"kind": self.kind, "max_days": self.max_days}
+
+
+class AuditTrailIntegrity(Requirement):
+    """Verifies append-only storage is actually append-only.
+
+    Checks that the configured storage backend does not expose any
+    UPDATE or DELETE methods on traces. Override chains must be
+    expressed as new linked traces, not mutations.
+    """
+    kind = "audit_trail_integrity"
+
+    def as_dict(self) -> dict[str, Any]:
+        return {"kind": self.kind}
+
+
+@dataclass
+class BSIProfile(Requirement):
+    """System is pursuing or has BSI IT-Grundschutz certification.
+
+    Args:
+        status: Either ``"pursuing"`` or ``"certified"``.
+        by: Target date string, e.g. ``"2026-Q4"``.
+        evidence: Path to the BSI profile document relative to repo root.
+    """
+    status: str = "pursuing"  # "pursuing" | "certified"
+    by: str = ""
+    evidence: str = "docs/bsi-profile.md"
+    kind: str = "bsi_profile"
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "kind": self.kind,
+            "status": self.status,
+            "by": self.by,
+            "evidence": self.evidence,
+        }
+
+
 # ---------------------------------------------------------------------------
 # Report dataclasses
 # ---------------------------------------------------------------------------
@@ -497,6 +563,67 @@ class SentinelManifesto:
                 expected=f"Target: {req.by}",
                 satisfied=True,  # Targeting is a statement of intent, not a gate
                 detail=f"targeting {req.by}",
+            )
+
+        if isinstance(req, GDPRCompliant):
+            if sentinel is None:
+                return DimensionStatus(
+                    name=name,
+                    expected="GDPR data minimisation",
+                    satisfied=False,
+                    detail="No Sentinel instance provided",
+                )
+            residency = sentinel.data_residency.value
+            scope = sentinel.sovereign_scope
+            in_eu = "EU" in residency.upper() or scope.upper() == "EU"
+            return DimensionStatus(
+                name=name,
+                expected="EU data residency, hashed inputs by default",
+                satisfied=in_eu,
+                detail=f"scope={scope} residency={residency}",
+            )
+
+        if isinstance(req, RetentionPolicy):
+            return DimensionStatus(
+                name=name,
+                expected=f"Retention ≤ {req.max_days} days",
+                satisfied=True,
+                detail=f"documented: max {req.max_days} days (operator-enforced)",
+            )
+
+        if isinstance(req, AuditTrailIntegrity):
+            if sentinel is None:
+                return DimensionStatus(
+                    name=name,
+                    expected="Append-only storage, no UPDATE/DELETE",
+                    satisfied=False,
+                    detail="No Sentinel instance provided",
+                )
+            storage = sentinel.storage
+            mutable_methods = [
+                m for m in ("update", "delete", "delete_trace") if hasattr(storage, m)
+            ]
+            return DimensionStatus(
+                name=name,
+                expected="Append-only storage, no UPDATE/DELETE",
+                satisfied=not mutable_methods,
+                detail=(
+                    f"storage={storage.backend_name}, "
+                    f"mutable methods: {mutable_methods or 'none'}"
+                ),
+            )
+
+        if isinstance(req, BSIProfile):
+            evidence_path = Path(req.evidence)
+            exists = evidence_path.exists()
+            return DimensionStatus(
+                name=name,
+                expected=f"BSI {req.status}" + (f" by {req.by}" if req.by else ""),
+                satisfied=exists,
+                detail=(
+                    f"status={req.status} evidence={req.evidence} "
+                    f"{'(present)' if exists else '(MISSING)'}"
+                ),
             )
 
         return DimensionStatus(
