@@ -211,22 +211,8 @@ class PostgresStorage(StorageBackend):
             return None
         return DecisionTrace.from_dict(_coerce_payload(row[0]))
 
-    def export_ndjson(self, path: str) -> int:
-        """
-        Export every stored trace to an NDJSON file. Same wire format as
-        FilesystemStorage, so exports are portable across backends.
-
-        Returns the number of traces written.
-        """
-        conn = self._connection()
-        count = 0
-        with open(path, "w", encoding="utf-8") as f, conn.cursor() as cur:
-            cur.execute("SELECT payload FROM decision_traces ORDER BY started_at")
-            for (payload,) in cur.fetchall():
-                data = _coerce_payload(payload)
-                f.write(json.dumps(data, default=str) + "\n")
-                count += 1
-        return count
+    # export_ndjson / import_ndjson inherited from StorageBackend base class.
+    # The base implementation pages through query() and handles filters.
 
     def close(self) -> None:
         if self._conn is not None:

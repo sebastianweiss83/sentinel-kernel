@@ -78,6 +78,19 @@ def main(argv: list[str] | None = None) -> int:
     p_dash.add_argument("--frames", type=int, default=1, help="Number of frames to render")
     p_dash.add_argument("--interval", type=float, default=2.0, help="Seconds between frames")
 
+    # --- export / import ----------------------------------------------------
+    p_export = sub.add_parser("export", help="Export traces to NDJSON")
+    p_export.add_argument("--output", required=True, help="Output NDJSON path")
+    p_export.add_argument("--agent", help="Filter by agent name")
+    p_export.add_argument("--project", help="Filter by project")
+    p_export.add_argument("--since", help="ISO date — only traces started at or after")
+    p_export.add_argument("--until", help="ISO date — only traces started before")
+    p_export.add_argument("--db", help="SQLite path (default: in-memory for CLI)")
+
+    p_import = sub.add_parser("import", help="Import traces from NDJSON")
+    p_import.add_argument("--input", required=True, help="Input NDJSON path")
+    p_import.add_argument("--db", help="SQLite path (default: in-memory for CLI)")
+
     # --- manifesto check ----------------------------------------------------
     p_man = sub.add_parser("manifesto", help="Manifesto utilities")
     man_sub = p_man.add_subparsers(dest="manifesto_command")
@@ -101,6 +114,10 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_report(args)
     if args.command == "dashboard":
         return _cmd_dashboard(args)
+    if args.command == "export":
+        return _cmd_export(args)
+    if args.command == "import":
+        return _cmd_import(args)
     if args.command == "manifesto":
         if args.manifesto_command == "check":
             return _cmd_manifesto_check(args)
@@ -349,6 +366,32 @@ def _cmd_report(args: argparse.Namespace) -> int:
         print(f"Wrote {args.output}")
     else:
         print(html)
+    return 0
+
+
+def _cmd_export(args: argparse.Namespace) -> int:
+    from datetime import datetime
+
+    storage = SQLiteStorage(args.db) if args.db else SQLiteStorage(":memory:")
+    storage.initialise()
+    start = datetime.fromisoformat(args.since) if args.since else None
+    end = datetime.fromisoformat(args.until) if args.until else None
+    count = storage.export_ndjson(
+        args.output,
+        start=start,
+        end=end,
+        agent=args.agent,
+        project=args.project,
+    )
+    print(f"Exported {count} traces to {args.output}")
+    return 0
+
+
+def _cmd_import(args: argparse.Namespace) -> int:
+    storage = SQLiteStorage(args.db) if args.db else SQLiteStorage(":memory:")
+    storage.initialise()
+    imported, skipped = storage.import_ndjson(args.input)
+    print(f"Imported {imported} traces, skipped {skipped} duplicates")
     return 0
 
 
