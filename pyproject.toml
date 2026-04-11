@@ -54,6 +54,9 @@ otel = [
 # LangFuse enrichment
 langfuse = ["langfuse>=2.0"]
 
+# Prometheus textfile exporter (CNCF, neutral)
+prometheus = ["prometheus-client>=0.19"]
+
 # Development
 dev = [
     "pytest>=8.0",
@@ -62,6 +65,8 @@ dev = [
     "ruff>=0.3",
     "mypy>=1.9",
     "hatch>=1.9",
+    "rich>=13.0",
+    "prometheus-client>=0.19",
 ]
 
 [project.scripts]

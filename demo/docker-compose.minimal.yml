@@ -30,6 +30,8 @@ services:
     restart: unless-stopped
     ports:
       - "9090:9090"
+    depends_on:
+      - node-exporter
     volumes:
       - "./prometheus.yml:/etc/prometheus/prometheus.yml:ro"
     healthcheck:
@@ -37,6 +39,19 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+
+  # Textfile collector — reads Sentinel's .prom files from the shared
+  # sentinel-metrics volume and exposes them to Prometheus.
+  node-exporter:
+    image: prom/node-exporter:v1.7.0
+    container_name: sentinel-min-node-exporter
+    restart: unless-stopped
+    command:
+      - '--collector.textfile.directory=/var/lib/sentinel-metrics'
+      - '--collector.disable-defaults'
+      - '--collector.textfile'
+    volumes:
+      - sentinel-metrics:/var/lib/sentinel-metrics:ro
 
   grafana:
     image: grafana/grafana:10.3.3
@@ -74,4 +89,10 @@ services:
       OTEL_ENDPOINT: http://otel-collector:4317
       SENTINEL_PROJECT: sentinel-demo-minimal
       SENTINEL_STORAGE: sqlite
+      SENTINEL_PROM_TEXTFILE: /var/lib/sentinel-metrics/sentinel.prom
+    volumes:
+      - sentinel-metrics:/var/lib/sentinel-metrics
     command: ["python", "-u", "/app/demo/demo_app.py"]
+
+volumes:
+  sentinel-metrics:
