@@ -7,6 +7,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.1.0] — 2026-04-11
+
+Minor release. Major visual overhaul of the public surface, new CLI
+command for zero-setup demos, and production-grade Grafana dashboard.
+
+### Added
+
+- **World-class GitHub Pages preview** — complete redesign of
+  `docs/preview/index.html` with a dark theme design system, hero
+  section, animated terminal, enforcement banner, comparison table,
+  6-panel live dashboard (all inline SVG), 3-tab code examples,
+  industry scenarios, features list, and try-it block. Fully
+  self-contained — zero external resources, safe for air-gapped hosts.
+- **`sentinel demo` CLI command** — full end-to-end walkthrough with
+  no Docker. Runs 50 realistic decisions, engages and disengages the
+  kill switch, runs the sovereignty scanners, runs the EU AI Act
+  checker, writes a self-contained HTML report, and prints a terminal
+  summary. Exit 0 on success.
+- **Docker minimal compose** — `demo/docker-compose.minimal.yml`
+  starts a SQLite-backed sentinel + OTel + Prometheus + Grafana in
+  under 60 seconds. No PostgreSQL, no LangFuse.
+- **`demo/healthcheck.sh`** — verifies Grafana/Prometheus/OTel/LangFuse
+  from the host.
+- **Grafana dashboard 7-row redesign** — 18 panels covering sovereignty
+  score, enforcement countdown, kill switch, live decision feed,
+  policy distribution, latency p50/p95/p99, EU AI Act per-article
+  coverage, human-action table, dependency map, operational status,
+  and manifesto state.
+- **OTel collector spanmetrics connector** — converts sentinel.decision
+  spans into Prometheus metrics while preserving all sovereignty
+  attributes as labels.
+
+### Changed
+
+- **HTML sovereignty report** — complete dark-theme redesign matching
+  the preview. SVG gauge for sovereignty score, urgency-coloured
+  enforcement countdown, priority-badged recommended actions,
+  EU-vs-US row styling in dependency tables, "what to do" column in
+  the EU AI Act table, executive summary for non-technical readers.
+  Still fully self-contained.
+- **Docker compose image pinning** — all images pinned to specific
+  versions. Healthchecks on all services. `restart: unless-stopped`
+  throughout. `depends_on: condition: service_healthy` for ordered
+  startup.
+
+### Fixed
+
+- `NamedTemporaryFile` context-manager use in demo command (ruff SIM115).
+
 ## [1.0.1] — 2026-04-11
 
 Patch release. No public API changes. Coverage hardened across the
