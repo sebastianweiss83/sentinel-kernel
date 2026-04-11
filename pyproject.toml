@@ -45,8 +45,11 @@ postgres = ["psycopg2-binary>=2.9"]
 # OpenTelemetry export
 otel = [
     "opentelemetry-sdk>=1.20",
-    "opentelemetry-exporter-otlp>=1.20",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.20",
 ]
+
+# LangFuse enrichment
+langfuse = ["langfuse>=2.0"]
 
 # Development
 dev = [
