@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `1.6.0` |
+| Version | `1.7.0` |
 | Tests | 448 passing |
 | Coverage | 99% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 15:25 UTC |
+| Last updated | 2026-04-11 15:27 UTC |
 
 ## Last 5 commits
 
+- `5197ecf` feat: v1.7.0 — trace verify, retention purge, policy versioning, benchmarks
+- `9ba2c1a` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `6b666a5` feat: trace integrity verify + retention purge + policy versioning
 - `cc4691b` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `29a5041` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `454478c` feat: v1.6.0 — VS-NfD profile, Prometheus textfile, 100% coverage
-- `859dee6` test: 100% coverage across every module
 
 ## Open issues
 
