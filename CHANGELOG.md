@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.5.0] — 2026-04-11
+
+Minor release. Governance and community — Linux Foundation Europe
+application preparation and a technical blog post draft.
+
+### Added
+
+- **LF Europe application preparation materials** at
+  `docs/lf-europe-application/`. Prerequisites checklist, current
+  status, application timeline, decision criteria, and an index
+  of materials to be produced closer to the application date.
+- **Technical blog post draft** —
+  `docs/content/sovereign-ai-decision-infrastructure.md`. A
+  ~1500-word CTO-level technical note on why AI decision
+  infrastructure needs to be sovereign. Zero corporate filler,
+  no hashtag recommendations. Peer-to-peer tone. Ready for review.
+
+### Changed
+
+- Governance docs (GOVERNANCE.md, CONTRIBUTING.md, SECURITY.md)
+  reviewed for LF Europe submission readiness. No substantive
+  changes required — the documents written in v1.3.0 already
+  cover the prerequisites.
+
 ## [1.4.0] — 2026-04-11
 
 Minor release. Integration depth — Haystack integration, integration
