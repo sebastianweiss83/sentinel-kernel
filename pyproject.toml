@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sentinel-kernel"
-version = "1.7.0"
+version = "1.8.0"
 description = "EU-sovereign decision record layer for AI agents."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -57,6 +57,15 @@ langfuse = ["langfuse>=2.0"]
 # Prometheus textfile exporter (CNCF, neutral)
 prometheus = ["prometheus-client>=0.19"]
 
+# Jupyter notebook widget
+jupyter = ["ipywidgets>=8.0", "IPython>=8.0"]
+
+# FastAPI / Starlette middleware
+fastapi = ["starlette>=0.30"]
+
+# Django middleware
+django = ["Django>=4.2"]
+
 # Development — pulls every optional extra so `pytest --cov` hits the
 # happy-path branches of all optional-dep guards.
 dev = [
@@ -73,6 +82,10 @@ dev = [
     "opentelemetry-exporter-otlp-proto-grpc>=1.20",
     "langfuse>=2.0",
     "psycopg2-binary>=2.9",
+    "ipywidgets>=8.0",
+    "starlette>=0.30",
+    "Django>=4.2",
+    "httpx>=0.27",
 ]
 
 [project.scripts]

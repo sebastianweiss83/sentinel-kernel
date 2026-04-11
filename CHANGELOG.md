@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.8.0] — 2026-04-11
+
+Minor release. Developer experience — Jupyter notebook widget,
+FastAPI middleware, Django middleware.
+
+### Added
+
+- **Jupyter integration** — `sentinel.integrations.jupyter.SentinelWidget`.
+  Live decision feed in a notebook cell. `refresh()` manual update,
+  `display()` renders inline. Optional extra: `pip install sentinel-kernel[jupyter]`.
+- **FastAPI middleware** — `sentinel.integrations.fastapi.SentinelMiddleware`.
+  Starlette-based, traces every request, skips health/metrics
+  endpoints automatically, optional `path_prefixes` filter. Optional
+  extra: `pip install sentinel-kernel[fastapi]`.
+- **Django middleware** — `sentinel.integrations.django.SentinelMiddleware`.
+  New-style callable, reads `settings.SENTINEL`, raises
+  `ImproperlyConfigured` when not configured. Optional extra:
+  `pip install sentinel-kernel[django]`.
+- **Jupyter + FastAPI + Django dev deps** — pulled into the `[dev]`
+  extra so CI exercises every middleware path.
+
+### Notes
+
+- 468 tests passing, 100% coverage maintained.
+- All three integrations follow the same structure as the existing
+  LangChain / Haystack / OTel / LangFuse integrations: guarded
+  `ImportError` with a helpful message naming the extra.
+
 ## [1.7.0] — 2026-04-11
 
 Minor release. Production hardening — trace integrity, retention,
