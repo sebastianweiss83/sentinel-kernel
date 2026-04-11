@@ -373,6 +373,9 @@ def _cmd_demo(args: argparse.Namespace) -> int:
 
     print(f"✓ Report saved: {out_path}")
     print()
+    print("Open it:")
+    print(f"  open {out_path}")
+    print()
     print("Attestation: sentinel attestation generate")
     print("Report:      sentinel report --output sovereignty_report.html")
     print()
