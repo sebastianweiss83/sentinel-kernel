@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `1.3.0` |
-| Tests | 331 passing |
+| Tests | 337 passing |
 | Coverage | 96% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 12:11 UTC |
+| Last updated | 2026-04-11 14:12 UTC |
 
 ## Last 5 commits
 
+- `a2ae57a` feat: Haystack integration — EU-based agent framework, closes #12
+- `81582b2` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `8e1fa61` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `b665a3b` feat: v1.3.0 — RFC-001 accepted, CONTRIBUTING, SECURITY, industry examples
 - `2e5da73` feat: examples — 13_full_pipeline and 10_manifesto substantially improved
-- `e55253f` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `2a58701` docs+ci: CONTRIBUTING refresh, SECURITY.md, CLAUDE.md auto-update regenerate-on-conflict
 
 ## Open issues
 
@@ -32,7 +32,6 @@
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
 - **#9** good first issue: VS-NfD deployment guide _(labels: documentation, good first issue)_
 - **#11** v1.1: VS-NfD deployment profile (roadmap) _(labels: roadmap)_
-- **#12** good first issue: Haystack integration _(labels: good first issue, integration)_
 - **#13** good first issue: Rust implementation of SovereigntyManifest (RFC-001) _(labels: good first issue, rfc)_
 - **#14** enhance: LangFuse integration — dedicated sovereignty panel _(labels: enhancement)_
 
