@@ -2,10 +2,11 @@
 
 | Field        | Value                                    |
 |--------------|------------------------------------------|
-| Status       | DRAFT                                    |
+| Status       | ACCEPTED                                 |
 | Author       | Sebastian Weiss                          |
 | Date         | 2026-04-11                               |
-| Comment period | 14 days once opened as GitHub Discussion |
+| Comment period | Closed — 14 days elapsed                |
+| Implementation | `sentinel/manifesto/base.py` (v1.2.0+)  |
 
 ---
 
@@ -136,42 +137,50 @@ report.export_json("sovereignty_report.json")
 
 ---
 
-## Open questions
+## Resolved decisions
 
-These are the points where input from design partners, BSI, and
-legal counsel will shape the final design.
+After the 14-day comment period, the following decisions were made.
 
-1. **Jurisdiction representation.**
-   Express jurisdictions as ISO-3166 country codes (`DE`, `FR`,
-   `US`), as legal entities (`Amazon Web Services EMEA SARL`), or as
-   named regulatory regimes (`CLOUD_ACT`, `GDPR_EU`)? Each has
-   tradeoffs. Probably all three, with a canonical mapping.
+1. **Jurisdiction representation — legal entity names.**
+   Express jurisdictions using the legal entity name that operates
+   the service (`Amazon Web Services, Inc.`, `Mistral AI SAS`),
+   not ISO country codes. Rationale: CLOUD Act exposure is a
+   property of legal incorporation, not physical location. A
+   canonical entity-to-regime mapping is provided in
+   `sentinel/scanner/knowledge.py`.
 
-2. **Mixed-jurisdiction deployments.**
-   A multi-national hospital chain may legitimately operate under
-   different rules in different countries. How does the manifesto
-   express "EU-only in DE, cloud OK in NL"? Per-subsystem manifests
-   with a parent-child relationship?
+2. **Mixed-jurisdiction deployments — list of jurisdictions.**
+   A requirement that accepts multiple jurisdictions uses a list:
+   ```python
+   jurisdiction = EUOnly(countries=["DE", "FR", "NL"])
+   ```
+   Parent-child manifesto inheritance is deferred to v2.0 and
+   tracked as a separate RFC when there is real demand.
 
-3. **Versioning model.**
-   The manifest schema must be versioned. `manifest_version: "1.0"`
-   at the top? SemVer? Year-based? A version negotiation during a
-   multi-project audit is fine, but we need one canonical rule.
+3. **Versioning model — SemVer, embedded in report.**
+   Every manifesto report carries a `schema_version` field. See
+   ADR-003 for rules: optional fields → no bump, mandatory fields
+   or rename → major bump.
 
-4. **Requirement composition.**
-   How do requirements compose when multiple manifests apply? Union
-   (strictest wins)? Named overrides? Explicit `inherits` clause?
+4. **Requirement composition — strictest wins.**
+   When multiple requirements touch the same dimension, the
+   strictest one wins. There is no explicit `inherits` mechanism
+   in v1.0.
 
-5. **Acknowledged gap hygiene.**
-   An `AcknowledgedGap` with an expired `by` date should become a
-   violation. The check needs a policy for "grace period" and
-   "immediate demotion" — which should be configurable but with a
-   safe default.
+5. **Acknowledged gap hygiene — mandatory fields.**
+   An `AcknowledgedGap` requires **all** of: `provider`,
+   `migrating_to`, `by`, and `reason`. An expired `by` date is
+   logged as a warning but does not auto-promote to a violation in
+   v1.0 — operators retain control of their migration timelines.
 
-6. **Evidence attachment.**
-   Should the manifest carry links to supporting evidence (SoC 2
-   report, BSI assessment, penetration test summary)? This would
-   make the manifesto the single document a regulator consumes.
+6. **Evidence attachment — separate field.**
+   A new `evidence` field on every requirement type is reserved
+   but not yet used. Actual evidence attachment is deferred to
+   v2.0 to allow real-world feedback to shape the mechanism.
+
+7. **TARGETING requirement type — description + by date mandatory.**
+   `Targeting(by="2026-Q4")` is the minimum. The description is
+   taken from the attribute name (`bsi_certification = Targeting(...)`).
 
 ---
 
