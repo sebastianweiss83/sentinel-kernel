@@ -243,3 +243,20 @@ No BSL. No commercial-only features. No relicensing. Ever.
 ## Governance
 
 Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confirmed, the project is maintained independently with all significant decisions made through the RFC process in GitHub Discussions.
+
+---
+
+## Documentation
+
+- [docs/schema.md](docs/schema.md) — full trace schema reference
+- [docs/eu-ai-act.md](docs/eu-ai-act.md) — Article 12/13/14/17 mapping
+- [docs/integration-guide.md](docs/integration-guide.md) — framework integrations
+- [docs/sovereignty.md](docs/sovereignty.md) — what sovereignty means
+- [docs/bsi-profile.md](docs/bsi-profile.md) — BSI IT-Grundschutz profile
+- [docs/landscape.md](docs/landscape.md) — how Sentinel relates to LLMOps ecosystem
+- [docs/architecture.md](docs/architecture.md) — detailed architecture
+- [docs/quickstart.md](docs/quickstart.md) — extended quickstart guide
+- [VISION.md](VISION.md) — strategic vision
+- [ROADMAP.md](ROADMAP.md) — detailed milestones
+- [GOVERNANCE.md](GOVERNANCE.md) — governance model
+- [CHANGELOG.md](CHANGELOG.md) — version history
