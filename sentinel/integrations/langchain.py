@@ -54,7 +54,7 @@ except ImportError:  # pragma: no cover - hit only when extra not installed
         """Stub base class used when langchain-core is not installed."""
 
 
-class SentinelCallbackHandler(_BaseCallbackHandler):  # type: ignore[misc]
+class SentinelCallbackHandler(_BaseCallbackHandler):
     """
     LangChain callback handler that writes a DecisionTrace on every
     ``on_llm_end`` and ``on_chain_end`` event using the given Sentinel

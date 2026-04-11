@@ -155,6 +155,13 @@ def test_callback_handler_missing_dep_helpful_error() -> None:
     _uninstall_fake_langchain()
     import sentinel.integrations.langchain as lc_mod  # noqa: PLC0415
 
+    try:
+        import langchain_core  # noqa: F401,PLC0415
+    except ImportError:
+        pass
+    else:
+        pytest.skip("langchain-core is installed in this env")
+
     importlib.reload(lc_mod)
 
     sentinel = _make_sentinel()

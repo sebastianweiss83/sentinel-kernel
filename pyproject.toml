@@ -57,7 +57,8 @@ langfuse = ["langfuse>=2.0"]
 # Prometheus textfile exporter (CNCF, neutral)
 prometheus = ["prometheus-client>=0.19"]
 
-# Development
+# Development — pulls every optional extra so `pytest --cov` hits the
+# happy-path branches of all optional-dep guards.
 dev = [
     "pytest>=8.0",
     "pytest-asyncio>=0.23",
@@ -67,6 +68,11 @@ dev = [
     "hatch>=1.9",
     "rich>=13.0",
     "prometheus-client>=0.19",
+    "langchain-core>=0.1",
+    "opentelemetry-sdk>=1.20",
+    "opentelemetry-exporter-otlp-proto-grpc>=1.20",
+    "langfuse>=2.0",
+    "psycopg2-binary>=2.9",
 ]
 
 [project.scripts]

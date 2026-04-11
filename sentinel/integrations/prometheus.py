@@ -308,8 +308,6 @@ class PrometheusExporter:
             g_decisions.labels(policy_result=result, agent=agent).set(n)
 
         for agent, samples in latencies.items():
-            if not samples:
-                continue
             g_p50.labels(agent=agent).set(_percentile(samples, 0.50))
             g_p95.labels(agent=agent).set(_percentile(samples, 0.95))
             g_p99.labels(agent=agent).set(_percentile(samples, 0.99))
@@ -328,12 +326,11 @@ def _percentile(values: list[float], p: float) -> float:
     # Use statistics.quantiles for n=100 and index — deterministic and
     # dependency-free.
     sorted_values = sorted(values)
-    # Linear interpolation, equivalent to numpy percentile with method='linear'
+    # Linear interpolation, equivalent to numpy percentile with method='linear'.
+    # Bounds above ensure 0 < p < 1 so f < len-1 and f+1 <= len-1.
     k = (len(sorted_values) - 1) * p
     f = int(k)
-    c = min(f + 1, len(sorted_values) - 1)
-    if f == c:
-        return float(sorted_values[int(k)])
+    c = f + 1
     return float(
         sorted_values[f] + (sorted_values[c] - sorted_values[f]) * (k - f)
     )
