@@ -22,7 +22,7 @@ from sentinel.core.trace import (
 )
 from sentinel.core.tracer import KillSwitchEngaged, PolicyDeniedError, Sentinel
 
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 __all__ = [
     "Sentinel",
     "PolicyDeniedError",

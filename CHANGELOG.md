@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.3.0] — 2026-04-11
+
+Minor release. Ecosystem and community — RFC-001 accepted,
+CONTRIBUTING and SECURITY rewritten, richer industry examples.
+
+### Added
+
+- **RFC-001 ACCEPTED**. Open questions resolved, implementation
+  reference document added at `docs/rfcs/RFC-001-implementation.md`.
+  `tests/test_rfc001_compliance.py` validates a real manifesto
+  against the spec.
+- **CONTRIBUTING.md rewrite** — sovereignty posture statement
+  template (mandatory on every PR), integration-add step-by-step
+  guide including the five mandatory tests, jurisdiction database
+  add guide, and security disclosure section.
+- **SECURITY.md rewrite** — supported versions, 48-hour
+  acknowledgement commitment, severity-based resolution timelines,
+  scope (in/out), known limitations, cryptographic choices, CVE
+  tracking placeholder.
+- **examples/13_full_pipeline.py rewrite** — realistic document
+  classifier + approval workflow. Wires classify → approve chain,
+  kill-switch drill, scanners, manifesto, EU AI Act check, HTML
+  report, and terminal summary. Runs in <2 seconds with zero
+  optional extras.
+- **examples/10_manifesto.py rewrite** — three industry scenarios
+  side by side: defence (VS-NfD), healthcare (GDPR), enterprise
+  (pragmatic with documented gaps).
+
+### Fixed
+
+- **`update-claude-md` CI job** — replaces rebase-and-retry with
+  regenerate-reset-push loop. On non-fast-forward, resets hard to
+  origin/main and re-runs the generator against the new HEAD,
+  eliminating merge conflicts between concurrent auto-updates.
+
 ## [1.2.0] — 2026-04-11
 
 Minor release. Depth across onboarding, governance, manifesto, and
