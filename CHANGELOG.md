@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.4.0] — 2026-04-11
+
+Minor release. Integration depth — Haystack integration, integration
+coverage ≥95%, and NDJSON trace export/import.
+
+### Added
+
+- **Haystack integration** — `sentinel.integrations.haystack.SentinelHaystackCallback`
+  for deepset Haystack (Berlin, EU-sovereign). Component-level and
+  pipeline-level tracing. Guarded with `ImportError`. Optional extra:
+  `pip install sentinel-kernel[haystack]`. Closes #12.
+- **Trace export/import** — `StorageBackend.export_ndjson()` and
+  `import_ndjson()` on every backend. Filters: start/end, agent,
+  project. Duplicate detection on import (skipped by `trace_id`).
+  Enables sharing traces between environments, archiving to long-
+  term storage, and loading sample data for demos.
+- **`sentinel export` and `sentinel import` CLI commands**.
+
+### Changed
+
+- **PostgreSQL backend** — removed its specialised `export_ndjson`
+  method in favour of the generic base-class implementation.
+  Behaviour is identical; signature now supports filters.
+
+### Coverage
+
+- Integration coverage now: langchain 99%, langfuse 98%, otel 95%,
+  haystack 100%. Total test suite: 344 passing, 96% overall.
+
 ## [1.3.0] — 2026-04-11
 
 Minor release. Ecosystem and community — RFC-001 accepted,
