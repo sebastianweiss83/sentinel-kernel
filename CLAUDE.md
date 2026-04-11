@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `1.7.0` |
-| Tests | 448 passing |
+| Version | `1.8.0` |
+| Tests | 468 passing |
 | Coverage | 99% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 15:27 UTC |
+| Last updated | 2026-04-11 15:33 UTC |
 
 ## Last 5 commits
 
+- `dca9974` feat: v1.8.0 — Jupyter, FastAPI, Django integrations
+- `48179e1` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `5197ecf` feat: v1.7.0 — trace verify, retention purge, policy versioning, benchmarks
 - `9ba2c1a` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `6b666a5` feat: trace integrity verify + retention purge + policy versioning
-- `cc4691b` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `29a5041` chore(auto): refresh CLAUDE.md state block [skip ci]
 
 ## Open issues
 
