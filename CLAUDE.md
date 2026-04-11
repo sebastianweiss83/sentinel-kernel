@@ -12,15 +12,15 @@
 | Tests | 306 passing |
 | Coverage | 96% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 13:49 UTC |
+| Last updated | 2026-04-11 13:53 UTC |
 
 ## Last 5 commits
 
+- `290d0c8` fix: mypy type args in cli.py — dict → dict[str, Any]
+- `56c05fe` docs: technical co-founder onboarding kit + ADR-001/002/003
+- `5ed05be` chore: refresh CLAUDE.md for v1.1.0 [skip ci]
 - `1f27d48` feat: v1.1.0 — world-class preview, demo command, dashboards
 - `44777cd` feat: sentinel demo command — full demo without Docker
-- `6e647ba` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `9f3e512` feat: Grafana dashboard — 7 rows, production quality metrics
-- `f267594` chore(auto): refresh CLAUDE.md state block [skip ci]
 
 ## Open issues
 
