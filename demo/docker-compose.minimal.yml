@@ -1,59 +1,32 @@
-name: sentinel-demo
+name: sentinel-demo-minimal
+
+# Minimal stack — starts in <60 seconds.
+# SQLite-backed sentinel demo + OTel + Prometheus + Grafana.
+# No PostgreSQL, no LangFuse. For full stack use docker-compose.yml.
 
 services:
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.95.0
-    container_name: sentinel-otel
+    container_name: sentinel-min-otel
     restart: unless-stopped
     ports:
-      - "4317:4317"   # OTLP gRPC
-      - "4318:4318"   # OTLP HTTP
-      - "8889:8889"   # Prometheus metrics exporter
-      - "13133:13133" # Health check extension
+      - "4317:4317"
+      - "4318:4318"
+      - "8889:8889"
+      - "13133:13133"
     volumes:
       - "./otel-config.yaml:/etc/otelcol-contrib/config.yaml:ro"
     command: ["--config=/etc/otelcol-contrib/config.yaml"]
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:13133"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  langfuse-db:
-    image: postgres:15.6-alpine
-    container_name: sentinel-langfuse-db
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: langfuse
-      POSTGRES_USER: langfuse
-      POSTGRES_PASSWORD: langfuse
-    volumes:
-      - langfuse-db-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U langfuse"]
-      interval: 10s
-      timeout: 5s
+      interval: 5s
+      timeout: 3s
       retries: 5
-
-  langfuse:
-    image: langfuse/langfuse:2.77.2
-    container_name: sentinel-langfuse
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    depends_on:
-      langfuse-db:
-        condition: service_healthy
-    environment:
-      DATABASE_URL: postgresql://langfuse:langfuse@langfuse-db:5432/langfuse
-      NEXTAUTH_SECRET: demo-only-do-not-use-in-production
-      NEXTAUTH_URL: http://localhost:3000
-      SALT: demo-only-do-not-use-in-production
 
   prometheus:
     image: prom/prometheus:v2.49.1
-    container_name: sentinel-prometheus
+    container_name: sentinel-min-prometheus
     restart: unless-stopped
     ports:
       - "9090:9090"
@@ -61,13 +34,13 @@ services:
       - "./prometheus.yml:/etc/prometheus/prometheus.yml:ro"
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   grafana:
     image: grafana/grafana:10.3.3
-    container_name: sentinel-grafana
+    container_name: sentinel-min-grafana
     restart: unless-stopped
     ports:
       - "3001:3000"
@@ -84,23 +57,21 @@ services:
       - "./grafana/dashboards:/var/lib/grafana/dashboards:ro"
     healthcheck:
       test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:3000/api/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   sentinel-demo:
     build:
       context: ..
       dockerfile: demo/Dockerfile
-    container_name: sentinel-demo-app
+    container_name: sentinel-min-demo
     restart: unless-stopped
     depends_on:
       otel-collector:
         condition: service_healthy
     environment:
       OTEL_ENDPOINT: http://otel-collector:4317
-      SENTINEL_PROJECT: sentinel-demo
+      SENTINEL_PROJECT: sentinel-demo-minimal
+      SENTINEL_STORAGE: sqlite
     command: ["python", "-u", "/app/demo/demo_app.py"]
-
-volumes:
-  langfuse-db-data:

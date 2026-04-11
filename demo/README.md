@@ -4,12 +4,28 @@ Spin up the full sovereignty platform — decision kernel, OTel collector,
 Prometheus, Grafana, self-hosted LangFuse, and a realistic demo application —
 with one command.
 
-## Run in three commands
+## Quick (60 seconds — SQLite, no PostgreSQL/LangFuse)
+
+```bash
+git clone https://github.com/sebastianweiss83/sentinel-kernel
+cd sentinel-kernel/demo
+docker compose -f docker-compose.minimal.yml up --build
+```
+
+Then open http://localhost:3001 — Grafana (admin / sentinel).
+
+## Full stack (PostgreSQL, LangFuse, everything)
 
 ```bash
 git clone https://github.com/sebastianweiss83/sentinel-kernel
 cd sentinel-kernel/demo
 docker compose up --build
+```
+
+## Verify health
+
+```bash
+./healthcheck.sh
 ```
 
 Then open:
