@@ -1,5 +1,43 @@
 # Sentinel — Claude Instructions
 
+<!-- CLAUDE_MD_AUTO_START -->
+
+<!-- This block is rewritten by scripts/update_claude_md.py. Do not edit by hand. -->
+
+## Current state
+
+| | |
+|---|---|
+| Version | `1.0.1` |
+| Tests | 304 passing |
+| Coverage | 97% |
+| Smoke test | 40/40 ✓ |
+| Last updated | 2026-04-11 13:05 UTC |
+
+## Last 5 commits
+
+- `b87b536` chore: v1.0.1 — coverage, cleanup, release runbook
+- `92b5bc2` refactor: remove legacy examples, consolidate quickstart docs
+- `4f8b703` test: integrations coverage — otel/langchain/langfuse/postgres to 95%+
+- `f696bd7` docs: add CLAUDE_MEGA_PROMPT.md + releasing.md
+- `f0d159f` test: air-gap filesystem backend → 100% coverage
+
+## Open issues
+
+- **#2** v0.5: LangFuse integration _(labels: roadmap, integration)_
+- **#3** good first issue: add more policy examples _(labels: good first issue)_
+- **#5** v1.0: BSI IT-Grundschutz formal assessment _(labels: roadmap, bsi)_
+- **#6** v1.0: Linux Foundation Europe application _(labels: roadmap, governance)_
+- **#7** RFC-001: SovereigntyManifest feedback wanted _(labels: rfc, discussion)_
+- **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
+- **#9** good first issue: VS-NfD deployment guide _(labels: documentation, good first issue)_
+- **#11** v1.1: VS-NfD deployment profile (roadmap) _(labels: roadmap)_
+- **#12** good first issue: Haystack integration _(labels: good first issue, integration)_
+- **#13** good first issue: Rust implementation of SovereigntyManifest (RFC-001) _(labels: good first issue, rfc)_
+- **#14** enhance: LangFuse integration — dedicated sovereignty panel _(labels: enhancement)_
+
+<!-- CLAUDE_MD_AUTO_END -->
+
 ## What this project is
 
 Sentinel is an EU-sovereign AI decision middleware kernel.
