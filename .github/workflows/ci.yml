@@ -72,6 +72,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e .
+      - run: pip install ruff pytest pytest-asyncio pytest-cov
       - run: python examples/minimal_trace.py
       - run: python examples/policy_deny.py
       - run: python examples/smoke_test.py

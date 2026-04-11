@@ -536,7 +536,7 @@ def main() -> int:
         # 39 — ruff check passes
         def _39() -> None:
             r = subprocess.run(
-                [sys.executable, "-m", "ruff", "check",
+                ["python", "-m", "ruff", "check",
                  "sentinel/", "tests/", "scripts/", "examples/"],
                 capture_output=True, text=True, timeout=60, cwd=str(ROOT),
             )
