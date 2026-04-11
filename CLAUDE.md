@@ -12,15 +12,15 @@
 | Tests | 504 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 16:44 UTC |
+| Last updated | 2026-04-11 16:57 UTC |
 
 ## Last 5 commits
 
+- `0f5733b` feat: preview data.json for live stats consumption
+- `62ddc44` chore: GitHub community health files — issue templates, PR template
 - `5bf2bfb` test: infrastructure yaml-exclusion branch (CI 99%→100%)
 - `568c702` fix: sync_all idempotency across environments
 - `79bbd40` feat: complete auto-sync — all derived content updates on every push
-- `ddaa04b` chore: sync CLAUDE.md to v2.0.0 [skip ci]
-- `8d0e5b1` feat: v2.0.0 — production stable, BSI assessment ready
 
 ## Open issues
 
