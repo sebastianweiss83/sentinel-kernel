@@ -10,6 +10,11 @@ The output is a single HTML file with:
 
 Air-gapped safe by design: it must pass a grep for "http://" and "https://"
 with zero hits on resource references.
+
+Dark theme matching the GitHub Pages preview. Executive summary for
+non-technical readers, SVG gauge, enforcement countdown, priority-
+badged recommended actions, coloured dependency table, and a
+"what to do" column in the EU AI Act table.
 """
 
 from __future__ import annotations
@@ -32,14 +37,7 @@ if TYPE_CHECKING:
 
 
 class HTMLReport:
-    """
-    Produce a single-file HTML sovereignty report.
-
-    Usage::
-
-        html = HTMLReport().generate(sentinel, manifesto=OurPolicy())
-        Path("report.html").write_text(html)
-    """
+    """Produce a single-file HTML sovereignty report."""
 
     def generate(
         self,
@@ -73,6 +71,280 @@ class HTMLReport:
 
 
 # ---------------------------------------------------------------------------
+# CSS (design system matches docs/preview)
+# ---------------------------------------------------------------------------
+
+_CSS = r"""
+:root {
+  --bg: #0a0e14; --surface: #111827; --surface2: #1a2332;
+  --border: #1f2937; --text: #e5e7eb; --text2: #9ca3af; --text3: #6b7280;
+  --green: #00d084; --red: #ff3b3b; --amber: #f5a623; --blue: #3b82f6;
+  --purple: #a78bfa;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+.mono { font-family: ui-monospace, "Cascadia Code", "Fira Code", Menlo, monospace; }
+h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+h2 {
+  font-size: 1.5rem; font-weight: 700; margin-top: 3rem; margin-bottom: 1rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.05rem; font-weight: 700; margin-top: 1.6rem; margin-bottom: 0.6rem; color: var(--text); }
+p { margin-bottom: 0.8rem; color: var(--text2); }
+.meta { color: var(--text3); font-size: 0.9rem; margin-bottom: 0.3rem; }
+.meta b { color: var(--text); font-weight: 600; }
+a { color: var(--green); }
+
+/* ---------- COUNTDOWN BAR ---------- */
+.countdown {
+  border-top: 3px solid var(--amber);
+  border-bottom: 3px solid var(--amber);
+  background: #2d1f00;
+  padding: 1rem 0;
+  margin: 1.5rem 0 2.5rem;
+}
+.countdown.urgent { background: #2d0b0b; border-color: var(--red); }
+.countdown.safe { background: #0b2d1a; border-color: var(--green); }
+.countdown-inner {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 2rem; flex-wrap: wrap;
+}
+.countdown-text { color: #ffd580; font-size: 0.98rem; max-width: 72ch; }
+.countdown.urgent .countdown-text { color: #ffb3b3; }
+.countdown.safe .countdown-text { color: #b3ffd9; }
+.countdown-text strong { color: var(--amber); font-weight: 700; }
+.countdown.urgent .countdown-text strong { color: var(--red); }
+.countdown.safe .countdown-text strong { color: var(--green); }
+.countdown-days {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0.5rem 1.2rem;
+  background: rgba(245, 166, 35, 0.08);
+  border: 1px solid var(--amber); border-radius: 8px;
+}
+.countdown.urgent .countdown-days { border-color: var(--red); background: rgba(255,59,59,0.08); }
+.countdown.safe .countdown-days { border-color: var(--green); background: rgba(0,208,132,0.08); }
+.countdown-days .n {
+  font-size: 2rem; font-weight: 800; color: var(--amber); line-height: 1;
+  font-family: ui-monospace, monospace;
+}
+.countdown.urgent .countdown-days .n { color: var(--red); }
+.countdown.safe .countdown-days .n { color: var(--green); }
+.countdown-days .label {
+  font-size: 0.7rem; color: var(--text2); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-top: 0.2rem;
+}
+
+/* ---------- EXEC SUMMARY ---------- */
+.exec {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--green);
+  border-radius: 8px;
+  padding: 1.5rem 1.8rem;
+  margin: 1.5rem 0 2.5rem;
+}
+.exec h3 {
+  margin-top: 0;
+  color: var(--green);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.8rem;
+}
+.exec p { color: var(--text); font-size: 1rem; margin-bottom: 0.6rem; }
+.exec p:last-child { margin-bottom: 0; }
+
+/* ---------- SCORE PANEL ---------- */
+.score-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 2rem;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.8rem;
+  margin-bottom: 2rem;
+}
+.score-grid .gauge { display: flex; justify-content: center; }
+.gauge-svg { display: block; }
+.gauge-ring  { fill: none; stroke: #1f2937; stroke-width: 14; }
+.gauge-fill  { fill: none; stroke-width: 14; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 100px 100px; }
+.gauge-fill.green { stroke: var(--green); }
+.gauge-fill.amber { stroke: var(--amber); }
+.gauge-fill.red { stroke: var(--red); }
+.score-label { color: var(--text2); font-size: 0.85rem; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.score-explain { color: var(--text2); font-size: 0.92rem; }
+.score-explain strong { color: var(--text); }
+
+/* ---------- TABLES ---------- */
+table {
+  border-collapse: collapse; width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+}
+th, td {
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: none; }
+th {
+  background: var(--surface2);
+  font-weight: 700;
+  color: var(--text2);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+td { color: var(--text2); }
+td.strong { color: var(--text); font-weight: 600; }
+td.mono { font-family: ui-monospace, monospace; font-size: 0.85rem; }
+
+/* EU-vs-US row accent */
+tr.eu td:first-child { border-left: 3px solid var(--green); }
+tr.us td:first-child { border-left: 3px solid var(--red); }
+tr.unknown td:first-child { border-left: 3px solid var(--text3); }
+
+/* ---------- STATUS BADGES ---------- */
+.badge {
+  display: inline-block;
+  padding: 0.18rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.badge-compliant     { background: rgba(0, 208, 132, 0.15); color: var(--green); }
+.badge-partial       { background: rgba(245, 166, 35, 0.15); color: var(--amber); }
+.badge-non_compliant { background: rgba(255, 59, 59, 0.15); color: var(--red); }
+.badge-action_required { background: rgba(167, 139, 250, 0.15); color: var(--purple); }
+.badge-yes  { background: rgba(255, 59, 59, 0.15); color: var(--red); }
+.badge-no   { background: rgba(0, 208, 132, 0.15); color: var(--green); }
+.priority-critical { background: var(--red); color: #fff; }
+.priority-high     { background: var(--amber); color: #1a0f00; }
+.priority-medium   { background: var(--blue); color: #fff; }
+.priority-low      { background: var(--text3); color: #fff; }
+
+/* ---------- ACTIONS ---------- */
+.actions { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; }
+.action {
+  display: grid; grid-template-columns: 110px 1fr;
+  gap: 1rem; align-items: start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--amber);
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+}
+.action.critical { border-left-color: var(--red); }
+.action.high     { border-left-color: var(--amber); }
+.action.medium   { border-left-color: var(--blue); }
+.action.low      { border-left-color: var(--text3); }
+.action .title { color: var(--text); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.action .what { color: var(--text2); font-size: 0.88rem; }
+
+/* ---------- MANIFESTO ---------- */
+.manifesto-score {
+  font-size: 2rem; font-weight: 800; color: var(--green);
+  font-family: ui-monospace, monospace;
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  margin-top: 3.5rem;
+  padding: 1.5rem 0 2.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text3);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 780px) {
+  .score-grid { grid-template-columns: 1fr; }
+  .countdown-inner { flex-direction: column; align-items: flex-start; }
+  .action { grid-template-columns: 1fr; }
+}
+"""
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+
+def _gauge_svg(score: float) -> str:
+    """Render a circular sovereignty score gauge (inline SVG)."""
+    s = max(0.0, min(1.0, score))
+    colour_cls = "green" if s >= 0.9 else ("amber" if s >= 0.6 else "red")
+    r = 70
+    circumference = 2 * 3.1415926 * r  # ≈ 440
+    offset = circumference * (1 - s)
+    return f"""
+<svg class="gauge-svg" viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <circle class="gauge-ring" cx="100" cy="100" r="{r}"/>
+  <circle class="gauge-fill {colour_cls}" cx="100" cy="100" r="{r}"
+          stroke-dasharray="{circumference:.2f}"
+          stroke-dashoffset="{offset:.2f}"/>
+  <text x="100" y="112" text-anchor="middle"
+        font-family="ui-monospace, monospace" font-size="36" font-weight="800"
+        fill="#e5e7eb">{s:.0%}</text>
+</svg>
+""".strip()
+
+
+def _countdown_classes(days: int) -> str:
+    if days < 0:
+        return "countdown safe"
+    if days < 90:
+        return "countdown urgent"
+    return "countdown"
+
+
+_ACTION_GUIDANCE = {
+    "Art. 9": "Configure a PolicyEvaluator — SimpleRuleEvaluator or LocalRegoEvaluator.",
+    "Art. 12": "Enable storage backend for append-only trace persistence.",
+    "Art. 13": "Populate agent, model, and policy metadata on every trace.",
+    "Art. 14": "Test the kill switch with engage_kill_switch() before go-live.",
+    "Art. 17": "Run sentinel compliance check as part of CI on every release.",
+    "Art. 10": "Data governance is a human process — see docs/bsi-profile.md.",
+    "Art. 15": "Configure accuracy thresholds and human review workflows.",
+}
+
+
+_CLOUD_ACT_YES = '<span class="badge badge-yes">YES</span>'
+_CLOUD_ACT_NO = '<span class="badge badge-no">NO</span>'
+
+
+def _cloud_act_badge(flag: bool) -> str:
+    return _CLOUD_ACT_YES if flag else _CLOUD_ACT_NO
+
+
+def _status_priority(status: str) -> tuple[str, str]:
+    """Return (priority_class, priority_label)."""
+    status = (status or "").upper()
+    if status == "NON_COMPLIANT":
+        return "critical", "CRITICAL"
+    if status == "PARTIAL":
+        return "high", "HIGH"
+    if status == "ACTION_REQUIRED":
+        return "medium", "MEDIUM"
+    return "low", "LOW"
+
+
+# ---------------------------------------------------------------------------
 # Rendering
 # ---------------------------------------------------------------------------
 
@@ -89,132 +361,257 @@ def _render_html(
     e = html.escape
     now = datetime.now().isoformat(timespec="seconds")
     score = runtime.sovereignty_score
+    days = compliance.days_to_enforcement
+    countdown_cls = _countdown_classes(days)
+    gauge = _gauge_svg(score)
 
-    score_cls = "score-green" if score >= 0.9 else ("score-amber" if score >= 0.6 else "score-red")
+    # Executive summary — plain English
+    if score >= 0.9:
+        summary_headline = "Your system meets EU sovereignty requirements."
+    elif score >= 0.6:
+        summary_headline = "Your system is partially sovereign. Action required."
+    else:
+        summary_headline = "Your system has significant sovereignty gaps."
 
-    compliance_rows = "".join(
-        f"<tr><td>{e(a.article)}</td><td>{e(a.title)}</td>"
-        f"<td class='status-{a.status.lower()}'>{e(a.status)}</td>"
-        f"<td>{'auto' if a.automated else 'manual'}</td>"
-        f"<td>{e(a.detail)}</td></tr>"
-        for a in compliance.articles.values()
-    )
+    overall = getattr(compliance, "overall", "UNKNOWN")
+    auto_coverage = getattr(compliance, "automated_coverage", 0.0)
 
-    runtime_rows = "".join(
-        f"<tr><td>{e(p.name)}</td><td>{e(p.version)}</td>"
-        f"<td>{e(p.parent_company)}</td><td>{e(p.jurisdiction)}</td>"
-        f"<td>{'yes' if p.cloud_act_exposure else 'no'}</td>"
-        f"<td>{'yes' if p.in_critical_path else 'no'}</td></tr>"
-        for p in runtime.packages[:50]  # cap display
-    )
+    # Compliance table with "what to do" column
+    compliance_rows = []
+    action_items: list[tuple[str, str, str, str]] = []
+    for a in compliance.articles.values():
+        status_cls = f"badge-{a.status.lower()}"
+        action = _ACTION_GUIDANCE.get(a.article, "Review manually.")
+        compliance_rows.append(
+            f"<tr>"
+            f"<td class='strong mono'>{e(a.article)}</td>"
+            f"<td>{e(a.title)}</td>"
+            f"<td><span class='badge {status_cls}'>{e(a.status)}</span></td>"
+            f"<td>{e(a.detail)}</td>"
+            f"<td>{e(action)}</td>"
+            f"</tr>"
+        )
+        if a.status.upper() in {"NON_COMPLIANT", "PARTIAL", "ACTION_REQUIRED"}:
+            pcls, plabel = _status_priority(a.status)
+            action_items.append((pcls, plabel, f"{a.article} — {a.title}", action))
+    compliance_tbody = "".join(compliance_rows)
+
+    # Runtime package table — coloured by jurisdiction
+    runtime_rows = []
+    for p in runtime.packages[:60]:
+        if p.cloud_act_exposure:
+            row_cls = "us"
+            cloud_badge = _CLOUD_ACT_YES
+        elif p.jurisdiction.upper() in {"UNKNOWN", ""}:
+            row_cls = "unknown"
+            cloud_badge = "<span class=\"badge badge-no\">—</span>"
+        else:
+            row_cls = "eu"
+            cloud_badge = _CLOUD_ACT_NO
+        runtime_rows.append(
+            f"<tr class='{row_cls}'>"
+            f"<td class='strong mono'>{e(p.name)}</td>"
+            f"<td class='mono'>{e(p.version)}</td>"
+            f"<td>{e(p.parent_company)}</td>"
+            f"<td>{e(p.jurisdiction)}</td>"
+            f"<td>{cloud_badge}</td>"
+            f"<td>{'yes' if p.in_critical_path else 'no'}</td>"
+            f"</tr>"
+        )
+    runtime_tbody = "".join(runtime_rows)
 
     cicd_rows = "".join(
-        f"<tr><td>{e(f.file)}</td><td>{e(f.component)}</td>"
-        f"<td>{e(f.vendor)}</td><td>{e(f.jurisdiction)}</td>"
-        f"<td>{'yes' if f.cloud_act_exposure else 'no'}</td></tr>"
+        f"<tr class='{'us' if f.cloud_act_exposure else 'eu'}'>"
+        f"<td class='mono'>{e(f.file)}</td>"
+        f"<td>{e(f.component)}</td>"
+        f"<td>{e(f.vendor)}</td>"
+        f"<td>{e(f.jurisdiction)}</td>"
+        f"<td>{_cloud_act_badge(f.cloud_act_exposure)}</td>"
+        f"</tr>"
         for f in cicd.findings
-    ) or "<tr><td colspan='5'>No CI/CD findings</td></tr>"
+    ) or "<tr><td colspan='5' style='text-align:center;color:var(--text3);'>No CI/CD findings</td></tr>"
 
     infra_rows = "".join(
-        f"<tr><td>{e(f.file)}</td><td>{e(f.component)}</td>"
-        f"<td>{e(f.vendor)}</td><td>{e(f.jurisdiction)}</td>"
-        f"<td>{'yes' if f.cloud_act_exposure else 'no'}</td></tr>"
+        f"<tr class='{'us' if f.cloud_act_exposure else 'eu'}'>"
+        f"<td class='mono'>{e(f.file)}</td>"
+        f"<td>{e(f.component)}</td>"
+        f"<td>{e(f.vendor)}</td>"
+        f"<td>{e(f.jurisdiction)}</td>"
+        f"<td>{_cloud_act_badge(f.cloud_act_exposure)}</td>"
+        f"</tr>"
         for f in infra.findings
-    ) or "<tr><td colspan='5'>No infrastructure findings</td></tr>"
+    ) or "<tr><td colspan='5' style='text-align:center;color:var(--text3);'>No infrastructure findings</td></tr>"
 
     manifesto_section = ""
     if manifesto_report is not None:
         dim_rows = "".join(
-            f"<tr><td>{'✅' if d.satisfied else '❌'}</td>"
-            f"<td>{e(d.name)}</td><td>{e(d.detail)}</td></tr>"
+            f"<tr>"
+            f"<td class='strong'>{'✓' if d.satisfied else '✗'}</td>"
+            f"<td class='strong'>{e(d.name)}</td>"
+            f"<td>{e(d.detail)}</td>"
+            f"</tr>"
             for d in manifesto_report.sovereignty_dimensions.values()
         )
         manifesto_section = f"""
 <h2>Manifesto status</h2>
-<p>Overall score: <b>{manifesto_report.overall_score:.0%}</b></p>
-<table><thead><tr><th></th><th>Dimension</th><th>Detail</th></tr></thead>
-<tbody>{dim_rows}</tbody></table>
+<p>Overall manifesto score: <span class="manifesto-score">{manifesto_report.overall_score:.0%}</span></p>
+<table>
+  <thead><tr><th style='width:60px;'></th><th>Dimension</th><th>Detail</th></tr></thead>
+  <tbody>{dim_rows}</tbody>
+</table>
 """
+
+    # Recommended actions block (priority badges)
+    if action_items:
+        action_items.sort(
+            key=lambda x: {"critical": 0, "high": 1, "medium": 2, "low": 3}[x[0]]
+        )
+        actions_html = "\n".join(
+            f"""
+<div class="action {cls}">
+  <span class="badge priority-{cls}">{plabel}</span>
+  <div>
+    <div class="title">{e(title)}</div>
+    <div class="what">{e(what)}</div>
+  </div>
+</div>
+"""
+            for cls, plabel, title, what in action_items
+        )
+    else:
+        actions_html = (
+            "<p style='color:var(--green);'>✓ No outstanding actions. "
+            "All EU AI Act articles are either compliant or marked for human action.</p>"
+        )
+
+    # Countdown banner text (urgency-aware)
+    if days < 0:
+        countdown_text = "<strong>EU AI Act Annex III is now in force.</strong> High-risk AI systems must prove automatic tamper-resistant logging. Penalties up to €15M or 3% of global turnover."
+    elif days < 90:
+        countdown_text = "<strong>Less than 90 days to enforcement.</strong> EU AI Act Annex III — 2 August 2026. Automatic tamper-resistant logging is mandatory for high-risk systems."
+    else:
+        countdown_text = "<strong>EU AI Act Annex III enforcement: 2 August 2026.</strong> High-risk AI systems must prove automatic tamper-resistant logging."
 
     return f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sentinel Sovereignty Report — {e(sentinel.project)}</title>
-<style>
- body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        max-width: 1100px; margin: 2em auto; padding: 0 1em; color: #111;
-        background: #fff; }}
- h1 {{ font-size: 1.8em; margin-bottom: .2em; }}
- h2 {{ font-size: 1.3em; margin-top: 2.2em; border-bottom: 1px solid #ccc;
-       padding-bottom: .3em; }}
- .meta {{ color: #555; font-size: .9em; }}
- .score {{ font-size: 3em; font-weight: 700; margin: .4em 0; }}
- .score-green {{ color: #167c3c; }}
- .score-amber {{ color: #a15c00; }}
- .score-red   {{ color: #a81717; }}
- table {{ border-collapse: collapse; width: 100%; margin-top: .6em; }}
- th, td {{ border: 1px solid #ddd; padding: .4em .6em; text-align: left;
-          font-size: .92em; vertical-align: top; }}
- th {{ background: #f4f4f4; font-weight: 600; }}
- .status-compliant {{ background: #e6f4ea; color: #167c3c; }}
- .status-partial {{ background: #fff4e5; color: #a15c00; }}
- .status-non_compliant {{ background: #fce8e6; color: #a81717; }}
- .status-action_required {{ background: #f6f0ff; color: #53229c; }}
- .pill {{ display: inline-block; padding: .1em .5em; border-radius: .4em;
-         font-size: .8em; background: #eee; }}
- footer {{ margin-top: 3em; padding-top: 1em; border-top: 1px solid #ccc;
-          color: #888; font-size: .82em; }}
-</style>
+<style>{_CSS}</style>
 </head>
 <body>
+<div class="container">
 
 <h1>Sentinel Sovereignty Report</h1>
-<p class="meta">
- Project: <b>{e(sentinel.project)}</b> ·
- Storage: <b>{e(sentinel.storage.backend_name)}</b> ·
- Data residency: <b>{e(sentinel.data_residency.value)}</b> ·
- Sovereign scope: <b>{e(sentinel.sovereign_scope)}</b>
-</p>
-<p class="meta">Generated: {now} · Days to EU AI Act enforcement: {compliance.days_to_enforcement}</p>
+<div class="meta">Project: <b>{e(sentinel.project)}</b> · Storage: <b>{e(sentinel.storage.backend_name)}</b> · Data residency: <b>{e(sentinel.data_residency.value)}</b> · Sovereign scope: <b>{e(sentinel.sovereign_scope)}</b></div>
+<div class="meta">Generated: {now}</div>
 
-<div class="score {score_cls}">{score:.0%}</div>
-<p>Runtime sovereignty score — fraction of installed packages with no CLOUD Act exposure.</p>
+<div class="{countdown_cls}">
+  <div class="countdown-inner" style="max-width:1100px;margin:0 auto;padding:0 1.5rem;">
+    <div class="countdown-text">{countdown_text}</div>
+    <div class="countdown-days">
+      <div class="n">{max(0, days)}</div>
+      <div class="label">days remaining</div>
+    </div>
+  </div>
+</div>
+
+<div class="exec">
+  <h3>Executive summary</h3>
+  <p><strong>{e(summary_headline)}</strong></p>
+  <p>The runtime sovereignty score is <strong>{score:.0%}</strong> — that is the fraction of installed Python packages with no US CLOUD Act exposure. EU AI Act overall status: <strong>{e(overall)}</strong>. Automated coverage of the required articles: <strong>{auto_coverage:.0%}</strong>.</p>
+  <p>Where the report flags partial or non-compliant items, the "recommended actions" block below names each one in priority order. Every action corresponds to a specific file or configuration change.</p>
+</div>
+
+<div class="score-grid">
+  <div class="gauge">{gauge}</div>
+  <div>
+    <div class="score-label">Sovereignty score</div>
+    <p class="score-explain">
+      <strong>{runtime.sovereign_packages}</strong> of <strong>{runtime.total_packages}</strong> installed packages are EU-sovereign or neutral.
+      <strong>{runtime.us_owned_packages}</strong> are US-incorporated and subject to the CLOUD Act. <strong>{runtime.unknown_jurisdiction}</strong> are unknown.
+    </p>
+    <p class="score-explain">
+      Critical-path violations: <strong>{len(runtime.critical_path_violations)}</strong>.
+      This is a runtime snapshot. CI/CD and infrastructure are reported separately below.
+    </p>
+  </div>
+</div>
 
 <h2>EU AI Act compliance</h2>
-<p>Overall: <span class="pill">{e(compliance.overall)}</span> · Automated coverage: {compliance.automated_coverage:.0%}</p>
-<table><thead><tr>
- <th>Article</th><th>Title</th><th>Status</th><th>Coverage</th><th>Detail</th>
-</tr></thead><tbody>{compliance_rows}</tbody></table>
+<p>Overall: <span class="badge badge-{overall.lower()}">{e(overall)}</span>  ·  Automated coverage: <strong style="color:var(--text);">{auto_coverage:.0%}</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th style="width:80px;">Article</th>
+      <th>Title</th>
+      <th style="width:150px;">Status</th>
+      <th>Detail</th>
+      <th>What to do</th>
+    </tr>
+  </thead>
+  <tbody>{compliance_tbody}</tbody>
+</table>
+
+<h2>Recommended actions</h2>
+<div class="actions">
+{actions_html}
+</div>
 
 {manifesto_section}
 
-<h2>Runtime packages ({runtime.total_packages} total, showing first 50)</h2>
-<p>
- Sovereign: <b>{runtime.sovereign_packages}</b> ·
- US-owned: <b>{runtime.us_owned_packages}</b> ·
- Unknown: <b>{runtime.unknown_jurisdiction}</b>
-</p>
-<table><thead><tr>
- <th>Package</th><th>Version</th><th>Parent</th><th>Jurisdiction</th>
- <th>CLOUD Act</th><th>Critical path</th>
-</tr></thead><tbody>{runtime_rows}</tbody></table>
+<h2>Runtime packages</h2>
+<p>Showing first 60 of <strong style="color:var(--text);">{runtime.total_packages}</strong> installed packages. Sovereign: <strong style="color:var(--green);">{runtime.sovereign_packages}</strong> · US-owned: <strong style="color:var(--red);">{runtime.us_owned_packages}</strong> · Unknown: <strong style="color:var(--text3);">{runtime.unknown_jurisdiction}</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Package</th>
+      <th>Version</th>
+      <th>Parent</th>
+      <th>Jurisdiction</th>
+      <th>CLOUD Act</th>
+      <th>Critical</th>
+    </tr>
+  </thead>
+  <tbody>{runtime_tbody}</tbody>
+</table>
 
 <h2>CI/CD findings</h2>
-<table><thead><tr>
- <th>File</th><th>Component</th><th>Vendor</th><th>Jurisdiction</th><th>CLOUD Act</th>
-</tr></thead><tbody>{cicd_rows}</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>Component</th>
+      <th>Vendor</th>
+      <th>Jurisdiction</th>
+      <th>CLOUD Act</th>
+    </tr>
+  </thead>
+  <tbody>{cicd_rows}</tbody>
+</table>
 
 <h2>Infrastructure findings</h2>
-<table><thead><tr>
- <th>File</th><th>Component</th><th>Vendor</th><th>Jurisdiction</th><th>CLOUD Act</th>
-</tr></thead><tbody>{infra_rows}</tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>Component</th>
+      <th>Vendor</th>
+      <th>Jurisdiction</th>
+      <th>CLOUD Act</th>
+    </tr>
+  </thead>
+  <tbody>{infra_rows}</tbody>
+</table>
 
 <footer>
- Generated by sentinel-kernel. Apache 2.0. This report is fully
- self-contained; it loads no external resources and is safe to
- distribute in air-gapped environments.
+  Generated by <b style="color:var(--text2);">sentinel-kernel</b>. Apache 2.0. This report is fully
+  self-contained — it loads no external resources and is safe to distribute in
+  air-gapped environments.
 </footer>
+
+</div>
 </body>
 </html>
 """

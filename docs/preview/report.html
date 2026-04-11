@@ -2,85 +2,374 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sentinel Sovereignty Report — sentinel-preview</title>
 <style>
- body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        max-width: 1100px; margin: 2em auto; padding: 0 1em; color: #111;
-        background: #fff; }
- h1 { font-size: 1.8em; margin-bottom: .2em; }
- h2 { font-size: 1.3em; margin-top: 2.2em; border-bottom: 1px solid #ccc;
-       padding-bottom: .3em; }
- .meta { color: #555; font-size: .9em; }
- .score { font-size: 3em; font-weight: 700; margin: .4em 0; }
- .score-green { color: #167c3c; }
- .score-amber { color: #a15c00; }
- .score-red   { color: #a81717; }
- table { border-collapse: collapse; width: 100%; margin-top: .6em; }
- th, td { border: 1px solid #ddd; padding: .4em .6em; text-align: left;
-          font-size: .92em; vertical-align: top; }
- th { background: #f4f4f4; font-weight: 600; }
- .status-compliant { background: #e6f4ea; color: #167c3c; }
- .status-partial { background: #fff4e5; color: #a15c00; }
- .status-non_compliant { background: #fce8e6; color: #a81717; }
- .status-action_required { background: #f6f0ff; color: #53229c; }
- .pill { display: inline-block; padding: .1em .5em; border-radius: .4em;
-         font-size: .8em; background: #eee; }
- footer { margin-top: 3em; padding-top: 1em; border-top: 1px solid #ccc;
-          color: #888; font-size: .82em; }
+:root {
+  --bg: #0a0e14; --surface: #111827; --surface2: #1a2332;
+  --border: #1f2937; --text: #e5e7eb; --text2: #9ca3af; --text3: #6b7280;
+  --green: #00d084; --red: #ff3b3b; --amber: #f5a623; --blue: #3b82f6;
+  --purple: #a78bfa;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+.mono { font-family: ui-monospace, "Cascadia Code", "Fira Code", Menlo, monospace; }
+h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.4rem; }
+h2 {
+  font-size: 1.5rem; font-weight: 700; margin-top: 3rem; margin-bottom: 1rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 1.05rem; font-weight: 700; margin-top: 1.6rem; margin-bottom: 0.6rem; color: var(--text); }
+p { margin-bottom: 0.8rem; color: var(--text2); }
+.meta { color: var(--text3); font-size: 0.9rem; margin-bottom: 0.3rem; }
+.meta b { color: var(--text); font-weight: 600; }
+a { color: var(--green); }
+
+/* ---------- COUNTDOWN BAR ---------- */
+.countdown {
+  border-top: 3px solid var(--amber);
+  border-bottom: 3px solid var(--amber);
+  background: #2d1f00;
+  padding: 1rem 0;
+  margin: 1.5rem 0 2.5rem;
+}
+.countdown.urgent { background: #2d0b0b; border-color: var(--red); }
+.countdown.safe { background: #0b2d1a; border-color: var(--green); }
+.countdown-inner {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 2rem; flex-wrap: wrap;
+}
+.countdown-text { color: #ffd580; font-size: 0.98rem; max-width: 72ch; }
+.countdown.urgent .countdown-text { color: #ffb3b3; }
+.countdown.safe .countdown-text { color: #b3ffd9; }
+.countdown-text strong { color: var(--amber); font-weight: 700; }
+.countdown.urgent .countdown-text strong { color: var(--red); }
+.countdown.safe .countdown-text strong { color: var(--green); }
+.countdown-days {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0.5rem 1.2rem;
+  background: rgba(245, 166, 35, 0.08);
+  border: 1px solid var(--amber); border-radius: 8px;
+}
+.countdown.urgent .countdown-days { border-color: var(--red); background: rgba(255,59,59,0.08); }
+.countdown.safe .countdown-days { border-color: var(--green); background: rgba(0,208,132,0.08); }
+.countdown-days .n {
+  font-size: 2rem; font-weight: 800; color: var(--amber); line-height: 1;
+  font-family: ui-monospace, monospace;
+}
+.countdown.urgent .countdown-days .n { color: var(--red); }
+.countdown.safe .countdown-days .n { color: var(--green); }
+.countdown-days .label {
+  font-size: 0.7rem; color: var(--text2); text-transform: uppercase;
+  letter-spacing: 0.05em; margin-top: 0.2rem;
+}
+
+/* ---------- EXEC SUMMARY ---------- */
+.exec {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--green);
+  border-radius: 8px;
+  padding: 1.5rem 1.8rem;
+  margin: 1.5rem 0 2.5rem;
+}
+.exec h3 {
+  margin-top: 0;
+  color: var(--green);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.8rem;
+}
+.exec p { color: var(--text); font-size: 1rem; margin-bottom: 0.6rem; }
+.exec p:last-child { margin-bottom: 0; }
+
+/* ---------- SCORE PANEL ---------- */
+.score-grid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 2rem;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.8rem;
+  margin-bottom: 2rem;
+}
+.score-grid .gauge { display: flex; justify-content: center; }
+.gauge-svg { display: block; }
+.gauge-ring  { fill: none; stroke: #1f2937; stroke-width: 14; }
+.gauge-fill  { fill: none; stroke-width: 14; stroke-linecap: round; transform: rotate(-90deg); transform-origin: 100px 100px; }
+.gauge-fill.green { stroke: var(--green); }
+.gauge-fill.amber { stroke: var(--amber); }
+.gauge-fill.red { stroke: var(--red); }
+.score-label { color: var(--text2); font-size: 0.85rem; margin-bottom: 0.3rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.score-explain { color: var(--text2); font-size: 0.92rem; }
+.score-explain strong { color: var(--text); }
+
+/* ---------- TABLES ---------- */
+table {
+  border-collapse: collapse; width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+}
+th, td {
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tbody tr:last-child td { border-bottom: none; }
+th {
+  background: var(--surface2);
+  font-weight: 700;
+  color: var(--text2);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+td { color: var(--text2); }
+td.strong { color: var(--text); font-weight: 600; }
+td.mono { font-family: ui-monospace, monospace; font-size: 0.85rem; }
+
+/* EU-vs-US row accent */
+tr.eu td:first-child { border-left: 3px solid var(--green); }
+tr.us td:first-child { border-left: 3px solid var(--red); }
+tr.unknown td:first-child { border-left: 3px solid var(--text3); }
+
+/* ---------- STATUS BADGES ---------- */
+.badge {
+  display: inline-block;
+  padding: 0.18rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.badge-compliant     { background: rgba(0, 208, 132, 0.15); color: var(--green); }
+.badge-partial       { background: rgba(245, 166, 35, 0.15); color: var(--amber); }
+.badge-non_compliant { background: rgba(255, 59, 59, 0.15); color: var(--red); }
+.badge-action_required { background: rgba(167, 139, 250, 0.15); color: var(--purple); }
+.badge-yes  { background: rgba(255, 59, 59, 0.15); color: var(--red); }
+.badge-no   { background: rgba(0, 208, 132, 0.15); color: var(--green); }
+.priority-critical { background: var(--red); color: #fff; }
+.priority-high     { background: var(--amber); color: #1a0f00; }
+.priority-medium   { background: var(--blue); color: #fff; }
+.priority-low      { background: var(--text3); color: #fff; }
+
+/* ---------- ACTIONS ---------- */
+.actions { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; }
+.action {
+  display: grid; grid-template-columns: 110px 1fr;
+  gap: 1rem; align-items: start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--amber);
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+}
+.action.critical { border-left-color: var(--red); }
+.action.high     { border-left-color: var(--amber); }
+.action.medium   { border-left-color: var(--blue); }
+.action.low      { border-left-color: var(--text3); }
+.action .title { color: var(--text); font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.action .what { color: var(--text2); font-size: 0.88rem; }
+
+/* ---------- MANIFESTO ---------- */
+.manifesto-score {
+  font-size: 2rem; font-weight: 800; color: var(--green);
+  font-family: ui-monospace, monospace;
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  margin-top: 3.5rem;
+  padding: 1.5rem 0 2.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text3);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 780px) {
+  .score-grid { grid-template-columns: 1fr; }
+  .countdown-inner { flex-direction: column; align-items: flex-start; }
+  .action { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
+<div class="container">
 
 <h1>Sentinel Sovereignty Report</h1>
-<p class="meta">
- Project: <b>sentinel-preview</b> ·
- Storage: <b>sqlite</b> ·
- Data residency: <b>EU-DE</b> ·
- Sovereign scope: <b>EU</b>
-</p>
-<p class="meta">Generated: 2026-04-11T13:39:12 · Days to EU AI Act enforcement: 113</p>
+<div class="meta">Project: <b>sentinel-preview</b> · Storage: <b>sqlite</b> · Data residency: <b>EU-DE</b> · Sovereign scope: <b>EU</b></div>
+<div class="meta">Generated: 2026-04-11T13:42:52</div>
 
-<div class="score score-green">100%</div>
-<p>Runtime sovereignty score — fraction of installed packages with no CLOUD Act exposure.</p>
+<div class="countdown">
+  <div class="countdown-inner" style="max-width:1100px;margin:0 auto;padding:0 1.5rem;">
+    <div class="countdown-text"><strong>EU AI Act Annex III enforcement: 2 August 2026.</strong> High-risk AI systems must prove automatic tamper-resistant logging.</div>
+    <div class="countdown-days">
+      <div class="n">113</div>
+      <div class="label">days remaining</div>
+    </div>
+  </div>
+</div>
+
+<div class="exec">
+  <h3>Executive summary</h3>
+  <p><strong>Your system meets EU sovereignty requirements.</strong></p>
+  <p>The runtime sovereignty score is <strong>100%</strong> — that is the fraction of installed Python packages with no US CLOUD Act exposure. EU AI Act overall status: <strong>PARTIAL</strong>. Automated coverage of the required articles: <strong>50%</strong>.</p>
+  <p>Where the report flags partial or non-compliant items, the "recommended actions" block below names each one in priority order. Every action corresponds to a specific file or configuration change.</p>
+</div>
+
+<div class="score-grid">
+  <div class="gauge"><svg class="gauge-svg" viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <circle class="gauge-ring" cx="100" cy="100" r="70"/>
+  <circle class="gauge-fill green" cx="100" cy="100" r="70"
+          stroke-dasharray="439.82"
+          stroke-dashoffset="0.00"/>
+  <text x="100" y="112" text-anchor="middle"
+        font-family="ui-monospace, monospace" font-size="36" font-weight="800"
+        fill="#e5e7eb">100%</text>
+</svg></div>
+  <div>
+    <div class="score-label">Sovereignty score</div>
+    <p class="score-explain">
+      <strong>60</strong> of <strong>60</strong> installed packages are EU-sovereign or neutral.
+      <strong>1</strong> are US-incorporated and subject to the CLOUD Act. <strong>46</strong> are unknown.
+    </p>
+    <p class="score-explain">
+      Critical-path violations: <strong>0</strong>.
+      This is a runtime snapshot. CI/CD and infrastructure are reported separately below.
+    </p>
+  </div>
+</div>
 
 <h2>EU AI Act compliance</h2>
-<p>Overall: <span class="pill">PARTIAL</span> · Automated coverage: 50%</p>
-<table><thead><tr>
- <th>Article</th><th>Title</th><th>Status</th><th>Coverage</th><th>Detail</th>
-</tr></thead><tbody><tr><td>Art. 9</td><td>Risk management</td><td class='status-partial'>PARTIAL</td><td>auto</td><td>Policy evaluator configured; every decision records the policy result.</td></tr><tr><td>Art. 10</td><td>Data governance</td><td class='status-action_required'>ACTION_REQUIRED</td><td>manual</td><td>Data governance is not automatable by a middleware kernel.</td></tr><tr><td>Art. 11</td><td>Technical documentation</td><td class='status-action_required'>ACTION_REQUIRED</td><td>manual</td><td>Annex IV technical documentation is a human deliverable.</td></tr><tr><td>Art. 12</td><td>Automatic record keeping</td><td class='status-compliant'>COMPLIANT</td><td>auto</td><td>Every wrapped call produces a DecisionTrace automatically, stored append-only.</td></tr><tr><td>Art. 13</td><td>Transparency &amp; information to deployers</td><td class='status-compliant'>COMPLIANT</td><td>auto</td><td>Traces record agent, model, policy name/version, and result per decision.</td></tr><tr><td>Art. 14</td><td>Human oversight</td><td class='status-compliant'>COMPLIANT</td><td>auto</td><td>Kill switch implemented; every override recorded as linked trace entry.</td></tr><tr><td>Art. 15</td><td>Accuracy, robustness, cybersecurity</td><td class='status-action_required'>ACTION_REQUIRED</td><td>manual</td><td>Model evaluation and adversarial testing are outside the trace layer.</td></tr><tr><td>Art. 17</td><td>Quality management system</td><td class='status-compliant'>COMPLIANT</td><td>auto</td><td>Continuous, append-only trace record satisfies the traceability requirement.</td></tr></tbody></table>
+<p>Overall: <span class="badge badge-partial">PARTIAL</span>  ·  Automated coverage: <strong style="color:var(--text);">50%</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th style="width:80px;">Article</th>
+      <th>Title</th>
+      <th style="width:150px;">Status</th>
+      <th>Detail</th>
+      <th>What to do</th>
+    </tr>
+  </thead>
+  <tbody><tr><td class='strong mono'>Art. 9</td><td>Risk management</td><td><span class='badge badge-partial'>PARTIAL</span></td><td>Policy evaluator configured; every decision records the policy result.</td><td>Configure a PolicyEvaluator — SimpleRuleEvaluator or LocalRegoEvaluator.</td></tr><tr><td class='strong mono'>Art. 10</td><td>Data governance</td><td><span class='badge badge-action_required'>ACTION_REQUIRED</span></td><td>Data governance is not automatable by a middleware kernel.</td><td>Data governance is a human process — see docs/bsi-profile.md.</td></tr><tr><td class='strong mono'>Art. 11</td><td>Technical documentation</td><td><span class='badge badge-action_required'>ACTION_REQUIRED</span></td><td>Annex IV technical documentation is a human deliverable.</td><td>Review manually.</td></tr><tr><td class='strong mono'>Art. 12</td><td>Automatic record keeping</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Every wrapped call produces a DecisionTrace automatically, stored append-only.</td><td>Enable storage backend for append-only trace persistence.</td></tr><tr><td class='strong mono'>Art. 13</td><td>Transparency &amp; information to deployers</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Traces record agent, model, policy name/version, and result per decision.</td><td>Populate agent, model, and policy metadata on every trace.</td></tr><tr><td class='strong mono'>Art. 14</td><td>Human oversight</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Kill switch implemented; every override recorded as linked trace entry.</td><td>Test the kill switch with engage_kill_switch() before go-live.</td></tr><tr><td class='strong mono'>Art. 15</td><td>Accuracy, robustness, cybersecurity</td><td><span class='badge badge-action_required'>ACTION_REQUIRED</span></td><td>Model evaluation and adversarial testing are outside the trace layer.</td><td>Configure accuracy thresholds and human review workflows.</td></tr><tr><td class='strong mono'>Art. 17</td><td>Quality management system</td><td><span class='badge badge-compliant'>COMPLIANT</span></td><td>Continuous, append-only trace record satisfies the traceability requirement.</td><td>Run sentinel compliance check as part of CI on every release.</td></tr></tbody>
+</table>
+
+<h2>Recommended actions</h2>
+<div class="actions">
+
+<div class="action high">
+  <span class="badge priority-high">HIGH</span>
+  <div>
+    <div class="title">Art. 9 — Risk management</div>
+    <div class="what">Configure a PolicyEvaluator — SimpleRuleEvaluator or LocalRegoEvaluator.</div>
+  </div>
+</div>
+
+
+<div class="action medium">
+  <span class="badge priority-medium">MEDIUM</span>
+  <div>
+    <div class="title">Art. 10 — Data governance</div>
+    <div class="what">Data governance is a human process — see docs/bsi-profile.md.</div>
+  </div>
+</div>
+
+
+<div class="action medium">
+  <span class="badge priority-medium">MEDIUM</span>
+  <div>
+    <div class="title">Art. 11 — Technical documentation</div>
+    <div class="what">Review manually.</div>
+  </div>
+</div>
+
+
+<div class="action medium">
+  <span class="badge priority-medium">MEDIUM</span>
+  <div>
+    <div class="title">Art. 15 — Accuracy, robustness, cybersecurity</div>
+    <div class="what">Configure accuracy thresholds and human review workflows.</div>
+  </div>
+</div>
+
+</div>
 
 
 <h2>Manifesto status</h2>
-<p>Overall score: <b>100%</b></p>
-<table><thead><tr><th></th><th>Dimension</th><th>Detail</th></tr></thead>
-<tbody><tr><td>✅</td><td>jurisdiction</td><td>0 critical-path violations</td></tr><tr><td>✅</td><td>kill_switch</td><td>kill switch API present</td></tr><tr><td>✅</td><td>storage</td><td>backend: sqlite</td></tr><tr><td>✅</td><td>bsi</td><td>targeting 2026-12-31</td></tr></tbody></table>
+<p>Overall manifesto score: <span class="manifesto-score">100%</span></p>
+<table>
+  <thead><tr><th style='width:60px;'></th><th>Dimension</th><th>Detail</th></tr></thead>
+  <tbody><tr><td class='strong'>✓</td><td class='strong'>jurisdiction</td><td>0 critical-path violations</td></tr><tr><td class='strong'>✓</td><td class='strong'>kill_switch</td><td>kill switch API present</td></tr><tr><td class='strong'>✓</td><td class='strong'>storage</td><td>backend: sqlite</td></tr><tr><td class='strong'>✓</td><td class='strong'>bsi</td><td>targeting 2026-12-31</td></tr></tbody>
+</table>
 
 
-<h2>Runtime packages (60 total, showing first 50)</h2>
-<p>
- Sovereign: <b>60</b> ·
- US-owned: <b>1</b> ·
- Unknown: <b>46</b>
-</p>
-<table><thead><tr>
- <th>Package</th><th>Version</th><th>Parent</th><th>Jurisdiction</th>
- <th>CLOUD Act</th><th>Critical path</th>
-</tr></thead><tbody><tr><td>shellingham</td><td>1.5.4</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>requests</td><td>2.33.1</td><td>Python Software Foundation</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>more-itertools</td><td>10.8.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>pexpect</td><td>4.9.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>platformdirs</td><td>4.9.4</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>rfc3986</td><td>2.0.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>jaraco.classes</td><td>3.4.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>click</td><td>8.3.1</td><td>Pallets</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>ptyprocess</td><td>0.7.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>certifi</td><td>2026.2.25</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>iniconfig</td><td>2.3.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>jaraco.context</td><td>6.1.2</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>virtualenv</td><td>21.2.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>pytest-cov</td><td>7.1.0</td><td>pytest-cov</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>uv</td><td>0.11.3</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>tomlkit</td><td>0.14.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>hyperlink</td><td>21.0.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>idna</td><td>3.11</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>distlib</td><td>0.4.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>build</td><td>1.4.2</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>rich</td><td>14.3.3</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>userpath</td><td>1.9.2</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>librt</td><td>0.8.1</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>tomli_w</td><td>1.2.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>httpcore</td><td>1.0.9</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>filelock</td><td>3.25.2</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>nh3</td><td>0.3.4</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>markdown-it-py</td><td>4.0.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>sentinel-kernel</td><td>0.1.0</td><td>sentinel-kernel</td><td>EU</td><td>no</td><td>yes</td></tr><tr><td>docutils</td><td>0.22.4</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>hatchling</td><td>1.29.0</td><td>Ofek Lev</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>twine</td><td>6.2.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>h11</td><td>0.16.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>coverage</td><td>7.13.5</td><td>Coverage.py</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>Pygments</td><td>2.20.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>mdurl</td><td>0.1.2</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>pathspec</td><td>1.0.4</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>PyYAML</td><td>6.0.3</td><td>YAML</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>pytest-asyncio</td><td>1.3.0</td><td>pytest-dev</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>id</td><td>1.6.1</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>urllib3</td><td>2.6.3</td><td>urllib3</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>readme_renderer</td><td>44.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>typing_extensions</td><td>4.15.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>jaraco.functools</td><td>4.4.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>trove-classifiers</td><td>2026.1.14.14</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>hatch</td><td>1.16.5</td><td>Ofek Lev</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>charset-normalizer</td><td>3.4.7</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr><tr><td>ruff</td><td>0.15.8</td><td>Astral</td><td>US</td><td>no</td><td>no</td></tr><tr><td>mypy</td><td>1.20.0</td><td>Python Software Foundation</td><td>Neutral</td><td>no</td><td>no</td></tr><tr><td>pluggy</td><td>1.6.0</td><td>Unknown</td><td>Unknown</td><td>no</td><td>no</td></tr></tbody></table>
+<h2>Runtime packages</h2>
+<p>Showing first 60 of <strong style="color:var(--text);">60</strong> installed packages. Sovereign: <strong style="color:var(--green);">60</strong> · US-owned: <strong style="color:var(--red);">1</strong> · Unknown: <strong style="color:var(--text3);">46</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Package</th>
+      <th>Version</th>
+      <th>Parent</th>
+      <th>Jurisdiction</th>
+      <th>CLOUD Act</th>
+      <th>Critical</th>
+    </tr>
+  </thead>
+  <tbody><tr class='unknown'><td class='strong mono'>shellingham</td><td class='mono'>1.5.4</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>requests</td><td class='mono'>2.33.1</td><td>Python Software Foundation</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>more-itertools</td><td class='mono'>10.8.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>pexpect</td><td class='mono'>4.9.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>platformdirs</td><td class='mono'>4.9.4</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>rfc3986</td><td class='mono'>2.0.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>jaraco.classes</td><td class='mono'>3.4.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>click</td><td class='mono'>8.3.1</td><td>Pallets</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>ptyprocess</td><td class='mono'>0.7.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>certifi</td><td class='mono'>2026.2.25</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>iniconfig</td><td class='mono'>2.3.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>jaraco.context</td><td class='mono'>6.1.2</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>virtualenv</td><td class='mono'>21.2.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>pytest-cov</td><td class='mono'>7.1.0</td><td>pytest-cov</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>uv</td><td class='mono'>0.11.3</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>tomlkit</td><td class='mono'>0.14.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>hyperlink</td><td class='mono'>21.0.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>idna</td><td class='mono'>3.11</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>distlib</td><td class='mono'>0.4.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>build</td><td class='mono'>1.4.2</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>rich</td><td class='mono'>14.3.3</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>userpath</td><td class='mono'>1.9.2</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>librt</td><td class='mono'>0.8.1</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>tomli_w</td><td class='mono'>1.2.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>httpcore</td><td class='mono'>1.0.9</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>filelock</td><td class='mono'>3.25.2</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>nh3</td><td class='mono'>0.3.4</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>markdown-it-py</td><td class='mono'>4.0.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>sentinel-kernel</td><td class='mono'>0.1.0</td><td>sentinel-kernel</td><td>EU</td><td><span class="badge badge-no">NO</span></td><td>yes</td></tr><tr class='unknown'><td class='strong mono'>docutils</td><td class='mono'>0.22.4</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>hatchling</td><td class='mono'>1.29.0</td><td>Ofek Lev</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>twine</td><td class='mono'>6.2.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>h11</td><td class='mono'>0.16.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>coverage</td><td class='mono'>7.13.5</td><td>Coverage.py</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>Pygments</td><td class='mono'>2.20.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>mdurl</td><td class='mono'>0.1.2</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>pathspec</td><td class='mono'>1.0.4</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>PyYAML</td><td class='mono'>6.0.3</td><td>YAML</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>pytest-asyncio</td><td class='mono'>1.3.0</td><td>pytest-dev</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>id</td><td class='mono'>1.6.1</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>urllib3</td><td class='mono'>2.6.3</td><td>urllib3</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>readme_renderer</td><td class='mono'>44.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>typing_extensions</td><td class='mono'>4.15.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>jaraco.functools</td><td class='mono'>4.4.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>trove-classifiers</td><td class='mono'>2026.1.14.14</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>hatch</td><td class='mono'>1.16.5</td><td>Ofek Lev</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>charset-normalizer</td><td class='mono'>3.4.7</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>ruff</td><td class='mono'>0.15.8</td><td>Astral</td><td>US</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>mypy</td><td class='mono'>1.20.0</td><td>Python Software Foundation</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>pluggy</td><td class='mono'>1.6.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>python-discovery</td><td class='mono'>1.2.1</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>requests-toolbelt</td><td class='mono'>1.0.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>packaging</td><td class='mono'>26.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>httpx</td><td class='mono'>0.28.1</td><td>Encode</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>pyproject_hooks</td><td class='mono'>1.2.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>keyring</td><td class='mono'>25.7.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>mypy_extensions</td><td class='mono'>1.1.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>pip</td><td class='mono'>26.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr><tr class='eu'><td class='strong mono'>pytest</td><td class='mono'>9.0.2</td><td>pytest-dev</td><td>Neutral</td><td><span class="badge badge-no">NO</span></td><td>no</td></tr><tr class='unknown'><td class='strong mono'>anyio</td><td class='mono'>4.13.0</td><td>Unknown</td><td>Unknown</td><td><span class="badge badge-no">—</span></td><td>no</td></tr></tbody>
+</table>
 
 <h2>CI/CD findings</h2>
-<table><thead><tr>
- <th>File</th><th>Component</th><th>Vendor</th><th>Jurisdiction</th><th>CLOUD Act</th>
-</tr></thead><tbody><tr><td>.github/workflows/ci.yml</td><td>github_actions</td><td>GitHub (Microsoft)</td><td>US</td><td>yes</td></tr><tr><td>.github/workflows/pages.yml</td><td>github_actions</td><td>GitHub (Microsoft)</td><td>US</td><td>yes</td></tr><tr><td>.github/workflows/release.yml</td><td>github_actions</td><td>GitHub (Microsoft)</td><td>US</td><td>yes</td></tr><tr><td>pyproject.toml</td><td>pypi</td><td>Python Package Index</td><td>US</td><td>no</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>Component</th>
+      <th>Vendor</th>
+      <th>Jurisdiction</th>
+      <th>CLOUD Act</th>
+    </tr>
+  </thead>
+  <tbody><tr class='us'><td class='mono'>.github/workflows/ci.yml</td><td>github_actions</td><td>GitHub (Microsoft)</td><td>US</td><td><span class="badge badge-yes">YES</span></td></tr><tr class='us'><td class='mono'>.github/workflows/pages.yml</td><td>github_actions</td><td>GitHub (Microsoft)</td><td>US</td><td><span class="badge badge-yes">YES</span></td></tr><tr class='us'><td class='mono'>.github/workflows/release.yml</td><td>github_actions</td><td>GitHub (Microsoft)</td><td>US</td><td><span class="badge badge-yes">YES</span></td></tr><tr class='eu'><td class='mono'>pyproject.toml</td><td>pypi</td><td>Python Package Index</td><td>US</td><td><span class="badge badge-no">NO</span></td></tr></tbody>
+</table>
 
 <h2>Infrastructure findings</h2>
-<table><thead><tr>
- <th>File</th><th>Component</th><th>Vendor</th><th>Jurisdiction</th><th>CLOUD Act</th>
-</tr></thead><tbody><tr><td colspan='5'>No infrastructure findings</td></tr></tbody></table>
+<table>
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>Component</th>
+      <th>Vendor</th>
+      <th>Jurisdiction</th>
+      <th>CLOUD Act</th>
+    </tr>
+  </thead>
+  <tbody><tr><td colspan='5' style='text-align:center;color:var(--text3);'>No infrastructure findings</td></tr></tbody>
+</table>
 
 <footer>
- Generated by sentinel-kernel. Apache 2.0. This report is fully
- self-contained; it loads no external resources and is safe to
- distribute in air-gapped environments.
+  Generated by <b style="color:var(--text2);">sentinel-kernel</b>. Apache 2.0. This report is fully
+  self-contained — it loads no external resources and is safe to distribute in
+  air-gapped environments.
 </footer>
+
+</div>
 </body>
 </html>
