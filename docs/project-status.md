@@ -91,6 +91,9 @@ EU-sovereign decision record layer for AI agents.
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
 - **#16** good first issue: Go implementation of RFC-001 _(labels: good first issue)_
 - **#17** good first issue: TypeScript/Node implementation of RFC-001 _(labels: good first issue)_
+- **#19** v3.1: Linux Foundation Europe formal application _(labels: roadmap)_
+- **#20** v3.2: BSI IT-Grundschutz formal assessment submission _(labels: roadmap)_
+- **#21** v3.3: EU-sovereign build pipeline (Phase 3) _(labels: roadmap)_
 
 ## Recent releases
 
