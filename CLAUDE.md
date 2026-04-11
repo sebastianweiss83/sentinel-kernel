@@ -12,15 +12,15 @@
 | Tests | 344 passing |
 | Coverage | 96% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 14:16 UTC |
+| Last updated | 2026-04-11 12:17 UTC |
 
 ## Last 5 commits
 
+- `7002374` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `bfe4bfe` feat: v1.4.0 — Haystack integration, NDJSON export/import
 - `d5aebf0` feat: trace export/import — NDJSON with filters, sentinel export/import CLI
 - `d10f804` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `a2ae57a` feat: Haystack integration — EU-based agent framework, closes #12
-- `81582b2` chore(auto): refresh CLAUDE.md state block [skip ci]
 
 ## Open issues
 
