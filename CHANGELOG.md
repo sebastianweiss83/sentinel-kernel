@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.7.0] — 2026-04-11
+
+Minor release. Production hardening — trace integrity, retention,
+policy versioning, and performance benchmarks.
+
+### Added
+
+- **Trace integrity verification** — `Sentinel.verify_integrity(trace_id)`
+  recomputes `inputs_hash` and `output_hash` from stored payloads and
+  compares with the stored hashes. Returns a structured
+  `IntegrityResult`. This is the feature that makes Sentinel
+  defensible in court: every trace can be independently verified as
+  unmodified.
+- **`sentinel verify` CLI command** — `--trace-id <id>`, `--all`,
+  `--json`. Exits 1 when any trace fails verification.
+- **Retention purge** — `StorageBackend.purge_before(cutoff, dry_run=True)`
+  with `PurgeResult(traces_affected, oldest_remaining, dry_run)`.
+  Defaults to dry-run so accidents are impossible.
+- **`sentinel purge --before <date>` CLI command** — `--dry-run`
+  (default), `--yes` to actually delete.
+- **`PolicyVersion` dataclass** — immutable metadata with SHA-256 of
+  the policy source, effective dates, and a name. Factory methods
+  `from_callable` and `from_file`.
+- **Performance benchmarks** — `benchmarks/benchmark_trace.py` with
+  five metrics: SQLite in-memory, SQLite on-disk, Filesystem,
+  decorator overhead, memory per 1000 traces. `--regress-check`
+  exits 1 when any metric is >20% below baseline.
+- **`docs/performance.md`** — documented baselines and profiling
+  guidance.
+
+### Notes
+
+- 448 tests passing, 100% coverage maintained.
+- `SQLiteStorage._delete_traces` is the reference delete path;
+  filesystem and postgres backends raise `NotImplementedError` on
+  `_delete_traces` until explicit retention support is added.
+
 ## [1.6.0] — 2026-04-11
 
 Minor release. VS-NfD deployment profile, Prometheus textfile
