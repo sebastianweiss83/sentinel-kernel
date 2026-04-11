@@ -1,44 +1,109 @@
 # Security Policy
 
-## Reporting a Vulnerability
+## Supported versions
 
-If you discover a security vulnerability in sentinel-kernel, please report it
-**privately** via email to **sebastian@swentures.com**. Do not open a public
-GitHub issue.
+| Version | Supported |
+|---------|-----------|
+| 1.x     | ✓ Yes     |
+| 0.x     | ✗ No      |
 
-Include as much detail as possible: steps to reproduce, affected versions,
-and potential impact.
+Only the current major version receives security patches. Users on
+0.x should upgrade to 1.x.
 
-## Response Timeline
+## Reporting a vulnerability
 
-- **Acknowledgment:** within 7 days of your report.
-- **Fix target:** within 30 days, depending on severity and complexity.
-- Critical issues may receive expedited patches.
+**Do not open a public GitHub issue for security vulnerabilities.**
+
+Email: **sebastian@swentures.com** (mark the subject `[sentinel-security]`).
+
+Please include:
+
+- Description of the vulnerability
+- Steps to reproduce
+- Affected versions
+- Potential impact — in particular which of the three invariants
+  is at risk
+- Suggested fix, if known
+- Your preferred language (English or German)
+
+We will acknowledge within **48 hours** (7 days maximum during
+holiday periods). Target resolution timelines:
+
+- **Critical** — 30 days
+- **High** — 60 days
+- **Medium / Low** — 90 days
+
+Reporters are credited in the CHANGELOG unless they ask otherwise.
+
+## Security design principles
+
+Sentinel is built around a small number of load-bearing invariants.
+A vulnerability that breaks any of them is classified as critical.
+
+1. **No network calls in the critical path.** Verified by CI
+   (`tests/test_airgap.py`). A regression here means the air-gap
+   promise is broken.
+2. **Inputs are hashed by default.** `inputs_hash` uses SHA-256 on
+   every trace. Raw inputs (`inputs_raw`) are opt-in per trace.
+3. **Storage is append-only.** No `UPDATE`, no `DELETE`. Corrections
+   are new linked traces, not mutations.
+4. **Kill switch halts all processing immediately.** EU AI Act Art. 14.
+   A vulnerability that bypasses `engage_kill_switch()` is critical.
+5. **Optional dependencies are guarded with `ImportError`.** A
+   missing optional package must never silently degrade the
+   critical path.
 
 ## Scope
 
-**In scope:**
-- The `sentinel-kernel` package itself
-- Storage backends shipped with this repository
-- Policy evaluators shipped with this repository
+### In scope
 
-**Out of scope:**
-- Third-party dependencies (report those to their maintainers directly)
-- Deployment infrastructure and hosting environments
-- Issues that require physical access or social engineering
+- The `sentinel` Python package (kernel, storage, policy, scanner,
+  compliance, dashboard).
+- Optional integrations in `sentinel.integrations.*`.
+- The reference Docker deployment in `demo/`.
+- The sovereignty scanner's classification of installed packages.
 
-## Audit Status
+### Out of scope
 
-No formal security audit has been performed on this project yet. Community
-review and responsible disclosure are the primary mechanisms for identifying
-vulnerabilities at this stage.
+- The AI agents that Sentinel wraps — those are the caller's
+  responsibility.
+- The LLM providers the AI agents call.
+- The underlying OS, container runtime, or hardware.
+- Exploits requiring prior arbitrary code execution on the host.
+- Issues that require physical access or social engineering.
 
-## Credit
+## Known limitations
 
-Reporters will be credited in the CHANGELOG upon resolution of the issue,
-unless they prefer to remain anonymous. Let us know your preference when
-you submit your report.
+These are documented trade-offs, not vulnerabilities:
 
-## Preferred Languages
+- **OTel export endpoint.** For full sovereignty, the collector
+  should be self-hosted. A hostile collector can observe trace
+  metadata (but not affect the critical path, because the local
+  write always happens first).
+- **PostgreSQL connection strings** may contain credentials. Use
+  environment variables and a secrets manager. Sentinel does not
+  log connection strings.
+- **`LocalRegoEvaluator` requires the OPA binary.** Verify the OPA
+  binary integrity out-of-band (e.g. against the project's GPG
+  signature) before using it in a critical deployment.
 
-We accept vulnerability reports in English or German.
+## Cryptographic choices
+
+- Input hashing: SHA-256 (hardcoded; no weak algorithms accepted).
+- No encryption at rest in the kernel itself — inherit from OS/DB.
+- No custom crypto. Sentinel does not implement cryptographic
+  primitives.
+
+## Audit status
+
+No formal security audit has been performed yet. Community review
+and responsible disclosure are the primary mechanisms for
+identifying vulnerabilities at this stage. A BSI IT-Grundschutz
+pre-engagement is planned for Q4 2026.
+
+## CVE tracking
+
+When a CVE is assigned, it will be referenced in the CHANGELOG
+entry for the fix release and linked from this file.
+
+Current CVEs: _none_.

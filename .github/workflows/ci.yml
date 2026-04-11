@@ -115,35 +115,38 @@ jobs:
       - name: Install package
         run: pip install -e ".[dev]"
 
-      - name: Rewrite CLAUDE.md auto-generated block
+      - name: Commit if changed
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python scripts/update_claude_md.py
-
-      - name: Commit if changed
         run: |
-          if git diff --quiet CLAUDE.md; then
-            echo "CLAUDE.md is already up to date."
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add CLAUDE.md
-          git commit -m "chore(auto): refresh CLAUDE.md state block [skip ci]"
-          # Retry with rebase to survive races where another commit landed
-          # between checkout and push.
-          for i in 1 2 3; do
-            if git push origin HEAD:main; then
-              echo "Pushed on attempt $i"
+
+          # Regenerate-reset-push loop: on non-fast-forward, reset hard
+          # to origin/main, re-run the generator on the new tip, and
+          # retry. Avoids rebase conflicts between concurrent auto-update
+          # commits — they both just overwrite the same auto-generated
+          # block, so the *latest* state always wins.
+          for i in 1 2 3 4 5; do
+            python scripts/update_claude_md.py
+
+            if git diff --quiet CLAUDE.md; then
+              echo "CLAUDE.md is already up to date (attempt $i)."
               exit 0
             fi
-            echo "Push rejected on attempt $i; rebasing and retrying."
+
+            git add CLAUDE.md
+            git commit -m "chore(auto): refresh CLAUDE.md state block [skip ci]"
+
+            if git push origin HEAD:main; then
+              echo "Pushed on attempt $i."
+              exit 0
+            fi
+
+            echo "Push rejected on attempt $i; resetting to origin/main and retrying."
             git fetch origin main
-            git rebase origin/main || {
-              echo "Rebase failed — aborting."
-              git rebase --abort || true
-              exit 1
-            }
+            git reset --hard origin/main
           done
+
           echo "Push still failing after retries — giving up."
           exit 1
