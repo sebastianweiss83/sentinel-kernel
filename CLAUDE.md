@@ -10,17 +10,17 @@
 |---|---|
 | Version | `2.0.0` |
 | Tests | 503 passing |
-| Coverage | 100% |
+| Coverage | 99% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 15:45 UTC |
+| Last updated | 2026-04-11 15:46 UTC |
 
 ## Last 5 commits
 
+- `ddaa04b` chore: sync CLAUDE.md to v2.0.0 [skip ci]
 - `8d0e5b1` feat: v2.0.0 — production stable, BSI assessment ready
 - `c5a1059` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `1f59eca` feat: v1.9.0 — DORA + NIS2 + unified compliance checker
 - `e3c200b` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `dca9974` feat: v1.8.0 — Jupyter, FastAPI, Django integrations
 
 ## Open issues
 
@@ -29,7 +29,6 @@
 - **#6** v1.0: Linux Foundation Europe application _(labels: roadmap, governance)_
 - **#7** RFC-001: SovereigntyManifest feedback wanted _(labels: rfc, discussion)_
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
-- **#11** v1.1: VS-NfD deployment profile (roadmap) _(labels: roadmap)_
 - **#13** good first issue: Rust implementation of SovereigntyManifest (RFC-001) _(labels: good first issue, rfc)_
 - **#14** enhance: LangFuse integration — dedicated sovereignty panel _(labels: enhancement)_
 
