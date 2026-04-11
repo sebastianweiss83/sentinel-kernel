@@ -82,10 +82,10 @@ Mature EU-sovereign cloud providers with Terraform support:
 - **Scaleway** (FR)
 - **OVHcloud** (FR)
 
-For classified / VS-NfD work:
-
-- **BWI Betrieb** (DE, federally owned) — sovereign infrastructure for
-  German federal and defence customers.
+For classified / national-security work, consult your government's
+sovereign infrastructure provider directly. Multiple EU member states
+operate nationally owned or -controlled infrastructure for defence and
+federal customers; requirements vary by jurisdiction.
 
 None of these are endorsed by Sentinel — they are starting points for
 a procurement evaluation. Run `sentinel scan` against your actual

@@ -209,14 +209,14 @@ declare, and verify sovereignty end-to-end.
   honest gap reporting. Distinguishes machine-checkable articles
   (12, 13, 14, 17) from organisational obligations (10, 11, 15).
 - **`sentinel report`** — generate a self-contained HTML sovereignty
-  report suitable for BWI / QS / regulatory review. No CDN, no
-  external resources — air-gapped safe by construction.
+  report suitable for regulatory review. No CDN, no external
+  resources — air-gapped safe by construction.
 - **`sentinel dashboard`** — live terminal dashboard showing
   decision traces, policy results, sovereignty score, and kill
   switch state. Zero dependencies.
 - **Demo package** — `demo/` with Docker Compose (OTel collector,
-  Prometheus, Grafana, self-hosted LangFuse), BWI evaluation
-  package, and Quantum Systems autonomous-decision demo.
+  Prometheus, Grafana, self-hosted LangFuse) running three realistic
+  industry scenarios end-to-end.
 - **RFC-001** — `SovereigntyManifest` specification, the first
   step toward a cross-project standard.
 
@@ -297,6 +297,8 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 
 ## Documentation
 
+- [docs/getting-started.md](docs/getting-started.md) — two-minute quickstart
+- [docs/real-world-examples.md](docs/real-world-examples.md) — industry scenarios
 - [docs/schema.md](docs/schema.md) — full trace schema reference
 - [docs/eu-ai-act.md](docs/eu-ai-act.md) — Article 12/13/14/17 mapping
 - [docs/integration-guide.md](docs/integration-guide.md) — framework integrations
@@ -304,8 +306,8 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 - [docs/ecosystem.md](docs/ecosystem.md) — sovereign AI project registry
 - [docs/rfcs/RFC-001-sovereignty-manifest.md](docs/rfcs/RFC-001-sovereignty-manifest.md) — SovereigntyManifest spec (draft)
 - [docs/bsi-profile.md](docs/bsi-profile.md) — BSI IT-Grundschutz profile
-- [demo/bwi/README.md](demo/bwi/README.md) — BWI evaluation package
-- [demo/qs/README.md](demo/qs/README.md) — Quantum Systems evaluation package
+- [demo/README.md](demo/README.md) — Docker Compose demo environment
+- [examples/](examples/) — 13 runnable examples and 5 policy templates
 - [docs/landscape.md](docs/landscape.md) — how Sentinel relates to LLMOps ecosystem
 - [docs/architecture.md](docs/architecture.md) — detailed architecture
 - [docs/quickstart.md](docs/quickstart.md) — extended quickstart guide

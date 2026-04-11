@@ -13,8 +13,8 @@ Status: Alpha → **Beta**.
 
 The complete Sentinel sovereignty platform. v0.9 adds the evaluation,
 declaration, and verification tooling on top of the v0.4 decision
-kernel. This is the release BWI and Quantum Systems design partners
-are evaluating against.
+kernel — aimed at any regulated organisation preparing for EU AI Act
+Annex III enforcement.
 
 ### Added — v0.3b add-on: LangFuse enrichment
 
@@ -103,15 +103,6 @@ are evaluating against.
 - **`docs/rfcs/RFC-001-sovereignty-manifest.md`** — draft
   specification for a cross-project sovereignty manifest standard.
 
-### Added — Partner evaluation packages
-
-- **`demo/bwi/`** — BWI federal evaluation package with
-  `compliance_report.py` that writes `bwi_compliance_report.html`.
-- **`demo/qs/`** — Quantum Systems evaluation package with
-  `autonomous_decision_demo.py` — realistic VTOL mission planner
-  with policy DENY, kill switch engagement, and air-gapped
-  operation.
-
 ### Added — End-to-end smoke test
 
 - `examples/smoke_test.py` rewritten to exercise the full v0.9
@@ -128,8 +119,7 @@ are evaluating against.
   highlights.
 - README gains a "Quick demo" section pointing at
   `demo/docker-compose.yml`.
-- Documentation index extended with ecosystem registry, RFC-001,
-  and the BWI / QS evaluation packages.
+- Documentation index extended with ecosystem registry and RFC-001.
 
 ### Notes
 
