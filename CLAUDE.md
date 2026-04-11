@@ -12,15 +12,15 @@
 | Tests | 593 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 17:35 UTC |
+| Last updated | 2026-04-11 17:37 UTC |
 
 ## Last 5 commits
 
+- `f6dce81` docs: README polish for GitHub discoverability
 - `4dcf4da` docs: publishable sovereign AI blog post
 - `e69eae2` feat: v2.4.0 — Rust SovereigntyManifest, RFC-001 implementations table, closes #13
 - `70e9a02` feat: v2.3.0 — LangFuse sovereignty panel, closes #14
 - `b62c5b1` feat: v2.2.0 — quantum-safe signing ML-DSA-65, client-side
-- `efcf79d` feat: v2.1.0 — BudgetTracker, attestations, CrewAI, AutoGen
 
 ## Open issues
 
