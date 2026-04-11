@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `1.5.0` |
-| Tests | 396 passing |
-| Coverage | 98% |
+| Version | `1.6.0` |
+| Tests | 421 passing |
+| Coverage | 99% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 15:03 UTC |
+| Last updated | 2026-04-11 15:17 UTC |
 
 ## Last 5 commits
 
+- `454478c` feat: v1.6.0 — VS-NfD profile, Prometheus textfile, 100% coverage
+- `859dee6` test: 100% coverage across every module
+- `fcd8cf9` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `2cc4ff6` fix: Python 3.11 compat — scope terminal shutil monkeypatch
 - `ab8fd12` fix: gitignore demo report, demo tempdir default, CONTRIBUTING note, close #2
-- `5cd7edc` test: all modules to 95%+ coverage
-- `1bf7a41` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `aaf8b01` feat: Prometheus textfile exporter — Grafana metrics now real
 
 ## Open issues
 
@@ -29,7 +29,6 @@
 - **#6** v1.0: Linux Foundation Europe application _(labels: roadmap, governance)_
 - **#7** RFC-001: SovereigntyManifest feedback wanted _(labels: rfc, discussion)_
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
-- **#9** good first issue: VS-NfD deployment guide _(labels: documentation, good first issue)_
 - **#11** v1.1: VS-NfD deployment profile (roadmap) _(labels: roadmap)_
 - **#13** good first issue: Rust implementation of SovereigntyManifest (RFC-001) _(labels: good first issue, rfc)_
 - **#14** enhance: LangFuse integration — dedicated sovereignty panel _(labels: enhancement)_
