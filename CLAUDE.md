@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `1.0.1` |
-| Tests | 304 passing |
+| Version | `1.1.0` |
+| Tests | 306 passing |
 | Coverage | 96% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 13:46 UTC |
+| Last updated | 2026-04-11 13:49 UTC |
 
 ## Last 5 commits
 
+- `1f27d48` feat: v1.1.0 — world-class preview, demo command, dashboards
+- `44777cd` feat: sentinel demo command — full demo without Docker
+- `6e647ba` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `9f3e512` feat: Grafana dashboard — 7 rows, production quality metrics
 - `f267594` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `13c4840` fix: Docker demo — pinned versions, healthchecks, minimal compose
-- `d0bc053` feat: HTML report redesign — dark theme matching preview
-- `cd6fdfe` chore(auto): refresh CLAUDE.md state block [skip ci]
 
 ## Open issues
 
