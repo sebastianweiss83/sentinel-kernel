@@ -63,7 +63,7 @@ What is missing: no ontology, no dashboard, no enterprise deployment tooling, no
 
 - VS-NfD deployment profile for classified German government use cases
 - Official BSI guidance referencing Sentinel as a reference implementation
-- Co-innovation contributions from European enterprises and research institutions (T-Systems, Fraunhofer, BWI, and others)
+- Co-innovation contributions from European enterprises and research institutions
 - Sovereign Tech Fonds-funded core maintainer team
 - 5+ production deployments across EU regulated sectors
 

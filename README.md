@@ -175,7 +175,7 @@ sentinel = Sentinel(
     sovereign_scope="EU",
     data_residency=DataResidency.EU_DE,
 )
-# PostgreSQL storage planned for v0.2
+# For PostgreSQL: from sentinel.storage.postgres import PostgresStorage
 ```
 
 **Air-gapped / classified**
