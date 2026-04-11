@@ -195,3 +195,129 @@ def test_infra_scanner_env_file_never_prints_values(tmp_path: Path) -> None:
         assert "sk-super-secret" not in finding.detail
     env_findings = [f for f in result.findings if f.component == "env_var_prefix"]
     assert len(env_findings) >= 2
+
+
+# ---------------------------------------------------------------------------
+# Expanded knowledge base + EU alternatives
+# ---------------------------------------------------------------------------
+
+
+def test_runtime_scanner_detects_crewai_and_autogen() -> None:
+    scanner = RuntimeScanner(
+        installed_packages=[
+            ("crewai", "0.1"),
+            ("autogen", "0.2"),
+            ("haystack-ai", "2.0"),
+        ]
+    )
+    result = scanner.scan()
+    by_name = {p.name: p for p in result.packages}
+    assert by_name["crewai"].cloud_act_exposure is True
+    assert by_name["autogen"].cloud_act_exposure is True
+    assert by_name["haystack-ai"].cloud_act_exposure is False
+    assert by_name["haystack-ai"].jurisdiction == "EU"
+
+
+def test_runtime_scanner_sovereign_alternatives() -> None:
+    scanner = RuntimeScanner(
+        installed_packages=[
+            ("openai", "1.0"),
+            ("pinecone-client", "3.0"),
+            ("numpy", "1.26"),
+        ]
+    )
+    alts = scanner.scan().sovereign_alternatives()
+    assert "openai" in alts
+    assert "mistralai" in alts["openai"] or "aleph-alpha" in alts["openai"]
+    assert "pinecone-client" in alts
+    assert "qdrant" in alts["pinecone-client"] or "weaviate" in alts["pinecone-client"]
+    assert "numpy" not in alts
+
+
+def test_suggest_alternative_helper() -> None:
+    from sentinel.scanner.knowledge import suggest_alternative
+
+    assert suggest_alternative("openai") is not None
+    assert suggest_alternative("OpenAI") is not None
+    assert suggest_alternative("numpy") is None
+    assert suggest_alternative("nonexistent") is None
+
+
+# ---------------------------------------------------------------------------
+# CI/CD scanner — new file types
+# ---------------------------------------------------------------------------
+
+
+def test_cicd_scanner_detects_makefile_us_download(tmp_path: Path) -> None:
+    (tmp_path / "Makefile").write_text(
+        "setup:\n"
+        "\tcurl -sSL https://download.docker.com/linux/install.sh | sh\n"
+        "\twget https://s3.amazonaws.com/bucket/tool.tar.gz\n"
+    )
+    result = CICDScanner().scan(tmp_path)
+    makefile_findings = [
+        f for f in result.findings if f.component == "makefile_download"
+    ]
+    assert len(makefile_findings) >= 1
+    assert any("amazonaws.com" in f.vendor for f in makefile_findings)
+
+
+def test_cicd_scanner_makefile_without_us_hosts(tmp_path: Path) -> None:
+    (tmp_path / "Makefile").write_text(
+        "install:\n"
+        "\tpip install -e .\n"
+    )
+    result = CICDScanner().scan(tmp_path)
+    makefile_findings = [
+        f for f in result.findings if f.component == "makefile_download"
+    ]
+    assert makefile_findings == []
+
+
+def test_cicd_scanner_detects_jenkinsfile(tmp_path: Path) -> None:
+    (tmp_path / "Jenkinsfile").write_text(
+        "pipeline { agent any; stages { stage('build') { steps { echo 'hi' } } } }\n"
+    )
+    result = CICDScanner().scan(tmp_path)
+    jenkins_findings = [f for f in result.findings if f.component == "jenkins"]
+    assert len(jenkins_findings) == 1
+
+
+def test_cicd_scanner_detects_drone_yml(tmp_path: Path) -> None:
+    (tmp_path / ".drone.yml").write_text("kind: pipeline\nname: default\n")
+    result = CICDScanner().scan(tmp_path)
+    drone_findings = [f for f in result.findings if f.component == "drone_ci"]
+    assert len(drone_findings) == 1
+    assert drone_findings[0].cloud_act_exposure is True
+
+
+# ---------------------------------------------------------------------------
+# CLI --suggest-alternatives
+# ---------------------------------------------------------------------------
+
+
+def test_cli_scan_suggest_alternatives_text(tmp_path: Path, capsys) -> None:
+    from sentinel import cli
+
+    rc = cli.main([
+        "scan", "--runtime", "--suggest-alternatives", "--repo", str(tmp_path),
+    ])
+    assert rc == 0
+    out = capsys.readouterr().out
+    # header appears whenever there's at least one known US package installed
+    if "EU-SOVEREIGN ALTERNATIVES" in out:
+        assert "→" in out
+
+
+def test_cli_scan_suggest_alternatives_json(tmp_path: Path, capsys) -> None:
+    from sentinel import cli
+
+    rc = cli.main([
+        "scan", "--runtime", "--suggest-alternatives", "--json",
+        "--repo", str(tmp_path),
+    ])
+    assert rc == 0
+    out = capsys.readouterr().out
+    data = json.loads(out)
+    assert "eu_alternatives" in data
+    assert isinstance(data["eu_alternatives"], dict)

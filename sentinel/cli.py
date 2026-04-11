@@ -53,6 +53,11 @@ def main(argv: list[str] | None = None) -> int:
     p_scan.add_argument("--all", action="store_true", help="Run all scanners (default)")
     p_scan.add_argument("--json", action="store_true", help="Emit JSON instead of text")
     p_scan.add_argument("--repo", default=".", help="Repository root for CI/CD and infra scans")
+    p_scan.add_argument(
+        "--suggest-alternatives",
+        action="store_true",
+        help="Show EU-sovereign alternatives for each flagged US package",
+    )
 
     # --- compliance check ---------------------------------------------------
     p_comp = sub.add_parser("compliance", help="EU AI Act compliance utilities")
@@ -259,18 +264,30 @@ def _cmd_scan(args: argparse.Namespace) -> int:
 
     run_all = args.all or not (args.runtime or args.cicd or args.infra)
     out: dict[str, Any] = {}
+    alternatives: dict[str, str] = {}
 
     if args.runtime or run_all:
-        out["runtime"] = RuntimeScanner().scan().to_dict()
+        runtime_result = RuntimeScanner().scan()
+        out["runtime"] = runtime_result.to_dict()
+        if args.suggest_alternatives:
+            alternatives = runtime_result.sovereign_alternatives()
     if args.cicd or run_all:
         out["cicd"] = CICDScanner().scan(args.repo).to_dict()
     if args.infra or run_all:
         out["infrastructure"] = InfrastructureScanner().scan(args.repo).to_dict()
 
     if args.json:
+        if args.suggest_alternatives:
+            out["eu_alternatives"] = alternatives
         print(json.dumps(out, indent=2))
     else:
         _print_scan_text(out)
+        if args.suggest_alternatives and alternatives:
+            print()
+            print("EU-SOVEREIGN ALTERNATIVES")
+            print("-------------------------")
+            for pkg, alt in sorted(alternatives.items()):
+                print(f"  {pkg} → {alt}")
     return 0
 
 

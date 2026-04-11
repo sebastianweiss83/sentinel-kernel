@@ -121,9 +121,98 @@ PACKAGE_KNOWLEDGE: dict[str, PackageKnowledge] = {
     "hatch":                 PackageKnowledge("Ofek Lev","Neutral",False,False,"OSS"),
     "hatchling":             PackageKnowledge("Ofek Lev","Neutral",False,False,"OSS"),
 
+    # --- AI agent frameworks (many US) ----------------------------------
+    "crewai":                PackageKnowledge("CrewAI Inc.",     "US", True,  False, "Agent framework"),
+    "autogen":               PackageKnowledge("Microsoft",       "US", True,  False, "Agent framework"),
+    "pyautogen":             PackageKnowledge("Microsoft",       "US", True,  False, "Agent framework"),
+    "semantic-kernel":       PackageKnowledge("Microsoft",       "US", True,  False, "Agent framework"),
+    "llama-index":           PackageKnowledge("LlamaIndex Inc.", "US", True,  False, "RAG framework"),
+    "llama-cpp-python":      PackageKnowledge("LlamaIndex Inc.", "US", False, False, "Local inference"),
+    "dspy":                  PackageKnowledge("Stanford NLP",    "US", False, False, "Academic"),
+    "griptape":              PackageKnowledge("Griptape AI",     "US", True,  False, "Agent framework"),
+    "haystack-ai":           PackageKnowledge("deepset GmbH",    "EU", False, False, "Berlin — EU-sovereign"),
+    "farm-haystack":         PackageKnowledge("deepset GmbH",    "EU", False, False, "Berlin — legacy Haystack 1.x"),
+
+    # --- Additional US LLM providers (CLOUD Act) ------------------------
+    "groq":                  PackageKnowledge("Groq Inc.",       "US", True,  True,  "Groq client"),
+    "perplexity-client":     PackageKnowledge("Perplexity AI",   "US", True,  True,  "Perplexity API"),
+    "mistralai":             PackageKnowledge("Mistral AI",      "EU", False, True,  "Paris — EU-sovereign"),
+
+    # --- EU-sovereign cloud / infra providers ---------------------------
+    "deepl":                 PackageKnowledge("DeepL SE",        "EU", False, False, "German translation"),
+    "aleph-alpha-client":    PackageKnowledge("Aleph Alpha GmbH","EU", False, True,  "German LLM"),
+    "scaleway":              PackageKnowledge("Scaleway SAS",    "EU", False, False, "French cloud"),
+    "hcloud":                PackageKnowledge("Hetzner Online GmbH","EU",False,False,"Hetzner Cloud — German"),
+    "ovh":                   PackageKnowledge("OVH SAS",         "EU", False, False, "French cloud"),
+
+    # --- Web / HTTP (neutral but commonly missed) -----------------------
+    "httpcore":              PackageKnowledge("Encode",          "Neutral", False, False, "OSS"),
+    "anyio":                 PackageKnowledge("agronholm",       "Neutral", False, False, "OSS"),
+    "sniffio":               PackageKnowledge("python-trio",     "Neutral", False, False, "OSS"),
+    "h11":                   PackageKnowledge("python-hyper",    "Neutral", False, False, "OSS"),
+    "h2":                    PackageKnowledge("python-hyper",    "Neutral", False, False, "OSS"),
+    "certifi":               PackageKnowledge("Certifi",         "Neutral", False, False, "CA bundle"),
+    "charset-normalizer":    PackageKnowledge("Ousret",          "Neutral", False, False, "OSS"),
+    "idna":                  PackageKnowledge("Kim Davies",      "Neutral", False, False, "OSS"),
+
+    # --- Observability servers / collectors (self-hostable) -------------
+    "prometheus-client":     PackageKnowledge("Prometheus",      "Neutral", False, False, "CNCF client"),
+    "grafana-api":           PackageKnowledge("Grafana Labs",    "US",      True,  False, "HQ in US despite OSS core"),
+
+    # --- Vector DBs ------------------------------------------------------
+    "pinecone-client":       PackageKnowledge("Pinecone",        "US", True,  True,  "Hosted vector DB"),
+    "weaviate-client":       PackageKnowledge("Weaviate B.V.",   "EU", False, True,  "Amsterdam"),
+    "qdrant-client":         PackageKnowledge("Qdrant",          "EU", False, True,  "Berlin"),
+    "chromadb":              PackageKnowledge("Chroma",          "US", True,  True,  "Hosted or self-hosted"),
+    "milvus":                PackageKnowledge("Zilliz",          "US", True,  True,  "Milvus host"),
+
+    # --- Document / PDF processing --------------------------------------
+    "pypdf":                 PackageKnowledge("py-pdf",          "Neutral", False, False, "OSS"),
+    "pdfplumber":            PackageKnowledge("pdfplumber",      "Neutral", False, False, "OSS"),
+
+    # --- Async / concurrency --------------------------------------------
+    "trio":                  PackageKnowledge("python-trio",     "Neutral", False, False, "OSS"),
+    "curio":                 PackageKnowledge("Dave Beazley",    "Neutral", False, False, "OSS"),
+
     # --- Sentinel itself --------------------------------------------------
     "sentinel-kernel":       PackageKnowledge("sentinel-kernel","EU",False,True,"This project"),
 }
+
+
+# ---------------------------------------------------------------------------
+# EU-sovereign alternatives map
+# ---------------------------------------------------------------------------
+
+#: For each US-owned package, a suggested EU-sovereign alternative.
+#: Used by ``sentinel scan --suggest-alternatives``.
+EU_ALTERNATIVES: dict[str, str] = {
+    "openai":              "mistralai (Mistral AI, Paris) or aleph-alpha-client (Aleph Alpha, Heidelberg)",
+    "anthropic":           "mistralai or aleph-alpha-client",
+    "cohere":              "mistralai",
+    "groq":                "mistralai (no EU hosted inference provider at this latency yet)",
+    "google-cloud-storage":"hcloud (Hetzner) or scaleway",
+    "boto3":               "hcloud (Hetzner) or scaleway or ovh",
+    "azure-storage-blob":  "hcloud (Hetzner) or scaleway",
+    "pinecone-client":     "qdrant-client (Berlin) or weaviate-client (Amsterdam)",
+    "chromadb":            "qdrant-client or weaviate-client",
+    "milvus":              "qdrant-client or weaviate-client",
+    "wandb":               "mlflow self-hosted, or langfuse (Berlin)",
+    "mlflow":              "langfuse (Berlin, self-hostable)",
+    "datadog":             "prometheus-client + grafana (self-hosted)",
+    "sentry-sdk":          "glitchtip (self-hosted, Sentry-compatible)",
+    "langchain":           "haystack-ai (deepset, Berlin)",
+    "llama-index":         "haystack-ai",
+    "crewai":              "haystack-ai",
+    "autogen":             "haystack-ai",
+    "semantic-kernel":     "haystack-ai",
+    "helicone":            "langfuse",
+    "langsmith":           "langfuse",
+}
+
+
+def suggest_alternative(package_name: str) -> str | None:
+    """Return an EU-sovereign alternative for the given US package, if known."""
+    return EU_ALTERNATIVES.get(_normalise(package_name))
 
 
 def lookup(package_name: str) -> PackageKnowledge | None:

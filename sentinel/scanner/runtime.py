@@ -15,7 +15,11 @@ from dataclasses import asdict, dataclass, field
 from importlib import metadata as importlib_metadata
 from typing import Any
 
-from sentinel.scanner.knowledge import PACKAGE_KNOWLEDGE, lookup
+from sentinel.scanner.knowledge import (
+    PACKAGE_KNOWLEDGE,
+    lookup,
+    suggest_alternative,
+)
 
 
 @dataclass
@@ -59,6 +63,21 @@ class ScanResult:
         if not self.packages:
             return 1.0
         return self.sovereign_packages / self.total_packages
+
+    def sovereign_alternatives(self) -> dict[str, str]:
+        """For each US-owned package in the scan, return an EU alternative.
+
+        Returns a ``{package_name: suggestion}`` mapping. Packages with no
+        known alternative are omitted.
+        """
+        out: dict[str, str] = {}
+        for p in self.packages:
+            if not p.cloud_act_exposure:
+                continue
+            alt = suggest_alternative(p.name)
+            if alt:
+                out[p.name] = alt
+        return out
 
     def to_dict(self) -> dict[str, Any]:
         return {

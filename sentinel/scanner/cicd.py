@@ -135,7 +135,87 @@ class CICDScanner:
                 )
             )
 
+        # Makefile — flag curl/wget calls to US cloud hosts.
+        makefile = root / "Makefile"
+        if makefile.exists():
+            result.files_scanned += 1
+            for finding in _scan_makefile(makefile, root):
+                result.findings.append(finding)
+
+        # Jenkinsfile — declarative or scripted.
+        jenkinsfile = root / "Jenkinsfile"
+        if jenkinsfile.exists():
+            result.files_scanned += 1
+            result.findings.append(
+                CICDFinding(
+                    file="Jenkinsfile",
+                    component="jenkins",
+                    vendor="Jenkins (CloudBees/self-hosted)",
+                    jurisdiction="Unknown",
+                    cloud_act_exposure=False,
+                    detail="Jenkins itself is OSS; hosted CloudBees is US.",
+                )
+            )
+
+        # Drone CI
+        drone_cfg = root / ".drone.yml"
+        if drone_cfg.exists():
+            result.files_scanned += 1
+            result.findings.append(
+                CICDFinding(
+                    file=".drone.yml",
+                    component="drone_ci",
+                    vendor="Harness (Drone)",
+                    jurisdiction="US",
+                    cloud_act_exposure=True,
+                    detail="Drone was acquired by Harness — hosted Drone Cloud is US.",
+                )
+            )
+
         return result
+
+
+_US_NETWORK_HOSTS = (
+    "amazonaws.com",
+    "cloudfront.net",
+    "googleapis.com",
+    "google.com",
+    "azurewebsites.net",
+    "blob.core.windows.net",
+    "windows.net",
+    "github.com/downloads",
+    "ghcr.io",
+    "gcr.io",
+)
+
+
+def _scan_makefile(path: Path, root: Path) -> list[CICDFinding]:
+    findings: list[CICDFinding] = []
+    rel = str(path.relative_to(root))
+    for lineno, line in enumerate(
+        path.read_text(errors="replace").splitlines(), start=1
+    ):
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if not any(cmd in stripped for cmd in ("curl", "wget")):
+            continue
+        matched = next(
+            (host for host in _US_NETWORK_HOSTS if host in stripped),
+            None,
+        )
+        if matched:
+            findings.append(
+                CICDFinding(
+                    file=rel,
+                    component="makefile_download",
+                    vendor=matched,
+                    jurisdiction="US",
+                    cloud_act_exposure=True,
+                    detail=f"line {lineno}: {stripped[:80]}",
+                )
+            )
+    return findings
 
 
 def _scan_dockerfile(path: Path, root: Path) -> list[CICDFinding]:
