@@ -17,6 +17,13 @@ Every AI agent makes decisions. From **2 August 2026**, EU high-risk AI systems 
 **Live preview:** https://sebastianweiss83.github.io/sentinel-kernel/
 **Get started in 2 minutes:** [docs/getting-started.md](docs/getting-started.md)
 
+## Quick demo
+
+```bash
+pip install sentinel-kernel
+sentinel demo  # 50 decisions, kill switch, compliance check, report
+```
+
 ---
 
 ## Quick demo — full stack in one command
@@ -197,8 +204,15 @@ Sentinel's critical path — interceptor, policy evaluation, trace emission, sto
 | **v0.7**   | ✓ shipped | EU AI Act compliance checker + diff report |
 | **v0.8**   | ✓ shipped | Demo environment (Docker Compose + Grafana dashboard) |
 | **v0.9**   | ✓ shipped | Sovereignty dashboard (terminal + self-contained HTML) |
-| **v1.0**   | Q4 2026  | BSI IT-Grundschutz assessment — certified sovereign |
-| **v1.1**   | Q1 2027  | VS-NfD classified deployment profile |
+| **v1.0**   | ✓ shipped | Core production baseline |
+| **v1.5**   | ✓ shipped | Compliance checkers (EU AI Act, DORA, NIS2) |
+| **v2.0**   | ✓ shipped | Production stable, BSI assessment ready |
+| **v2.1**   | ✓ shipped | BudgetTracker, attestations, CrewAI, AutoGen |
+| **v2.2**   | ✓ shipped | Quantum-safe signing (ML-DSA-65, client-side) |
+| **v2.3**   | ✓ shipped | LangFuse sovereignty panel |
+| **v2.4**   | ✓ shipped | Rust RFC-001 implementation |
+| **v3.0**   | Q3 2026  | BSI assessment submission + LF Europe application |
+| **v3.1**   | Q1 2027  | VS-NfD classified deployment profile |
 
 ## What's in v0.9
 
