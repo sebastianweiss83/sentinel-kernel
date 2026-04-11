@@ -306,6 +306,140 @@ class Sentinel:
             offset=offset,
         )
 
+    def preflight(self, action_type: str) -> PreflightResult:
+        """Check whether an action would be allowed — without executing it.
+
+        No trace is written. Returns instantly. Use before executing
+        sensitive or irreversible actions.
+
+        Checks:
+
+        1. Kill switch active → DENY immediately.
+        2. Policy evaluation against ``action_type`` if an evaluator
+           is configured.
+        """
+        reasons: list[str] = []
+
+        with self._kill_switch_lock:
+            ks_active = self._kill_switch_active
+            ks_reason = self._kill_switch_reason or "kill switch engaged"
+
+        if ks_active:
+            reasons.append(f"kill_switch:{ks_reason}")
+            return PreflightResult(
+                cleared=False,
+                kill_switch_active=True,
+                policy_result="DENY",
+                reasons=reasons,
+            )
+
+        evaluator = self.policy_evaluator
+        if isinstance(evaluator, NullPolicyEvaluator):
+            return PreflightResult(
+                cleared=True,
+                kill_switch_active=False,
+                policy_result="NOT_EVALUATED",
+                reasons=[],
+            )
+
+        # Run the evaluator synchronously against a minimal input.
+        preview_trace = DecisionTrace(
+            project=self.project,
+            agent="preflight",
+            inputs={"action_type": action_type},
+        )
+        try:
+            result = asyncio.run(
+                evaluator.evaluate(
+                    policy_path=action_type,
+                    inputs={"action_type": action_type},
+                    trace=preview_trace,
+                )
+            )
+        except Exception as exc:
+            return PreflightResult(
+                cleared=False,
+                kill_switch_active=False,
+                policy_result="DENY",
+                reasons=[f"evaluator_error:{type(exc).__name__}"],
+            )
+
+        if result.result == PolicyResult.ALLOW:
+            return PreflightResult(
+                cleared=True,
+                kill_switch_active=False,
+                policy_result="ALLOW",
+                reasons=[],
+            )
+
+        if result.result == PolicyResult.DENY:
+            reason = result.rule_triggered or result.rationale or "policy_deny"
+            return PreflightResult(
+                cleared=False,
+                kill_switch_active=False,
+                policy_result="DENY",
+                reasons=[f"policy:{reason}"],
+            )
+
+        return PreflightResult(
+            cleared=False,
+            kill_switch_active=False,
+            policy_result=str(result.result),
+            reasons=["policy_result_not_allow"],
+        )
+
+    def verify_output(
+        self,
+        trace_id: str,
+        output: Any,
+    ) -> OutputVerificationResult:
+        """Retrieve a trace and verify its output hash matches ``output``.
+
+        Fully offline. Zero network calls.
+        """
+        trace = self.storage.get(trace_id)
+        if trace is None:
+            return OutputVerificationResult(
+                verified=False,
+                trace_id=trace_id,
+                stored_hash=None,
+                computed_hash="",
+                match=False,
+                detail="trace not found",
+            )
+
+        if not isinstance(output, dict):
+            return OutputVerificationResult(
+                verified=False,
+                trace_id=trace_id,
+                stored_hash=trace.output_hash,
+                computed_hash="",
+                match=False,
+                detail="output must be a dict",
+            )
+
+        computed = DecisionTrace._hash(output)
+        stored = trace.output_hash
+        if stored is None:
+            return OutputVerificationResult(
+                verified=False,
+                trace_id=trace_id,
+                stored_hash=None,
+                computed_hash=computed,
+                match=False,
+                detail="trace has no output_hash recorded",
+            )
+
+        match = computed == stored
+        return OutputVerificationResult(
+            verified=match,
+            trace_id=trace_id,
+            stored_hash=stored,
+            computed_hash=computed,
+            match=match,
+            detail="output matches recorded hash" if match else "output does not match recorded hash",
+        )
+
     def verify_integrity(self, trace_id: str) -> IntegrityResult:
         """
         Verify a trace has not been tampered with.
@@ -389,6 +523,51 @@ class IntegrityResult:
             "found": self.found,
             "inputs_match": self.inputs_match,
             "output_match": self.output_match,
+            "detail": self.detail,
+        }
+
+
+@dataclass
+class PreflightResult:
+    """Result of :meth:`Sentinel.preflight`.
+
+    Preflight checks are advisory: no trace is written, no action is
+    executed. Used to decide whether to attempt a sensitive or
+    irreversible action.
+    """
+
+    cleared: bool
+    kill_switch_active: bool
+    policy_result: str  # "ALLOW" | "DENY" | "NOT_EVALUATED"
+    reasons: list[str]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "cleared": self.cleared,
+            "kill_switch_active": self.kill_switch_active,
+            "policy_result": self.policy_result,
+            "reasons": list(self.reasons),
+        }
+
+
+@dataclass
+class OutputVerificationResult:
+    """Result of :meth:`Sentinel.verify_output`."""
+
+    verified: bool
+    trace_id: str
+    stored_hash: str | None
+    computed_hash: str
+    match: bool
+    detail: str
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "verified": self.verified,
+            "trace_id": self.trace_id,
+            "stored_hash": self.stored_hash,
+            "computed_hash": self.computed_hash,
+            "match": self.match,
             "detail": self.detail,
         }
 

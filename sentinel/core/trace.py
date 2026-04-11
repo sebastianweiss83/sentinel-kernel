@@ -159,6 +159,20 @@ class DecisionTrace:
         if trace_id not in self.precedent_trace_ids:
             self.precedent_trace_ids.append(trace_id)
 
+    def verify_output(self, output: Any) -> bool:
+        """Verify ``output`` matches the stored ``output_hash``.
+
+        Recomputes SHA-256 of ``output`` and compares to the recorded
+        hash. Works fully offline. Returns True if unmodified.
+
+        Returns False if ``output_hash`` was not recorded (graceful).
+        """
+        if not self.output_hash:
+            return False
+        if not isinstance(output, dict):
+            return False
+        return self._hash(output) == self.output_hash
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "schema_version": self.schema_version,

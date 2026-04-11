@@ -13,6 +13,12 @@ Sentinel — EU-sovereign AI decision middleware.
 Apache 2.0 License. See LICENSE.
 """
 
+from sentinel.core.attestation import (
+    AttestationResult,
+    generate_attestation,
+    verify_attestation,
+)
+from sentinel.core.budget import BudgetCheckResult, BudgetTracker
 from sentinel.core.trace import (
     DataResidency,
     DecisionTrace,
@@ -23,11 +29,13 @@ from sentinel.core.trace import (
 from sentinel.core.tracer import (
     IntegrityResult,
     KillSwitchEngaged,
+    OutputVerificationResult,
     PolicyDeniedError,
+    PreflightResult,
     Sentinel,
 )
 
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 __all__ = [
     "Sentinel",
     "PolicyDeniedError",
@@ -38,4 +46,11 @@ __all__ = [
     "HumanOverride",
     "DataResidency",
     "IntegrityResult",
+    "PreflightResult",
+    "OutputVerificationResult",
+    "BudgetTracker",
+    "BudgetCheckResult",
+    "generate_attestation",
+    "verify_attestation",
+    "AttestationResult",
 ]

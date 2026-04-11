@@ -148,6 +148,22 @@ def main(argv: list[str] | None = None) -> int:
     p_import.add_argument("--input", required=True, help="Input NDJSON path")
     p_import.add_argument("--db", help="SQLite path (default: in-memory for CLI)")
 
+    # --- attestation --------------------------------------------------------
+    p_att = sub.add_parser("attestation", help="Governance attestation utilities")
+    att_sub = p_att.add_subparsers(dest="attestation_command")
+
+    p_att_gen = att_sub.add_parser("generate", help="Generate a self-contained attestation")
+    p_att_gen.add_argument("--output", help="Output JSON path (default: stdout)")
+    p_att_gen.add_argument("--manifesto", help="Dotted path to a SentinelManifesto subclass")
+    p_att_gen.add_argument(
+        "--compliance",
+        action="store_true",
+        help="Include an EU AI Act compliance summary",
+    )
+
+    p_att_ver = att_sub.add_parser("verify", help="Verify an attestation offline")
+    p_att_ver.add_argument("--input", required=True, help="Attestation JSON path")
+
     # --- manifesto check ----------------------------------------------------
     p_man = sub.add_parser("manifesto", help="Manifesto utilities")
     man_sub = p_man.add_subparsers(dest="manifesto_command")
@@ -193,6 +209,13 @@ def main(argv: list[str] | None = None) -> int:
         if args.manifesto_command == "check":
             return _cmd_manifesto_check(args)
         p_man.print_help()
+        return 1
+    if args.command == "attestation":
+        if args.attestation_command == "generate":
+            return _cmd_attestation_generate(args)
+        if args.attestation_command == "verify":
+            return _cmd_attestation_verify(args)
+        p_att.print_help()
         return 1
 
     parser.print_help()
@@ -329,7 +352,10 @@ def _cmd_demo(args: argparse.Namespace) -> int:
 
     print(f"✓ Report saved: {out_path}")
     print()
-    print("If Sentinel helped you: github.com/sebastianweiss83/sentinel-kernel ⭐")
+    print("Attestation: sentinel attestation generate")
+    print("Report:      sentinel report --output sovereignty_report.html")
+    print()
+    print("If Sentinel helped you: ⭐ github.com/sebastianweiss83/sentinel-kernel")
     print()
 
     # Clean up temp database
@@ -595,6 +621,50 @@ def _cmd_manifesto_check(args: argparse.Namespace) -> int:
     else:
         print(report.as_text())
     return 0
+
+
+def _cmd_attestation_generate(args: argparse.Namespace) -> int:
+    from sentinel.core.attestation import generate_attestation
+
+    sentinel = _make_default_sentinel()
+    manifesto_cls = _load_manifesto(args.manifesto) if args.manifesto else None
+    manifesto = manifesto_cls() if manifesto_cls is not None else None
+
+    compliance_report = None
+    if args.compliance:
+        from sentinel.compliance import EUAIActChecker
+
+        compliance_report = EUAIActChecker().check(sentinel)
+
+    doc = generate_attestation(
+        sentinel=sentinel,
+        manifesto=manifesto,
+        compliance_report=compliance_report,
+    )
+    content = json.dumps(doc, indent=2, sort_keys=True)
+    if args.output:
+        Path(args.output).write_text(content + "\n", encoding="utf-8")
+        print(f"Wrote {args.output}")
+    else:
+        print(content)
+    return 0
+
+
+def _cmd_attestation_verify(args: argparse.Namespace) -> int:
+    from sentinel.core.attestation import verify_attestation
+
+    path = Path(args.input)
+    if not path.exists():
+        print(f"attestation: file not found: {path}", file=sys.stderr)
+        return 2
+    doc = json.loads(path.read_text(encoding="utf-8"))
+    result = verify_attestation(doc)
+    print(f"valid:          {result.valid}")
+    print(f"hash_verified:  {result.hash_verified}")
+    print(f"detail:         {result.detail}")
+    if result.what_failed:
+        print(f"what_failed:    {result.what_failed}")
+    return 0 if result.valid else 1
 
 
 # ---------------------------------------------------------------------------

@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `2.0.0` |
-| Tests | 507 passing |
+| Version | `2.1.0` |
+| Tests | 568 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 17:01 UTC |
+| Last updated | 2026-04-11 17:12 UTC |
 
 ## Last 5 commits
 
+- `6a9f687` feat: v2.1.0 — BudgetTracker, attestations, CrewAI, AutoGen
 - `3ea8d56` feat: manifesto 5 theses as explicit named CI checks
 - `0f5733b` feat: preview data.json for live stats consumption
 - `62ddc44` chore: GitHub community health files — issue templates, PR template
 - `5bf2bfb` test: infrastructure yaml-exclusion branch (CI 99%→100%)
-- `568c702` fix: sync_all idempotency across environments
 
 ## Open issues
 

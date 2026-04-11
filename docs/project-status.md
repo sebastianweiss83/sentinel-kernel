@@ -6,11 +6,11 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-11 17:01 UTC_
+_Last generated from HEAD commit: 2026-04-11 17:12 UTC_
 
 ## Version
 
-**`2.0.0`** — Production/Stable
+**`2.1.0`** — Production/Stable
 
 EU-sovereign decision record layer for AI agents.
 
@@ -18,7 +18,7 @@ EU-sovereign decision record layer for AI agents.
 
 | | |
 |---|---|
-| Tests | 507 passing |
+| Tests | 568 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
 
@@ -34,12 +34,16 @@ EU-sovereign decision record layer for AI agents.
 | `sentinel/compliance/nis2.py` | 100% | ✓ |
 | `sentinel/compliance/unified.py` | 100% | ✓ |
 | `sentinel/core/__init__.py` | 100% | ✓ |
+| `sentinel/core/attestation.py` | 100% | ✓ |
+| `sentinel/core/budget.py` | 100% | ✓ |
 | `sentinel/core/trace.py` | 100% | ✓ |
 | `sentinel/core/tracer.py` | 100% | ✓ |
 | `sentinel/dashboard/__init__.py` | 100% | ✓ |
 | `sentinel/dashboard/html.py` | 100% | ✓ |
 | `sentinel/dashboard/terminal.py` | 100% | ✓ |
 | `sentinel/integrations/__init__.py` | 100% | ✓ |
+| `sentinel/integrations/autogen.py` | 100% | ✓ |
+| `sentinel/integrations/crewai.py` | 100% | ✓ |
 | `sentinel/integrations/django.py` | 100% | ✓ |
 | `sentinel/integrations/fastapi.py` | 100% | ✓ |
 | `sentinel/integrations/haystack.py` | 100% | ✓ |
@@ -73,7 +77,7 @@ EU-sovereign decision record layer for AI agents.
 - `purge_before(cutoff, dry_run)` retention management
 - Manifesto types: `AcknowledgedGap`, `AuditTrailIntegrity`, `BSIProfile`, `DimensionStatus`, `EUOnly`, `GDPRCompliant`, `Gap`, `ManifestoReport`, `MigrationPlan`, `OnPremiseOnly`, `Required`, `RetentionPolicy`, `SentinelManifesto`, `Targeting`, `VSNfDReady`, `ZeroExposure`
 - Compliance checkers: `DoraChecker`, `EUAIActChecker`, `NIS2Checker`, `UnifiedComplianceChecker`
-- Integrations: `django`, `fastapi`, `haystack`, `jupyter`, `langchain`, `langfuse`, `otel`, `prometheus`
+- Integrations: `autogen`, `crewai`, `django`, `fastapi`, `haystack`, `jupyter`, `langchain`, `langfuse`, `otel`, `prometheus`
 
 ## Open issues
 
@@ -102,6 +106,7 @@ EU-sovereign decision record layer for AI agents.
 
 ## Shipped
 
+- **2.1.0 (2026-04-11)** — **Sovereign-first governance primitives.**
 - **2.0.0 (2026-04-11)** — **Major release. Production stable. BSI assessment ready.**
 - **1.9.0 (2026-04-11)** — Minor release. Advanced compliance — DORA and NIS2 checkers with
 - **1.8.0 (2026-04-11)** — Minor release. Developer experience — Jupyter notebook widget,
@@ -113,6 +118,5 @@ EU-sovereign decision record layer for AI agents.
 - **1.2.0 (2026-04-11)** — Minor release. Depth across onboarding, governance, manifesto, and
 - **1.1.0 (2026-04-11)** — Minor release. Major visual overhaul of the public surface, new CLI
 - **1.0.1 (2026-04-11)** — Patch release. No public API changes. Coverage hardened across the
-- **1.0.0 (2026-04-11)** — Stable release. The full v0.9.x feature set — kill switch, PostgreSQL
 
 <!-- SYNC_ALL_STATUS_END -->

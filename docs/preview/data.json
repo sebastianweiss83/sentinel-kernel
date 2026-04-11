@@ -2,6 +2,6 @@
   "coverage": "100%",
   "days_to_enforcement": 113,
   "smoke": "40/40",
-  "tests": 507,
-  "version": "2.0.0"
+  "tests": 568,
+  "version": "2.1.0"
 }

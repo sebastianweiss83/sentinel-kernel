@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.1.0] — 2026-04-11
+
+**Sovereign-first governance primitives.**
+
+### Added
+
+- **`BudgetTracker`** — client-side spend tracking with a sovereign
+  audit trail. Every cost entry is a local `DecisionTrace`. No
+  external service, no API key, works air-gapped.
+- **`Sentinel.preflight(action_type)`** — check if an action would
+  be allowed before executing it. No trace written. Returns instantly.
+- **Output verification** — `Sentinel.verify_output(trace_id, output)`
+  and `DecisionTrace.verify_output(output)` compare a value against
+  a recorded `output_hash`. Works offline.
+- **Attestations** — `generate_attestation()` / `verify_attestation()`
+  produce portable, self-contained governance JSON documents whose
+  SHA-256 hash is the proof. Verifiable offline, no cloud needed.
+- **`sentinel attestation`** CLI — `generate` and `verify` subcommands.
+- **`SentinelCrewCallback`** — CrewAI task callback integration
+  (`pip install sentinel-kernel[crewai]`).
+- **`SentinelAutoGenHook`** — Microsoft AutoGen agent hook integration
+  (`pip install sentinel-kernel[autogen]`).
+- **Manifesto 5 theses as named CI checks** — new `manifesto-checks`
+  job runs Thesis 1 (no US-owned deps), Thesis 2 (air-gap), Thesis 3
+  (`check_license.py`), Thesis 4 (`check_manifesto.py`), Thesis 5
+  (trace immutability).
+- **GitHub community health files** — issue templates (bug, feature,
+  integration), PR template, `FUNDING.yml`, README star CTA.
+- **`docs/preview/data.json`** — live metrics emitted on every sync
+  for GitHub Pages consumers.
+
+### Changed
+
+- `sentinel demo` now prints the attestation and report commands
+  at the end, plus a subtle star CTA.
+- Runtime scanner's optional-extras allowlist now includes
+  `langsmith` (transitive dep of optional `langchain`/`langfuse`).
+
 ## [2.0.0] — 2026-04-11
 
 **Major release. Production stable. BSI assessment ready.**
