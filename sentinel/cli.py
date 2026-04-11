@@ -238,6 +238,8 @@ def _load_manifesto(ref: str) -> Any:
 
     if module_ref.endswith(".py") or "/" in module_ref:
         path = Path(module_ref)
+        if not path.exists():
+            return None
         spec = importlib.util.spec_from_file_location(path.stem, path)
         if spec is None or spec.loader is None:
             return None

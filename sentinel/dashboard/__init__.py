@@ -6,6 +6,6 @@ Both zero-dependency and air-gapped safe.
 """
 
 from sentinel.dashboard.html import HTMLReport
-from sentinel.dashboard.terminal import TerminalDashboard
+from sentinel.dashboard.terminal import TerminalDashboard, TerminalReport
 
-__all__ = ["TerminalDashboard", "HTMLReport"]
+__all__ = ["TerminalDashboard", "TerminalReport", "HTMLReport"]

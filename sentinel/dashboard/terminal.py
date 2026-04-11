@@ -132,6 +132,17 @@ class TerminalDashboard:
 
         return RuntimeScanner().scan().sovereignty_score
 
+    def print_summary(self) -> None:
+        """Render one frame and print it — convenience for scripts."""
+        print(self.render_once())
+
+
+# Public alias — matches RFC-001 / mega-prompt naming where the
+# terminal renderer is referred to as `TerminalReport`. The canonical
+# class name is `TerminalDashboard` (it is a live dashboard, not a
+# one-shot report), but the alias keeps the two vocabularies in sync.
+TerminalReport = TerminalDashboard
+
 
 def _terminal_width() -> int:
     try:
