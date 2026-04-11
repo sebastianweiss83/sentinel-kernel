@@ -7,6 +7,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.0.0] — 2026-04-11
+
+**Major release. Production stable. BSI assessment ready.**
+
+No breaking changes. v2.0 freezes the v1.x API surface under
+SemVer guarantees and ships three v2.0-specific documents that
+prepare the codebase for formal BSI IT-Grundschutz assessment.
+
+### Added
+
+- **`docs/api-stability.md`** — every public API classified as
+  STABLE, BETA, or EXPERIMENTAL. Breaking changes to STABLE APIs
+  now require a major version bump.
+- **`docs/migration-v2.md`** — v1.x → v2.0 migration guide.
+  Short answer: no breaking changes, just upgrade the pin.
+- **`docs/bsi-pre-engagement/`** — complete 4-document package
+  ready for the first BSI meeting:
+  - `README.md` — what and why
+  - `technical-summary.md` — 2-page project summary
+  - `architecture-overview.md` — the 5-layer architecture
+  - `test-evidence.md` — the test suite as BSI evidence
+  - `ai-act-mapping.md` — Art. 12/13/14 mapping with
+    file-and-line references into the implementation
+
+### Changed
+
+- **Status:** Production/Stable. This is explicit in the
+  classifiers in `pyproject.toml` and the release notes.
+- **Coverage baseline:** 100% line coverage is now the
+  release-blocking standard. Every module in `sentinel/` sits
+  at 100%.
+- **Test count:** 503+ tests across unit, integration,
+  compliance, and air-gap suites.
+
+### Deprecated
+
+Nothing. Every v1.x API is preserved.
+
+### Roadmap beyond v2.0
+
+- **2026-Q2** — first BSI pre-engagement meeting
+- **2026-Q3** — design partner pilot in production
+- **2026-Q4** — formal BSI assessment begins; LF Europe
+  application submitted
+- **2027-Q1** — VS-NfD profile iteration
+
 ## [1.9.0] — 2026-04-11
 
 Minor release. Advanced compliance — DORA and NIS2 checkers with
