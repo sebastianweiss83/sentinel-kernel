@@ -12,15 +12,15 @@
 | Tests | 593 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 19:32 UTC |
+| Last updated | 2026-04-11 19:37 UTC |
 
 ## Last 5 commits
 
+- `e4c9ee8` fix(rust): allow clippy::should_implement_trait on builder add()
 - `eeb61a2` fix: rust fmt compliance, pip install retry for transient SSL flakes
 - `38f928f` feat: v3.0.0 — complete platform, API frozen, BSI assessment ready
 - `f6dce81` docs: README polish for GitHub discoverability
 - `4dcf4da` docs: publishable sovereign AI blog post
-- `e69eae2` feat: v2.4.0 — Rust SovereigntyManifest, RFC-001 implementations table, closes #13
 
 ## Open issues
 
