@@ -24,6 +24,5 @@ pub mod requirements;
 pub use manifesto::SovereigntyManifest;
 pub use report::{ManifestoReport, RequirementResult, RequirementStatus};
 pub use requirements::{
-    AcknowledgedGap, AirGapRequired, EUJurisdiction, Requirement, Targeting,
-    ZeroCloudActExposure,
+    AcknowledgedGap, AirGapRequired, EUJurisdiction, Requirement, Targeting, ZeroCloudActExposure,
 };

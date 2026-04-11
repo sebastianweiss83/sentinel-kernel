@@ -27,8 +27,7 @@ impl SovereigntyManifest {
     }
 
     pub fn check(&self) -> ManifestoReport {
-        let results: Vec<RequirementResult> =
-            self.requirements.iter().map(|r| r.check()).collect();
+        let results: Vec<RequirementResult> = self.requirements.iter().map(|r| r.check()).collect();
 
         let acknowledged_gaps: Vec<String> = results
             .iter()

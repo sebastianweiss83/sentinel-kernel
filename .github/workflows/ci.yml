@@ -151,8 +151,17 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install package
-        run: pip install -e ".[dev]"
+      - name: Install package (with retry for transient pip flakes)
+        run: |
+          for i in 1 2 3 4 5; do
+            if pip install --retries 5 --timeout 60 -e ".[dev]"; then
+              exit 0
+            fi
+            echo "pip install failed on attempt $i — retrying in 10s"
+            sleep 10
+          done
+          echo "pip install failed after 5 attempts"
+          exit 1
 
       - name: Run sync_all + commit with retry
         env:
