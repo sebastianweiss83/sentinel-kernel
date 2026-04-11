@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.0.2] — 2026-04-11
+
+**Scanner gets a reentrant cooperative timeout. Workflow concurrency
+guards. Same os.walk-pruning approach — no SIGALRM, no threads.**
+
+### Added
+
+- **`InfrastructureScanner.scan(timeout_seconds=5.0)`** — new
+  cooperative wall-clock budget on top of the existing walk-time
+  pruning. When the deadline expires the scan stops at the next file
+  boundary and returns a partial result with `timed_out=True`. The
+  check is a `time.monotonic()` comparison inside the walk loop:
+  fully reentrant, thread-safe, signal-free, cross-platform. Explicit
+  rejection of `signal.SIGALRM` (non-reentrant, breaks in threads
+  and async contexts).
+- **`InfraScanResult.timed_out`** field and a matching `"timed_out"`
+  key in `to_dict()` so callers can distinguish a partial result from
+  a complete one.
+- **CI workflow concurrency guards** — `ci.yml` and `release.yml` now
+  set a per-ref concurrency group so two rapid pushes or tags on main
+  can't race each other through `sync-all` / `deploy-pages`. The
+  existing atomic `sync-all` → `deploy-pages` chain inside `ci.yml`
+  is preserved (pages.yml remains dispatch-only).
+
+### Fixed
+
+- Scanner deadline tests cover the full phase 1 → 2 → 3 matrix,
+  including mid-phase breaks and the post-phase-3 final check.
+
 ## [3.0.1] — 2026-04-11
 
 **Bug fix: infrastructure scanner no longer hangs on large directories.**

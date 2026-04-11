@@ -510,6 +510,186 @@ def test_infra_scan_does_not_hang_on_large_dir(tmp_path: Path) -> None:
     assert result.files_scanned == 1
 
 
+def test_infra_deadline_unbounded_never_expires() -> None:
+    from sentinel.scanner.infrastructure import _Deadline
+
+    d = _Deadline(None)
+    assert d.expired() is False
+
+
+def test_infra_deadline_fires_after_timeout(monkeypatch: pytest.MonkeyPatch) -> None:
+    """_Deadline is purely time.monotonic-based — no signal handlers."""
+    import time
+
+    from sentinel.scanner.infrastructure import _Deadline
+
+    fake_now = [1000.0]
+
+    def _fake_monotonic() -> float:
+        return fake_now[0]
+
+    monkeypatch.setattr(time, "monotonic", _fake_monotonic)
+    d = _Deadline(5.0)
+    assert d.expired() is False
+    fake_now[0] += 4.0
+    assert d.expired() is False
+    fake_now[0] += 2.0  # now 6s elapsed > 5s budget
+    assert d.expired() is True
+
+
+def test_infra_scan_timeout_returns_partial(monkeypatch: pytest.MonkeyPatch) -> None:
+    """When the deadline fires mid-walk, scan() returns partial results
+    with timed_out=True instead of blocking indefinitely."""
+    from sentinel.scanner import InfrastructureScanner
+    from sentinel.scanner import infrastructure as mod
+
+    # Deadline that expires immediately — first check fires.
+    class _ZeroBudget:
+        def expired(self) -> bool:
+            return True
+
+    def _make_zero(*_args, **_kwargs):
+        return _ZeroBudget()
+
+    monkeypatch.setattr(mod, "_Deadline", _make_zero)
+
+    result = InfrastructureScanner().scan(".", timeout_seconds=0.001)
+    assert result.timed_out is True
+    # to_dict must surface the deadline note
+    assert result.to_dict()["timed_out"] is True
+    assert "deadline" in result.to_dict()["scan_note"].lower()
+
+
+def _make_phase_fixture(tmp_path: Path) -> None:
+    """Fixture with one .tf, one k8s .yaml, and a .env — covers all 3 phases."""
+    (tmp_path / "main.tf").write_text('provider "hetzner" {}\n')
+    (tmp_path / "storage.yaml").write_text(
+        "apiVersion: storage.k8s.io/v1\n"
+        "kind: StorageClass\n"
+        "parameters:\n"
+        "  storageClassName: gp3\n"
+    )
+    (tmp_path / ".env").write_text("AWS_ACCESS_KEY_ID=x\n")
+
+
+def _install_fake_deadline(
+    monkeypatch: pytest.MonkeyPatch, expire_after_n_checks: int
+) -> None:
+    """Patch _Deadline so .expired() returns True after N total calls."""
+    from sentinel.scanner import infrastructure as mod
+
+    state = {"count": 0}
+
+    class _Fake:
+        def expired(self) -> bool:
+            state["count"] += 1
+            return state["count"] > expire_after_n_checks
+
+    monkeypatch.setattr(mod, "_Deadline", lambda *_a, **_kw: _Fake())
+
+
+def test_infra_scan_deadline_expires_mid_phase1(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Line 154: `break` inside phase 1 loop when deadline expires."""
+    from sentinel.scanner import InfrastructureScanner
+
+    _make_phase_fixture(tmp_path)
+    # Order of expired() calls in phase 1 with one .tf file:
+    #   1) inside _walk_files at start of walk
+    #   2) inside the scan() loop body check after the first yield
+    # Let the walk start (count=1 False) then break on the scan body check.
+    _install_fake_deadline(monkeypatch, expire_after_n_checks=1)
+
+    result = InfrastructureScanner().scan(str(tmp_path))
+    assert result.timed_out is True
+
+
+def test_infra_scan_deadline_expires_mid_phase2(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Lines 165 and 172-173: `break` inside phase 2 loop + short-circuit."""
+    from sentinel.scanner import InfrastructureScanner
+
+    _make_phase_fixture(tmp_path)
+    # Phase 1 _walk_files call 1 (False), scan() loop body check 2 (False),
+    # post-phase-1 check 3 (False), phase 2 _walk_files call 4 (False),
+    # phase 2 loop body check 5 (True -> break), post-phase-2 check (True).
+    _install_fake_deadline(monkeypatch, expire_after_n_checks=4)
+
+    result = InfrastructureScanner().scan(str(tmp_path))
+    assert result.timed_out is True
+
+
+def test_infra_scan_deadline_expires_at_end(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Line 182: deadline fires only at the final post-phase-3 check."""
+    from sentinel.scanner import InfrastructureScanner
+    from sentinel.scanner import infrastructure as mod
+
+    _make_phase_fixture(tmp_path)
+
+    # For 1 tf + 1 yaml + 1 env fixture, scan() calls expired() in this
+    # order: phase1 walk(1), phase1 body(2), phase1 post(3), phase2 walk(4),
+    # phase2 body(5), phase2 post(6), phase3 post(7). Only call 7 should
+    # return True so line 182 is exercised without short-circuiting earlier.
+    state = {"count": 0}
+
+    class _OnlyFinal:
+        def expired(self) -> bool:
+            state["count"] += 1
+            return state["count"] >= 7
+
+    monkeypatch.setattr(mod, "_Deadline", lambda *_a, **_kw: _OnlyFinal())
+
+    result = InfrastructureScanner().scan(str(tmp_path))
+    assert result.timed_out is True
+    # Phases 1 and 2 completed cleanly, so findings exist
+    assert result.files_scanned >= 2
+
+
+def test_infra_scan_phase2_and_phase3_respect_deadline(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Deadline must be honoured between phases even when phase 1 finds nothing."""
+    from sentinel.scanner import InfrastructureScanner
+
+    (tmp_path / "x.yaml").write_text("apiVersion: v1\nkind: StorageClass\n")
+    (tmp_path / ".env").write_text("AWS_ACCESS_KEY_ID=x\n")
+
+    _install_fake_deadline(monkeypatch, expire_after_n_checks=0)
+    result = InfrastructureScanner().scan(str(tmp_path))
+    assert result.timed_out is True
+
+
+def test_infra_scan_timeout_none_is_unbounded() -> None:
+    """timeout_seconds=None disables the deadline entirely."""
+    from sentinel.scanner import InfrastructureScanner
+
+    result = InfrastructureScanner().scan(".", timeout_seconds=None)
+    assert result.timed_out is False
+
+
+def test_infra_walk_files_respects_deadline() -> None:
+    """_walk_files stops yielding as soon as the deadline has expired."""
+    from sentinel.scanner.infrastructure import _walk_files
+
+    class _AlwaysExpired:
+        def expired(self) -> bool:
+            return True
+
+    results = list(
+        _walk_files(
+            Path("."),
+            ("*.tf",),
+            max_depth=3,
+            deadline=_AlwaysExpired(),  # type: ignore[arg-type]
+        )
+    )
+    assert results == []
+
+
 def test_infra_looks_like_k8s_handles_os_error(monkeypatch: pytest.MonkeyPatch) -> None:
     from sentinel.scanner.infrastructure import _looks_like_k8s
 

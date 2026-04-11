@@ -11,6 +11,7 @@ import fnmatch
 import json
 import os
 import re
+import time
 from collections.abc import Iterator
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -39,6 +40,30 @@ _EXCLUDED_DIRS = frozenset(
 # accidentally pointed at a large directory (e.g. the user's home dir).
 _DEFAULT_MAX_DEPTH = 3
 
+# Default wall-clock budget for a single scan. None = unlimited (tests).
+# This is a belt-and-suspenders guarantee on top of walk-time pruning so
+# scan() can never block the caller indefinitely, even if a future bug
+# or a pathological symlink graph defeats the depth limit. The check is
+# a monotonic-clock comparison inside the walk loop — fully reentrant,
+# thread-safe, signal-free, and cross-platform.
+_DEFAULT_TIMEOUT_SECONDS: float = 5.0
+
+
+class _Deadline:
+    """Cooperative deadline checker. Reentrant, signal-free."""
+
+    __slots__ = ("_expires_at",)
+
+    def __init__(self, timeout_seconds: float | None) -> None:
+        self._expires_at: float | None = (
+            time.monotonic() + timeout_seconds if timeout_seconds is not None else None
+        )
+
+    def expired(self) -> bool:
+        if self._expires_at is None:
+            return False
+        return time.monotonic() >= self._expires_at
+
 
 @dataclass
 class InfraFinding:
@@ -58,6 +83,7 @@ class InfraScanResult:
     findings: list[InfraFinding] = field(default_factory=list)
     files_scanned: int = 0
     max_depth_scanned: int = _DEFAULT_MAX_DEPTH
+    timed_out: bool = False
 
     @property
     def us_controlled_components(self) -> int:
@@ -69,10 +95,12 @@ class InfraScanResult:
             "total_findings": len(self.findings),
             "us_controlled_components": self.us_controlled_components,
             "max_depth_scanned": self.max_depth_scanned,
+            "timed_out": self.timed_out,
             "scan_note": (
                 f"Scanned up to {self.max_depth_scanned} directory levels "
                 "deep from repo_root. Excluded dirs (.venv, node_modules, "
                 ".git, etc.) are pruned at walk time."
+                + (" Scan deadline reached — partial results." if self.timed_out else "")
             ),
             "findings": [f.to_dict() for f in self.findings],
         }
@@ -100,6 +128,7 @@ class InfrastructureScanner:
         repo_root: str | Path = ".",
         *,
         max_depth: int = _DEFAULT_MAX_DEPTH,
+        timeout_seconds: float | None = _DEFAULT_TIMEOUT_SECONDS,
     ) -> InfraScanResult:
         """Scan IaC files under ``repo_root``.
 
@@ -108,27 +137,49 @@ class InfrastructureScanner:
         and never goes deeper than ``max_depth`` levels. This bounds
         scan cost even when ``repo_root`` is accidentally pointed at a
         large tree like the user's home directory.
+
+        ``timeout_seconds`` is a cooperative wall-clock budget. When
+        exceeded the scan stops at the next file boundary and returns
+        the partial result with ``timed_out=True``. The check is a
+        monotonic-clock comparison — no signals, fully reentrant,
+        thread-safe, works on every platform.
         """
         root = Path(repo_root)
+        deadline = _Deadline(timeout_seconds)
         result = InfraScanResult(max_depth_scanned=max_depth)
 
-        for tf in sorted(_walk_files(root, ("*.tf", "*.tfvars"), max_depth)):
+        # Phase 1: terraform
+        for tf in sorted(_walk_files(root, ("*.tf", "*.tfvars"), max_depth, deadline)):
+            if deadline.expired():
+                break
             result.files_scanned += 1
             for finding in _scan_terraform(tf, root):
                 result.findings.append(finding)
+        if deadline.expired():
+            result.timed_out = True
+            return result
 
-        for yaml_path in sorted(_walk_files(root, ("*.yaml", "*.yml"), max_depth)):
+        # Phase 2: kubernetes manifests
+        for yaml_path in sorted(_walk_files(root, ("*.yaml", "*.yml"), max_depth, deadline)):
+            if deadline.expired():
+                break
             if not _looks_like_k8s(yaml_path):
                 continue
             result.files_scanned += 1
             for finding in _scan_k8s(yaml_path, root):
                 result.findings.append(finding)
+        if deadline.expired():
+            result.timed_out = True
+            return result
 
+        # Phase 3: repo-root .env
         env_path = root / ".env"
         if env_path.exists():
             result.files_scanned += 1
             for finding in _scan_env_file(env_path, root):
                 result.findings.append(finding)
+        if deadline.expired():
+            result.timed_out = True
 
         return result
 
@@ -137,12 +188,14 @@ def _walk_files(
     root: Path,
     patterns: tuple[str, ...],
     max_depth: int = _DEFAULT_MAX_DEPTH,
+    deadline: _Deadline | None = None,
 ) -> Iterator[Path]:
     """Yield files under ``root`` matching any glob in ``patterns``.
 
     Uses :func:`os.walk` with in-place ``dirs`` pruning so excluded
     directories and directories past ``max_depth`` are never entered.
-    Symlinks are not followed.
+    Symlinks are not followed. If ``deadline`` is supplied, iteration
+    stops as soon as the deadline has elapsed (cooperative cancel).
     """
     root_resolved = root.resolve(strict=False)
     if not root_resolved.exists():
@@ -150,6 +203,9 @@ def _walk_files(
     root_str = str(root_resolved)
 
     for current, dirs, files in os.walk(root_str, followlinks=False):
+        if deadline is not None and deadline.expired():
+            return
+
         rel = os.path.relpath(current, root_str)
         depth = 0 if rel == "." else rel.count(os.sep) + 1
 

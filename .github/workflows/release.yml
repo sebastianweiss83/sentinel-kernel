@@ -5,6 +5,11 @@ on:
     tags:
       - "v*"
 
+# Two tag pushes should never overlap the post-release sync.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   publish:
     name: Publish to PyPI

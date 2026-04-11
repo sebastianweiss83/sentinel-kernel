@@ -6,11 +6,11 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-11 20:15 UTC_
+_Last generated from HEAD commit: 2026-04-11 20:31 UTC_
 
 ## Version
 
-**`3.0.1`** — Production/Stable
+**`3.0.2`** — Production/Stable
 
 EU-sovereign decision record layer for AI agents.
 
@@ -18,7 +18,7 @@ EU-sovereign decision record layer for AI agents.
 
 | | |
 |---|---|
-| Tests | 596 passing |
+| Tests | 605 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
 
@@ -112,6 +112,7 @@ EU-sovereign decision record layer for AI agents.
 
 ## Shipped
 
+- **3.0.2 (2026-04-11)** — **Scanner gets a reentrant cooperative timeout. Workflow concurrency
 - **3.0.1 (2026-04-11)** — **Bug fix: infrastructure scanner no longer hangs on large directories.**
 - **3.0.0 (2026-04-11)** — **Complete platform · API frozen · BSI assessment ready.**
 - **2.4.0 (2026-04-11)** — **Rust RFC-001 implementation. Closes #13. Multi-language spec.**
@@ -123,6 +124,5 @@ EU-sovereign decision record layer for AI agents.
 - **1.8.0 (2026-04-11)** — Minor release. Developer experience — Jupyter notebook widget,
 - **1.7.0 (2026-04-11)** — Minor release. Production hardening — trace integrity, retention,
 - **1.6.0 (2026-04-11)** — Minor release. VS-NfD deployment profile, Prometheus textfile
-- **1.5.0 (2026-04-11)** — Minor release. Governance and community — Linux Foundation Europe
 
 <!-- SYNC_ALL_STATUS_END -->

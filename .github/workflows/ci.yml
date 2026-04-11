@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [main]
 
+# Serialise Pages deploys on main so two rapid pushes can't race each
+# other through sync-all / deploy-pages. PRs get their own concurrency
+# group per branch so they don't block main.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   test:
     name: Test (Python ${{ matrix.python-version }})
