@@ -10,17 +10,17 @@
 |---|---|
 | Version | `1.0.1` |
 | Tests | 304 passing |
-| Coverage | 97% |
+| Coverage | 96% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-11 13:39 UTC |
+| Last updated | 2026-04-11 13:44 UTC |
 
 ## Last 5 commits
 
+- `13c4840` fix: Docker demo — pinned versions, healthchecks, minimal compose
+- `d0bc053` feat: HTML report redesign — dark theme matching preview
+- `cd6fdfe` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `fd7c596` feat: world-class GitHub Pages preview — complete redesign
 - `a1bbef3` chore(auto): refresh CLAUDE.md state block [skip ci]
-- `3df2546` test: verify CLAUDE.md auto-update
-- `e416afb` feat: auto-update CLAUDE.md state block on every push to main
-- `b87b536` chore: v1.0.1 — coverage, cleanup, release runbook
 
 ## Open issues
 
