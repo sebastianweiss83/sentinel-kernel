@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-11 20:57 UTC_
+_Last generated from HEAD commit: 2026-04-11 21:11 UTC_
 
 ## Version
 
@@ -94,6 +94,7 @@ EU-sovereign decision record layer for AI agents.
 - **#19** v3.1: Linux Foundation Europe formal application _(labels: roadmap)_
 - **#20** v3.2: BSI IT-Grundschutz formal assessment submission _(labels: roadmap)_
 - **#21** v3.3: EU-sovereign build pipeline (Phase 3) _(labels: roadmap)_
+- **#24** v4.0: SovereignRouter — policy-driven model selection _(labels: enhancement, roadmap)_
 
 ## Recent releases
 
