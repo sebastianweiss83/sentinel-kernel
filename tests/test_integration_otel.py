@@ -161,3 +161,192 @@ def test_otel_missing_dep_helpful_error(monkeypatch: pytest.MonkeyPatch) -> None
     sentinel = _make_sentinel()
     with pytest.raises(ImportError, match="sentinel-kernel\\[otel\\]"):
         OTelExporter(sentinel, endpoint="http://fake:4317")
+
+
+# ---------------------------------------------------------------------------
+# Wrapper delegation — initialise, get, backend_name
+# ---------------------------------------------------------------------------
+
+
+def test_otel_wrapper_delegates_initialise_and_get() -> None:
+    sentinel = _make_sentinel()
+    original = sentinel.storage
+    tracer = FakeTracer()
+    exporter = OTelExporter(
+        sentinel, endpoint="http://fake:4317", tracer_factory=lambda: tracer
+    )
+
+    # storage is now the wrapper
+    wrapper = sentinel.storage
+    assert wrapper is not original
+    assert wrapper.backend_name == original.backend_name
+
+    # initialise is delegated (idempotent for SQLite :memory:)
+    wrapper.initialise()
+
+    # Write a trace and look it up via the wrapper
+    @sentinel.trace
+    def do_work() -> dict[str, int]:
+        return {"ok": 1}
+
+    do_work()
+    _wait_for_spans(tracer, 1)
+
+    traces = sentinel.query(limit=1)
+    assert len(traces) == 1
+    loaded = wrapper.get(traces[0].trace_id)
+    assert loaded is not None
+    assert loaded.trace_id == traces[0].trace_id
+
+    exporter.shutdown()
+
+
+# ---------------------------------------------------------------------------
+# Policy result attribute — when policy_evaluation is present
+# ---------------------------------------------------------------------------
+
+
+def test_otel_span_policy_result_from_evaluation() -> None:
+    """When a rule evaluator runs, the span reflects the real ALLOW value."""
+    from sentinel.policy.evaluator import SimpleRuleEvaluator
+
+    def rule(inputs: dict) -> tuple[bool, str | None]:
+        return True, None
+
+    sentinel = Sentinel(
+        storage=SQLiteStorage(":memory:"),
+        policy_evaluator=SimpleRuleEvaluator({"p.py": rule}),
+        project="otel-policy",
+        sovereign_scope="EU",
+        data_residency=DataResidency.LOCAL,
+    )
+    tracer = FakeTracer()
+    exporter = OTelExporter(
+        sentinel, endpoint="http://fake:4317", tracer_factory=lambda: tracer
+    )
+
+    @sentinel.trace(policy="p.py")
+    def do_work() -> dict[str, int]:
+        return {"ok": 1}
+
+    do_work()
+    _wait_for_spans(tracer, 1)
+
+    attrs = tracer.spans[0].attributes
+    assert attrs["sentinel.policy_result"] == "ALLOW"
+    exporter.shutdown()
+
+
+# ---------------------------------------------------------------------------
+# flush + shutdown lifecycle
+# ---------------------------------------------------------------------------
+
+
+def test_otel_flush_drains_queue() -> None:
+    sentinel = _make_sentinel()
+    tracer = FakeTracer()
+    exporter = OTelExporter(
+        sentinel, endpoint="http://fake:4317", tracer_factory=lambda: tracer
+    )
+
+    @sentinel.trace
+    def do_work() -> dict[str, int]:
+        return {"ok": 1}
+
+    for _ in range(3):
+        do_work()
+
+    exporter.flush(timeout=1.0)
+    # After flush the worker should have emitted all enqueued spans
+    assert len(tracer.spans) == 3
+    exporter.shutdown()
+
+
+def test_otel_flush_returns_promptly_when_already_empty() -> None:
+    sentinel = _make_sentinel()
+    tracer = FakeTracer()
+    exporter = OTelExporter(
+        sentinel, endpoint="http://fake:4317", tracer_factory=lambda: tracer
+    )
+    # Flushing an empty queue must not hang
+    exporter.flush(timeout=0.5)
+    exporter.shutdown()
+
+
+# ---------------------------------------------------------------------------
+# _import_otel — the real import path
+# ---------------------------------------------------------------------------
+
+
+def test_import_otel_raises_with_pip_extra_hint_when_sdk_missing() -> None:
+    """In this test environment opentelemetry-sdk is not installed, so
+    the real _import_otel() must raise ImportError naming the extra."""
+    import sentinel.integrations.otel as otel_mod
+
+    try:
+        import opentelemetry  # noqa: F401
+
+        pytest.skip("opentelemetry is installed — this test only runs without it")
+    except ImportError:
+        pass
+
+    with pytest.raises(ImportError, match="sentinel-kernel\\[otel\\]"):
+        otel_mod._import_otel()
+
+
+# ---------------------------------------------------------------------------
+# _build_real_tracer — cover the SDK-import branch with fake modules
+# ---------------------------------------------------------------------------
+
+
+def test_build_real_tracer_uses_import_result(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Stub _import_otel() with fake OTel classes so we can cover the
+    _build_real_tracer body without installing opentelemetry-sdk."""
+    import sentinel.integrations.otel as otel_mod
+
+    sentinel_tracer_obj: list[Any] = []
+
+    class FakeProvider:
+        def __init__(self) -> None:
+            self.processors: list[Any] = []
+
+        def add_span_processor(self, processor: Any) -> None:
+            self.processors.append(processor)
+
+    class FakeProcessor:
+        def __init__(self, exporter: Any) -> None:
+            self.exporter = exporter
+
+    class FakeExporter:
+        def __init__(self, endpoint: str) -> None:
+            self.endpoint = endpoint
+
+    class FakeOTelTrace:
+        _provider: Any = None
+
+        def set_tracer_provider(self, provider: Any) -> None:
+            self._provider = provider
+
+        def get_tracer(self, name: str) -> FakeTracer:
+            tracer = FakeTracer()
+            sentinel_tracer_obj.append(tracer)
+            return tracer
+
+    fake_trace = FakeOTelTrace()
+
+    def fake_import() -> tuple[Any, Any, Any]:
+        return fake_trace, (FakeProvider, FakeProcessor), FakeExporter
+
+    monkeypatch.setattr(otel_mod, "_import_otel", fake_import)
+
+    sentinel = _make_sentinel()
+    exporter = OTelExporter(sentinel, endpoint="http://stub:4317")
+
+    # _build_real_tracer was invoked because we passed no tracer_factory
+    assert sentinel_tracer_obj, "get_tracer was not called"
+    assert fake_trace._provider is not None
+    # Processor was added
+    assert fake_trace._provider.processors
+    exporter.shutdown()

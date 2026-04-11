@@ -270,3 +270,130 @@ def test_postgres_via_sentinel_facade() -> None:
     assert len(traces) == 1
     assert traces[0].data_residency == DataResidency.EU_DE
     assert traces[0].sovereign_scope == "EU"
+
+
+# ---------------------------------------------------------------------------
+# query — policy_result filter branch
+# ---------------------------------------------------------------------------
+
+
+def test_postgres_query_by_policy_result() -> None:
+    fake, connect = _fake_connect_factory()
+    storage = PostgresStorage("postgresql://fake/db", connect_fn=connect)
+    storage.initialise()
+
+    storage.save(_make_sample_trace(result=PolicyResult.ALLOW))
+    storage.save(_make_sample_trace(result=PolicyResult.DENY))
+    storage.save(_make_sample_trace(result=PolicyResult.ALLOW))
+
+    denies = storage.query(policy_result=PolicyResult.DENY)
+    allows = storage.query(policy_result=PolicyResult.ALLOW)
+    assert len(denies) == 1
+    assert len(allows) == 2
+
+
+# ---------------------------------------------------------------------------
+# get — missing trace returns None
+# ---------------------------------------------------------------------------
+
+
+def test_postgres_get_missing_returns_none() -> None:
+    fake, connect = _fake_connect_factory()
+    storage = PostgresStorage("postgresql://fake/db", connect_fn=connect)
+    storage.initialise()
+    assert storage.get("does-not-exist") is None
+
+
+# ---------------------------------------------------------------------------
+# close
+# ---------------------------------------------------------------------------
+
+
+def test_postgres_close_releases_connection() -> None:
+    fake, connect = _fake_connect_factory()
+    storage = PostgresStorage("postgresql://fake/db", connect_fn=connect)
+    storage.initialise()
+    storage.save(_make_sample_trace())
+
+    storage.close()
+    assert fake.closed is True
+    # Closing a second time on a None connection must not raise
+    storage.close()
+
+
+# ---------------------------------------------------------------------------
+# __repr__
+# ---------------------------------------------------------------------------
+
+
+def test_postgres_repr_includes_dsn() -> None:
+    fake, connect = _fake_connect_factory()
+    storage = PostgresStorage(
+        "postgresql://fake/db", connect_fn=connect
+    )
+    r = repr(storage)
+    assert "PostgresStorage" in r
+    assert "postgresql://fake/db" in r
+
+
+# ---------------------------------------------------------------------------
+# _coerce_payload — string JSON fallback (psycopg2 may return str)
+# ---------------------------------------------------------------------------
+
+
+def test_coerce_payload_parses_json_string() -> None:
+    from sentinel.storage.postgres import _coerce_payload
+
+    data = {"trace_id": "abc", "schema_version": "1.0.0"}
+    # dict in, dict out
+    assert _coerce_payload(data) == data
+    # JSON string in, dict out
+    assert _coerce_payload(json.dumps(data)) == data
+
+
+# ---------------------------------------------------------------------------
+# _import_psycopg2 — direct ImportError path
+# ---------------------------------------------------------------------------
+
+
+def test_import_psycopg2_raises_without_extra() -> None:
+    """When psycopg2 is not installed, the helper raises with the hint."""
+    import sentinel.storage.postgres as pg_mod
+
+    try:
+        import psycopg2  # noqa: F401
+
+        pytest.skip("psycopg2 is installed in this env")
+    except ImportError:
+        pass
+
+    with pytest.raises(ImportError, match="sentinel-kernel\\[postgres\\]"):
+        pg_mod._import_psycopg2()
+
+
+# ---------------------------------------------------------------------------
+# Default connect_fn path — covers `if connect_fn is None:` branch
+# ---------------------------------------------------------------------------
+
+
+def test_postgres_default_connect_uses_import(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Constructing without connect_fn should call _import_psycopg2() and
+    wire up the returned module's connect() function."""
+    import sentinel.storage.postgres as pg_mod
+
+    class FakeModule:
+        connected_with: list[str] = []
+
+        @staticmethod
+        def connect(dsn: str) -> Any:
+            FakeModule.connected_with.append(dsn)
+            return _fake_connect_factory()[0]
+
+    monkeypatch.setattr(pg_mod, "_import_psycopg2", lambda: FakeModule)
+
+    storage = PostgresStorage("postgresql://default/db")
+    storage.initialise()
+    storage.save(_make_sample_trace())
+    assert FakeModule.connected_with == ["postgresql://default/db"]

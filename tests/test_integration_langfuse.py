@@ -148,3 +148,82 @@ def test_langfuse_enricher_supports_legacy_trace_method() -> None:
     assert len(client.calls) == 1
     assert client.calls[0]["id"] == "lf_legacy"
     assert "sentinel.sovereign_scope" in client.calls[0]["metadata"]
+
+
+def test_langfuse_enricher_supports_generic_update_method() -> None:
+    """Third SDK shape: client.update(trace_id=..., metadata=...)."""
+    class GenericClient:
+        def __init__(self) -> None:
+            self.calls: list[dict[str, Any]] = []
+
+        def update(self, trace_id: str, metadata: dict[str, Any]) -> None:
+            self.calls.append({"trace_id": trace_id, "metadata": metadata})
+
+    sentinel, trace_id = _make_sentinel_with_trace()
+    client = GenericClient()
+    enricher = LangFuseEnricher(sentinel, client=client)
+    enricher.enrich(langfuse_trace_id="lf_generic", sentinel_trace_id=trace_id)
+
+    assert len(client.calls) == 1
+    assert client.calls[0]["trace_id"] == "lf_generic"
+
+
+def test_langfuse_enricher_raises_for_unknown_client_shape() -> None:
+    """A client with none of the known methods produces a clear error."""
+
+    class UnknownClient:
+        pass
+
+    sentinel, trace_id = _make_sentinel_with_trace()
+    enricher = LangFuseEnricher(sentinel, client=UnknownClient())
+    with pytest.raises(AttributeError, match="does not expose a known metadata"):
+        enricher.enrich(
+            langfuse_trace_id="lf_weird", sentinel_trace_id=trace_id
+        )
+
+
+def test_langfuse_default_client_uses_import(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Constructing without an injected client calls _import_langfuse_client()
+    and instantiates its return value."""
+    import sentinel.integrations.langfuse as lf_mod
+
+    created: list[Any] = []
+
+    class FakeLangfuseClass:
+        def __init__(self) -> None:
+            created.append(self)
+
+        def update_trace(self, trace_id: str, metadata: dict[str, Any]) -> None:
+            pass
+
+    monkeypatch.setattr(
+        lf_mod, "_import_langfuse_client", lambda: FakeLangfuseClass
+    )
+
+    sentinel, _ = _make_sentinel_with_trace()
+    enricher = LangFuseEnricher(sentinel)  # no client injected
+
+    assert created, "FakeLangfuseClass() was not instantiated"
+    assert isinstance(enricher._client, FakeLangfuseClass)
+
+
+# ---------------------------------------------------------------------------
+# _import_langfuse_client — direct ImportError path
+# ---------------------------------------------------------------------------
+
+
+def test_import_langfuse_client_raises_without_extra() -> None:
+    """When langfuse is not installed, the helper raises with the hint."""
+    import sentinel.integrations.langfuse as lf_mod
+
+    try:
+        import langfuse  # noqa: F401
+
+        pytest.skip("langfuse is installed in this env")
+    except ImportError:
+        pass
+
+    with pytest.raises(ImportError, match="sentinel-kernel\\[langfuse\\]"):
+        lf_mod._import_langfuse_client()
