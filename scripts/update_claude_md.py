@@ -105,38 +105,53 @@ def read_smoke_test() -> str:
 
 
 def read_last_commits(n: int = 5) -> list[tuple[str, str]]:
-    """Return the last ``n`` commits as (sha, subject) pairs."""
-    out = _run(["git", "log", f"-{n}", "--pretty=format:%h|%s"])
+    """Return the last ``n`` commits as (sha, subject) pairs.
+
+    Filters out auto-sync chore commits (``chore(auto):``) so the
+    rendered block is stable across repeated sync runs — otherwise
+    every CI sync commit would shift the "last 5 commits" view by one
+    and trigger an infinite cascade of trivial drift.
+    """
+    # Pull a wider window so we still have n non-auto commits after filtering.
+    out = _run(["git", "log", f"-{n * 4}", "--pretty=format:%h|%s"])
     pairs: list[tuple[str, str]] = []
     for line in out.splitlines():
         if "|" not in line:
             continue
         sha, subject = line.split("|", 1)
-        pairs.append((sha.strip(), subject.strip()))
+        subject = subject.strip()
+        if subject.startswith("chore(auto):"):
+            continue
+        pairs.append((sha.strip(), subject))
+        if len(pairs) >= n:
+            break
     return pairs
 
 
 def read_head_commit_date() -> str:
-    """Use the HEAD commit's author date as the "last updated" stamp.
+    """Return the most recent non-auto commit's date as the stamp.
 
-    This keeps the block idempotent: running the script twice without
-    any new commits produces the same file. The alternative (wall-clock
-    time) would trigger a spurious rewrite on every invocation.
+    We skip ``chore(auto):`` commits so that an auto-sync commit does
+    not keep shifting the "last updated" field, which would otherwise
+    make every subsequent run produce new drift.
     """
-    out = _run(["git", "log", "-1", "--pretty=format:%cs %cI"])
-    # %cs = YYYY-MM-DD (commit short date), %cI = full ISO 8601
-    # We only need the short date + HH:MM for the display.
-    if not out.strip():
-        return "unknown"
-    parts = out.strip().split()
-    if len(parts) < 2:
-        return parts[0] if parts else "unknown"
-    short_date = parts[0]
-    iso = parts[1]
-    # Extract HH:MM from the ISO timestamp's time component
-    time_part = iso.split("T", 1)[1] if "T" in iso else ""
-    hhmm = time_part[:5] if len(time_part) >= 5 else ""
-    return f"{short_date} {hhmm} UTC".strip()
+    # Ask git for the latest N commits and pick the first non-auto one.
+    out = _run(["git", "log", "-20", "--pretty=format:%s||%cs %cI"])
+    for line in out.splitlines():
+        if "||" not in line:
+            continue
+        subject, rest = line.split("||", 1)
+        if subject.startswith("chore(auto):"):
+            continue
+        parts = rest.strip().split()
+        if not parts:
+            continue
+        short_date = parts[0]
+        iso = parts[1] if len(parts) > 1 else ""
+        time_part = iso.split("T", 1)[1] if "T" in iso else ""
+        hhmm = time_part[:5] if len(time_part) >= 5 else ""
+        return f"{short_date} {hhmm} UTC".strip()
+    return "unknown"
 
 
 def read_open_issues() -> list[tuple[int, str, list[str]]] | None:

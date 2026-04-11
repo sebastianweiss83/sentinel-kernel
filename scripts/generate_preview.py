@@ -705,7 +705,7 @@ JS = r"""
 # ---------------------------------------------------------------------------
 
 
-def _section_hero(days: int) -> str:
+def _section_hero(days: int, *, tests: str, coverage: str, smoke: str) -> str:
     return f"""
 <section class="hero">
   <div class="container hero-grid">
@@ -722,9 +722,9 @@ def _section_hero(days: int) -> str:
         US CLOUD Act exposure. Air-gapped capable.
       </p>
       <div class="stats">
-        <span class="stat-pill"><span class="ok">✓</span>304 tests</span>
-        <span class="stat-pill"><span class="ok">✓</span>97% coverage</span>
-        <span class="stat-pill"><span class="ok">✓</span>40/40 smoke</span>
+        <span class="stat-pill"><span class="ok">✓</span>{tests}</span>
+        <span class="stat-pill"><span class="ok">✓</span>{coverage} coverage</span>
+        <span class="stat-pill"><span class="ok">✓</span>{smoke} smoke</span>
       </div>
       <div class="cta-row">
         <button id="install-btn" class="btn-primary">
@@ -1167,6 +1167,9 @@ def _render_index(
     sovereignty_score: float,
     compliance: object,
     days_to_enforcement: int,
+    tests: str,
+    coverage: str,
+    smoke: str,
 ) -> str:
     # sentinel/compliance/sovereignty_score are computed for report.html;
     # the landing page uses the sample data as narrative scaffolding.
@@ -1183,7 +1186,7 @@ def _render_index(
 <style>{CSS}</style>
 </head>
 <body>
-{_section_hero(days)}
+{_section_hero(days, tests=tests, coverage=coverage, smoke=smoke)}
 {_section_enforcement(days)}
 {_section_problem()}
 {_section_dashboard(days)}
@@ -1212,11 +1215,29 @@ def main() -> int:
     compliance = EUAIActChecker().check(sentinel)
     days = _countdown_days()
 
+    # Pull live test/coverage/smoke stats from the existing state reader so
+    # the hero pills are never stale. Falls back to conservative defaults
+    # when pytest is unavailable.
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from update_claude_md import (
+        read_smoke_test,
+        read_tests_and_coverage,
+    )
+
+    tests, coverage = read_tests_and_coverage()
+    smoke_raw = read_smoke_test()
+    # read_smoke_test returns "40/40 ✓" or "failed at step N"; we want a
+    # terse label for the pill so it reads "40/40 smoke" not "40/40 ✓ smoke".
+    smoke = smoke_raw.replace(" ✓", "").strip()
+
     index_html = _render_index(
         sentinel=sentinel,
         sovereignty_score=sovereignty_score,
         compliance=compliance,
         days_to_enforcement=days,
+        tests=tests,
+        coverage=coverage,
+        smoke=smoke,
     )
     (OUT_DIR / "index.html").write_text(index_html, encoding="utf-8")
 

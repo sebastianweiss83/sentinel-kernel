@@ -10,17 +10,17 @@
 |---|---|
 | Version | `2.0.0` |
 | Tests | 503 passing |
-| Coverage | 99% |
+| Coverage | 100% |
 | Smoke test | 40/40 ✓ |
 | Last updated | 2026-04-11 16:15 UTC |
 
 ## Last 5 commits
 
 - `79bbd40` feat: complete auto-sync — all derived content updates on every push
-- `a7bb535` chore(auto): refresh CLAUDE.md state block [skip ci]
 - `ddaa04b` chore: sync CLAUDE.md to v2.0.0 [skip ci]
 - `8d0e5b1` feat: v2.0.0 — production stable, BSI assessment ready
-- `c5a1059` chore(auto): refresh CLAUDE.md state block [skip ci]
+- `1f59eca` feat: v1.9.0 — DORA + NIS2 + unified compliance checker
+- `dca9974` feat: v1.8.0 — Jupyter, FastAPI, Django integrations
 
 ## Open issues
 
