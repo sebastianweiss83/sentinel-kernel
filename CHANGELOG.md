@@ -7,6 +7,55 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [1.2.0] — 2026-04-11
+
+Minor release. Depth across onboarding, governance, manifesto, and
+sovereignty scanner.
+
+### Added
+
+- **Technical co-founder onboarding kit** — `docs/onboarding/technical-cofounder.md`.
+  Covers architecture in five minutes, the three invariants, development
+  setup, reading order, integration/storage extension guides, and
+  release process.
+- **Architecture Decision Records** — ADR-001 (local-first), ADR-002
+  (Apache 2.0 permanent), ADR-003 (schema versioning). Structured
+  records of the architectural commitments.
+- **BSI IT-Grundschutz profile — expanded**. Complete Baustein mapping
+  across APP.6, CON.1, CON.2, OPS.1.1.3, SYS.1.6, NET.1.2. Evidence
+  index and automated-vs-operator split table. Ready for a real BSI
+  pre-engagement conversation.
+- **Manifesto — new requirement types**:
+  - `GDPRCompliant` — checks EU data residency and hashed-input
+    default.
+  - `RetentionPolicy(max_days=N)` — declares operator-enforced
+    retention.
+  - `AuditTrailIntegrity` — verifies storage exposes no
+    UPDATE/DELETE methods.
+  - `BSIProfile(status, by, evidence)` — tracks BSI certification
+    status and evidence path.
+- **Scanner — expanded jurisdiction database**. 30+ new packages
+  including CrewAI, AutoGen, Semantic Kernel, LlamaIndex, Haystack,
+  Mistral AI, DeepL, Aleph Alpha, Scaleway, Hetzner, OVH, Groq,
+  Perplexity, Pinecone, Weaviate, Qdrant, Chroma, Milvus.
+- **Scanner — EU-sovereign alternatives map**.
+  `RuntimeScanResult.sovereign_alternatives()` returns an
+  `{us_package: suggestion}` map.
+- **Scanner — `--suggest-alternatives` CLI flag**. Prints the
+  EU-sovereign alternatives block alongside the scan. Works in
+  both text and JSON output modes.
+- **CI/CD scanner — Makefile, Jenkinsfile, Drone CI support**.
+  Makefile scanner flags `curl`/`wget` calls to US cloud hosts
+  (amazonaws.com, googleapis.com, azurewebsites.net, etc.).
+
+### Fixed
+
+- **CI race** — `update-claude-md` job now rebases and retries the
+  self-push so concurrent commits during an auto-update don't cause
+  non-fast-forward failures.
+- **mypy** — `dict` → `dict[str, Any]` in `sentinel/cli.py`
+  `_cmd_demo`.
+
 ## [1.1.0] — 2026-04-11
 
 Minor release. Major visual overhaul of the public surface, new CLI
