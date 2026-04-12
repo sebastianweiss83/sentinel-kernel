@@ -12,15 +12,15 @@
 | Tests | 615 passing |
 | Coverage | 99% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-12 13:37 UTC |
+| Last updated | 2026-04-12 13:46 UTC |
 
 ## Last 5 commits
 
+- `c935941` docs: add repo governance — onboarding, design, change control rules
 - `86fa0a2` feat: sovereign design language — institutional visual identity
 - `d91989e` feat: CLI-first landing page — hero, tabs, stats, snippet safety
 - `577d738` docs: archive marketing drafts + document rust-impl status
 - `d31e07c` docs: perfection pass — badges + bsi-profile + archive drafts
-- `4bfcd44` fix: final cleanup — stale test counts, release checklist, sync
 
 ## Open issues
 
