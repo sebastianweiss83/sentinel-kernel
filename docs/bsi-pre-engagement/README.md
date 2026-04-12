@@ -76,6 +76,21 @@ environments including VS-NfD-track defence and healthcare AI.
 | 2026-Q4 | Formal assessment begins |
 | 2027-Q1 | Profile accepted; VS-NfD guidance iteration |
 
+## Contact
+
+**BSI Referat KI-Sicherheit**
+Bundesamt für Sicherheit in der Informationstechnik
+Godesberger Allee 185-189, 53175 Bonn
+
+E-Mail: ki-sicherheit@bsi.bund.de
+Web: https://www.bsi.bund.de/KI
+
+**Recommended approach:**
+1. Send `docs/bsi-pre-engagement/technical-summary.md` by email
+2. Subject: "Sentinel — BSI IT-Grundschutz Pre-Engagement Anfrage"
+3. Attach: `sentinel attestation generate --output attestation.json`
+4. Expect response within 4-6 weeks
+
 ## Points of contact
 
 - Maintainer: Sebastian Weiss (sebastian@swentures.com)

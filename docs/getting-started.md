@@ -1,25 +1,28 @@
 # Getting started with Sentinel
 
-Two minutes from `pip3 install` to your first sovereign decision trace.
+Two minutes from install to your first sovereign decision trace.
 
 ---
 
 ## 1. Install
 
 ```bash
-pip3 install sentinel-kernel
+# macOS (recommended — avoids PEP 668 "externally-managed-environment")
+brew install pipx
+pipx install sentinel-kernel
 sentinel demo
-```
 
-**If `pip3` is not found, or `sentinel` is not on your PATH:**
-```bash
+# Linux / Docker / CI
+pip install sentinel-kernel
+sentinel demo
+
+# Alternative (always works)
 python3 -m pip install sentinel-kernel
 python3 -m sentinel demo
 ```
 
 `python3 -m sentinel` is equivalent to the `sentinel` entry point. Use it
-whenever pip's `--user` bin directory is not on PATH — a common situation
-on fresh macOS installs.
+whenever the bin directory is not on PATH.
 
 Zero required dependencies. Works with Python 3.11 and 3.12.
 

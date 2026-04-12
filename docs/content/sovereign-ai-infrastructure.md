@@ -205,9 +205,13 @@ things that are not yet done are marked as not done.
 ## What to do now
 
 ```bash
-pip3 install sentinel-kernel
+# macOS (recommended)
+brew install pipx && pipx install sentinel-kernel
 sentinel demo
-# or: python3 -m pip install sentinel-kernel && python3 -m sentinel demo
+
+# Linux / Docker / CI
+pip install sentinel-kernel
+sentinel demo
 ```
 
 That runs 50 decisions, engages the kill switch for five more,

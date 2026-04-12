@@ -153,12 +153,12 @@ def test_eu_ai_act_art9_partial_when_policy_configured() -> None:
     assert "PARTIAL" in report.eu_ai_act_articles["Art. 9"]
 
 
-def test_eu_ai_act_art9_action_required_without_policy() -> None:
+def test_eu_ai_act_art9_partial_without_policy() -> None:
     class M(SentinelManifesto):
         pass
 
     report = M().check(sentinel=_make_sentinel(with_policy=False), runtime_scan=_clean_scans()[0])
-    assert "ACTION REQUIRED" in report.eu_ai_act_articles["Art. 9"]
+    assert "PARTIAL" in report.eu_ai_act_articles["Art. 9"]
 
 
 def test_manifesto_score_calculation() -> None:

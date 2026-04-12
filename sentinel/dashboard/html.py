@@ -434,6 +434,42 @@ _ACTION_GUIDANCE: dict[str, dict[str, str]] = {
         "deadline": "Your team must implement",
         "owner": "Data + Engineering",
     },
+    "Art. 16": {
+        "summary": "Complete provider registration, conformity assessment, CE marking.",
+        "detail": (
+            "Art. 16(d) deployer logging and 16(f) post-market monitoring evidence are "
+            "produced automatically via the trace store. Register your AI system in the "
+            "EU AI Act database (Art. 71). Conduct conformity assessment (Annex VI or VII "
+            "depending on risk class). Affix CE marking. Registration and conformity "
+            "assessment are human deliverables."
+        ),
+        "deadline": "Before market placement",
+        "owner": "Legal + Compliance",
+    },
+    "Art. 26": {
+        "summary": "Document human oversight procedures and train staff.",
+        "detail": (
+            "Art. 26(5) deployer logging and Art. 26(6) human oversight primitives "
+            "(kill switch + trace store) are shipped by Sentinel. Document human oversight "
+            "procedures in writing. Define escalation paths when kill switch is engaged. "
+            "Train operational staff on AI system limitations and override process. "
+            "Establish incident reporting workflow."
+        ),
+        "deadline": "Before deployment",
+        "owner": "Operations + Legal",
+    },
+    "Art. 72": {
+        "summary": "Publish a GPAI post-market monitoring plan (if applicable).",
+        "detail": (
+            "Records model identity, inputs hash, outputs and decision chain for any "
+            "GPAI call — the raw evidence Art. 72 requires. Only applies if deploying a "
+            "GPAI model as high-risk system. Publish a GPAI post-market monitoring plan. "
+            "Maintain model cards and capability evaluations. Sentinel provides the audit "
+            "trail automatically."
+        ),
+        "deadline": "Before deployment (only if GPAI applies)",
+        "owner": "Engineering + Legal",
+    },
 }
 
 
@@ -725,7 +761,9 @@ def _render_html(
     <li><strong>Run the manifesto + compliance check</strong> and attach the output to your change request:<br>
         <code>sentinel compliance check --all-frameworks</code></li>
     <li><strong>Schedule BSI pre-engagement</strong> — the pre-engagement package is already in
-        <code>docs/bsi-pre-engagement/</code>. Contact BSI Referat KI-Sicherheit.</li>
+        <code>docs/bsi-pre-engagement/</code>. Contact:
+        <strong style="color:var(--text);">ki-sicherheit@bsi.bund.de</strong>
+        (bsi.bund.de/KI)</li>
     <li><strong>EU AI Act Annex III enforcement: {max(0, days)} days</strong> remaining
         (2 August 2026). Penalties up to €15M or 3% of global annual turnover.</li>
   </ol>
@@ -735,6 +773,7 @@ def _render_html(
 
 <h2>Runtime packages</h2>
 <p>Showing first 60 of <strong style="color:var(--text);">{runtime.total_packages}</strong> installed packages. Sovereign: <strong style="color:var(--green);">{runtime.sovereign_packages}</strong> · US-owned: <strong style="color:var(--red);">{runtime.us_owned_packages}</strong> · Unknown: <strong style="color:var(--text3);">{runtime.unknown_jurisdiction}</strong></p>
+<p style="font-size:0.85rem;color:var(--text3);">Showing packages in the current Python environment. For a complete scan including your project dependencies, run <code style="font-family:ui-monospace,monospace;background:#0a0e14;padding:0.12rem 0.45rem;border-radius:3px;color:var(--green);font-size:0.85rem;border:1px solid var(--border);">sentinel report</code> from your project directory with your virtual environment activated.</p>
 <table>
   <thead>
     <tr>

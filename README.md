@@ -21,8 +21,8 @@ cloud dependencies, in any environment including air-gapped.
 [![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
 [![Version](https://img.shields.io/badge/version-v3.0.3-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Tests](https://img.shields.io/badge/tests-615%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
-[![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Tests](https://img.shields.io/badge/tests-unknown%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Coverage](https://img.shields.io/badge/coverage-unknown%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Status](https://img.shields.io/badge/status-production%2Fstable-brightgreen)](CHANGELOG.md)
 [![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F14%2F17-green)](docs/eu-ai-act.md)
 <!-- SYNC_ALL_README_END -->
@@ -33,12 +33,15 @@ cloud dependencies, in any environment including air-gapped.
 ## Quick demo
 
 ```bash
-pip3 install sentinel-kernel
-sentinel demo  # 50 decisions, kill switch, compliance check, report
-```
+# macOS (recommended)
+brew install pipx && pipx install sentinel-kernel
+sentinel demo
 
-**If `pip3` is not found, or `sentinel` is not on your PATH:**
-```bash
+# Linux / Docker / CI
+pip install sentinel-kernel
+sentinel demo
+
+# Alternative (always works)
 python3 -m pip install sentinel-kernel
 python3 -m sentinel demo
 ```
@@ -63,19 +66,22 @@ scan — and streams live traces to Grafana. See
 ## Install
 
 ```bash
-pip3 install sentinel-kernel
+# macOS (recommended — avoids PEP 668 "externally-managed-environment")
+brew install pipx
+pipx install sentinel-kernel
 sentinel demo
-```
 
-**If `pip3` is not found, or `sentinel` is not on your PATH:**
-```bash
+# Linux / Docker / CI
+pip install sentinel-kernel
+sentinel demo
+
+# Alternative (always works)
 python3 -m pip install sentinel-kernel
 python3 -m sentinel demo
 ```
 
 `python3 -m sentinel` is equivalent to the `sentinel` entry point and always
-works, even on systems where `pip`'s `--user` bin directory is not on PATH
-(common on fresh macOS installs).
+works, even on systems where the bin directory is not on PATH.
 
 ## Five minutes to your first sovereign trace
 

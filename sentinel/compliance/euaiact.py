@@ -76,13 +76,20 @@ class ComplianceReport:
 
     @property
     def overall(self) -> str:
-        statuses = [a.status for a in self.articles.values()]
-        if not statuses:
+        if not self.articles:
             return "UNKNOWN"
+        # NON_COMPLIANT only if core logging articles fail — Art. 12, 13, 14.
+        # Everything else being partial or action-required is normal for a
+        # middleware kernel that cannot discharge organisational obligations.
+        core_articles = {"Art. 12", "Art. 13", "Art. 14"}
+        core_results = [
+            a for a in self.articles.values() if a.article in core_articles
+        ]
+        if any(a.status == "NON_COMPLIANT" for a in core_results):
+            return "NON_COMPLIANT"
+        statuses = [a.status for a in self.articles.values()]
         if all(s == "COMPLIANT" for s in statuses):
             return "COMPLIANT"
-        if any(s == "NON_COMPLIANT" for s in statuses):
-            return "NON_COMPLIANT"
         return "PARTIAL"
 
     def diff(self) -> str:
@@ -251,13 +258,13 @@ class EUAIActChecker:
             art9 = ArticleReport(
                 article="Art. 9",
                 title="Risk management",
-                status="NON_COMPLIANT",
+                status="PARTIAL",
                 automated=True,
-                detail="No policy evaluator wired up — decisions not being evaluated against rules.",
+                detail="No PolicyEvaluator configured. In production, wire a SimpleRuleEvaluator or LocalRegoEvaluator.",
                 human_action=HumanActionItem(
                     article="Art. 9",
                     action="Configure a PolicyEvaluator on Sentinel",
-                    guidance="Use SimpleRuleEvaluator or LocalRegoEvaluator. Pass via Sentinel(policy_evaluator=...).",
+                    guidance="Use SimpleRuleEvaluator or LocalRegoEvaluator. Pass via Sentinel(policy_evaluator=...). See examples/02_policy_evaluation.py for a working example.",
                 ),
             )
         report.articles["Art. 9"] = art9

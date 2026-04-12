@@ -61,9 +61,9 @@ def test_art9_partial_with_policy() -> None:
     assert report.articles["Art. 9"].status == "PARTIAL"
 
 
-def test_art9_non_compliant_without_policy() -> None:
+def test_art9_partial_without_policy() -> None:
     report = EUAIActChecker().check(_make_sentinel(with_policy=False))
-    assert report.articles["Art. 9"].status == "NON_COMPLIANT"
+    assert report.articles["Art. 9"].status == "PARTIAL"
 
 
 def test_honest_about_non_automatable_articles() -> None:

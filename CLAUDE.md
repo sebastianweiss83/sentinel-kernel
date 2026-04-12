@@ -9,9 +9,9 @@
 | | |
 |---|---|
 | Version | `3.0.3` |
-| Tests | 615 passing |
-| Coverage | 100% |
-| Smoke test | 40/40 ✓ |
+| Tests | unknown |
+| Coverage | unknown |
+| Smoke test | failed at step 39 |
 | Last updated | 2026-04-11 22:25 UTC |
 
 ## Last 5 commits

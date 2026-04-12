@@ -337,6 +337,7 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     cicd = CICDScanner().scan(demo_root)
     print(f"      Runtime: {runtime.total_packages} packages, "
           f"score={runtime.sovereignty_score:.0%}")
+    print("               (run from your project venv for full dependency scan)")
     print(f"      CI/CD:   {len(cicd.findings)} findings")
     print()
 

@@ -741,17 +741,17 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
         Sentinel wraps any AI agent and records tamper-resistant decision
         traces to local sovereign storage. Client-side ML-DSA-65 signing.
         Zero cloud. Zero US CLOUD Act exposure. Air-gapped capable.
-        <strong><span id="hero-days">113</span> days to EU AI Act enforcement.</strong>
+        <strong><span id="hero-days">112</span> days to EU AI Act enforcement.</strong>
       </p>
       <div class="stats">
         <span class="stat-pill"><span class="ok">✓</span><span id="stat-version">v3.0.3</span></span>
-        <span class="stat-pill"><span class="ok">✓</span><span id="stat-tests">615 passing</span></span>
-        <span class="stat-pill"><span class="ok">✓</span><span id="stat-coverage">100% coverage</span></span>
-        <span class="stat-pill"><span class="ok">✓</span><span id="stat-smoke">40/40 smoke</span></span>
+        <span class="stat-pill"><span class="ok">✓</span><span id="stat-tests">unknown</span></span>
+        <span class="stat-pill"><span class="ok">✓</span><span id="stat-coverage">unknown coverage</span></span>
+        <span class="stat-pill"><span class="ok">✓</span><span id="stat-smoke">failed at step 39 smoke</span></span>
       </div>
       <div class="cta-row">
         <button id="install-btn" class="btn-primary">
-          <span class="mono-inline">$ pip3 install sentinel-kernel</span>
+          <span class="mono-inline">$ pipx install sentinel-kernel</span>
         </button>
         <a href="https://github.com/sebastianweiss83/sentinel-kernel" class="link-secondary">View on GitHub →</a>
         <a href="report.html" class="link-tertiary">sentinel report ↗</a>
@@ -767,7 +767,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
     <span class="title">~/sentinel — python</span>
   </div>
   <div class="terminal-body">
-    <div class="line l1"><span class="prompt">$</span> pip3 install sentinel-kernel</div>
+    <div class="line l1"><span class="prompt">$</span> pipx install sentinel-kernel</div>
     <div class="line l2"><span class="prompt">$</span> python3</div>
     <div class="line l3"><span class="py">&gt;&gt;&gt;</span> <span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel</div>
     <div class="line l4"><span class="py">&gt;&gt;&gt;</span> s = <span class="fn">Sentinel</span>()</div>
@@ -802,7 +802,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
       Penalties: up to €15M or 3% of global annual turnover.
     </div>
     <div class="enforce-days">
-      <div class="n" id="days-count">113</div>
+      <div class="n" id="days-count">112</div>
       <div class="label">days remaining</div>
     </div>
   </div>
@@ -818,7 +818,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
       <div class="industry-card">
         <h3>Quantum-safe trace signing</h3>
         <p><strong>ML-DSA-65 (FIPS 204)</strong>, BSI TR-02102-1 recommended. Keys stay client-side, forever. Same algorithm as cloud competitors — your keys, your infrastructure, your law.</p>
-        <div class="ks-code">pip3 install sentinel-kernel[pqc] &amp;&amp; sentinel keygen</div>
+        <div class="ks-code">pipx inject sentinel-kernel oqs-python &amp;&amp; sentinel keygen</div>
       </div>
       <div class="industry-card">
         <h3>Attestations · BudgetTracker · Preflight</h3>
@@ -830,7 +830,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
       <div class="industry-card">
         <h3>CrewAI · AutoGen · LangFuse panel</h3>
         <p>New framework integrations: <strong>CrewAI</strong> task callback and <strong>AutoGen</strong> agent hook. LangFuse gains a <strong>sovereignty widget</strong> — self-contained HTML, no CDN.</p>
-        <div class="ks-code">pip3 install sentinel-kernel[crewai,autogen]</div>
+        <div class="ks-code">pip install sentinel-kernel[crewai,autogen]</div>
       </div>
       <div class="industry-card">
         <h3>Rust SovereigntyManifest</h3>
@@ -1078,7 +1078,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
 
       <div class="panel">
         <h3>Enforcement countdown</h3>
-        <div class="count-big" id="days-count-2">113</div>
+        <div class="count-big" id="days-count-2">112</div>
         <div class="count-label">Days to EU AI Act Annex III</div>
         <div class="count-sub">2 August 2026 · Penalties up to €15M</div>
       </div>
@@ -1330,7 +1330,7 @@ att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
     </div>
 
     <div class="roadmap-bar">
-      ⚠ <strong><span id="days-count-3">113</span> days</strong> until EU AI Act Annex III enforcement (2 August 2026)
+      ⚠ <strong><span id="days-count-3">112</span> days</strong> until EU AI Act Annex III enforcement (2 August 2026)
     </div>
   </div>
 </section>
@@ -1340,12 +1340,12 @@ att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
   <div class="container">
     <div class="try">
       <h2>Try it now</h2>
-      <div class="small" style="margin-bottom:0.4rem;opacity:0.8">macOS / Linux</div>
-      <div><div class="step">$ pip3 install sentinel-kernel</div></div>
+      <div class="small" style="margin-bottom:0.4rem;opacity:0.8">macOS (recommended)</div>
+      <div><div class="step">$ brew install pipx &amp;&amp; pipx install sentinel-kernel</div></div>
       <div><div class="step">$ sentinel demo</div></div>
-      <div class="sep">Alternative (always works, even without pip on PATH)</div>
-      <div><div class="step">$ python3 -m pip install sentinel-kernel</div></div>
-      <div><div class="step">$ python3 -m sentinel demo</div></div>
+      <div class="sep">Linux / Docker / CI</div>
+      <div><div class="step">$ pip install sentinel-kernel</div></div>
+      <div><div class="step">$ sentinel demo</div></div>
       <div class="small">Runs 50 decisions · Kill switch demo · Compliance check<br>
         Generates sovereignty_report.html · No Docker required</div>
       <div class="sep">or — full Grafana demo</div>
@@ -1379,7 +1379,7 @@ docker compose -f docker-compose.minimal.yml up
   var btn = document.getElementById('install-btn');
   if (!btn) return;
   btn.addEventListener('click', function() {
-    var txt = 'pip3 install sentinel-kernel && sentinel demo';
+    var txt = 'pipx install sentinel-kernel && sentinel demo';
     if (navigator.clipboard) navigator.clipboard.writeText(txt);
     var original = btn.innerHTML;
     btn.innerHTML = '\u2713 Copied!';

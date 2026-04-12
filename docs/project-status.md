@@ -18,9 +18,9 @@ EU-sovereign decision record layer for AI agents.
 
 | | |
 |---|---|
-| Tests | 615 passing |
-| Coverage | 100% |
-| Smoke test | 40/40 ✓ |
+| Tests | unknown |
+| Coverage | unknown |
+| Smoke test | failed at step 39 |
 
 ## Modules
 
@@ -31,7 +31,7 @@ EU-sovereign decision record layer for AI agents.
 | `sentinel/cli.py` | 100% | ✓ |
 | `sentinel/compliance/__init__.py` | 100% | ✓ |
 | `sentinel/compliance/dora.py` | 100% | ✓ |
-| `sentinel/compliance/euaiact.py` | 100% | ✓ |
+| `sentinel/compliance/euaiact.py` | 99% | ✓ |
 | `sentinel/compliance/nis2.py` | 100% | ✓ |
 | `sentinel/compliance/unified.py` | 100% | ✓ |
 | `sentinel/core/__init__.py` | 100% | ✓ |
@@ -43,7 +43,7 @@ EU-sovereign decision record layer for AI agents.
 | `sentinel/crypto/signing.py` | 100% | ✓ |
 | `sentinel/crypto/timestamp.py` | 100% | ✓ |
 | `sentinel/dashboard/__init__.py` | 100% | ✓ |
-| `sentinel/dashboard/html.py` | 100% | ✓ |
+| `sentinel/dashboard/html.py` | 99% | ✓ |
 | `sentinel/dashboard/terminal.py` | 100% | ✓ |
 | `sentinel/integrations/__init__.py` | 100% | ✓ |
 | `sentinel/integrations/autogen.py` | 100% | ✓ |

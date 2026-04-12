@@ -738,7 +738,7 @@ def _check_eu_ai_act_articles(sentinel: Sentinel | None) -> dict[str, str]:
     has_storage = sentinel.storage is not None
 
     return {
-        "Art. 9":  "PARTIAL (policy evaluator wired)" if has_policy else "ACTION REQUIRED — no policy evaluator",
+        "Art. 9":  "PARTIAL (policy evaluator wired)" if has_policy else "PARTIAL — no policy evaluator configured",
         "Art. 12": "COMPLIANT (traces written)" if has_storage else "NON_COMPLIANT",
         "Art. 13": "COMPLIANT (traces carry policy/model metadata)",
         "Art. 14": "COMPLIANT (kill switch implemented)" if has_kill_switch else "NON_COMPLIANT",

@@ -820,7 +820,7 @@ JS = r"""
   var btn = document.getElementById('install-btn');
   if (!btn) return;
   btn.addEventListener('click', function() {
-    var txt = 'pip3 install sentinel-kernel && sentinel demo';
+    var txt = 'pipx install sentinel-kernel && sentinel demo';
     if (navigator.clipboard) navigator.clipboard.writeText(txt);
     var original = btn.innerHTML;
     btn.innerHTML = '\u2713 Copied!';
@@ -944,7 +944,7 @@ def _section_hero(
       </div>
       <div class="cta-row">
         <button id="install-btn" class="btn-primary">
-          <span class="mono-inline">$ pip3 install sentinel-kernel</span>
+          <span class="mono-inline">$ pipx install sentinel-kernel</span>
         </button>
         <a href="https://github.com/sebastianweiss83/sentinel-kernel" class="link-secondary">View on GitHub →</a>
         <a href="report.html" class="link-tertiary">sentinel report ↗</a>
@@ -968,7 +968,7 @@ def _terminal_block() -> str:
     <span class="title">~/sentinel — python</span>
   </div>
   <div class="terminal-body">
-    <div class="line l1"><span class="prompt">$</span> pip3 install sentinel-kernel</div>
+    <div class="line l1"><span class="prompt">$</span> pipx install sentinel-kernel</div>
     <div class="line l2"><span class="prompt">$</span> python3</div>
     <div class="line l3"><span class="py">&gt;&gt;&gt;</span> <span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel</div>
     <div class="line l4"><span class="py">&gt;&gt;&gt;</span> s = <span class="fn">Sentinel</span>()</div>
@@ -1021,7 +1021,7 @@ def _section_v3_highlights(version: str) -> str:
       <div class="industry-card">
         <h3>Quantum-safe trace signing</h3>
         <p><strong>ML-DSA-65 (FIPS 204)</strong>, BSI TR-02102-1 recommended. Keys stay client-side, forever. Same algorithm as cloud competitors — your keys, your infrastructure, your law.</p>
-        <div class="ks-code">pip3 install sentinel-kernel[pqc] &amp;&amp; sentinel keygen</div>
+        <div class="ks-code">pipx inject sentinel-kernel oqs-python &amp;&amp; sentinel keygen</div>
       </div>
       <div class="industry-card">
         <h3>Attestations · BudgetTracker · Preflight</h3>
@@ -1033,7 +1033,7 @@ def _section_v3_highlights(version: str) -> str:
       <div class="industry-card">
         <h3>CrewAI · AutoGen · LangFuse panel</h3>
         <p>New framework integrations: <strong>CrewAI</strong> task callback and <strong>AutoGen</strong> agent hook. LangFuse gains a <strong>sovereignty widget</strong> — self-contained HTML, no CDN.</p>
-        <div class="ks-code">pip3 install sentinel-kernel[crewai,autogen]</div>
+        <div class="ks-code">pip install sentinel-kernel[crewai,autogen]</div>
       </div>
       <div class="industry-card">
         <h3>Rust SovereigntyManifest</h3>
@@ -1575,12 +1575,12 @@ def _section_try() -> str:
   <div class="container">
     <div class="try">
       <h2>Try it now</h2>
-      <div class="small" style="margin-bottom:0.4rem;opacity:0.8">macOS / Linux</div>
-      <div><div class="step">$ pip3 install sentinel-kernel</div></div>
+      <div class="small" style="margin-bottom:0.4rem;opacity:0.8">macOS (recommended)</div>
+      <div><div class="step">$ brew install pipx &amp;&amp; pipx install sentinel-kernel</div></div>
       <div><div class="step">$ sentinel demo</div></div>
-      <div class="sep">Alternative (always works, even without pip on PATH)</div>
-      <div><div class="step">$ python3 -m pip install sentinel-kernel</div></div>
-      <div><div class="step">$ python3 -m sentinel demo</div></div>
+      <div class="sep">Linux / Docker / CI</div>
+      <div><div class="step">$ pip install sentinel-kernel</div></div>
+      <div><div class="step">$ sentinel demo</div></div>
       <div class="small">Runs 50 decisions · Kill switch demo · Compliance check<br>
         Generates sovereignty_report.html · No Docker required</div>
       <div class="sep">or — full Grafana demo</div>

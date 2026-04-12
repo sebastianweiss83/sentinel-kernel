@@ -92,6 +92,15 @@ deployed.
 
 ---
 
+### Contact: BSI Referat KI-Sicherheit
+
+For questions about the IT-Grundschutz profile or AI security assessment:
+
+- **E-Mail:** ki-sicherheit@bsi.bund.de
+- **Web:** https://www.bsi.bund.de/KI
+
+---
+
 ### SYS.1.6 — Containerisierung
 
 SYS.1.6 applies when Sentinel is deployed inside containers. The
@@ -205,3 +214,14 @@ All cryptographic operations run in-process. There is no API key, no
 cloud service, no network call. RFC 3161 timestamping via EU-sovereign
 TSAs only (DFN-CERT, D-Trust); US-based TSAs are rejected at
 construction time.
+
+---
+
+## BSI contact
+
+**BSI Referat KI-Sicherheit**
+Bundesamt für Sicherheit in der Informationstechnik
+Godesberger Allee 185-189, 53175 Bonn
+
+E-Mail: ki-sicherheit@bsi.bund.de
+Web: https://www.bsi.bund.de/KI
