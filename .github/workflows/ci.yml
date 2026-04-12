@@ -59,10 +59,10 @@ jobs:
         run: python scripts/check_sovereignty.py
 
       - name: Verify EU AI Act mandatory trace fields present
-        run: pytest tests/test_eu_ai_act_fields.py -v
+        run: pytest tests/test_eu_ai_act_fields.py -v --no-cov
 
       - name: Verify trace schema stability
-        run: pytest tests/test_trace_schema.py -v
+        run: pytest tests/test_trace_schema.py -v --no-cov
 
   manifesto-checks:
     name: "Manifesto — 5 sovereignty theses"
@@ -81,7 +81,7 @@ jobs:
         run: python scripts/check_sovereignty.py
 
       - name: "Thesis 2 — Air-gap: full critical path works offline"
-        run: pytest tests/test_airgap.py -v
+        run: pytest tests/test_airgap.py -v --no-cov
         env:
           SENTINEL_AIRGAP: "1"
 
@@ -92,7 +92,7 @@ jobs:
         run: python scripts/check_manifesto.py
 
       - name: "Thesis 5 — Trace immutability: no UPDATE/DELETE in storage"
-        run: pytest tests/ -k "immut or append_only or no_update or no_delete" -v
+        run: pytest tests/ -k "immut or append_only or no_update or no_delete" -v --no-cov
 
   lint:
     name: Lint & type check
@@ -140,7 +140,7 @@ jobs:
           cache-dependency-path: pyproject.toml
       - run: pip install -e ".[dev]"
       - name: Run air-gapped tests
-        run: pytest tests/test_airgap.py -v
+        run: pytest tests/test_airgap.py -v --no-cov
         env:
           SENTINEL_AIRGAP: "1"
 
