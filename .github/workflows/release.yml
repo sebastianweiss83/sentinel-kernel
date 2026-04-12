@@ -3,7 +3,9 @@ name: Release
 on:
   push:
     tags: ['v*.*.*']
-    branches-ignore: ['**']   # ONLY tags, NEVER branches
+    # No branches filter — tags-only trigger. CI has tags-ignore: ['**']
+    # so CI never fires on tags. This workflow never fires on branches
+    # because there is no branches: filter — only tags: is specified.
 
 concurrency:
   group: release-${{ github.ref }}
