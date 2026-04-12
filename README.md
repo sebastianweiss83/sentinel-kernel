@@ -29,8 +29,8 @@ cloud dependencies, in any environment including air-gapped.
 [![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
 [![Version](https://img.shields.io/badge/version-v3.0.7-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Tests](https://img.shields.io/badge/tests-615%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
-[![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Tests](https://img.shields.io/badge/tests-576%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Coverage](https://img.shields.io/badge/coverage-91%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Status](https://img.shields.io/badge/status-production%2Fstable-brightgreen)](CHANGELOG.md)
 [![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F14%2F17-green)](docs/eu-ai-act.md)
 <!-- SYNC_ALL_README_END -->
@@ -424,6 +424,7 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 - [docs/landscape.md](docs/landscape.md) — how Sentinel relates to the ecosystem
 - [docs/ecosystem.md](docs/ecosystem.md) — sovereign project registry
 - [docs/rfcs/RFC-001-sovereignty-manifest.md](docs/rfcs/RFC-001-sovereignty-manifest.md) — SovereigntyManifest spec (draft)
+- [rust-impl/](rust-impl/) — Rust reference implementation of RFC-001 (experimental)
 - [GOVERNANCE.md](GOVERNANCE.md) — governance model
 - [CONTRIBUTING.md](CONTRIBUTING.md) — contribution guide
 - [CHANGELOG.md](CHANGELOG.md) — version history

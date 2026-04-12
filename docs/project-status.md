@@ -18,8 +18,8 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 
 | | |
 |---|---|
-| Tests | 615 passing |
-| Coverage | 99% |
+| Tests | unknown |
+| Coverage | unknown |
 | Smoke test | 40/40 ✓ |
 
 ## Modules
@@ -48,14 +48,14 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 | `sentinel/integrations/__init__.py` | 100% | ✓ |
 | `sentinel/integrations/autogen.py` | 100% | ✓ |
 | `sentinel/integrations/crewai.py` | 100% | ✓ |
-| `sentinel/integrations/django.py` | 100% | ✓ |
-| `sentinel/integrations/fastapi.py` | 100% | ✓ |
+| `sentinel/integrations/django.py` | 0% | ✗ |
+| `sentinel/integrations/fastapi.py` | 0% | ✗ |
 | `sentinel/integrations/haystack.py` | 100% | ✓ |
-| `sentinel/integrations/jupyter.py` | 100% | ✓ |
-| `sentinel/integrations/langchain.py` | 100% | ✓ |
-| `sentinel/integrations/langfuse.py` | 100% | ✓ |
-| `sentinel/integrations/otel.py` | 100% | ✓ |
-| `sentinel/integrations/prometheus.py` | 100% | ✓ |
+| `sentinel/integrations/jupyter.py` | 0% | ✗ |
+| `sentinel/integrations/langchain.py` | 99% | ✓ |
+| `sentinel/integrations/langfuse.py` | 98% | ✓ |
+| `sentinel/integrations/otel.py` | 96% | ✓ |
+| `sentinel/integrations/prometheus.py` | 0% | ✗ |
 | `sentinel/manifesto/__init__.py` | 100% | ✓ |
 | `sentinel/manifesto/base.py` | 100% | ✓ |
 | `sentinel/policy/__init__.py` | 100% | ✓ |
@@ -68,7 +68,7 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 | `sentinel/storage/__init__.py` | 100% | ✓ |
 | `sentinel/storage/base.py` | 100% | ✓ |
 | `sentinel/storage/filesystem.py` | 100% | ✓ |
-| `sentinel/storage/postgres.py` | 100% | ✓ |
+| `sentinel/storage/postgres.py` | 99% | ✓ |
 | `sentinel/storage/sqlite.py` | 100% | ✓ |
 
 ## What's inside
