@@ -28,7 +28,7 @@ The kernel and every governance primitive around it.
   no CDN).
 - **v2.4** — RFC-001 `SovereigntyManifest` Rust reference implementation.
 - **v3.0** — API freeze. BSI pre-engagement package ready. v1→v3
-  capability parity on the public site. 608 tests, 100% coverage.
+  capability parity on the public site. 576+ tests, 91% coverage.
 - **v3.0.1 / v3.0.2** — Reentrant scanner timeout, workflow concurrency
   guards, walk-time directory pruning. Operational hardening.
 

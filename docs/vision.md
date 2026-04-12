@@ -248,7 +248,7 @@ not last forever. It should last long enough to become the default.
 Sovereign decision traces, policy-as-code, kill switch, manifesto-as-code,
 EU AI Act compliance checker, sovereignty scanner, quantum-safe signing,
 RFC-001 cross-language manifest. Production stable. API frozen.
-608 tests, 100% coverage.
+576+ tests, 91% coverage.
 
 **Phase 2 — Certify (v3.1–v3.x, 2026).**
 Linux Foundation Europe stewardship application (v3.1, Q3 2026). BSI

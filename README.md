@@ -38,7 +38,7 @@ cloud dependencies, in any environment including air-gapped.
 **Live preview:** https://sebastianweiss83.github.io/sentinel-kernel/
 **Get started in 2 minutes:** [docs/getting-started.md](docs/getting-started.md)
 
-## Quick demo
+## Quick start
 
 ```bash
 # macOS (recommended)
@@ -54,9 +54,7 @@ python3 -m pip install sentinel-kernel
 python3 -m sentinel demo
 ```
 
----
-
-## Quick demo — full stack in one command
+### Full-stack demo (Docker)
 
 ```bash
 git clone https://github.com/sebastianweiss83/sentinel-kernel
@@ -399,24 +397,38 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 
 ## Documentation
 
+**Core**
 - [docs/vision.md](docs/vision.md) — the Sovereign Decision Kernel, in full
 - [docs/roadmap.md](docs/roadmap.md) — three phases, Router design
 - [docs/getting-started.md](docs/getting-started.md) — two-minute quickstart
-- [docs/real-world-examples.md](docs/real-world-examples.md) — industry scenarios
-- [docs/schema.md](docs/schema.md) — full trace schema reference
-- [docs/eu-ai-act.md](docs/eu-ai-act.md) — Article 12/13/14/17 mapping
-- [docs/integration-guide.md](docs/integration-guide.md) — framework integrations
-- [docs/sovereignty.md](docs/sovereignty.md) — what sovereignty means
-- [docs/ecosystem.md](docs/ecosystem.md) — sovereign AI project registry
-- [docs/rfcs/RFC-001-sovereignty-manifest.md](docs/rfcs/RFC-001-sovereignty-manifest.md) — SovereigntyManifest spec (draft)
-- [docs/bsi-profile.md](docs/bsi-profile.md) — BSI IT-Grundschutz profile
-- [demo/README.md](demo/README.md) — Docker Compose demo environment
-- [examples/](examples/) — 13 runnable examples and 7 policy templates
-- [docs/landscape.md](docs/landscape.md) — how Sentinel relates to LLMOps ecosystem
 - [docs/architecture.md](docs/architecture.md) — detailed architecture
-- [docs/releasing.md](docs/releasing.md) — release runbook
-- [CLAUDE_MEGA_PROMPT.md](CLAUDE_MEGA_PROMPT.md) — persistent Claude Code reference
-- [VISION.md](VISION.md) — strategic vision
-- [ROADMAP.md](ROADMAP.md) — detailed milestones
+- [docs/schema.md](docs/schema.md) — full trace schema reference
+- [docs/api-stability.md](docs/api-stability.md) — API stability contract
+
+**Compliance & certification**
+- [docs/eu-ai-act.md](docs/eu-ai-act.md) — Article 12/13/14/17 mapping
+- [docs/bsi-profile.md](docs/bsi-profile.md) — BSI IT-Grundschutz profile
+- [docs/bsi-pre-engagement/README.md](docs/bsi-pre-engagement/README.md) — BSI pre-engagement package
+- [docs/dora-compliance.md](docs/dora-compliance.md) — DORA financial regulation
+- [docs/nis2-compliance.md](docs/nis2-compliance.md) — NIS2 critical infrastructure
+- [docs/vsnfd-deployment.md](docs/vsnfd-deployment.md) — VS-NfD classified deployment
+
+**Integrations & examples**
+- [docs/integration-guide.md](docs/integration-guide.md) — framework integrations
+- [docs/real-world-examples.md](docs/real-world-examples.md) — industry scenarios
+- [examples/](examples/) — 13 runnable examples and 7 policy templates
+- [demo/README.md](demo/README.md) — Docker Compose demo environment
+
+**Ecosystem & governance**
+- [docs/sovereignty.md](docs/sovereignty.md) — what sovereignty means
+- [docs/landscape.md](docs/landscape.md) — how Sentinel relates to the ecosystem
+- [docs/ecosystem.md](docs/ecosystem.md) — sovereign project registry
+- [docs/rfcs/RFC-001-sovereignty-manifest.md](docs/rfcs/RFC-001-sovereignty-manifest.md) — SovereigntyManifest spec (draft)
 - [GOVERNANCE.md](GOVERNANCE.md) — governance model
+- [CONTRIBUTING.md](CONTRIBUTING.md) — contribution guide
 - [CHANGELOG.md](CHANGELOG.md) — version history
+
+**Onboarding & operations**
+- [docs/onboarding/technical-cofounder.md](docs/onboarding/technical-cofounder.md) — technical onboarding
+- [docs/performance.md](docs/performance.md) — performance benchmarks
+- [docs/releasing.md](docs/releasing.md) — release runbook
