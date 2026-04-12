@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.0.6` |
-| Tests | unknown |
-| Coverage | unknown |
+| Tests | 615 passing |
+| Coverage | 99% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-12 11:07 UTC |
+| Last updated | 2026-04-12 11:28 UTC |
 
 ## Last 5 commits
 
+- `a296681` fix: complete hardening — 48/48 functional, 576 tests, 40/40 smoke
 - `da2bd5f` fix: workflow deduplication + version sync audit
 - `e2bd38d` chore: re-sync derived content for v3.0.5
 - `b96c53c` release: v3.0.5 — deep last-mile audit + PyPI fix
 - `5b65a00` chore: re-sync derived content after rebase
-- `2581b53` fix: deep last-mile audit — version sync, stale data, security email
 
 ## Open issues
 

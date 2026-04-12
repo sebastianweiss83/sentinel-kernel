@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-12 11:07 UTC_
+_Last generated from HEAD commit: 2026-04-12 11:28 UTC_
 
 ## Version
 
@@ -18,8 +18,8 @@ EU-sovereign decision record layer for AI agents.
 
 | | |
 |---|---|
-| Tests | unknown |
-| Coverage | unknown |
+| Tests | 615 passing |
+| Coverage | 99% |
 | Smoke test | 40/40 ✓ |
 
 ## Modules
@@ -48,14 +48,14 @@ EU-sovereign decision record layer for AI agents.
 | `sentinel/integrations/__init__.py` | 100% | ✓ |
 | `sentinel/integrations/autogen.py` | 100% | ✓ |
 | `sentinel/integrations/crewai.py` | 100% | ✓ |
-| `sentinel/integrations/django.py` | 0% | ✗ |
-| `sentinel/integrations/fastapi.py` | 0% | ✗ |
+| `sentinel/integrations/django.py` | 100% | ✓ |
+| `sentinel/integrations/fastapi.py` | 100% | ✓ |
 | `sentinel/integrations/haystack.py` | 100% | ✓ |
-| `sentinel/integrations/jupyter.py` | 0% | ✗ |
-| `sentinel/integrations/langchain.py` | 99% | ✓ |
-| `sentinel/integrations/langfuse.py` | 98% | ✓ |
-| `sentinel/integrations/otel.py` | 96% | ✓ |
-| `sentinel/integrations/prometheus.py` | 0% | ✗ |
+| `sentinel/integrations/jupyter.py` | 100% | ✓ |
+| `sentinel/integrations/langchain.py` | 100% | ✓ |
+| `sentinel/integrations/langfuse.py` | 100% | ✓ |
+| `sentinel/integrations/otel.py` | 100% | ✓ |
+| `sentinel/integrations/prometheus.py` | 100% | ✓ |
 | `sentinel/manifesto/__init__.py` | 100% | ✓ |
 | `sentinel/manifesto/base.py` | 100% | ✓ |
 | `sentinel/policy/__init__.py` | 100% | ✓ |
@@ -68,7 +68,7 @@ EU-sovereign decision record layer for AI agents.
 | `sentinel/storage/__init__.py` | 100% | ✓ |
 | `sentinel/storage/base.py` | 100% | ✓ |
 | `sentinel/storage/filesystem.py` | 100% | ✓ |
-| `sentinel/storage/postgres.py` | 99% | ✓ |
+| `sentinel/storage/postgres.py` | 100% | ✓ |
 | `sentinel/storage/sqlite.py` | 100% | ✓ |
 
 ## What's inside
@@ -97,6 +97,7 @@ EU-sovereign decision record layer for AI agents.
 
 ## Recent releases
 
+- **v3.0.6** — v3.0.6 — Complete hardening + 100% functional audit
 - **v3.0.5** — v3.0.5 — Deep last-mile audit
 - **v3.0.4** — v3.0.4 — Complete UX overhaul
 - **v3.0.3** — v3.0.3 — Fix: demo prints copy-pasteable open command
@@ -108,7 +109,6 @@ EU-sovereign decision record layer for AI agents.
 - **v2.2.0** — v2.2.0 — Quantum-safe signing: ML-DSA-65, client-side
 - **v2.1.0** — v2.1.0 — BudgetTracker, Attestations, CrewAI, AutoGen
 - **v2.0.0** — v2.0.0 — Production stable, BSI assessment ready
-- **v1.9.0** — v1.9.0 — DORA + NIS2 compliance
 
 ## Shipped
 
