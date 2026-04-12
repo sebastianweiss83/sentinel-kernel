@@ -10,7 +10,7 @@ _Last generated from HEAD commit: 2026-04-12 10:37 UTC_
 
 ## Version
 
-**`3.0.3`** — Production/Stable
+**`3.0.4`** — Production/Stable
 
 EU-sovereign decision record layer for AI agents.
 
