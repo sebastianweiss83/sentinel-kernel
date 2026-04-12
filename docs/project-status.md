@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-12 13:46 UTC_
+_Last generated from HEAD commit: 2026-04-12 14:12 UTC_
 
 ## Version
 
@@ -18,58 +18,9 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 
 | | |
 |---|---|
-| Tests | 615 passing |
-| Coverage | 99% |
+| Tests | 642 passing |
+| Coverage | unknown |
 | Smoke test | 40/40 ✓ |
-
-## Modules
-
-| Module | Coverage | Status |
-|---|---|---|
-| `sentinel/__init__.py` | 100% | ✓ |
-| `sentinel/__main__.py` | 100% | ✓ |
-| `sentinel/cli.py` | 100% | ✓ |
-| `sentinel/compliance/__init__.py` | 100% | ✓ |
-| `sentinel/compliance/dora.py` | 100% | ✓ |
-| `sentinel/compliance/euaiact.py` | 99% | ✓ |
-| `sentinel/compliance/nis2.py` | 100% | ✓ |
-| `sentinel/compliance/unified.py` | 100% | ✓ |
-| `sentinel/core/__init__.py` | 100% | ✓ |
-| `sentinel/core/attestation.py` | 100% | ✓ |
-| `sentinel/core/budget.py` | 100% | ✓ |
-| `sentinel/core/trace.py` | 100% | ✓ |
-| `sentinel/core/tracer.py` | 100% | ✓ |
-| `sentinel/crypto/__init__.py` | 100% | ✓ |
-| `sentinel/crypto/signing.py` | 100% | ✓ |
-| `sentinel/crypto/timestamp.py` | 100% | ✓ |
-| `sentinel/dashboard/__init__.py` | 100% | ✓ |
-| `sentinel/dashboard/html.py` | 99% | ✓ |
-| `sentinel/dashboard/terminal.py` | 100% | ✓ |
-| `sentinel/integrations/__init__.py` | 100% | ✓ |
-| `sentinel/integrations/autogen.py` | 100% | ✓ |
-| `sentinel/integrations/crewai.py` | 100% | ✓ |
-| `sentinel/integrations/django.py` | 100% | ✓ |
-| `sentinel/integrations/fastapi.py` | 100% | ✓ |
-| `sentinel/integrations/haystack.py` | 100% | ✓ |
-| `sentinel/integrations/jupyter.py` | 100% | ✓ |
-| `sentinel/integrations/langchain.py` | 100% | ✓ |
-| `sentinel/integrations/langfuse.py` | 100% | ✓ |
-| `sentinel/integrations/otel.py` | 100% | ✓ |
-| `sentinel/integrations/prometheus.py` | 100% | ✓ |
-| `sentinel/manifesto/__init__.py` | 100% | ✓ |
-| `sentinel/manifesto/base.py` | 100% | ✓ |
-| `sentinel/policy/__init__.py` | 100% | ✓ |
-| `sentinel/policy/evaluator.py` | 100% | ✓ |
-| `sentinel/scanner/__init__.py` | 100% | ✓ |
-| `sentinel/scanner/cicd.py` | 100% | ✓ |
-| `sentinel/scanner/infrastructure.py` | 100% | ✓ |
-| `sentinel/scanner/knowledge.py` | 100% | ✓ |
-| `sentinel/scanner/runtime.py` | 100% | ✓ |
-| `sentinel/storage/__init__.py` | 100% | ✓ |
-| `sentinel/storage/base.py` | 100% | ✓ |
-| `sentinel/storage/filesystem.py` | 100% | ✓ |
-| `sentinel/storage/postgres.py` | 100% | ✓ |
-| `sentinel/storage/sqlite.py` | 100% | ✓ |
 
 ## What's inside
 
