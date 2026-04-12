@@ -194,12 +194,11 @@ IT-Grundschutz.
 
 | Milestone | Target | BSI relevance |
 |---|---|---|
-| v1.0 — Production baseline | 2026-04 | Core trace emission and storage — baseline for assessment |
-| v1.1 — Demo surface + dashboards | 2026-04 | Operator onboarding materials |
-| v1.2 — Onboarding + BSI profile expansion | 2026-04 | This document; conversation-ready for pre-engagement |
-| v1.4 — Haystack integration | 2026-Q2 | EU-sovereign agent framework coverage |
-| v2.0 — BSI reference implementation | 2026-Q4 | Formal assessment against IT-Grundschutz |
-| v2.1 — VS-NfD deployment profile | 2027-Q1 | Cleared for classified German government deployments |
+| v3.0 — Production stable, API frozen | 2026-04 (shipped) | Core kernel, 576+ tests, 91% coverage — baseline for assessment |
+| v3.0.x — Hardening + compliance audit | 2026-04 (shipped) | All customer-facing surfaces verified, self-contained HTML reports |
+| v3.1 — Linux Foundation Europe application | 2026-Q3 | EU-governed project stewardship |
+| v3.2 — BSI IT-Grundschutz formal assessment | 2026-Q4 | Formal assessment against IT-Grundschutz |
+| v4.0 — SovereignRouter | 2026–2027 | Policy-driven decision system selection |
 
 ---
 
