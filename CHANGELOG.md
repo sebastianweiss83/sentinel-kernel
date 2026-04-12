@@ -7,6 +7,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.0.5] — 2026-04-12
+
+**Deep last-mile audit. Every customer-facing surface reviewed and
+polished to government/defence procurement standard.**
+
+### Fixed
+
+- **`__init__.py` version sync** — was 3.0.3 while pyproject.toml was
+  3.0.4. Both now match the release tag.
+- **README EU AI Act table** — Art. 11 status corrected from "Partial"
+  to "Human action" (matches `euaiact.py` ACTION_REQUIRED). Art. 17
+  corrected from "Partial" to "Full" (matches COMPLIANT).
+- **README policy template count** — 5 → 7 (actual count in
+  `examples/policies/`).
+- **SECURITY.md supported versions** — updated to show 3.x as current,
+  0–2.x as end-of-life.
+- **CONTRIBUTING.md security email** — aligned with SECURITY.md
+  (`sebastian@swentures.com`, was `security@swentures.com`).
+- **BSI pre-engagement** — version v2.0 → v3.0, test count 503 → 615.
+- **`docs/co-innovation.md`** — removed stale "TBD" stub.
+- **Release workflow** — removed `sync-after-release` job that caused
+  double-sync race with `ci.yml`. Added `tags-ignore` and
+  `workflow_dispatch` to CI.
+
+### Removed
+
+- Closed duplicate issues #5 (superseded by #20) and #6 (by #19).
+- Closed duplicate discussion #10 (superseded by #15).
+
+## [3.0.4] — 2026-04-12
+
+**Complete UX overhaul. First-time users no longer see alarming
+NON_COMPLIANT status. All install instructions use pipx on macOS.
+BSI contact details everywhere.**
+
+### Changed
+
+- **Overall compliance status** — `NON_COMPLIANT` only when core
+  articles (Art. 12, 13, 14) fail. Everything else returns `PARTIAL`.
+- **Art. 9 without policy** — shows `PARTIAL` with configuration hint,
+  not `NON_COMPLIANT`.
+- **Art. 16, 26, 72** — HTML report "What to do" column now has
+  specific actionable remediation (provider registration, deployer
+  procedures, GPAI monitoring plan).
+- **Install instructions** — pipx for macOS, pip for Linux/CI across
+  all user-facing docs (README, getting-started, preview site,
+  architecture, CONTRIBUTING).
+- **BSI contact** — `ki-sicherheit@bsi.bund.de` added to HTML report
+  next steps, `docs/bsi-pre-engagement/`, and `docs/bsi-profile.md`.
+- **Runtime packages note** — HTML report and terminal output explain
+  that the scan shows the current Python environment.
+- **GitHub repo description** — updated to mention pipx.
+
+### Added
+
+- `sentinel/__main__.py` — `python3 -m sentinel` works out of the box.
+
 ## [3.0.3] — 2026-04-11
 
 **Tiny UX fix: `sentinel demo` now prints a copy-pasteable `open`

@@ -18,9 +18,9 @@ EU-sovereign decision record layer for AI agents.
 
 | | |
 |---|---|
-| Tests | 615 passing |
-| Coverage | 99% |
-| Smoke test | 40/40 ✓ |
+| Tests | unknown |
+| Coverage | unknown |
+| Smoke test | failed at step 39 |
 
 ## Modules
 
@@ -112,6 +112,8 @@ EU-sovereign decision record layer for AI agents.
 
 ## Shipped
 
+- **3.0.5 (2026-04-12)** — **Deep last-mile audit. Every customer-facing surface reviewed and
+- **3.0.4 (2026-04-12)** — **Complete UX overhaul. First-time users no longer see alarming
 - **3.0.3 (2026-04-11)** — **Tiny UX fix: `sentinel demo` now prints a copy-pasteable `open`
 - **3.0.2 (2026-04-11)** — **Scanner gets a reentrant cooperative timeout. Workflow concurrency
 - **3.0.1 (2026-04-11)** — **Bug fix: infrastructure scanner no longer hangs on large directories.**
@@ -122,7 +124,5 @@ EU-sovereign decision record layer for AI agents.
 - **2.1.0 (2026-04-11)** — **Sovereign-first governance primitives.**
 - **2.0.0 (2026-04-11)** — **Major release. Production stable. BSI assessment ready.**
 - **1.9.0 (2026-04-11)** — Minor release. Advanced compliance — DORA and NIS2 checkers with
-- **1.8.0 (2026-04-11)** — Minor release. Developer experience — Jupyter notebook widget,
-- **1.7.0 (2026-04-11)** — Minor release. Production hardening — trace integrity, retention,
 
 <!-- SYNC_ALL_STATUS_END -->

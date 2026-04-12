@@ -3,8 +3,11 @@ name: CI
 on:
   push:
     branches: [main]
+    tags-ignore:
+      - "v*"
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 # Serialise Pages deploys on main so two rapid pushes can't race each
 # other through sync-all / deploy-pages. PRs get their own concurrency
