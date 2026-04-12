@@ -8,9 +8,9 @@
 
 | | |
 |---|---|
-| Version | `3.0.5` |
-| Tests | 615 passing |
-| Coverage | 99% |
+| Version | `3.0.6` |
+| Tests | unknown |
+| Coverage | unknown |
 | Smoke test | 40/40 ✓ |
 | Last updated | 2026-04-12 11:07 UTC |
 

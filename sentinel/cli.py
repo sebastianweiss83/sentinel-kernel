@@ -26,9 +26,16 @@ from sentinel.storage import SQLiteStorage
 
 
 def main(argv: list[str] | None = None) -> int:
+    from sentinel import __version__
+
     parser = argparse.ArgumentParser(
         prog="sentinel",
         description="Sentinel — EU-sovereign AI decision middleware",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"sentinel-kernel {__version__}",
     )
     sub = parser.add_subparsers(dest="command")
 

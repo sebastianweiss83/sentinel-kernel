@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.0.6] — 2026-04-12
+
+**Complete hardening audit — 48/48 functional tests, 576/576 test suite,
+40/40 smoke test, all customer-facing surfaces verified.**
+
+### Added
+
+- **`sentinel --version` flag** — government/defence CLI standard
+  compliance; reports `sentinel-kernel X.Y.Z`
+
+### Fixed
+
+- **Smoke test step 39** — `python` → `sys.executable` fixes ruff
+  check failure on macOS where `python` binary does not exist
+
 ## [3.0.5] — 2026-04-12
 
 **Deep last-mile audit. Every customer-facing surface reviewed and
