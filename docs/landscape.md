@@ -21,7 +21,7 @@ Sentinel sits at the intersection of LLM tracing and enterprise governance. This
 
 ## What Sentinel does
 
-Sentinel occupies a category that does not have an established name yet: **decision record infrastructure**. It produces a structured, append-only, sovereign artifact for every AI agent decision — capturing what was decided, under which policy, by which model, and under whose jurisdiction.
+Sentinel occupies a category that does not have an established name yet: **decision record infrastructure**. It produces a structured, append-only, sovereign artifact for every autonomous decision — capturing what was decided, under which policy, by which system, and under whose jurisdiction.
 
 This is complementary to observability and LLMOps, not competing with them. A team can use Langfuse for prompt debugging and Sentinel for compliance records. They answer different questions:
 

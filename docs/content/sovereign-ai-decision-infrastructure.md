@@ -5,14 +5,14 @@ _Draft — 2026-04-11._
 
 ## 1. The decision record problem
 
-Every AI agent running in production makes decisions. Most of them
+Every autonomous system running in production makes decisions. Most of them
 are uncontroversial; some of them will eventually matter to a
 regulator, an insurer, or a court. The distinction between the two
 is knowable only in retrospect.
 
 This is not a new problem. Database transactions get this right —
 the log is authoritative, it is append-only, and it outlives the
-process that wrote it. But AI agents have grown up inside
+process that wrote it. But autonomous decision systems have grown up inside
 observability tools, which were built for debugging distributed
 systems, not for evidence. An observability record is lossy by
 design. It is sampled, compressed, rotated, and stored in whichever

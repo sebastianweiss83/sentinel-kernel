@@ -30,7 +30,7 @@ def main(argv: list[str] | None = None) -> int:
 
     parser = argparse.ArgumentParser(
         prog="sentinel",
-        description="Sentinel — EU-sovereign AI decision middleware",
+        description="Sentinel — Sovereign decision tracing for any autonomous system",
     )
     parser.add_argument(
         "--version",

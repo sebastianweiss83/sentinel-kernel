@@ -18,7 +18,7 @@ itself. It is a starting point for an informed evaluation.
 ## Decision record layer
 
 ### sentinel-kernel *(this project)*
-- **Role:** EU-sovereign AI decision middleware kernel
+- **Role:** EU-sovereign decision tracing kernel
 - **Jurisdiction:** EU
 - **Air-gap:** Yes — reference `FilesystemStorage` backend
 - **Certification:** BSI IT-Grundschutz targeted for v1.0 (Q4 2026)

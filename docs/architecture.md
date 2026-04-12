@@ -10,7 +10,7 @@ This document defines the architectural principles and key decisions of the Sent
 
 ## Kernel responsibilities
 
-Sentinel does one thing: sit in the execution path of AI agent calls and emit sovereign decision traces.
+Sentinel does one thing: sit in the execution path of autonomous decision calls and emit sovereign decision traces.
 
 It does not:
 - Host a dashboard

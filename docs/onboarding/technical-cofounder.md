@@ -5,7 +5,7 @@ productive in one afternoon.
 
 ## The one-paragraph pitch
 
-Sentinel is EU-sovereign AI decision middleware. You wrap any AI agent
+Sentinel is the EU-sovereign decision kernel. You wrap any decision function
 with `@sentinel.trace`, we record a tamper-resistant decision trace to
 local storage, you pass an EU AI Act Art. 12/13/14 audit. The three
 invariants are: no US CLOUD Act exposure in the critical path, the
@@ -16,7 +16,7 @@ sovereignty is the product.
 
 ```
 ┌─────────────────────┐
-│  Your AI agent      │   any Python callable, sync or async
+│  Your decision fn   │   any Python callable, sync or async
 └──────────┬──────────┘
            │ @sentinel.trace
 ┌──────────▼──────────┐

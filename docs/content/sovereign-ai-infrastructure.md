@@ -79,7 +79,7 @@ Strip away the legal hedging and Article 12 is a technical spec.
 
 1. **Automatic.** No human step to initiate logging. The log event
    must happen at the same code boundary as the action being
-   logged. In a wrapped AI agent this means the trace must be
+   logged. In a wrapped decision function this means the trace must be
    emitted by the wrapper, not by the policy engine, not by the
    operator's dashboard.
 

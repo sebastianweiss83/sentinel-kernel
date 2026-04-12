@@ -1,5 +1,5 @@
 """
-Sentinel — EU-sovereign AI decision middleware.
+Sentinel — Sovereign decision tracing for any autonomous system.
 
     from sentinel import Sentinel
     from sentinel.storage import SQLiteStorage

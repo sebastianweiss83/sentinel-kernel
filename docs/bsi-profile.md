@@ -25,8 +25,8 @@ The assessment scope covers:
 
 The assessment explicitly does **not** cover:
 
-- The AI agents that Sentinel wraps — those are the customer's system.
-- The LLM providers the AI agents call — those are separately governed.
+- The decision systems that Sentinel wraps — those are the customer's system.
+- The model providers or rule engines they call — those are separately governed.
 - The underlying OS, container runtime, or hardware.
 
 ---

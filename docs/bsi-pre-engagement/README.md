@@ -38,7 +38,7 @@ architecture and [docs/roadmap.md](../roadmap.md) for phase detail.
 
 ## Context
 
-Sentinel is an EU-sovereign AI decision middleware kernel. Its
+Sentinel is an EU-sovereign decision tracing kernel. Its
 three non-negotiable invariants are:
 
 1. No US CLOUD Act exposure in the critical path.

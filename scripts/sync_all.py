@@ -96,7 +96,7 @@ def _read_description() -> str:
     """Read the project description from pyproject.toml."""
     text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
     m = re.search(r'^description\s*=\s*"([^"]+)"', text, re.MULTILINE)
-    return m.group(1) if m else "EU-sovereign AI decision middleware."
+    return m.group(1) if m else "Sovereign decision tracing for any autonomous system."
 
 
 def _read_module_coverage() -> list[tuple[str, int]]:

@@ -9,8 +9,8 @@
 | | |
 |---|---|
 | Version | `3.0.7` |
-| Tests | 615 passing |
-| Coverage | 99% |
+| Tests | unknown |
+| Coverage | unknown |
 | Smoke test | 40/40 ✓ |
 | Last updated | 2026-04-12 12:09 UTC |
 
@@ -182,12 +182,15 @@ git rebase origin/main
 git push origin main
 ```
 
-For **releases** — push code first, wait for CI, then tag:
+For **releases** — push code first, wait for CI, then tag the
+**pre-sync commit** (not the `[skip ci]` auto-sync commit — GitHub
+Actions honours `[skip ci]` globally, including for tag pushes):
 
 ```bash
 ./scripts/push.sh              # push to main
 # wait for CI sync-all to finish
-git tag vX.Y.Z
+RELEASE_SHA=$(git log --format=%H --grep='feat:\|fix:\|release:' -1)
+git tag vX.Y.Z $RELEASE_SHA    # tag the REAL commit
 git push origin vX.Y.Z         # only Release workflow fires
 ```
 
