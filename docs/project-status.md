@@ -18,9 +18,9 @@ EU-sovereign decision record layer for AI agents.
 
 | | |
 |---|---|
-| Tests | unknown |
-| Coverage | unknown |
-| Smoke test | failed at step 39 |
+| Tests | 615 passing |
+| Coverage | 99% |
+| Smoke test | 40/40 ✓ |
 
 ## Modules
 
