@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-12 14:19 UTC_
+_Last generated from HEAD commit: 2026-04-12 14:23 UTC_
 
 ## Version
 
@@ -18,7 +18,7 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 
 | | |
 |---|---|
-| Tests | unknown |
+| Tests | 642 passing |
 | Coverage | unknown |
 | Smoke test | 40/40 ✓ |
 

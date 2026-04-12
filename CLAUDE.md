@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.0.7` |
-| Tests | unknown |
+| Tests | 642 passing |
 | Coverage | unknown |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-12 14:19 UTC |
+| Last updated | 2026-04-12 14:23 UTC |
 
 ## Last 5 commits
 
+- `bee029e` fix: complete design token sweep — zero old green (#00d084) remaining
 - `c22ffbf` docs: update repo governance with coverage enforcement + onboarding details
 - `c8bf9eb` fix: move cov-fail-under out of addopts — was failing focused CI runs
 - `5192e9e` test: 100% line + branch coverage, enforced in CI
 - `c935941` docs: add repo governance — onboarding, design, change control rules
-- `86fa0a2` feat: sovereign design language — institutional visual identity
 
 ## Open issues
 
