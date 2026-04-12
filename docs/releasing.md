@@ -77,8 +77,6 @@ Run this list in order. Every item must be ticked before you tag.
 - [ ] `python examples/smoke_test.py` → `ALL 40 STEPS PASSED`
 - [ ] `python scripts/check_sovereignty.py` → passes
 - [ ] `ruff check sentinel/ tests/ scripts/ examples/` → no errors
-- [ ] `CLAUDE_MEGA_PROMPT.md` "Current state" and "Roadmap" sections
-      updated to the new version
 - [ ] `git status` shows only the intended version / CHANGELOG /
       documentation diff
 - [ ] Working tree is on `main` and up to date with `origin/main`
@@ -171,12 +169,7 @@ diff, commit the fixes, and re-run the smoke test before tagging.
 
 ## After the release — Claude Code continuity
 
-Every release is also the moment to update `CLAUDE_MEGA_PROMPT.md`
-so the next Claude Code session (which has no memory of the one
-before it) sees the current version, current test count, and
-current roadmap. The file is the contract between one session and
-the next — let it drift and future work starts from a wrong map.
-
-The three-command flow above does not update that file. Keep the
-update in the same commit as the version bump, not the tag — the
-tag is immutable, but the doc needs to move forward.
+`CLAUDE.md` is the authoritative reference for Claude Code sessions.
+It is auto-synced by `scripts/sync_all.py` on every push to main,
+so version, test count, and commit history update automatically.
+No manual step is needed.

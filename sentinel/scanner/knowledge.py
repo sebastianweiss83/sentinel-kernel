@@ -121,7 +121,7 @@ PACKAGE_KNOWLEDGE: dict[str, PackageKnowledge] = {
     "hatch":                 PackageKnowledge("Ofek Lev","Neutral",False,False,"OSS"),
     "hatchling":             PackageKnowledge("Ofek Lev","Neutral",False,False,"OSS"),
 
-    # --- AI agent frameworks (many US) ----------------------------------
+    # --- Agent frameworks (many US) --------------------------------------
     "crewai":                PackageKnowledge("CrewAI Inc.",     "US", True,  False, "Agent framework"),
     "autogen":               PackageKnowledge("Microsoft",       "US", True,  False, "Agent framework"),
     "pyautogen":             PackageKnowledge("Microsoft",       "US", True,  False, "Agent framework"),

@@ -1537,7 +1537,7 @@ def _section_roadmap(days: int) -> str:
           <li><span class="tag">trace</span> Sovereign decision records</li>
           <li><span class="tag">gov</span> Policy-as-code · manifesto-as-code</li>
           <li><span class="tag">safe</span> Kill switch (Art. 14)</li>
-          <li><span class="tag">bsi</span> BSI pre-engagement ready · 608 tests · 100% cov</li>
+          <li><span class="tag">bsi</span> BSI pre-engagement ready · 576+ tests · 91% cov</li>
         </ul>
         <div class="foot">Shipped and verified on main.</div>
       </div>
