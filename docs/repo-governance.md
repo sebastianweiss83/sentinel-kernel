@@ -1,10 +1,10 @@
 # Sentinel-Kernel Repo Governance
 
-**Status:** Active | **Updated:** April 12, 2026
+**Status:** Active | **Updated:** April 12, 2026 | **Coverage:** 100%
 
 ## Purpose
 
-Keep repo + landing page world-class, sovereign-first, compliant-focused.
+World-class sovereign decision infrastructure for enterprises.
 
 ## Decisions
 
@@ -13,6 +13,9 @@ Keep repo + landing page world-class, sovereign-first, compliant-focused.
 - **Primary:** `pipx install sentinel-kernel && sentinel demo`
 - **Secondary:** Python SDK (`from sentinel import Sentinel`)
 - **Advanced:** Docker / OQS / Grafana / Rust
+- Hero terminal → `sentinel demo` walkthrough
+- CTA copies → `pipx install sentinel-kernel && sentinel demo`
+- CLI tab → first/default in "Start in 2 minutes"
 
 ### Design Language
 
@@ -31,6 +34,13 @@ Keep repo + landing page world-class, sovereign-first, compliant-focused.
 | `CLAUDE.md` | Positioning / design / push rules |
 | `README.md` | Doc index / badges / quick start |
 | `docs/bsi-profile.md` | BSI timeline |
+
+### Coverage Enforcement
+
+- `--cov-fail-under=100 --cov-branch` on full test suite in CI
+- CI fails automatically if coverage regresses
+- `# pragma: no cover` only for env-dependent import guards
+- Focused CI runs use `--no-cov` to avoid false failures
 
 ### Multilingual
 
