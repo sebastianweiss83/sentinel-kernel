@@ -12,15 +12,15 @@
 | Tests | unknown |
 | Coverage | unknown |
 | Smoke test | failed at step 39 |
-| Last updated | 2026-04-11 22:25 UTC |
+| Last updated | 2026-04-12 10:37 UTC |
 
 ## Last 5 commits
 
+- `159efa0` fix: complete UX overhaul — PARTIAL status, BSI contact, pipx, Art. guidance
 - `09f035c` fix(ci): install pytest-xdist in quickstart job
 - `6f10ea5` perf: CI — pip cache, pytest-xdist parallel execution
 - `7770d5e` fix: UX polish — pip3 everywhere, cleaner demo summary
 - `fde60f7` fix: sentinel demo saves report to CWD, prints correct open command
-- `40cd630` fix: install instructions — pip3, python3 -m sentinel for macOS
 
 ## Open issues
 
