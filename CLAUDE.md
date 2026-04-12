@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.0.7` |
-| Tests | unknown |
-| Coverage | unknown |
+| Tests | 615 passing |
+| Coverage | 99% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-12 12:09 UTC |
+| Last updated | 2026-04-12 12:21 UTC |
 
 ## Last 5 commits
 
+- `1144e5b` fix: complete repositioning sweep — zero stale 'AI agent' or 'AI middleware' left
 - `0741875` fix: remove branches-ignore from release.yml — was blocking tag triggers
 - `d6d9406` feat: technology-agnostic positioning — The Sovereign Decision Kernel
 - `44f1ad1` fix: permanent workflow separation — ci on branches, release on tags only
 - `a296681` fix: complete hardening — 48/48 functional, 576 tests, 40/40 smoke
-- `da2bd5f` fix: workflow deduplication + version sync audit
 
 ## Open issues
 
