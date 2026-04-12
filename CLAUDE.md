@@ -12,15 +12,15 @@
 | Tests | unknown |
 | Coverage | unknown |
 | Smoke test | failed at step 39 |
-| Last updated | 2026-04-12 10:53 UTC |
+| Last updated | 2026-04-12 10:59 UTC |
 
 ## Last 5 commits
 
+- `b96c53c` release: v3.0.5 — deep last-mile audit + PyPI fix
 - `5b65a00` chore: re-sync derived content after rebase
 - `2581b53` fix: deep last-mile audit — version sync, stale data, security email
 - `0c390ea` release: v3.0.4 — complete UX overhaul
 - `9ba9c2a` chore: re-sync derived content after rebase
-- `159efa0` fix: complete UX overhaul — PARTIAL status, BSI contact, pipx, Art. guidance
 
 ## Open issues
 
