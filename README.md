@@ -19,7 +19,7 @@ cloud dependencies, in any environment including air-gapped.
 
 <!-- SYNC_ALL_README_START -->
 [![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
-[![Version](https://img.shields.io/badge/version-v3.0.4-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v3.0.5-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Tests](https://img.shields.io/badge/tests-615%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
