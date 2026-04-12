@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.0.7` |
-| Tests | unknown |
-| Coverage | unknown |
+| Tests | 615 passing |
+| Coverage | 99% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-12 13:06 UTC |
+| Last updated | 2026-04-12 13:12 UTC |
 
 ## Last 5 commits
 
+- `577d738` docs: archive marketing drafts + document rust-impl status
 - `d31e07c` docs: perfection pass — badges + bsi-profile + archive drafts
 - `4bfcd44` fix: final cleanup — stale test counts, release checklist, sync
 - `4f755a0` docs: establish single source of truth + surface compliance docs
 - `1144e5b` fix: complete repositioning sweep — zero stale 'AI agent' or 'AI middleware' left
-- `0741875` fix: remove branches-ignore from release.yml — was blocking tag triggers
 
 ## Open issues
 

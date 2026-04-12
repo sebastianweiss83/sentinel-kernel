@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-12 13:06 UTC_
+_Last generated from HEAD commit: 2026-04-12 13:12 UTC_
 
 ## Version
 
@@ -18,8 +18,8 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 
 | | |
 |---|---|
-| Tests | unknown |
-| Coverage | unknown |
+| Tests | 615 passing |
+| Coverage | 99% |
 | Smoke test | 40/40 ✓ |
 
 ## Modules
@@ -48,14 +48,14 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 | `sentinel/integrations/__init__.py` | 100% | ✓ |
 | `sentinel/integrations/autogen.py` | 100% | ✓ |
 | `sentinel/integrations/crewai.py` | 100% | ✓ |
-| `sentinel/integrations/django.py` | 0% | ✗ |
-| `sentinel/integrations/fastapi.py` | 0% | ✗ |
+| `sentinel/integrations/django.py` | 100% | ✓ |
+| `sentinel/integrations/fastapi.py` | 100% | ✓ |
 | `sentinel/integrations/haystack.py` | 100% | ✓ |
-| `sentinel/integrations/jupyter.py` | 0% | ✗ |
-| `sentinel/integrations/langchain.py` | 99% | ✓ |
-| `sentinel/integrations/langfuse.py` | 98% | ✓ |
-| `sentinel/integrations/otel.py` | 96% | ✓ |
-| `sentinel/integrations/prometheus.py` | 0% | ✗ |
+| `sentinel/integrations/jupyter.py` | 100% | ✓ |
+| `sentinel/integrations/langchain.py` | 100% | ✓ |
+| `sentinel/integrations/langfuse.py` | 100% | ✓ |
+| `sentinel/integrations/otel.py` | 100% | ✓ |
+| `sentinel/integrations/prometheus.py` | 100% | ✓ |
 | `sentinel/manifesto/__init__.py` | 100% | ✓ |
 | `sentinel/manifesto/base.py` | 100% | ✓ |
 | `sentinel/policy/__init__.py` | 100% | ✓ |
@@ -68,7 +68,7 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 | `sentinel/storage/__init__.py` | 100% | ✓ |
 | `sentinel/storage/base.py` | 100% | ✓ |
 | `sentinel/storage/filesystem.py` | 100% | ✓ |
-| `sentinel/storage/postgres.py` | 99% | ✓ |
+| `sentinel/storage/postgres.py` | 100% | ✓ |
 | `sentinel/storage/sqlite.py` | 100% | ✓ |
 
 ## What's inside
