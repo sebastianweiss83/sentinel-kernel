@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.0.5` |
-| Tests | unknown |
-| Coverage | unknown |
-| Smoke test | failed at step 39 |
+| Tests | 615 passing |
+| Coverage | 99% |
+| Smoke test | 40/40 ✓ |
 | Last updated | 2026-04-12 10:59 UTC |
 
 ## Last 5 commits
 
+- `e2bd38d` chore: re-sync derived content for v3.0.5
 - `b96c53c` release: v3.0.5 — deep last-mile audit + PyPI fix
 - `5b65a00` chore: re-sync derived content after rebase
 - `2581b53` fix: deep last-mile audit — version sync, stale data, security email
 - `0c390ea` release: v3.0.4 — complete UX overhaul
-- `9ba9c2a` chore: re-sync derived content after rebase
 
 ## Open issues
 

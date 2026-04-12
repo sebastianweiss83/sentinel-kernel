@@ -18,9 +18,9 @@ EU-sovereign decision record layer for AI agents.
 
 | | |
 |---|---|
-| Tests | unknown |
-| Coverage | unknown |
-| Smoke test | failed at step 39 |
+| Tests | 615 passing |
+| Coverage | 99% |
+| Smoke test | 40/40 ✓ |
 
 ## Modules
 
@@ -97,6 +97,7 @@ EU-sovereign decision record layer for AI agents.
 
 ## Recent releases
 
+- **v3.0.5** — v3.0.5 — Deep last-mile audit
 - **v3.0.4** — v3.0.4 — Complete UX overhaul
 - **v3.0.3** — v3.0.3 — Fix: demo prints copy-pasteable open command
 - **v3.0.2** — v3.0.2 — reentrant scanner timeout + workflow concurrency guards
@@ -108,7 +109,6 @@ EU-sovereign decision record layer for AI agents.
 - **v2.1.0** — v2.1.0 — BudgetTracker, Attestations, CrewAI, AutoGen
 - **v2.0.0** — v2.0.0 — Production stable, BSI assessment ready
 - **v1.9.0** — v1.9.0 — DORA + NIS2 compliance
-- **v1.8.0** — v1.8.0 — Jupyter, FastAPI, Django integrations
 
 ## Shipped
 
