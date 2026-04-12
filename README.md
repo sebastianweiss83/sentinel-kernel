@@ -1,12 +1,20 @@
 # sentinel-kernel
 
-**The Sovereign AI Kernel.**
+**The Sovereign Decision Kernel.**
 
-Three layers between your business logic and your AI models:
+Sentinel sits between your business logic and any autonomous decision
+system. It records every decision — sovereign, tamper-resistant,
+append-only — and enforces what is allowed to be decided.
+
+Works with LLMs, ML classifiers, rule engines, and robotic systems.
+If it decides, Sentinel records it.
+
+Three layers:
 
 - **Trace** — every decision recorded, sovereign, tamper-resistant
-- **Govern** — what AI may decide, policy-as-code, kill switch
-- **Route** *(v4.0)* — which model decides what, based on sovereignty policy
+- **Govern** — what may be decided, policy-as-code, kill switch
+- **Route** *(v4.0)* — which system decides what, based on sovereignty
+  policy and data classification
 
 No vendor lock-in. No US CLOUD Act. No deployment strategists.
 Apache 2.0, permanently.
@@ -19,10 +27,10 @@ cloud dependencies, in any environment including air-gapped.
 
 <!-- SYNC_ALL_README_START -->
 [![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
-[![Version](https://img.shields.io/badge/version-v3.0.6-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v3.0.7-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Tests](https://img.shields.io/badge/tests-615%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
-[![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Tests](https://img.shields.io/badge/tests-unknown%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Coverage](https://img.shields.io/badge/coverage-unknown%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Status](https://img.shields.io/badge/status-production%2Fstable-brightgreen)](CHANGELOG.md)
 [![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F14%2F17-green)](docs/eu-ai-act.md)
 <!-- SYNC_ALL_README_END -->
@@ -166,7 +174,7 @@ async def evaluate_procurement(ctx: dict) -> dict:
 
 ## What Sentinel does. What it doesn't.
 
-| | Sentinel | LLM observability tools | Proprietary AI platforms |
+| | Sentinel | Cloud observability tools | Proprietary platforms |
 |---|---|---|---|
 | Sovereign decision records | ✓ | — | Vendor-jurisdicted |
 | In-process policy evaluation | ✓ | — | — |
@@ -177,7 +185,7 @@ async def evaluate_procurement(ctx: dict) -> dict:
 | Apache 2.0 permanently | ✓ | Varies | — |
 | US CLOUD Act exposure | **None** | Varies | **Unconditional** |
 
-Sentinel is not an observability tool. It is not a content filter. It does not replace your LLM or your agent framework. It wraps them — and produces a legally-valid, portable, sovereign record of every decision they make.
+Sentinel is not an observability tool. It is not a content filter. It does not replace your LLM, your ML model, or your rule engine — it does not care which technology makes the decision. It wraps any Python function and produces a legally-valid, portable, sovereign record of every decision it makes.
 
 ---
 
@@ -303,8 +311,8 @@ Your business logic
 └─────────────────────────────────────────┘
         │
         ▼
-  MODEL LAYER (your choice)
-  Claude · Mistral · Llama · Kimi · local
+  DECISION LAYER (your choice)
+  LLMs · ML classifiers · Rule engines · Robotic systems
   Switch anytime. No lock-in.
         │
         ▼
@@ -318,6 +326,25 @@ Your business logic
 - Zero network calls at runtime
 - Zero US CLOUD Act exposure
 - Full offline / air-gapped operation
+
+## Why it works for any autonomous system
+
+The EU AI Act does not regulate language models. It regulates decisions.
+Article 12 requires automatic, tamper-resistant logging of every decision
+made by a high-risk system — regardless of the technology underneath.
+
+An LLM, a gradient-boosted classifier, a rule engine, an industrial
+robot: if it makes a high-risk decision, it needs a sovereign decision
+record.
+
+```python
+# Works with any decision function
+@sentinel.trace
+async def my_decision(context: dict) -> dict:
+    return await any_system.decide(context)
+    # LLM, ML model, rule engine, robot control system
+    # Sentinel doesn't care. It records the decision.
+```
 
 ## Why not Palantir AIP
 
@@ -372,7 +399,7 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 
 ## Documentation
 
-- [docs/vision.md](docs/vision.md) — the Sovereign AI Kernel, in full
+- [docs/vision.md](docs/vision.md) — the Sovereign Decision Kernel, in full
 - [docs/roadmap.md](docs/roadmap.md) — three phases, Router design
 - [docs/getting-started.md](docs/getting-started.md) — two-minute quickstart
 - [docs/real-world-examples.md](docs/real-world-examples.md) — industry scenarios

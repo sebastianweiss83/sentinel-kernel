@@ -1,13 +1,14 @@
-# Sentinel Vision — The Sovereign AI Kernel
+# Sentinel Vision — The Sovereign Decision Kernel
 
-Sentinel is not compliance middleware. Sentinel is the **Sovereign AI Kernel** —
-a thin, open-source, EU-sovereign layer that sits between your business logic
-and whatever AI models you use, and answers three questions every regulated
-enterprise has to answer in 2026.
+Sentinel is not compliance middleware. Sentinel is the **Sovereign Decision
+Kernel** — a thin, open-source, EU-sovereign layer that sits between your
+business logic and any autonomous decision system, and answers four questions
+every regulated enterprise has to answer in 2026.
 
 ## The problem
 
-Every CIO and every BSI auditor now has three questions about AI in production:
+Every CIO and every BSI auditor now has four questions about autonomous
+systems in production:
 
 1. **What did the system decide, and can we prove it later?**
    EU AI Act Art. 12 and Art. 17 require automatic, tamper-resistant decision
@@ -18,14 +19,19 @@ Every CIO and every BSI auditor now has three questions about AI in production:
    moment of the decision, and the result must be provable later. Art. 14
    (human oversight) requires a working kill switch, not a meeting.
 
-3. **Which model made that decision, and is that model even legal for this
+3. **Which system made that decision, and is it even legal for this
    data class?**
    A classified procurement decision cannot be sent to an API in Oregon.
-   "Which model" is itself a compliance question — one that grows more
-   urgent every month as the model landscape fragments.
+   "Which system" is itself a compliance question — one that grows more
+   urgent every month as the technology landscape fragments.
+
+4. **Does this work for our ML pipeline, not just our LLM?**
+   Yes. Sentinel traces decisions, not models. The `@sentinel.trace`
+   decorator wraps any Python function — LLM calls, ML classifiers,
+   rule engines, robotic control systems. If it decides, Sentinel records it.
 
 Most products on the market answer exactly one of these questions. Sentinel
-answers all three, in one thin kernel that you can read end-to-end.
+answers all four, in one thin kernel that you can read end-to-end.
 
 ## The three-layer architecture
 
@@ -50,8 +56,8 @@ Your business logic
 └──────────────────────────────────────────┘
         │
         ▼
-   MODEL LAYER (your choice)
-   Claude · Mistral · Llama · Kimi · local
+   DECISION LAYER (your choice)
+   LLMs · ML classifiers · Rule engines · Robotic systems
         │
         ▼
    SOVEREIGN STORAGE
@@ -60,7 +66,7 @@ Your business logic
 
 ### Layer 1 — Trace (v3.0, shipped)
 
-Every AI decision becomes a structured, append-only, sovereign record. SHA-256
+Every autonomous decision becomes a structured, append-only, sovereign record. SHA-256
 hashed inputs. UTC timestamps. Policy result. Model used. Sovereignty scope.
 Data residency. Art. 12 compliance is an automated side-effect of the
 interceptor, not a project.
@@ -85,7 +91,7 @@ your infrastructure.
 
 ### Layer 2 — Govern (v3.0, shipped)
 
-What the AI is allowed to decide is policy-as-code, evaluated in-process,
+What the system is allowed to decide is policy-as-code, evaluated in-process,
 recorded in every trace. The kill switch (Art. 14) halts every wrapped call
 instantly without a restart. The manifesto declares which dependencies,
 models, jurisdictions, and data classes are acceptable — and runs as five
@@ -117,14 +123,14 @@ DecisionTrace. There is no way for a policy to fail silently.
 
 ### Layer 3 — Route (v4.0, roadmap)
 
-Layer 3 answers the last, and hardest, question: **which model should even
+Layer 3 answers the last, and hardest, question: **which system should even
 handle this decision?**
 
-The same SentinelManifesto that defines what the AI may decide defines which
-models are acceptable for each data class. The router reuses the existing
-policy engine, selects a model, records the choice and the reason as part
-of the sovereign trace, and falls back automatically if the preferred model
-is unavailable.
+The same SentinelManifesto that defines what may be decided defines which
+systems are acceptable for each data class. The router reuses the existing
+policy engine, selects the right decision system, records the choice and the
+reason as part of the sovereign trace, and falls back automatically if the
+preferred system is unavailable.
 
 ```python
 # Layer 3 — Route (v4.0 vision)
@@ -145,8 +151,32 @@ print(result.sovereignty_proof)  # attestation hash
 ```
 
 Route is what turns "we use Sentinel for logging" into "we use Sentinel as
-our AI platform." It is also what breaks vendor lock-in: the choice of
-model becomes a configuration of your manifesto, not a rewrite of your code.
+our decision platform." It is also what breaks vendor lock-in: the choice
+of decision system becomes a configuration of your manifesto, not a rewrite
+of your code.
+
+## Why the technology doesn't matter
+
+The EU AI Act Art. 12 requirement is technology-neutral. It requires
+automatic, tamper-resistant logging of every decision made by a high-risk
+AI system. The regulation does not define "AI system" as "large language
+model." It defines it as any system that influences decisions affecting
+people's rights, safety, or access to services.
+
+That includes:
+- LLMs making procurement approvals
+- ML classifiers making credit decisions
+- Rule engines making insurance eligibility decisions
+- Autonomous systems making operational decisions
+- Robotic systems making physical action decisions
+
+Sentinel wraps any Python function that makes such a decision. The
+`@sentinel.trace` decorator is technology-neutral by design.
+
+This means Sentinel is sustainable beyond any single technology wave.
+LLMs are the current dominant paradigm. They will not be the last. The
+regulatory obligation to produce a sovereign decision record will outlast
+every specific technology.
 
 ## Why not Palantir AIP
 
@@ -172,12 +202,18 @@ itself. What survives is the trusted kernel underneath: policy, audit trail,
 model router, sovereignty proof. That is Sentinel. Open source, EU sovereign,
 Apache 2.0, self-service.
 
-| Solution | Jurisdiction  | Open       | Model-agnostic | Air-gapped | Router      |
-|----------|---------------|------------|----------------|-----------|-------------|
-| Palantir AIP | US CLOUD Act | ✗         | Partial        | ✗          | Proprietary |
-| LangSmith    | US CLOUD Act | ✗         | Partial        | ✗          | ✗           |
-| asqav-sdk    | US cloud     | MIT         | ✗              | ✗          | ✗           |
-| **Sentinel** | **EU**       | **Apache 2.0** | **✓ any model** | **✓**     | **→ v4.0**   |
+| Solution | Jurisdiction  | Open       | System-agnostic | Air-gapped | Router      |
+|----------|---------------|------------|-----------------|-----------|-------------|
+| Palantir AIP | US CLOUD Act | ✗         | Partial         | ✗          | Proprietary |
+| LangSmith    | US CLOUD Act | ✗         | LLMs only       | ✗          | ✗           |
+| asqav-sdk    | US cloud     | MIT        | ✗               | ✗          | ✗           |
+| **Sentinel** | **EU**       | **Apache 2.0** | **✓ any system** | **✓**  | **→ v4.0**  |
+
+| Non-LLM capability           | Cloud obs. | Proprietary | Sentinel |
+|-------------------------------|-----------|-------------|----------|
+| ML classifier governance      | ✗         | ✗           | ✓        |
+| Rule engine audit trail        | ✗         | ✗           | ✓        |
+| Robotic decision logging       | ✗         | ✗           | ✓        |
 
 ## The market timing
 
@@ -199,12 +235,12 @@ EU-governed home. The infrastructure to be credibly sovereign exists for
 the first time.
 
 **The empty field.** Nobody is building this exact thing. The big US
-observability tools are observability tools. The cloud providers are cloud
-providers. The EU-sovereign projects we respect — Mistral, Mittagessen,
-Nextcloud — are model vendors or collaboration platforms, not decision
-kernels. Sentinel is the only open-source, EU-sovereign, model-agnostic
-AI decision kernel we can find. That will not last forever. It should last
-long enough to become the default.
+observability tools are observability tools — tied to LLMs. The cloud
+providers are cloud providers. The EU-sovereign projects we respect —
+Mistral, Mittagessen, Nextcloud — are model vendors or collaboration
+platforms, not decision kernels. Sentinel is the only open-source,
+EU-sovereign, technology-agnostic decision kernel we can find. That will
+not last forever. It should last long enough to become the default.
 
 ## Roadmap
 

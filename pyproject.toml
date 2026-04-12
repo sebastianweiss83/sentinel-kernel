@@ -4,23 +4,39 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sentinel-kernel"
-version = "3.0.6"
-description = "EU-sovereign decision record layer for AI agents."
+version = "3.0.7"
+description = "Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule engines, and robotic systems. EU AI Act compliant. Air-gapped capable. Apache 2.0."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
 keywords = [
-    "AI", "agents", "sovereignty", "EU", "GDPR",
-    "decision-trace", "audit", "middleware", "LLM",
+    "sovereignty",
+    "eu-ai-act",
+    "decision-tracing",
+    "audit-trail",
+    "autonomous-systems",
+    "ai-governance",
+    "compliance",
+    "air-gapped",
+    "manifesto-as-code",
+    "post-quantum",
+    "bsi",
+    "llm",
+    "machine-learning",
+    "rule-engine",
+    "robotics",
 ]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Legal Industry",
     "License :: OSI Approved :: Apache Software License",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Security",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 # Zero hard dependencies — works out of the box

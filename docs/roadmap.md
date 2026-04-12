@@ -2,7 +2,7 @@
 
 Three phases. Every version reflects shipped code, not plans.
 
-For the deeper strategic picture — the Sovereign AI Kernel architecture,
+For the deeper strategic picture — the Sovereign Decision Kernel architecture,
 the Palantir thesis, and the market timing — see
 [docs/vision.md](vision.md).
 
@@ -55,8 +55,14 @@ SovereigntyManifest from a Python library to a cross-ecosystem standard.
 
 Phase 3 is the **SovereignRouter** — the third layer of the Sentinel
 Kernel. The thesis is simple: your SentinelManifesto already defines
-which models are permitted for each data class. The router reuses the
-same policy engine to select models automatically.
+which systems are permitted for each data class. The router reuses the
+same policy engine to select the right decision system automatically.
+
+The router is technology-agnostic by design. The same policy that decides
+"this data is classified, use a local model" also decides "this decision
+requires a deterministic rule engine, not a probabilistic LLM." The
+router selects the right system for the right decision — not just between
+LLMs, but between any decision system in your inventory.
 
 ```python
 # Define once in your manifesto:
@@ -101,6 +107,23 @@ The last acknowledged gap is the build pipeline itself. Phase 4 closes it.
   with keys that never leave EU hardware.
 - **Multi-language parity** — Python, Rust, Go, TypeScript all at
   first-class status, not just manifest implementations.
+
+## Why Sentinel is built for the long term
+
+Every technology wave produces new systems that make autonomous decisions.
+Expert systems in the 1980s. ML classifiers in the 2000s. LLMs in the
+2020s. Agentic systems today. Neurosymbolic systems tomorrow.
+
+Sentinel is built around the regulatory requirement, not the technology:
+
+> "Every high-risk autonomous decision must be automatically recorded
+> in a tamper-resistant, sovereign audit trail."
+
+This requirement does not mention LLMs. It does not mention any specific
+technology. It describes a property of decision-making systems.
+
+`@sentinel.trace` is that property, implemented. It wrapped expert systems
+in principle. It wraps LLMs today. It will wrap whatever comes next.
 
 ## The market thesis
 

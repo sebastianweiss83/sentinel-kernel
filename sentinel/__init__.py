@@ -35,7 +35,7 @@ from sentinel.core.tracer import (
     Sentinel,
 )
 
-__version__ = "3.0.6"
+__version__ = "3.0.7"
 __all__ = [
     "Sentinel",
     "PolicyDeniedError",

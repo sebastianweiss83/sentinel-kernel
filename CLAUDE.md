@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `3.0.6` |
-| Tests | 615 passing |
-| Coverage | 99% |
+| Version | `3.0.7` |
+| Tests | unknown |
+| Coverage | unknown |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-12 11:28 UTC |
+| Last updated | 2026-04-12 11:35 UTC |
 
 ## Last 5 commits
 
+- `44f1ad1` fix: permanent workflow separation — ci on branches, release on tags only
 - `a296681` fix: complete hardening — 48/48 functional, 576 tests, 40/40 smoke
 - `da2bd5f` fix: workflow deduplication + version sync audit
 - `e2bd38d` chore: re-sync derived content for v3.0.5
 - `b96c53c` release: v3.0.5 — deep last-mile audit + PyPI fix
-- `5b65a00` chore: re-sync derived content after rebase
 
 ## Open issues
 
@@ -36,15 +36,31 @@
 
 <!-- CLAUDE_MD_AUTO_END -->
 
-## THE SENTINEL VISION
+## SENTINEL POSITIONING
 
-Sentinel = **The Sovereign AI Kernel.**
+Sentinel is NOT "an LLM governance tool."
+Sentinel IS "sovereign decision tracing for any autonomous system."
+
+Primary message: **The Sovereign Decision Kernel.**
+
+Works with: LLMs (current primary market), ML classifiers,
+rule engines, robotic systems, any Python decision function.
+
+The `@sentinel.trace` decorator is technology-neutral.
+The EU AI Act obligation is technology-neutral.
+Sentinel is the bridge between them.
+
+In every document and customer interaction:
+- Lead with "decision" not "AI"
+- Lead with "autonomous system" not "LLM"
+- Use LLMs as the primary example, not the only example
+- The sustainability argument: regulation outlasts technology
 
 Three layers:
 
 - **TRACE (v3.0 ✓)** — sovereign decision records, Art. 12 automated
-- **GOVERN (v3.0 ✓)** — what AI may decide, policy-as-code, kill switch
-- **ROUTE (v4.0 →)** — which model decides what, driven by manifesto
+- **GOVERN (v3.0 ✓)** — what may be decided, policy-as-code, kill switch
+- **ROUTE (v4.0 →)** — which system decides what, driven by manifesto
 
 The Palantir thesis: when LLMs guide their own integration — and that is
 already happening — the deployment-strategist model collapses. The
@@ -52,7 +68,7 @@ sovereign kernel underneath is what survives and scales. That is Sentinel:
 open source, EU sovereign, Apache 2.0, self-service.
 
 **Market:** EU AI Act enforcement 2 August 2026. Empty field — nobody
-else is building EU-sovereign, open-source, model-agnostic decision
+else is building EU-sovereign, open-source, technology-agnostic decision
 kernel. Every European bank, insurer, defence contractor, healthcare
 provider, and government agency needs what Phase 2 + Phase 3 will
 deliver.
@@ -62,9 +78,9 @@ Full strategy: [docs/vision.md](docs/vision.md) · Phases:
 
 ## What this project is
 
-Sentinel is an EU-sovereign AI decision middleware kernel.
-It sits in the execution path of any AI agent and turns every decision
-into a structured, auditable, sovereign artifact.
+Sentinel is an EU-sovereign decision middleware kernel.
+It sits in the execution path of any autonomous decision system and
+turns every decision into a structured, auditable, sovereign artifact.
 
 The sovereignty is the product. Everything else is implementation detail.
 

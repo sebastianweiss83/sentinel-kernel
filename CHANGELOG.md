@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.0.7] — 2026-04-12
+
+**Technology-agnostic positioning: The Sovereign Decision Kernel.**
+
+### Changed
+
+- Positioning across all surfaces: "Sovereign Decision Kernel" (was
+  "Sovereign AI Kernel"). AI stays in the product domain; decision is
+  the operative word
+- README, vision.md, roadmap.md, preview page, CLAUDE.md updated
+- Explicit coverage: LLMs, ML classifiers, rule engines, robotic systems
+- PyPI description and keywords updated for technology-agnostic discovery
+- GitHub description and topics updated
+- Comparison tables extended with non-LLM capability rows
+- Architecture diagrams: "Model Layer" → "Decision Layer"
+- New section in vision.md: "Why the technology doesn't matter"
+- New section in roadmap.md: "Why Sentinel is built for the long term"
+
+### Unchanged
+
+- All LLM integrations (LangChain, CrewAI, AutoGen, etc.) preserved
+- Technical implementation unchanged — @sentinel.trace was always
+  technology-neutral
+- EU AI Act compliance mapping unchanged
+- Palantir thesis and three-layer architecture unchanged
+
 ## [3.0.6] — 2026-04-12
 
 **Complete hardening audit — 48/48 functional tests, 576/576 test suite,

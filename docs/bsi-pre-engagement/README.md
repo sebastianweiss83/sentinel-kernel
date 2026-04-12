@@ -7,8 +7,8 @@ be handed to BSI in the first meeting.
 
 ## The three-layer kernel
 
-`sentinel-kernel` is the **Sovereign AI Kernel**. It sits between
-business logic and AI models and implements three layers:
+`sentinel-kernel` is the **Sovereign Decision Kernel**. It sits between
+business logic and any autonomous decision system and implements three layers:
 
 1. **Trace (v3.0 shipped).** Every AI decision becomes a structured,
    append-only sovereign record. EU AI Act Art. 12 is an automated

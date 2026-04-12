@@ -924,16 +924,16 @@ def _section_hero(
   <div class="container hero-grid">
     <div>
       <div class="sentinel-mark">{MARK_SVG}</div>
-      <div class="eyebrow">v{version} · EU AI Act Art. 12 · 2 Aug 2026 · Apache 2.0 permanent</div>
+      <div class="eyebrow">v{version} · EU AI Act · Any autonomous system · Apache 2.0 permanent</div>
       <h1>
-        <span>AI decisions.</span>
+        <span>Decisions.</span>
         <span class="underline">Sovereign.</span>
         <span>Auditable.</span>
       </h1>
       <p class="lead">
-        Sentinel wraps any AI agent and records tamper-resistant decision
-        traces to local sovereign storage. Client-side ML-DSA-65 signing.
-        Zero cloud. Zero US CLOUD Act exposure. Air-gapped capable.
+        Sentinel wraps any autonomous decision system and records tamper-resistant
+        decision traces to local sovereign storage. Works with LLMs, ML classifiers,
+        rule engines, and robotic systems. Zero cloud. Zero US CLOUD Act exposure.
         <strong><span id="hero-days">{days}</span> days to EU AI Act enforcement.</strong>
       </p>
       <div class="stats">
@@ -1057,7 +1057,7 @@ def _section_problem() -> str:
 <section class="block">
   <div class="container">
     <h2>Most solutions fail the sovereignty test</h2>
-    <p class="sub">Three ways to log AI decisions. Only one passes the EU AI Act, the CLOUD Act, and the air-gap test.</p>
+    <p class="sub">Three ways to log autonomous decisions. Only one passes the EU AI Act, the CLOUD Act, and the air-gap test.</p>
 
     <table class="compare">
       <thead>
@@ -1078,6 +1078,8 @@ def _section_problem() -> str:
         <tr><td class="row-label">BSI path</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓ v3.0 ready</td></tr>
         <tr><td class="row-label">Quantum-safe signing</td><td class="no">✗</td><td class="partial">Server-side</td><td class="col-good-cell yes">✓ ML-DSA-65, client-side</td></tr>
         <tr><td class="row-label">Manifesto-as-code CI</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓ 5 theses, every PR</td></tr>
+        <tr><td class="row-label">ML classifier governance</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓</td></tr>
+        <tr><td class="row-label">Rule engine audit trail</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓</td></tr>
       </tbody>
     </table>
 
@@ -1092,7 +1094,7 @@ def _section_problem() -> str:
 
 
 def _section_kernel() -> str:
-    """The Sovereign AI Kernel — three-layer architecture diagram."""
+    """The Sovereign Decision Kernel — three-layer architecture diagram."""
     # SVG diagram: single viewBox, all elements positioned absolutely.
     # Dimensions chosen so width scales to container up to 760px.
     svg = """
@@ -1160,11 +1162,11 @@ def _section_kernel() -> str:
   <line x1="360" y1="418" x2="360" y2="454"
         stroke="#00d084" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <!-- Box 3: MODEL LAYER -->
+  <!-- Box 3: DECISION LAYER -->
   <rect x="120" y="462" width="480" height="72" rx="10"
         fill="#2d1f00" stroke="#f5a623" stroke-width="1"/>
-  <text x="360" y="490" text-anchor="middle" class="lbl">MODEL LAYER (your choice)</text>
-  <text x="360" y="510" text-anchor="middle" class="mono">Claude · Mistral · Llama · Kimi · local model</text>
+  <text x="360" y="490" text-anchor="middle" class="lbl">DECISION LAYER (your choice)</text>
+  <text x="360" y="510" text-anchor="middle" class="mono">LLMs · ML classifiers · Rule engines · Robotic systems</text>
   <text x="360" y="526" text-anchor="middle" class="lbl-xs">SWITCH ANYTIME. NO LOCK-IN.</text>
 
   <!-- Arrow down -->
@@ -1182,8 +1184,8 @@ def _section_kernel() -> str:
     return f"""
 <section class="block">
   <div class="container">
-    <h2>The Sovereign AI Kernel</h2>
-    <p class="sub">Three layers between your business logic and your AI models. One thin kernel you can read end-to-end.</p>
+    <h2>The Sovereign Decision Kernel</h2>
+    <p class="sub">Three layers between your business logic and any autonomous decision system. One thin kernel you can read end-to-end.</p>
 
     <div class="kernel-wrap">
       {svg}
@@ -1651,9 +1653,9 @@ def _render_index(
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="EU-sovereign AI decision middleware v{version}. ML-DSA-65 quantum-safe trace signing. BudgetTracker, attestations, CrewAI + AutoGen. Air-gapped. Apache 2.0.">
+<meta name="description" content="Sovereign decision tracing for any autonomous system v{version}. LLMs, ML classifiers, rule engines, robotics. EU AI Act compliant. Air-gapped. Apache 2.0.">
 <link rel="icon" type="image/svg+xml" href="{FAVICON_DATA_URI}">
-<title>Sentinel v{version} — Sovereign AI Decision Middleware</title>
+<title>Sentinel v{version} — Sovereign Decision Kernel</title>
 <style>{CSS}</style>
 </head>
 <body>
