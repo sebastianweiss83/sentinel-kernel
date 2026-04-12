@@ -45,7 +45,7 @@ three non-negotiable invariants are:
 2. Air-gapped operation must always work.
 3. Apache 2.0, permanently — no CLA, no relicensing.
 
-The software is at v2.0, production stable, with 503+ tests and
+The software is at v3.0, production stable, with 615+ tests and
 100% line coverage. It is designed for deployment in regulated
 environments including VS-NfD-track defence and healthcare AI.
 
@@ -61,7 +61,7 @@ environments including VS-NfD-track defence and healthcare AI.
 ## What we provide
 
 - Complete open source code under Apache 2.0.
-- 503+ automated tests with 100% line coverage, including 11
+- 615+ automated tests with 100% line coverage, including 11
   dedicated air-gap tests that deny the network at the socket level.
 - Structured compliance reports for EU AI Act, DORA, NIS2.
 - Documented sovereignty invariants with CI enforcement.

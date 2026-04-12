@@ -62,4 +62,3 @@ To discuss design partner status, open an issue on GitHub.
 ## Community
 
 - **GitHub Discussions:** For RFCs, architecture questions, and design partner conversations
-- Community channels TBD

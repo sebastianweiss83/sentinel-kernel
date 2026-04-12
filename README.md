@@ -262,8 +262,8 @@ market thesis, lives in [docs/roadmap.md](docs/roadmap.md).
 | Art. 13 | Transparency | ✓ Full — automated |
 | Art. 14 | Human oversight | ✓ Full — kill switch |
 | Art. 9  | Risk management | ~ Partial — policy traces |
-| Art. 11 | Technical docs | ~ Partial — traces as evidence |
-| Art. 17 | Quality mgmt | ~ Partial — continuous record |
+| Art. 11 | Technical docs | → Human action — Annex IV required |
+| Art. 17 | Quality mgmt | ✓ Full — continuous record |
 | Art. 16 | Provider obligations | ~ Partial — logging covered |
 | Art. 26 | Deployer obligations | ~ Partial — logging + oversight |
 | Art. 10 | Data governance | → Human action |
@@ -384,7 +384,7 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 - [docs/rfcs/RFC-001-sovereignty-manifest.md](docs/rfcs/RFC-001-sovereignty-manifest.md) — SovereigntyManifest spec (draft)
 - [docs/bsi-profile.md](docs/bsi-profile.md) — BSI IT-Grundschutz profile
 - [demo/README.md](demo/README.md) — Docker Compose demo environment
-- [examples/](examples/) — 13 runnable examples and 5 policy templates
+- [examples/](examples/) — 13 runnable examples and 7 policy templates
 - [docs/landscape.md](docs/landscape.md) — how Sentinel relates to LLMOps ecosystem
 - [docs/architecture.md](docs/architecture.md) — detailed architecture
 - [docs/releasing.md](docs/releasing.md) — release runbook

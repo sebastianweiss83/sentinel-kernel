@@ -4,11 +4,12 @@
 
 | Version | Supported |
 |---------|-----------|
-| 1.x     | ✓ Yes     |
+| 3.x     | ✓ Yes     |
+| 2.x     | ✗ No      |
+| 1.x     | ✗ No      |
 | 0.x     | ✗ No      |
 
-Only the current major version receives security patches. Users on
-0.x should upgrade to 1.x.
+Only the current major version receives security patches.
 
 ## Reporting a vulnerability
 

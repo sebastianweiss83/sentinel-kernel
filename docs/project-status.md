@@ -86,8 +86,6 @@ EU-sovereign decision record layer for AI agents.
 ## Open issues
 
 - **#3** good first issue: add more policy examples _(labels: good first issue)_
-- **#5** v1.0: BSI IT-Grundschutz formal assessment _(labels: roadmap, bsi)_
-- **#6** v1.0: Linux Foundation Europe application _(labels: roadmap, governance)_
 - **#7** RFC-001: SovereigntyManifest feedback wanted _(labels: rfc, discussion)_
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
 - **#16** good first issue: Go implementation of RFC-001 _(labels: good first issue)_

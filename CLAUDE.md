@@ -9,9 +9,9 @@
 | | |
 |---|---|
 | Version | `3.0.4` |
-| Tests | 615 passing |
-| Coverage | 99% |
-| Smoke test | 40/40 ✓ |
+| Tests | unknown |
+| Coverage | unknown |
+| Smoke test | failed at step 39 |
 | Last updated | 2026-04-12 10:38 UTC |
 
 ## Last 5 commits
@@ -25,8 +25,6 @@
 ## Open issues
 
 - **#3** good first issue: add more policy examples _(labels: good first issue)_
-- **#5** v1.0: BSI IT-Grundschutz formal assessment _(labels: roadmap, bsi)_
-- **#6** v1.0: Linux Foundation Europe application _(labels: roadmap, governance)_
 - **#7** RFC-001: SovereigntyManifest feedback wanted _(labels: rfc, discussion)_
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
 - **#16** good first issue: Go implementation of RFC-001 _(labels: good first issue)_

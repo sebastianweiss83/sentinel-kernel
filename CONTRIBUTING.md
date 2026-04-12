@@ -218,7 +218,7 @@ All five must pass before a PR is ready for review.
 
 **Do not open public issues for security vulnerabilities.**
 
-Email: **security@swentures.com**
+Email: **sebastian@swentures.com** (subject: `[sentinel-security]`)
 
 Please include:
 - Description of the vulnerability
