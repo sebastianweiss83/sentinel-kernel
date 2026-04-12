@@ -1,5 +1,5 @@
 {
-  "coverage": "99%",
+  "coverage": "91%",
   "days_to_enforcement": 112,
   "enforcement_date": "2026-08-02",
   "eu_ai_act": {
@@ -29,6 +29,6 @@
     "Prometheus"
   ],
   "smoke": "40/40",
-  "tests": 615,
+  "tests": 576,
   "version": "3.0.7"
 }

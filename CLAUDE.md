@@ -9,8 +9,8 @@
 | | |
 |---|---|
 | Version | `3.0.7` |
-| Tests | 615 passing |
-| Coverage | 99% |
+| Tests | unknown |
+| Coverage | unknown |
 | Smoke test | 40/40 ✓ |
 | Last updated | 2026-04-12 13:30 UTC |
 
@@ -142,6 +142,32 @@ If 2 and 3 are both yes: not in the critical path.
 - Storage is pluggable — no backend is mandatory
 - Breaking changes to the trace schema require an RFC (/project:rfc)
 - Never swallow errors silently — a missing trace is worse than a crash
+
+## Visual design language
+
+The preview page (`scripts/generate_preview.py`) is the design source of
+truth. All tokens are CSS custom properties in the `:root` block.
+
+**Tone:** Sovereign infrastructure product — not AI startup. Think BWI +
+Linear: institutional confidence, operational precision, European restraint.
+
+**Palette:**
+- `--green: #34d399` (emerald-400 — cooler, less "crypto mint")
+- `--green-dim: #059669` (emerald-600)
+- `--bg: #0a0e14`, `--surface: #111827`, `--surface2: #1a2332`
+- Accent is used sparingly: status indicators, prompts, active states
+
+**Shape:** `border-radius: 4-6px` everywhere. No consumer-style pill shapes
+(`999px`) or oversized rounded corners (`12px+`). Sharper = more architectural.
+
+**Motion:** Near-instant reveals (`0.2s`, no translateY bounce). Information
+appears, it does not perform. Terminal lines stagger at 0.3s intervals max.
+
+**Components:** Stat pills are monospace rectangles, not consumer badges.
+Buttons have no hover lift — just colour shift. Kill switch is a solid-state
+circle, no pulse animation.
+
+**Rule:** When in doubt, remove decoration. The content is the proof.
 
 ## Auto-sync contract (non-negotiable)
 

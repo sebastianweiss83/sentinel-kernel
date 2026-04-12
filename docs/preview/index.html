@@ -15,8 +15,8 @@
   --text: #e5e7eb;
   --text2: #9ca3af;
   --text3: #6b7280;
-  --green: #00d084;
-  --green-dim: #00a368;
+  --green: #34d399;
+  --green-dim: #059669;
   --red: #ff3b3b;
   --amber: #f5a623;
   --blue: #3b82f6;
@@ -98,9 +98,10 @@ a:hover { text-decoration: underline; }
 .stat-pill {
   background: var(--surface2);
   border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0.4rem 0.9rem;
-  font-size: 0.85rem;
+  border-radius: 4px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+  font-family: ui-monospace, monospace;
   color: var(--text2);
 }
 .stat-pill .ok { color: var(--green); margin-right: 0.3rem; }
@@ -110,15 +111,15 @@ a:hover { text-decoration: underline; }
   color: #001b0e;
   border: 0;
   padding: 0.9rem 1.4rem;
-  border-radius: 8px;
+  border-radius: 6px;
   font-weight: 700;
   font-family: inherit;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: transform 0.1s, background 0.2s;
+  transition: background 0.15s;
 }
-.btn-primary:hover { background: #00ec95; transform: translateY(-1px); }
-.btn-primary:active { transform: translateY(0); }
+.btn-primary:hover { background: #6ee7b7; }
+.btn-primary:active { background: var(--green-dim); }
 .btn-primary .mono-inline { font-family: ui-monospace, monospace; font-weight: 600; }
 .link-secondary { color: var(--text); font-weight: 500; }
 .link-tertiary { color: var(--text2); }
@@ -127,9 +128,9 @@ a:hover { text-decoration: underline; }
 .terminal {
   background: #0d1117;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 6px;
   overflow: hidden;
-  box-shadow: 0 30px 80px rgba(0, 208, 132, 0.08), 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
 }
 .terminal-bar {
   background: #161b22;
@@ -161,7 +162,7 @@ a:hover { text-decoration: underline; }
 }
 .terminal-body .line {
   opacity: 0;
-  animation: fade-in 0.35s ease forwards;
+  animation: fade-in 0.2s ease forwards;
 }
 .terminal-body .prompt { color: var(--green); }
 .terminal-body .py { color: var(--purple); }
@@ -171,20 +172,21 @@ a:hover { text-decoration: underline; }
 .terminal-body .cm { color: var(--text3); }
 .terminal-body .json { color: #f78c6c; }
 .terminal-body .success { color: var(--green); font-weight: 600; }
-.l1 { animation-delay: 0.2s; }
-.l2 { animation-delay: 1.6s; }
-.l3 { animation-delay: 2.7s; }
-.l4 { animation-delay: 3.7s; }
-.l5 { animation-delay: 4.7s; }
-.l6 { animation-delay: 5.2s; }
-.l7 { animation-delay: 5.7s; }
-.l8 { animation-delay: 6.5s; }
-.l9 { animation-delay: 7.1s; }
-.l10 { animation-delay: 8.1s; }
-.l11 { animation-delay: 9.5s; }
+.l1  { animation-delay: 0.1s; }
+.l2  { animation-delay: 0.8s; }
+.l3  { animation-delay: 1.4s; }
+.l4  { animation-delay: 1.6s; }
+.l5  { animation-delay: 1.8s; }
+.l6  { animation-delay: 2.4s; }
+.l7  { animation-delay: 2.7s; }
+.l8  { animation-delay: 3.0s; }
+.l9  { animation-delay: 3.3s; }
+.l10 { animation-delay: 3.6s; }
+.l11 { animation-delay: 4.0s; }
+.l12 { animation-delay: 4.3s; }
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 /* ---------- ENFORCEMENT BANNER ---------- */
@@ -209,7 +211,7 @@ a:hover { text-decoration: underline; }
   align-items: center;
   background: rgba(245, 166, 35, 0.1);
   border: 1px solid var(--amber);
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 0.5rem 1.2rem;
 }
 .enforce-days .n {
@@ -244,7 +246,7 @@ section.block {
   border-collapse: collapse;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 6px;
   overflow: hidden;
 }
 .compare th, .compare td {
@@ -268,7 +270,7 @@ section.block {
 .compare .partial { color: var(--amber); font-weight: 600; }
 .compare .row-label { color: var(--text); font-weight: 500; }
 .compare .col-good-cell {
-  background: rgba(0, 208, 132, 0.04);
+  background: rgba(52, 211, 153, 0.04);
 }
 .note {
   margin-top: 1.5rem;
@@ -289,7 +291,7 @@ section.block {
 .panel {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 1.5rem;
 }
 .panel h3 {
@@ -373,7 +375,7 @@ section.block {
   font-weight: 700;
   letter-spacing: 0.04em;
 }
-.pill.allow { background: rgba(0, 208, 132, 0.15); color: var(--green); }
+.pill.allow { background: rgba(52, 211, 153, 0.15); color: var(--green); }
 .pill.deny { background: rgba(255, 59, 59, 0.15); color: var(--red); }
 .pill.exc  { background: rgba(245, 166, 35, 0.15); color: var(--amber); }
 
@@ -398,15 +400,9 @@ section.block {
   padding: 1rem 0;
 }
 .ks-indicator {
-  width: 56px; height: 56px; border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, var(--green), #006b42);
-  box-shadow: 0 0 0 0 rgba(0, 208, 132, 0.6);
-  animation: pulse 2.2s ease-out infinite;
-}
-@keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(0, 208, 132, 0.5); }
-  70%  { box-shadow: 0 0 0 18px rgba(0, 208, 132, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 208, 132, 0); }
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--green);
+  border: 3px solid var(--green-dim);
 }
 .ks-label { color: var(--green); font-weight: 700; letter-spacing: 0.05em; }
 .ks-sub { color: var(--text2); font-size: 0.85rem; text-align: center; }
@@ -446,14 +442,14 @@ section.block {
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  border-radius: 8px 8px 0 0;
+  border-radius: 4px 4px 0 0;
 }
 .tab-btn.active { background: var(--surface2); color: var(--text); border-color: var(--border); }
 .tab-panel {
   display: none;
   background: var(--surface2);
   border: 1px solid var(--border);
-  border-radius: 0 12px 12px 12px;
+  border-radius: 0 6px 6px 6px;
   padding: 1.4rem;
 }
 .tab-panel.active { display: block; }
@@ -481,7 +477,7 @@ section.block {
 .industry-card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 1.8rem;
 }
 .industry-card .icon { width: 48px; height: 48px; margin-bottom: 1rem; color: var(--green); }
@@ -560,7 +556,7 @@ section.block {
   background: var(--surface);
   border: 1px solid var(--border);
   border-left: 4px solid var(--green);
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 1rem 1.1rem;
 }
 .tagline-card.govern  { border-left-color: var(--green); }
@@ -589,7 +585,7 @@ section.block {
   margin-top: 1.5rem;
 }
 .roadmap-col {
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 1.6rem 1.5rem;
   border: 1px solid var(--border);
   background: var(--surface);
@@ -598,8 +594,8 @@ section.block {
   gap: 0.8rem;
 }
 .roadmap-col.done {
-  background: rgba(0, 208, 132, 0.06);
-  border-color: rgba(0, 208, 132, 0.35);
+  background: rgba(52, 211, 153, 0.06);
+  border-color: rgba(52, 211, 153, 0.35);
 }
 .roadmap-col.now {
   background: rgba(245, 166, 35, 0.06);
@@ -664,7 +660,7 @@ section.block {
   padding: 1rem 1.2rem;
   background: rgba(245, 166, 35, 0.08);
   border: 1px solid var(--amber);
-  border-radius: 8px;
+  border-radius: 4px;
   color: #ffd580;
   font-size: 0.9rem;
   display: flex;
@@ -678,13 +674,13 @@ section.block {
 .try {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 6px;
   padding: 3rem 2rem;
   text-align: center;
 }
 .try h2 { margin-bottom: 1.5rem; }
 .try .step { font-family: ui-monospace, monospace; background: #0a0e14; padding: 0.9rem 1.4rem;
-             border-radius: 8px; display: inline-block; margin: 0.3rem 0; color: var(--green); font-size: 0.95rem; }
+             border-radius: 4px; display: inline-block; margin: 0.3rem 0; color: var(--green); font-size: 0.95rem; }
 .try .sep { color: var(--text3); margin: 1.2rem 0 0.8rem; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em; }
 .try pre {
   text-align: left;
@@ -693,7 +689,7 @@ section.block {
   font-family: ui-monospace, monospace;
   background: #0a0e14;
   padding: 1.2rem;
-  border-radius: 8px;
+  border-radius: 4px;
   color: var(--text);
   font-size: 0.85rem;
   overflow-x: auto;
@@ -730,7 +726,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
 <section class="hero">
   <div class="container hero-grid">
     <div>
-      <div class="sentinel-mark"><svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='#00d084' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='#00d084' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='#00d084' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='#00d084'/></svg></div>
+      <div class="sentinel-mark"><svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='#34d399' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='#34d399' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='#34d399' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='#34d399'/></svg></div>
       <div class="eyebrow">v3.0.7 · EU AI Act · Any autonomous system · Apache 2.0 permanent</div>
       <h1>
         <span>Decisions.</span>
@@ -745,8 +741,8 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
       </p>
       <div class="stats">
         <span class="stat-pill"><span class="ok">✓</span><span id="stat-version">v3.0.7</span></span>
-        <span class="stat-pill"><span class="ok">✓</span><span id="stat-tests">615 passing</span></span>
-        <span class="stat-pill"><span class="ok">✓</span><span id="stat-coverage">99% coverage</span></span>
+        <span class="stat-pill"><span class="ok">✓</span><span id="stat-tests">576 passing</span></span>
+        <span class="stat-pill"><span class="ok">✓</span><span id="stat-coverage">91% coverage</span></span>
         <span class="stat-pill"><span class="ok">✓</span><span id="stat-smoke">40/40 smoke</span></span>
       </div>
       <div class="cta-row">
@@ -891,14 +887,14 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
             markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#00d084"/>
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/>
     </marker>
     <style>
       .lbl        { font: 600 14px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #e5e7eb; }
       .lbl-sm     { font: 500 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #9ca3af; }
       .lbl-xs     { font: 500 10px ui-monospace, monospace; letter-spacing: 0.05em; fill: #6b7280; }
       .lbl-big    { font: 800 18px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #e5e7eb; letter-spacing: 0.02em; }
-      .tag        { font: 700 11px ui-monospace, monospace; fill: #00d084; }
+      .tag        { font: 700 11px ui-monospace, monospace; fill: #34d399; }
       .tag-blue   { font: 700 11px ui-monospace, monospace; fill: #3b82f6; }
       .mono       { font: 500 11px ui-monospace, monospace; fill: #9ca3af; }
     </style>
@@ -912,17 +908,17 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
 
   <!-- Arrow down -->
   <line x1="360" y1="72" x2="360" y2="108"
-        stroke="#00d084" stroke-width="2" marker-end="url(#arrow)"/>
+        stroke="#34d399" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- Box 2: SENTINEL KERNEL (big green border) -->
   <rect x="40" y="116" width="640" height="298" rx="14"
-        fill="#0a0e14" stroke="#00d084" stroke-width="2"/>
+        fill="#0a0e14" stroke="#34d399" stroke-width="2"/>
   <text x="60" y="148" class="lbl-big">SENTINEL KERNEL</text>
   <text x="60" y="168" class="lbl-xs">EU-SOVEREIGN · OPEN SOURCE · APACHE 2.0</text>
 
   <!-- Inner GOVERN box -->
   <rect x="64" y="186" width="292" height="112" rx="10"
-        fill="#111827" stroke="#00d084" stroke-width="1.5"/>
+        fill="#111827" stroke="#34d399" stroke-width="1.5"/>
   <text x="80" y="212" class="lbl">GOVERN</text>
   <text x="326" y="212" text-anchor="end" class="tag">v3.0 ✓</text>
   <text x="80" y="240" class="lbl-sm">Policy-as-code</text>
@@ -940,7 +936,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
 
   <!-- Inner TRACE box (full width) -->
   <rect x="64" y="314" width="592" height="82" rx="10"
-        fill="#111827" stroke="#00a368" stroke-width="1.5"/>
+        fill="#111827" stroke="#059669" stroke-width="1.5"/>
   <text x="80" y="340" class="lbl">TRACE</text>
   <text x="626" y="340" text-anchor="end" class="tag">v3.0 ✓</text>
   <text x="80" y="364" class="lbl-sm">Every decision · sovereign · tamper-resistant · auditable</text>
@@ -948,7 +944,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
 
   <!-- Arrow down -->
   <line x1="360" y1="418" x2="360" y2="454"
-        stroke="#00d084" stroke-width="2" marker-end="url(#arrow)"/>
+        stroke="#34d399" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- Box 3: DECISION LAYER -->
   <rect x="120" y="462" width="480" height="72" rx="10"
@@ -959,7 +955,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
 
   <!-- Arrow down -->
   <line x1="360" y1="540" x2="360" y2="576"
-        stroke="#00d084" stroke-width="2" marker-end="url(#arrow)"/>
+        stroke="#34d399" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- Box 4: SOVEREIGN STORAGE -->
   <rect x="120" y="584" width="480" height="72" rx="10"
@@ -1379,7 +1375,7 @@ docker compose -f docker-compose.minimal.yml up</pre>
       <a href="https://github.com/sebastianweiss83/sentinel-kernel/blob/main/docs/rfcs/RFC-001-sovereignty-manifest.md">RFC-001</a>
       <a href="https://github.com/sebastianweiss83/sentinel-kernel/discussions">Discussions</a>
     </div>
-    <div><span class="sentinel-mark-sm"><svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='#00d084' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='#00d084' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='#00d084' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='#00d084'/></svg></span>sentinel-kernel · Swentures UG · Apache 2.0</div>
+    <div><span class="sentinel-mark-sm"><svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='#34d399' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='#34d399' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='#34d399' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='#34d399'/></svg></span>sentinel-kernel · Swentures UG · Apache 2.0</div>
     <div class="motto">No BSL. No commercial-only features. No relicensing. Ever.</div>
     <div style="margin-top:1rem;font-size:0.75rem;">Generated from HEAD commit: 2026-04-12</div>
   </div>
