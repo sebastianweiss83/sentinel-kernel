@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    tags:
-      - "v*"
+    tags: ['v*.*.*']
+    branches-ignore: ['**']   # ONLY tags, NEVER branches
 
 concurrency:
   group: release-${{ github.ref }}
@@ -11,24 +11,49 @@ concurrency:
 
 jobs:
   publish:
-    name: Publish to PyPI
+    name: Build and publish to PyPI
     runs-on: ubuntu-latest
     environment: release
     permissions:
-      id-token: write
+      id-token: write    # for trusted publisher
+      contents: read     # read only — NO writes to repo
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Build
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-release-${{ hashFiles('pyproject.toml') }}
+
+      - name: Install build tools
+        run: pip install build --retries 5
+
+      - name: Verify version matches tag
         run: |
-          pip install build
-          python -m build
+          TAG="${GITHUB_REF#refs/tags/v}"
+          VERSION=$(python -c "
+          import tomllib
+          with open('pyproject.toml','rb') as f:
+              print(tomllib.load(f)['project']['version'])
+          ")
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "ERROR: tag v$TAG does not match pyproject.toml version $VERSION"
+            exit 1
+          fi
+          echo "✓ Version match: $VERSION"
+
+      - name: Build wheel and sdist
+        run: python -m build
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: false
+
+      # NO sync step. NO commit step. NO push step.
+      # CI workflow handles sync on the next push to main.

@@ -3,15 +3,14 @@ name: CI
 on:
   push:
     branches: [main]
-    tags-ignore:
-      - "v*"
+    tags-ignore: ['**']       # NEVER trigger on tags — Release workflow owns those
   pull_request:
     branches: [main]
   workflow_dispatch:
 
-# Serialise Pages deploys on main so two rapid pushes can't race each
-# other through sync-all / deploy-pages. PRs get their own concurrency
-# group per branch so they don't block main.
+# Serialise sync-all + Pages deploys on main so two rapid pushes can't
+# race. PRs get their own concurrency group per branch so they don't
+# block main.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
@@ -162,7 +161,10 @@ jobs:
     name: Sync all derived content
     runs-on: ubuntu-latest
     needs: [test, sovereignty-check, manifesto-checks, lint, quickstart, airgap]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: |
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      !contains(github.event.head_commit.message, '[skip ci]')
     permissions:
       contents: write
       pages: write
@@ -172,6 +174,7 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+          ref: main
 
       - uses: actions/setup-python@v5
         with:
@@ -179,52 +182,37 @@ jobs:
           cache: 'pip'
           cache-dependency-path: pyproject.toml
 
-      - name: Install package (with retry for transient pip flakes)
-        run: |
-          for i in 1 2 3 4 5; do
-            if pip install --retries 5 --timeout 60 -e ".[dev]"; then
-              exit 0
-            fi
-            echo "pip install failed on attempt $i — retrying in 10s"
-            sleep 10
-          done
-          echo "pip install failed after 5 attempts"
-          exit 1
+      - name: Install package
+        run: pip install -e ".[dev]"
 
-      - name: Run sync_all + commit with retry
+      - name: Pull latest (avoid conflict with concurrent runs)
+        run: |
+          git pull --rebase origin main || (
+            git checkout --ours CLAUDE.md \
+              docs/preview/data.json \
+              docs/preview/index.html \
+              docs/preview/report.html \
+              docs/project-status.md 2>/dev/null || true
+            git add -A
+            git rebase --continue || git rebase --skip
+          )
+
+      - name: Run sync_all
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/sync_all.py
+
+      - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          # Regenerate-reset-push loop: on non-fast-forward, reset hard
-          # to origin/main, re-run sync_all on the new tip, and retry.
-          # The loop must always terminate — the sync is idempotent so
-          # two runs against the same HEAD produce identical output.
-          for i in 1 2 3 4 5; do
-            python scripts/sync_all.py
-
-            if git diff --quiet; then
-              echo "Nothing to sync on attempt $i."
-              exit 0
-            fi
-
-            git add CLAUDE.md README.md docs/project-status.md docs/preview/
-            git commit -m "chore(auto): sync all derived content [skip ci]"
-
-            if git push origin HEAD:main; then
-              echo "Pushed on attempt $i."
-              exit 0
-            fi
-
-            echo "Push rejected on attempt $i; resetting to origin/main and retrying."
-            git fetch origin main
-            git reset --hard origin/main
-          done
-
-          echo "Push still failing after retries — giving up."
-          exit 1
+          git diff --quiet && echo "Nothing to sync" && exit 0
+          git add CLAUDE.md README.md \
+                  docs/project-status.md \
+                  docs/preview/
+          git diff --staged --quiet && echo "Nothing staged" && exit 0
+          git commit -m "chore(auto): sync all derived content [skip ci]"
+          git push origin main
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

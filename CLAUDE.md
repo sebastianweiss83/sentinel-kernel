@@ -149,8 +149,42 @@ git add -A && git commit -m "chore: manual sync" && git push
 ```
 
 The sync is idempotent — running it twice on the same HEAD produces
-byte-identical output. CI enforces this via a regenerate-reset-push
-loop in `.github/workflows/ci.yml:sync-all`.
+byte-identical output. CI enforces this via the sync-all job in
+`.github/workflows/ci.yml`.
+
+## Git push — safe pattern (prevents race condition)
+
+CI runs sync-all on every push to main and commits the result.
+If you push while CI is committing, you get a conflict.
+
+**NEVER** use bare `git push origin main`.
+**ALWAYS** use `./scripts/push.sh` or:
+
+```bash
+git fetch origin main
+git rebase origin/main
+git push origin main
+```
+
+For **releases** — push code first, wait for CI, then tag:
+
+```bash
+./scripts/push.sh              # push to main
+# wait for CI sync-all to finish
+git tag vX.Y.Z
+git push origin vX.Y.Z         # only Release workflow fires
+```
+
+Or: `./scripts/push.sh --tag v3.1.0` (does both with wait).
+
+## Workflow architecture
+
+```
+push to main  → CI workflow ONLY (test, lint, sovereignty, sync-all, Pages)
+push tag v*.* → Release workflow ONLY (build, publish to PyPI)
+```
+
+No overlap. No race condition. Release workflow NEVER commits or pushes.
 
 ## Deployment contexts
 
