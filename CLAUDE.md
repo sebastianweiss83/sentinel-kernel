@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | Version | `3.0.7` |
-| Tests | 642 passing |
+| Tests | unknown |
 | Coverage | unknown |
 | Smoke test | 40/40 ✓ |
 | Last updated | 2026-04-12 14:19 UTC |

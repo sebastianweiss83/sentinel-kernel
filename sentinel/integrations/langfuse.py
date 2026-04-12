@@ -162,11 +162,11 @@ def generate_langfuse_panel(sentinel: Sentinel) -> str:
     if trace_count:
         score = max(score, int(100 * (allow / max(allow + deny, 1))))
 
-    ks_colour = "#ff3b3b" if sentinel.kill_switch_active else "#00d084"
+    ks_colour = "#ff3b3b" if sentinel.kill_switch_active else "#34d399"
     ks_text = "ACTIVE" if sentinel.kill_switch_active else "INACTIVE"
 
     return f"""<!-- Sentinel sovereignty panel — self-contained, no CDN -->
-<div style="background:#0a0e14;color:#e5e7eb;padding:1.5rem;border-radius:12px;
+<div style="background:#0a0e14;color:#e5e7eb;padding:1.5rem;border-radius:6px;
             font-family:system-ui,-apple-system,Segoe UI,sans-serif;max-width:520px">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
     <h3 style="margin:0;font-size:1rem;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em">
@@ -181,7 +181,7 @@ def generate_langfuse_panel(sentinel: Sentinel) -> str:
   <svg width="160" height="160" viewBox="0 0 200 200" style="display:block;margin:0 auto"
        xmlns="http://www.w3.org/2000/svg">
     <circle cx="100" cy="100" r="70" fill="none" stroke="#1f2937" stroke-width="14"/>
-    <circle cx="100" cy="100" r="70" fill="none" stroke="#00d084" stroke-width="14"
+    <circle cx="100" cy="100" r="70" fill="none" stroke="#34d399" stroke-width="14"
             stroke-linecap="round" stroke-dasharray="440"
             stroke-dashoffset="{440 - 440 * (score / 100)}"
             transform="rotate(-90 100 100)"/>
@@ -193,9 +193,9 @@ def generate_langfuse_panel(sentinel: Sentinel) -> str:
     <h4 style="font-size:0.75rem;color:#9ca3af;text-transform:uppercase;
                letter-spacing:0.06em;margin:0 0 0.6rem 0">EU AI Act coverage</h4>
     <div style="display:flex;flex-direction:column;gap:0.4rem;font-size:0.8rem">
-      <div>Art. 12 Automatic logging &nbsp;<span style="color:#00d084">✓ compliant</span></div>
-      <div>Art. 13 Transparency &nbsp;<span style="color:#00d084">✓ compliant</span></div>
-      <div>Art. 14 Human oversight &nbsp;<span style="color:#00d084">✓ compliant</span></div>
+      <div>Art. 12 Automatic logging &nbsp;<span style="color:#34d399">✓ compliant</span></div>
+      <div>Art. 13 Transparency &nbsp;<span style="color:#34d399">✓ compliant</span></div>
+      <div>Art. 14 Human oversight &nbsp;<span style="color:#34d399">✓ compliant</span></div>
     </div>
   </div>
 
@@ -206,7 +206,7 @@ def generate_langfuse_panel(sentinel: Sentinel) -> str:
       <div>traces</div>
     </div>
     <div>
-      <div style="color:#00d084;font-size:1.2rem;font-weight:700">{allow}</div>
+      <div style="color:#34d399;font-size:1.2rem;font-weight:700">{allow}</div>
       <div>ALLOW</div>
     </div>
     <div>

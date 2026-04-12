@@ -18,7 +18,7 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 
 | | |
 |---|---|
-| Tests | 642 passing |
+| Tests | unknown |
 | Coverage | unknown |
 | Smoke test | 40/40 ✓ |
 

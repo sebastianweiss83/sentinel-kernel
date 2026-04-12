@@ -891,13 +891,13 @@ FAVICON_DATA_URI = (
     "data:image/svg+xml,"
     "<svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg'>"
     "<path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' "
-    "fill='none' stroke='%2300d084' stroke-width='2.5' "
+    "fill='none' stroke='%2334d399' stroke-width='2.5' "
     "stroke-linejoin='round'/>"
     "<line x1='20' y1='10' x2='20' y2='38' "
-    "stroke='%2300d084' stroke-width='2.5' stroke-linecap='round'/>"
+    "stroke='%2334d399' stroke-width='2.5' stroke-linecap='round'/>"
     "<line x1='13' y1='22' x2='27' y2='22' "
-    "stroke='%2300d084' stroke-width='2' stroke-linecap='round'/>"
-    "<circle cx='20' cy='14' r='2' fill='%2300d084'/>"
+    "stroke='%2334d399' stroke-width='2' stroke-linecap='round'/>"
+    "<circle cx='20' cy='14' r='2' fill='%2334d399'/>"
     "</svg>"
 )
 

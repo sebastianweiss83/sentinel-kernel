@@ -76,7 +76,7 @@ class UnifiedReport:
             "<title>Sentinel unified compliance report</title>",
             "<style>body{font-family:system-ui,sans-serif;max-width:900px;"
             "margin:2rem auto;padding:0 1.5rem;background:#0a0e14;color:#e5e7eb;}"
-            "h1{border-bottom:2px solid #00d084;padding-bottom:.3em;}"
+            "h1{border-bottom:2px solid #34d399;padding-bottom:.3em;}"
             "h2{margin-top:2em;border-bottom:1px solid #1f2937;padding-bottom:.2em;}"
             "pre{background:#111827;padding:1rem;border-radius:6px;overflow-x:auto;"
             "font-family:ui-monospace,monospace;font-size:.9rem;}"

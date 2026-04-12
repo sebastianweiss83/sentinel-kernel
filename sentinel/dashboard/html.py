@@ -78,7 +78,7 @@ _CSS = r"""
 :root {
   --bg: #0a0e14; --surface: #111827; --surface2: #1a2332;
   --border: #1f2937; --text: #e5e7eb; --text2: #9ca3af; --text3: #6b7280;
-  --green: #00d084; --red: #ff3b3b; --amber: #f5a623; --blue: #3b82f6;
+  --green: #34d399; --red: #ff3b3b; --amber: #f5a623; --blue: #3b82f6;
   --purple: #a78bfa;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -169,7 +169,7 @@ a { color: var(--green); }
   align-items: center;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 1.8rem;
   margin-bottom: 2rem;
 }
