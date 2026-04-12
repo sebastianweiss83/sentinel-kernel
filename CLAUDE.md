@@ -12,15 +12,15 @@
 | Tests | 615 passing |
 | Coverage | 99% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-12 13:12 UTC |
+| Last updated | 2026-04-12 13:30 UTC |
 
 ## Last 5 commits
 
+- `d91989e` feat: CLI-first landing page — hero, tabs, stats, snippet safety
 - `577d738` docs: archive marketing drafts + document rust-impl status
 - `d31e07c` docs: perfection pass — badges + bsi-profile + archive drafts
 - `4bfcd44` fix: final cleanup — stale test counts, release checklist, sync
 - `4f755a0` docs: establish single source of truth + surface compliance docs
-- `1144e5b` fix: complete repositioning sweep — zero stale 'AI agent' or 'AI middleware' left
 
 ## Open issues
 

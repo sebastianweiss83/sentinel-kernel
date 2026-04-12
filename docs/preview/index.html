@@ -764,28 +764,21 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
     <span class="dot dot-red"></span>
     <span class="dot dot-amber"></span>
     <span class="dot dot-green"></span>
-    <span class="title">~/sentinel — python</span>
+    <span class="title">~/projects — terminal</span>
   </div>
   <div class="terminal-body">
     <div class="line l1"><span class="prompt">$</span> pipx install sentinel-kernel</div>
-    <div class="line l2"><span class="prompt">$</span> python3</div>
-    <div class="line l3"><span class="py">&gt;&gt;&gt;</span> <span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel</div>
-    <div class="line l4"><span class="py">&gt;&gt;&gt;</span> s = <span class="fn">Sentinel</span>()</div>
-    <div class="line l5"><span class="py">&gt;&gt;&gt;</span> @s.trace</div>
-    <div class="line l6"><span class="py">...</span> <span class="kw">async def</span> <span class="fn">approve</span>(ctx):</div>
-    <div class="line l7"><span class="py">...</span> &nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> {<span class="str">"ok"</span>: <span class="kw">True</span>}</div>
-    <div class="line l8"><span class="py">&gt;&gt;&gt;</span> <span class="kw">import</span> asyncio</div>
-    <div class="line l9"><span class="py">&gt;&gt;&gt;</span> asyncio.<span class="fn">run</span>(<span class="fn">approve</span>({<span class="str">"amount"</span>: <span class="nu">5000</span>}))</div>
-    <div class="line l10"><span class="json">{<br>
-&nbsp;&nbsp;"trace_id": "01hx7k9m2n3p",<br>
-&nbsp;&nbsp;"policy_result": "ALLOW",<br>
-&nbsp;&nbsp;"sovereign_scope": "EU",<br>
-&nbsp;&nbsp;"data_residency": "local",<br>
-&nbsp;&nbsp;"inputs_hash": "sha256:a3f8c2d1...",<br>
-&nbsp;&nbsp;"latency_ms": 3,<br>
-&nbsp;&nbsp;"schema_version": "1.0.0"<br>
-}</span></div>
-    <div class="line l11 success">✓ Trace written. Sovereign. Local. Yours.</div>
+    <div class="line l2"><span class="prompt">$</span> sentinel demo</div>
+    <div class="line l3" style="opacity:0.5">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+    <div class="line l4" style="opacity:0.5">&nbsp; SENTINEL DEMO — Sovereignty walkthrough</div>
+    <div class="line l5" style="opacity:0.5">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+    <div class="line l6"><span class="ok">✓</span> 50 decisions traced (EU sovereign)</div>
+    <div class="line l7"><span class="ok">✓</span> Kill switch tested (Art. 14)</div>
+    <div class="line l8"><span class="ok">✓</span> Sovereignty scan (92% score)</div>
+    <div class="line l9"><span class="ok">✓</span> EU AI Act compliance (PARTIAL)</div>
+    <div class="line l10"><span class="ok">✓</span> HTML report generated</div>
+    <div class="line l11">&nbsp;</div>
+    <div class="line l12 success">Report: sentinel_demo_report.html</div>
   </div>
 </div>
 
@@ -1092,18 +1085,35 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
 
 <section class="block">
   <div class="container">
-    <h2>Start in 5 minutes</h2>
-    <p class="sub">Four snippets. Real working code. No placeholders.</p>
+    <h2>Start in 2 minutes</h2>
+    <p class="sub">Evaluate the full sovereignty stack — or embed it in your code.</p>
 
     <div class="tabs">
       <div class="tab-headers">
-        <button class="tab-btn active" data-tab="minimal">Minimal</button>
+        <button class="tab-btn active" data-tab="cli">Evaluate (CLI)</button>
+        <button class="tab-btn" data-tab="minimal">Python SDK</button>
         <button class="tab-btn" data-tab="policy">With Policy</button>
         <button class="tab-btn" data-tab="full">Full Pipeline</button>
-        <button class="tab-btn" data-tab="governance">Governance v3.0</button>
+        <button class="tab-btn" data-tab="governance">Governance</button>
       </div>
 
-      <div id="tab-minimal" class="tab-panel active"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel
+      <div id="tab-cli" class="tab-panel active"><pre><span class="cm"># Install + full end-to-end demo (no code required)</span>
+<span class="prompt">$</span> pipx install sentinel-kernel
+<span class="prompt">$</span> sentinel demo
+
+<span class="cm"># Sovereignty scan of your environment</span>
+<span class="prompt">$</span> sentinel scan
+
+<span class="cm"># EU AI Act compliance check</span>
+<span class="prompt">$</span> sentinel compliance check
+
+<span class="cm"># Generate a self-contained HTML sovereignty report</span>
+<span class="prompt">$</span> sentinel report --output sovereignty.html
+
+<span class="cm"># Generate a portable governance attestation</span>
+<span class="prompt">$</span> sentinel attestation generate --output governance.json</pre></div>
+
+      <div id="tab-minimal" class="tab-panel"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel
 
 sentinel = <span class="fn">Sentinel</span>()  <span class="cm"># SQLite, zero config</span>
 
@@ -1350,11 +1360,11 @@ att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
       <div><div class="step">$ sentinel demo</div></div>
       <div class="small">Runs 50 decisions · Kill switch demo · Compliance check<br>
         Generates sovereignty_report.html · No Docker required</div>
-      <div class="sep">or — full Grafana demo</div>
+      <div class="sep">or — full Grafana demo (requires Docker)</div>
       <pre>git clone https://github.com/sebastianweiss83/sentinel-kernel
 cd sentinel-kernel/demo
-docker compose -f docker-compose.minimal.yml up
-# http://localhost:3001 — Grafana dashboard</pre>
+docker compose -f docker-compose.minimal.yml up</pre>
+      <div class="small">Then open http://localhost:3001 (Grafana · admin / sentinel)</div>
     </div>
   </div>
 </section>
