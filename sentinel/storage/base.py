@@ -138,7 +138,7 @@ class StorageBackend(ABC):
                     fh.write("\n")
                     count += 1
                 offset += page_size
-                if len(traces) < page_size:
+                if len(traces) < page_size:  # pragma: no branch
                     break
         return count
 

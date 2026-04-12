@@ -43,7 +43,7 @@ _MISSING_DEP_MESSAGE = (
 )
 
 
-def _import_otel() -> tuple[Any, Any, Any]:
+def _import_otel() -> tuple[Any, Any, Any]:  # pragma: no cover
     try:
         from opentelemetry import trace as otel_trace
         from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (

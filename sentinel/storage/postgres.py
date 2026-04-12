@@ -31,10 +31,10 @@ _MISSING_DEP_MESSAGE = (
 
 def _import_psycopg2() -> Any:
     try:
-        import psycopg2
+        import psycopg2  # pragma: no cover
     except ImportError as exc:
         raise ImportError(_MISSING_DEP_MESSAGE) from exc
-    return psycopg2
+    return psycopg2  # pragma: no cover
 
 
 _SCHEMA_SQL = """

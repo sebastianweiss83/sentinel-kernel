@@ -37,7 +37,7 @@ jobs:
         run: pip install -e ".[dev]"
 
       - name: Run tests
-        run: pytest tests/ -v --cov=sentinel --cov-report=term-missing --cov-fail-under=75
+        run: pytest tests/ -v --cov=sentinel --cov-report=term-missing --cov-branch --cov-fail-under=100
 
   sovereignty-check:
     name: Sovereignty checks

@@ -120,6 +120,22 @@ def test_overall_is_partial_when_gaps_present() -> None:
     assert report.overall == "PARTIAL"
 
 
+def test_overall_non_compliant_when_core_article_fails() -> None:
+    """Cover the NON_COMPLIANT return branch (euaiact.py line 89)."""
+    report = EUAIActChecker().check(_make_sentinel())
+    # Force a core article to NON_COMPLIANT
+    report.articles["Art. 12"].status = "NON_COMPLIANT"
+    assert report.overall == "NON_COMPLIANT"
+
+
+def test_overall_compliant_when_all_articles_pass() -> None:
+    """Cover the COMPLIANT return branch (euaiact.py line 92)."""
+    report = EUAIActChecker().check(_make_sentinel())
+    for art in report.articles.values():
+        art.status = "COMPLIANT"
+    assert report.overall == "COMPLIANT"
+
+
 def test_automated_coverage_nonzero() -> None:
     report = EUAIActChecker().check(_make_sentinel())
     assert 0.0 < report.automated_coverage < 1.0

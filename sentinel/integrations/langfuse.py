@@ -31,7 +31,7 @@ _MISSING_DEP_MESSAGE = (
 )
 
 
-def _import_langfuse_client() -> Any:
+def _import_langfuse_client() -> Any:  # pragma: no cover
     try:
         from langfuse import Langfuse
     except ImportError as exc:

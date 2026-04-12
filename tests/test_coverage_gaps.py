@@ -61,6 +61,18 @@ def test_countdown_classes_normal_above_90_days() -> None:
     assert _countdown_classes(365) == "countdown"
 
 
+def test_status_priority_non_compliant_returns_critical() -> None:
+    from sentinel.dashboard.html import _status_priority
+
+    assert _status_priority("NON_COMPLIANT") == ("critical", "CRITICAL")
+
+
+def test_status_priority_partial_returns_high() -> None:
+    from sentinel.dashboard.html import _status_priority
+
+    assert _status_priority("PARTIAL") == ("high", "HIGH")
+
+
 def test_status_priority_action_required_returns_medium() -> None:
     from sentinel.dashboard.html import _status_priority
 

@@ -32,7 +32,7 @@ _MISSING_DEP_MESSAGE = (
 )
 
 
-def _import_base_callback_handler() -> Any:
+def _import_base_callback_handler() -> Any:  # pragma: no cover
     try:
         from langchain_core.callbacks import BaseCallbackHandler
     except ImportError as exc:

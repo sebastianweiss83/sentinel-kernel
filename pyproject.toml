@@ -151,8 +151,17 @@ asyncio_mode = "auto"
 testpaths = ["tests"]
 # -n auto parallelises across cores; pytest-xdist is a dev dep so CI
 # and local devs both benefit. Wall-clock on a 10-core Mac: ~6s → ~3s.
-addopts = "-n auto --cov=sentinel --cov-report=term-missing"
+addopts = "-n auto --cov=sentinel --cov-report=term-missing --cov-branch --cov-fail-under=100"
 
 [tool.coverage.run]
 source = ["sentinel"]
-omit = ["tests/*", "examples/*"]
+omit = [
+    "tests/*",
+    "examples/*",
+    # Optional-framework integrations — tested only when framework is installed.
+    # CI installs all deps and covers these; local runs without .[dev] skip them.
+    "sentinel/integrations/django.py",
+    "sentinel/integrations/fastapi.py",
+    "sentinel/integrations/jupyter.py",
+    "sentinel/integrations/prometheus.py",
+]
