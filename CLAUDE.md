@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.0.4` |
-| Tests | unknown |
-| Coverage | unknown |
-| Smoke test | failed at step 39 |
-| Last updated | 2026-04-12 10:37 UTC |
+| Tests | 615 passing |
+| Coverage | 99% |
+| Smoke test | 40/40 ✓ |
+| Last updated | 2026-04-12 10:38 UTC |
 
 ## Last 5 commits
 
+- `0c390ea` release: v3.0.4 — complete UX overhaul
 - `9ba9c2a` chore: re-sync derived content after rebase
 - `159efa0` fix: complete UX overhaul — PARTIAL status, BSI contact, pipx, Art. guidance
 - `09f035c` fix(ci): install pytest-xdist in quickstart job
 - `6f10ea5` perf: CI — pip cache, pytest-xdist parallel execution
-- `7770d5e` fix: UX polish — pip3 everywhere, cleaner demo summary
 
 ## Open issues
 
