@@ -21,7 +21,7 @@ itself. It is a starting point for an informed evaluation.
 - **Role:** EU-sovereign decision tracing kernel
 - **Jurisdiction:** EU
 - **Air-gap:** Yes — reference `FilesystemStorage` backend
-- **Certification:** BSI IT-Grundschutz targeted for v1.0 (Q4 2026)
+- **Certification:** BSI IT-Grundschutz targeted for v3.2 (Q4 2026)
 
 ---
 
@@ -67,7 +67,7 @@ before trusting any label — projects move.
 | Backend          | Jurisdiction  | Sentinel support         | Notes |
 |------------------|---------------|--------------------------|-------|
 | SQLite           | Public domain | `SQLiteStorage`          | Default. Single-node. |
-| PostgreSQL       | Neutral (PGDG)| `PostgresStorage` (extra)| v0.2 and above. |
+| PostgreSQL       | Neutral (PGDG)| `PostgresStorage` (extra)| Shipped as `sentinel-kernel[postgres]`. |
 | Filesystem NDJSON| N/A           | `FilesystemStorage`      | Reference air-gapped backend. |
 
 ---
@@ -99,7 +99,7 @@ Terraform to see what you have today.
   standard for expressing and verifying sovereignty requirements,
   designed to be portable beyond Sentinel. See
   [docs/rfcs/RFC-001-sovereignty-manifest.md](rfcs/RFC-001-sovereignty-manifest.md).
-- **BSI profile** — v1.0 target. See
+- **BSI profile** — v3.2 target. See
   [docs/bsi-profile.md](bsi-profile.md).
 
 ---

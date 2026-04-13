@@ -157,7 +157,7 @@ Every `DecisionTrace` carries a `data_residency` field and a `sovereign_scope` f
 
 Sovereignty cannot be bolted on after the fact. If an environment is configured for `DataResidency.EU_DE`, every trace carries that assertion — meaning auditors can query by sovereignty scope and know the assertion was made at infrastructure configuration time, not added to a report post-hoc.
 
-`DataResidency` is a first-class enum, not a tag. Enforcement of residency constraints at write time (raising `SovereigntyViolationError` when a trace configured for `EU_DE` is sent to a non-sovereign backend) is planned for v0.3.
+`DataResidency` is a first-class enum, not a tag. Enforcement of residency constraints at write time (raising `SovereigntyViolationError` when a trace configured for `EU_DE` is sent to a non-sovereign backend) is on the post-v3.1 roadmap as a schema-compatible additive check.
 
 ### Principle 5: Human overrides are first-class events
 
@@ -169,7 +169,7 @@ An override is a significant event in a decision chain: it records an exception 
 
 ### Principle 6: Ship small, iterate fast
 
-v0.1 ships with SQLite storage, filesystem storage, null policy evaluator, simple Python-callable evaluator, and the `@sentinel.trace` decorator. Nothing else.
+The initial v1.0 kernel shipped with SQLite storage, filesystem storage, a null policy evaluator, a simple Python-callable evaluator, and the `@sentinel.trace` decorator — deliberately the smallest useful surface. Every addition since has been driven by deployment feedback, not speculative design.
 
 Projects that become standards ship a kernel that works immediately, then let real deployment feedback drive the roadmap. The test suite, framework integrations, and additional backends are shaped by deployed users and design partners. The issue tracker is not the roadmap.
 

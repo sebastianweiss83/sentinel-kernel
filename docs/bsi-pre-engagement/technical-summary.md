@@ -55,8 +55,9 @@ explanation. No pretending that software can automate governance.
 
 ## Test evidence
 
-- **503+ tests** across unit, integration, and air-gap suites.
-- **100% line coverage** — no module is under the bar.
+- **686 tests** across unit, integration, and air-gap suites.
+- **100% line and branch coverage** — enforced in CI via
+  `--cov-fail-under=100`. No module is under the bar.
 - **40/40 smoke test** — a 40-step end-to-end validation that
   runs on every release.
 - **11 dedicated air-gap tests** that deny `socket.socket()` at
@@ -65,6 +66,10 @@ explanation. No pretending that software can automate governance.
   re-hashes stored inputs/outputs and compares against stored
   hashes. This is the feature that makes Sentinel defensible in
   court: every trace can be independently verified as unmodified.
+- **Signed PDF evidence pack** — `sentinel evidence-pack` bundles
+  traces in a window with framework coverage, hash manifest, and
+  a sovereign attestation. Reproducible, offline-verifiable,
+  suitable as an audit binder artefact.
 
 ## What Sentinel does NOT cover
 
@@ -84,7 +89,7 @@ These are operator responsibilities documented in
 - **Governance doc:** `GOVERNANCE.md` at the repo root
 - **RFC process:** documented in `CONTRIBUTING.md`
 - **Target foundation:** Linux Foundation Europe stewardship,
-  planned for Q4 2026 alongside the BSI engagement
+  planned for v3.2 alongside the BSI IT-Grundschutz assessment
 
 ## References
 

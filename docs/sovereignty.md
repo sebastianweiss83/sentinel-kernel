@@ -22,7 +22,7 @@ Sentinel uses `FilesystemStorage` as its reference deployment for classified env
 
 BSI IT-Grundschutz is the German federal standard for information security, required for government and defence procurement in Germany and applied across EU regulated industries. Certification is a 12–18 month process.
 
-Sentinel is designed with BSI IT-Grundschutz certification as the v1.0 target. The BSI profile document is in `docs/bsi-profile.md`.
+Sentinel is designed with BSI IT-Grundschutz certification as the v3.2 target. The BSI profile document is in `docs/bsi-profile.md`.
 
 ## What sovereign means in practice
 

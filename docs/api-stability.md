@@ -17,7 +17,8 @@ version bump and a minimum six-month deprecation notice:
 - `SentinelManifesto` base class and all requirement classes
 - `EUAIActChecker.check()` and the `ComplianceReport` structure
 - All CLI commands: `sentinel scan/compliance/report/demo/
-  attestation/keygen/manifesto/verify/purge/export/import`
+  attestation/keygen/manifesto/verify/purge/export/import/
+  ci-check/evidence-pack`
 - All integration class names and constructor signatures
 - `trace_id` format (UUIDv4 string)
 - NDJSON export format

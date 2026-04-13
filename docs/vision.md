@@ -244,16 +244,20 @@ not last forever. It should last long enough to become the default.
 
 ## Roadmap
 
-**Phase 1 — Trace + Govern (v1.0–v3.0, shipped).**
+**Phase 1 — Trace + Govern (v1.0–v3.1, shipped).**
 Sovereign decision traces, policy-as-code, kill switch, manifesto-as-code,
 EU AI Act compliance checker, sovereignty scanner, quantum-safe signing,
-RFC-001 cross-language manifest. Production stable. API frozen.
-576+ tests, 91% coverage.
+RFC-001 cross-language manifest. v3.0 froze the public API. v3.1 — The
+Auditor Release — added `sentinel ci-check`, `sentinel evidence-pack`
+(signed PDF evidence packs), and honest-scope framing across all
+surfaces. Production stable. 686 tests. 100% line and branch coverage
+enforced in CI.
 
-**Phase 2 — Certify (v3.1–v3.x, 2026).**
-Linux Foundation Europe stewardship application (v3.1, Q3 2026). BSI
-IT-Grundschutz formal assessment (v3.2, Q4 2026). First lighthouse
-deployments. Go and TypeScript reference implementations of RFC-001.
+**Phase 2 — Certify (v3.2, 2026).**
+Linux Foundation Europe stewardship application and BSI IT-Grundschutz
+formal assessment, both targeted for v3.2 in Q3/Q4 2026. First
+lighthouse deployments. Go and TypeScript reference implementations
+of RFC-001.
 
 **Phase 3 — Route (v4.0–v4.x, 2026–2027).**
 SovereignRouter. Policy-driven model selection. Local model adapters

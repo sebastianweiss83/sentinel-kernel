@@ -10,16 +10,18 @@ be handed to BSI in the first meeting.
 `sentinel-kernel` is the **Sovereign Decision Kernel**. It sits between
 business logic and any autonomous decision system and implements three layers:
 
-1. **Trace (v3.0 shipped).** Every AI decision becomes a structured,
-   append-only sovereign record. EU AI Act Art. 12 is an automated
-   side-effect of the interceptor. Optional ML-DSA-65 (FIPS 204)
-   signing, with keys on the operator's own infrastructure.
-2. **Govern (v3.0 shipped).** What the AI may decide is policy-as-code,
-   evaluated in-process, recorded in every trace. Art. 14 human
-   oversight is implemented as a kill switch. Manifesto-as-code runs
-   as five named CI theses on every pull request.
-3. **Route (v4.0 roadmap).** The SovereignRouter — the same policy
-   engine that governs what may be decided selects which model
+1. **Trace (v3.0, shipped).** Every autonomous decision becomes a
+   structured, append-only sovereign record. EU AI Act Art. 12 is an
+   automated side-effect of the interceptor. Optional ML-DSA-65
+   (FIPS 204) signing, with keys on the operator's own infrastructure.
+2. **Govern (v3.0, shipped).** What the system may decide is
+   policy-as-code, evaluated in-process, recorded in every trace.
+   Art. 14 human oversight is implemented as a kill switch.
+   Manifesto-as-code runs as five named CI theses on every pull
+   request. v3.1.0 added `sentinel ci-check` (one-stop CI aggregator)
+   and `sentinel evidence-pack` (signed PDF evidence pack for auditors).
+3. **Route (v4.0, roadmap).** The SovereignRouter — the same policy
+   engine that governs what may be decided selects which system
    handles each decision, based on data classification and
    sovereignty requirements. RFC-002 is in discussion.
 
@@ -45,9 +47,10 @@ three non-negotiable invariants are:
 2. Air-gapped operation must always work.
 3. Apache 2.0, permanently — no CLA, no relicensing.
 
-The software is at v3.0, production stable, with 615+ tests and
-100% line coverage. It is designed for deployment in regulated
-environments including VS-NfD-track defence and healthcare AI.
+The software is at v3.1.0, production stable, with 686 tests and
+100% line and branch coverage enforced in CI. It is designed for
+deployment in regulated environments including VS-NfD-track
+defence and healthcare AI.
 
 ## What we need from BSI
 
@@ -61,9 +64,12 @@ environments including VS-NfD-track defence and healthcare AI.
 ## What we provide
 
 - Complete open source code under Apache 2.0.
-- 615+ automated tests with 100% line coverage, including 11
-  dedicated air-gap tests that deny the network at the socket level.
+- 686 automated tests with 100% line and branch coverage, enforced
+  in CI, including 11 dedicated air-gap tests that deny the network
+  at the socket level.
 - Structured compliance reports for EU AI Act, DORA, NIS2.
+- Signed PDF evidence packs via `sentinel evidence-pack` — cover
+  page, framework coverage, hash manifest, sovereign attestation.
 - Documented sovereignty invariants with CI enforcement.
 - Reproducible releases via PyPI trusted publisher (OIDC).
 

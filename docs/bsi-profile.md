@@ -1,6 +1,6 @@
 # BSI IT-Grundschutz Profile
 
-**Status:** Pre-engagement — formal BSI engagement planned alongside v2.0 (Q4 2026)
+**Status:** Pre-engagement — formal BSI engagement targeted for v3.2 (Q4 2026)
 **Target:** BSI IT-Grundschutz reference profile for sovereign AI decision infrastructure
 **Certification path:** IT-Grundschutz → VS-NfD deployment profile
 
@@ -186,7 +186,7 @@ IT-Grundschutz.
 - [x] Network-isolated CI test suite
 - [x] Export format (NDJSON) is human-readable and tool-independent
 - [ ] Tested and validated in a real network-isolated environment
-- [ ] Formal VS-NfD assessment (planned v2.0)
+- [ ] Formal VS-NfD assessment (targeted v3.2)
 
 ---
 
@@ -194,10 +194,10 @@ IT-Grundschutz.
 
 | Milestone | Target | BSI relevance |
 |---|---|---|
-| v3.0 — Production stable, API frozen | 2026-04 (shipped) | Core kernel, 576+ tests, 91% coverage — baseline for assessment |
+| v3.0 — Production stable, API frozen | 2026-04 (shipped) | Core kernel, API freeze — baseline for assessment |
 | v3.0.x — Hardening + compliance audit | 2026-04 (shipped) | All customer-facing surfaces verified, self-contained HTML reports |
-| v3.1 — Linux Foundation Europe application | 2026-Q3 | EU-governed project stewardship |
-| v3.2 — BSI IT-Grundschutz formal assessment | 2026-Q4 | Formal assessment against IT-Grundschutz |
+| v3.1 — The Auditor Release | 2026-04 (shipped) | 686 tests, 100% line+branch coverage, signed PDF evidence packs, `sentinel ci-check`, honest-scope framing |
+| v3.2 — LF Europe + BSI IT-Grundschutz | 2026-Q3/Q4 | EU-governed project stewardship and formal assessment |
 | v4.0 — SovereignRouter | 2026–2027 | Policy-driven decision system selection |
 
 ---

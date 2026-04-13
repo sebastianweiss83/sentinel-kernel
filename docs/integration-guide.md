@@ -50,11 +50,23 @@ Every integration PR must include:
 4. Override — second linked trace entry, original untouched
 5. EU AI Act fields — all mandatory fields present and non-null
 
-## Planned integrations
+## Shipped integrations
 
-| Framework | Status | Notes |
+| Framework | Extra | Notes |
 |---|---|---|
-| LangChain callback handler | v0.3 | Wraps any LangChain agent or chain |
-| LangGraph | v0.3 | State machine agents |
-| OpenTelemetry export | v0.3 | Complements LangFuse and Grafana |
-| AutoGen | v0.4 | Multi-agent coordination |
+| LangChain callback handler | `sentinel-kernel[langchain]` | Wraps any LangChain agent or chain |
+| CrewAI | `sentinel-kernel[crewai]` | Task callback for multi-agent crews |
+| AutoGen | `sentinel-kernel[autogen]` | Agent hook for multi-agent coordination |
+| Haystack | `sentinel-kernel[haystack]` | Component wrapper for deepset pipelines |
+| LangFuse | `sentinel-kernel[langfuse]` | Sovereignty panel widget (self-contained HTML) |
+| OpenTelemetry export | `sentinel-kernel[otel]` | Span exporter — complements LangFuse and Grafana |
+| Prometheus textfile | `sentinel-kernel[prometheus]` | Sovereignty score, latency, decision counts |
+| FastAPI / Starlette | `sentinel-kernel[fastapi]` | Middleware |
+| Django | `sentinel-kernel[django]` | Middleware |
+| Jupyter | `sentinel-kernel[jupyter]` | Interactive widget |
+
+## Postponed integrations
+
+- **LangGraph** — state-machine agent framework. Listed in CHANGELOG
+  v3.1.0 `Intentionally postponed to v3.2 or later`.
+- **PydanticAI** — same postponement window.

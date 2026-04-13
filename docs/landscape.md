@@ -13,7 +13,7 @@ Sentinel sits at the intersection of LLM tracing and enterprise governance. This
 | **Enterprise Platforms** | Proprietary full-stack AI platforms with built-in decision layers | End-to-end AI deployment with vendor-controlled decision recording | **Designed for** — sovereign decision record layer for deployments where proprietary platforms are jurisdictionally excluded |
 | **Prompt Management** | Langfuse Prompt Mgmt, PromptLayer, Humanloop | Version prompts, A/B test, human-in-loop iteration | **No** — does not manage prompts or do prompt engineering |
 | **Eval Frameworks** | DeepEval, RAGAS, UpTrain | LLM output quality scoring, RAG evaluation | **No** — does not score LLM quality or run evals |
-| **Observability** | OpenTelemetry, Grafana, Datadog | General infrastructure monitoring, distributed tracing | **Partial** — OTel export planned as optional extra; traces are currently native JSON/NDJSON |
+| **Observability** | OpenTelemetry, Grafana, Datadog | General infrastructure monitoring, distributed tracing | **Complementary** — OTel export shipped as `sentinel-kernel[otel]`; native JSON/NDJSON remains the primary format |
 
 **Relationship key:** *Complementary* = works alongside. *Upstream* = Sentinel wraps or builds on it. *Downstream* = consumes Sentinel output. *Adjacent* = different problem, no overlap. *Designed for* = Sentinel addresses this category's gap.
 
@@ -39,13 +39,19 @@ Sentinel wraps agent function calls. It does not require replacing your existing
 
 | If you use | Sentinel integrates via |
 |---|---|
-| LangGraph / CrewAI / AutoGen | `@sentinel.trace` decorator on agent entry points |
+| LangChain | `sentinel-kernel[langchain]` — shipped callback handler |
+| CrewAI / AutoGen | `sentinel-kernel[crewai]` / `[autogen]` — shipped task hooks |
+| Haystack | `sentinel-kernel[haystack]` — shipped component wrapper |
+| LangFuse | `sentinel-kernel[langfuse]` — shipped sovereignty panel |
+| OpenTelemetry | `sentinel-kernel[otel]` — shipped span exporter |
+| Prometheus | `sentinel-kernel[prometheus]` — shipped textfile collector |
+| FastAPI / Django / Jupyter | `[fastapi]` / `[django]` / `[jupyter]` — shipped middlewares |
 | Any LLM provider | Model metadata recorded in trace (set explicitly) |
 | OPA / Rego policies | `LocalRegoEvaluator` — in-process, no network |
 | Python rule functions | `SimpleRuleEvaluator` — zero dependencies |
-| OpenTelemetry | Planned export as optional extra (`sentinel-kernel[otel]`) |
 
-Framework-specific integration helpers (LangChain, LangGraph) are planned for v0.3.
+LangGraph and PydanticAI integrations are explicitly postponed — see
+the `Intentionally postponed` section of the v3.1.0 CHANGELOG entry.
 
 ---
 
@@ -53,11 +59,14 @@ Framework-specific integration helpers (LangChain, LangGraph) are planned for v0
 
 ```
 Agent → sentinel.trace() → SQLite / NDJSON trace
-                ↓ (planned)
+                ↓ (optional)
            OTEL → Langfuse / Grafana
 ```
 
-Today, traces are written to local storage only. OpenTelemetry export is a planned optional extra (`sentinel-kernel[otel]`) — not yet implemented.
+Traces are always written to local sovereign storage first. OpenTelemetry
+export is shipped as an optional extra (`sentinel-kernel[otel]`) and
+runs downstream of the local write — the local record is the source of
+truth and cannot be gated by the exporter.
 
 ---
 

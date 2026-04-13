@@ -11,7 +11,7 @@ commercial trademark holder.
 The Sentinel name is intended to be held by the governing foundation
 once established, not by any commercial entity. The current plan is
 transfer to Linux Foundation Europe once the project meets the
-stewardship requirements (target v2.0 — see
+stewardship requirements (target v3.2 — see
 [`docs/lf-europe-application/README.md`](lf-europe-application/README.md)).
 
 ## Why no trademark yet

@@ -52,8 +52,9 @@ licence and trademark policy.
 
 ## Becoming a design partner
 
-Design partners shape the v0.1 → v1.0 protocol. Their production requirements
-determine what Sentinel needs to handle.
+Design partners shape the post-v3.1 roadmap — the BSI profile, the
+LF Europe submission, the first lighthouse deployments. Their
+production requirements determine what Sentinel needs to handle.
 
 To discuss design partner status, open an issue on GitHub.
 

@@ -24,7 +24,7 @@ Maintainer: Sebastian Weiss ([@sebastianweiss83](https://github.com/sebastianwei
 
 **Protocol changes require an RFC** — trace schema, `StorageBackend` interface, `PolicyEvaluator` contract, sovereignty assertions, governance changes. Process: author posts `docs/rfcs/RFC-[NNN]-[title].md`, opens a GitHub Discussion, 14-day comment period, maintainer decides, rationale recorded permanently.
 
-**Releases** follow [Semantic Versioning](https://semver.org/). Breaking changes before 1.0 are expected. Criteria in [docs/project-status.md](docs/project-status.md).
+**Releases** follow [Semantic Versioning](https://semver.org/). The public API is frozen as of v3.0 — see [docs/api-stability.md](docs/api-stability.md) for the STABLE / BETA / EXPERIMENTAL surface. Breaking changes to STABLE APIs require a major version bump and a minimum six-month deprecation notice.
 
 ---
 

@@ -266,8 +266,8 @@ market thesis, lives in [docs/roadmap.md](docs/roadmap.md).
 | **v2.3** | ✓ shipped | LangFuse sovereignty panel |
 | **v2.4** | ✓ shipped | Rust RFC-001 implementation |
 | **v3.0** | ✓ shipped | API frozen, BSI pre-engagement package |
-| **v3.1** | Q3 2026 | LF Europe application |
-| **v3.2** | Q4 2026 | BSI IT-Grundschutz assessment |
+| **v3.1** | ✓ shipped | The Auditor Release — evidence pack, ci-check, runtime briefing |
+| **v3.2** | Q3–Q4 2026 | LF Europe application + BSI IT-Grundschutz assessment |
 | **v4.0** | 2026-27 | SovereignRouter |
 
 ## EU AI Act compliance

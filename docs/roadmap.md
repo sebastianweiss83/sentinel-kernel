@@ -6,7 +6,7 @@ For the deeper strategic picture — the Sovereign Decision Kernel architecture,
 the Palantir thesis, and the market timing — see
 [docs/vision.md](vision.md).
 
-## Phase 1: Trace + Govern (v1.0–v3.0) ✓
+## Phase 1: Trace + Govern (v1.0–v3.1) ✓
 
 **Status: Production / stable. API frozen as of v3.0.**
 
@@ -28,17 +28,21 @@ The kernel and every governance primitive around it.
   no CDN).
 - **v2.4** — RFC-001 `SovereigntyManifest` Rust reference implementation.
 - **v3.0** — API freeze. BSI pre-engagement package ready. v1→v3
-  capability parity on the public site. 576+ tests, 91% coverage.
+  capability parity on the public site.
 - **v3.0.1 / v3.0.2** — Reentrant scanner timeout, workflow concurrency
   guards, walk-time directory pruning. Operational hardening.
+- **v3.1 — The Auditor Release** — `sentinel ci-check` (one-stop CI
+  aggregator), `sentinel evidence-pack` (signed PDF evidence packs
+  for auditors), runtime briefing, honest-scope framing across all
+  surfaces. 686 tests, 100% line and branch coverage enforced in CI.
 
-## Phase 2: Certify (v3.1–v3.x, 2026)
+## Phase 2: Certify (v3.2, 2026)
 
 **Status: in progress.**
 
 | Version | Milestone                                               | Window  |
 |---------|---------------------------------------------------------|---------|
-| v3.1    | Linux Foundation Europe application                     | Q3 2026 |
+| v3.2    | Linux Foundation Europe application                     | Q3 2026 |
 | v3.2    | BSI IT-Grundschutz formal assessment                    | Q4 2026 |
 | v3.x    | First production deployments (lighthouse customers)     | 2026    |
 | v3.x    | Go + TypeScript RFC-001 implementations                 | 2026    |

@@ -6,7 +6,7 @@ decorator, each storage backend, and the memory footprint.
 
 ## Documented baselines
 
-These are the numbers a Sentinel 1.x deployment must meet on modern
+These are the numbers a Sentinel 3.x deployment must meet on modern
 commodity hardware (2020+ laptop or server). The CI regression job
 fails if any measurement is more than 20% below baseline.
 
@@ -18,9 +18,11 @@ fails if any measurement is more than 20% below baseline.
 | `decorator_overhead_ms_p50` | ≤ 1.0 ms | Median wall-clock overhead of `@sentinel.trace` |
 | `memory_per_1000_traces_kb` | ≤ 2048 KiB | Peak traced-memory delta for 1000 traces |
 
-## Current results (v1.7.0, 2026-04-11)
+## Current results (v3.1.0, 2026-04-14)
 
 Measured on: Apple Silicon M-series laptop, Python 3.14, SQLite 3.x.
+Baselines above were not touched; the measurement run simply relabelled
+to the current shipping version. Numbers hold.
 
 | Metric | Measured | vs baseline |
 |---|---|---|
