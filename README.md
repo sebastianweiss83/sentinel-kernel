@@ -335,6 +335,13 @@ Your business logic
 - Zero US CLOUD Act exposure
 - Full offline / air-gapped operation
 
+## Runtime Briefing
+
+[Sentinel Runtime Briefing](https://sebastianweiss83.github.io/sentinel-kernel/runtime-briefing.html)
+— operating picture, runtime walkthrough, decision record, evidence
+route, deployment posture, and scope. Dark and light mode, keyboard
+navigable, no framework, no tracking.
+
 ## Why it works for any autonomous system
 
 The EU AI Act does not regulate language models. It regulates decisions.
