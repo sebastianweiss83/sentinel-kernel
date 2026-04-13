@@ -14,14 +14,7 @@ and a signed PDF evidence pack for auditors.
 
 ### Added
 
-- **`sentinel evidence-pack`** — new CLI command that generates a
-  self-contained, tamper-evident PDF evidence pack for auditors.
-  Includes cover page, executive summary, EU AI Act / DORA / NIS2
-  coverage, trace samples, SHA-256 hash manifest with a single pack
-  digest, sovereign attestation appendix, and dependency
-  sovereignty scan. Optional extra: `pip install sentinel-kernel[pdf]`
-  (pulls `reportlab`, BSD-3-Clause, UK-based, pure Python,
-  air-gapped capable).
+- `sentinel evidence-pack` — signed, self-contained PDF evidence pack for auditors. Cover, executive summary, EU AI Act / DORA / NIS2 coverage, trace samples, hash manifest with pack digest, sovereign attestation appendix, dependency sovereignty scan. Optional extra `sentinel-kernel[pdf]` (reportlab, BSD-3-Clause, UK-based, pure Python, air-gapped)
 - **`sentinel ci-check`** — new one-stop CI/CD command that
   aggregates the EU AI Act compliance snapshot, runtime sovereignty
   scan, and (optional) manifesto check into a single exit code.

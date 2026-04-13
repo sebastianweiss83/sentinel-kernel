@@ -335,6 +335,10 @@ Your business logic
 - Zero US CLOUD Act exposure
 - Full offline / air-gapped operation
 
+## Runtime Briefing
+
+[Sentinel Runtime Briefing](/docs/runtime-briefing.html) — interactive architecture explainer.
+
 ## Why it works for any autonomous system
 
 The EU AI Act does not regulate language models. It regulates decisions.
