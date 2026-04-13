@@ -12,15 +12,15 @@
 | Tests | 686 passing |
 | Coverage | unknown |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-14 00:44 UTC |
+| Last updated | 2026-04-14 00:52 UTC |
 
 ## Last 5 commits
 
+- `c2cf531` docs: remove broken Runtime Briefing link from README
 - `3f6dd57` docs: tighten evidence-pack changelog bullet + add Runtime Briefing link
 - `b3770d8` fix: skip evidence-pack render tests when reportlab is absent
 - `7b86016` feat: v3.1.0 — the auditor release
 - `bee029e` fix: complete design token sweep — zero old green (#00d084) remaining
-- `c22ffbf` docs: update repo governance with coverage enforcement + onboarding details
 
 ## Open issues
 
