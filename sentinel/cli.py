@@ -18,6 +18,7 @@ import argparse
 import importlib.util
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -30,7 +31,11 @@ def main(argv: list[str] | None = None) -> int:
 
     parser = argparse.ArgumentParser(
         prog="sentinel",
-        description="Sentinel — Sovereign decision tracing for any autonomous system",
+        description=(
+            "Sentinel — Sovereign decision trace and policy enforcement layer "
+            "for autonomous systems. Supports EU AI Act Art. 12/13/14/17 "
+            "evidence. Not a full compliance solution."
+        ),
     )
     parser.add_argument(
         "--version",
@@ -192,6 +197,56 @@ def main(argv: list[str] | None = None) -> int:
     p_mcheck.add_argument("--json", action="store_true", help="Emit JSON")
     p_mcheck.add_argument("--repo", default=".", help="Repository root")
 
+    # --- ci-check -----------------------------------------------------------
+    p_ci = sub.add_parser(
+        "ci-check",
+        help="One-stop CI/CD check — EU AI Act + sovereignty scan + optional manifesto",
+    )
+    p_ci.add_argument(
+        "--manifesto",
+        default=None,
+        help="Optional manifesto reference (module:Class or path.py:Class)",
+    )
+    p_ci.add_argument("--repo", default=".", help="Repository root for manifesto check")
+    p_ci.add_argument("--json", action="store_true", help="Emit JSON instead of text")
+
+    # --- evidence-pack ------------------------------------------------------
+    p_ep = sub.add_parser(
+        "evidence-pack",
+        help="Generate a signed PDF evidence pack for auditors",
+    )
+    p_ep.add_argument("--output", required=True, help="Output PDF path")
+    p_ep.add_argument("--since", help="ISO 8601 — window start (default: no lower bound)")
+    p_ep.add_argument("--until", help="ISO 8601 — window end (default: no upper bound)")
+    p_ep.add_argument("--project", help="Filter by project name")
+    p_ep.add_argument(
+        "--financial-sector",
+        action="store_true",
+        help="Include the DORA section",
+    )
+    p_ep.add_argument(
+        "--critical-infrastructure",
+        action="store_true",
+        help="Include the NIS2 section",
+    )
+    p_ep.add_argument(
+        "--max-traces",
+        type=int,
+        default=10_000,
+        help="Maximum number of traces to include (default 10000)",
+    )
+    p_ep.add_argument("--db", help="SQLite path (default: in-memory)")
+    p_ep.add_argument(
+        "--manifesto",
+        default=None,
+        help="Optional manifesto reference (module:Class or path.py:Class)",
+    )
+    p_ep.add_argument(
+        "--title",
+        default="Sentinel Evidence Pack",
+        help="Pack title used on the cover page",
+    )
+
     args = parser.parse_args(argv)
 
     if args.command == "demo":
@@ -239,6 +294,10 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     if args.command == "keygen":
         return _cmd_keygen(args)
+    if args.command == "ci-check":
+        return _cmd_ci_check(args)
+    if args.command == "evidence-pack":
+        return _cmd_evidence_pack(args)
 
     parser.print_help()
     return 1
@@ -713,6 +772,104 @@ def _cmd_manifesto_check(args: argparse.Namespace) -> int:
     else:
         print(report.as_text())
     return 0
+
+
+def _cmd_ci_check(args: argparse.Namespace) -> int:
+    from sentinel.ci import run_ci_checks
+
+    sentinel = _make_default_sentinel()
+
+    manifesto_instance = None
+    if args.manifesto:
+        cls = _load_manifesto(args.manifesto)
+        if cls is None:
+            print(
+                f"Could not resolve manifesto: {args.manifesto}",
+                file=sys.stderr,
+            )
+            return 2
+        manifesto_instance = cls()
+
+    result = run_ci_checks(
+        sentinel=sentinel,
+        manifesto=manifesto_instance,
+        repo_root=args.repo,
+    )
+    if args.json:
+        print(result.as_json())
+    else:
+        print(result.as_text())
+    return result.exit_code
+
+
+def _cmd_evidence_pack(args: argparse.Namespace) -> int:
+    from sentinel.compliance.evidence_pack import (
+        EvidencePackOptions,
+        render_evidence_pdf,
+    )
+
+    def _parse_iso(value: str | None, label: str) -> Any:
+        if value is None:
+            return None
+        try:
+            return datetime.fromisoformat(value)
+        except ValueError:
+            print(
+                f"evidence-pack: --{label} is not a valid ISO 8601 "
+                f"datetime: {value}",
+                file=sys.stderr,
+            )
+            return _PARSE_ERROR
+
+    since = _parse_iso(args.since, "since")
+    if since is _PARSE_ERROR:
+        return 2
+    until = _parse_iso(args.until, "until")
+    if until is _PARSE_ERROR:
+        return 2
+
+    storage = SQLiteStorage(args.db) if args.db else SQLiteStorage(":memory:")
+    sentinel = Sentinel(
+        storage=storage,
+        project=args.project or "sentinel-cli",
+        data_residency=DataResidency.LOCAL,
+    )
+
+    manifesto_instance = None
+    if args.manifesto:
+        cls = _load_manifesto(args.manifesto)
+        if cls is None:
+            print(
+                f"Could not resolve manifesto: {args.manifesto}",
+                file=sys.stderr,
+            )
+            return 2
+        manifesto_instance = cls()
+
+    options = EvidencePackOptions(
+        since=since,
+        until=until,
+        project=args.project,
+        financial_sector=args.financial_sector,
+        critical_infrastructure=args.critical_infrastructure,
+        max_traces=args.max_traces,
+        title=args.title,
+    )
+    try:
+        path = render_evidence_pdf(
+            sentinel=sentinel,
+            options=options,
+            output=args.output,
+            manifesto=manifesto_instance,
+        )
+    except ImportError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
+    print(f"Wrote {path}")
+    return 0
+
+
+_PARSE_ERROR = object()
 
 
 def _cmd_keygen(args: argparse.Namespace) -> int:

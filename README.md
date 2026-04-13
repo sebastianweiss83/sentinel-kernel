@@ -1,6 +1,6 @@
 # sentinel-kernel
 
-**The Sovereign Decision Kernel.**
+**The Sovereign Decision Trace & Policy Layer.**
 
 Sentinel sits between your business logic and any autonomous decision
 system. It records every decision — sovereign, tamper-resistant,
@@ -8,6 +8,16 @@ append-only — and enforces what is allowed to be decided.
 
 Works with LLMs, ML classifiers, rule engines, and robotic systems.
 If it decides, Sentinel records it.
+
+**Honest scope.** Sentinel is the enforcement and evidence layer
+for EU AI Act Art. 12 (logging), Art. 13 (transparency), Art. 14
+(human oversight), and Art. 17 (quality management traceability).
+It does **not** replace risk management (Art. 9), data governance
+(Art. 10), technical documentation (Art. 11), accuracy and
+robustness controls (Art. 15), or conformity assessment and
+post-market monitoring. Those are organisational obligations
+above this layer. See [docs/eu-ai-act.md](docs/eu-ai-act.md) for the
+full scoping note.
 
 Three layers:
 
@@ -178,7 +188,7 @@ async def evaluate_procurement(ctx: dict) -> dict:
 | In-process policy evaluation | ✓ | — | — |
 | Air-gapped operation | ✓ | — | — |
 | BSI IT-Grundschutz path | ✓ | — | — |
-| EU AI Act Art. 12 compliance | ✓ | — | Partial |
+| EU AI Act Art. 12/13/14/17 evidence layer | ✓ | — | Partial |
 | Zero hard dependencies | ✓ | — | — |
 | Apache 2.0 permanently | ✓ | Varies | — |
 | US CLOUD Act exposure | **None** | Varies | **Unconditional** |
@@ -374,8 +384,6 @@ pytest
 
 ---
 
----
-
 If Sentinel helps you meet EU AI Act requirements, consider giving
 it a ⭐ on GitHub — it helps others find the project.
 
@@ -392,6 +400,38 @@ No BSL. No commercial-only features. No relicensing. Ever.
 ## Governance
 
 Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confirmed, the project is maintained independently with all significant decisions made through the RFC process in GitHub Discussions.
+
+---
+
+## Plug into CI/CD in 3 lines
+
+```yaml
+- run: pip install sentinel-kernel
+- run: sentinel ci-check --manifesto manifesto.py:MyManifesto
+```
+
+`sentinel ci-check` runs the EU AI Act snapshot, the runtime
+sovereignty scan, and (optionally) a manifesto check in-process,
+with one aggregate exit code. Fully offline, air-gapped capable.
+GitHub Actions, GitLab CI, Jenkins, and pre-commit snippets in
+[docs/ci-cd-integration.md](docs/ci-cd-integration.md).
+
+For auditors: `sentinel evidence-pack --output audit.pdf` generates
+a signed, self-contained PDF evidence pack with EU AI Act / DORA /
+NIS2 coverage, trace hash manifest, and sovereign attestation
+appendix. Install via `pip install sentinel-kernel[pdf]`.
+
+---
+
+## Commercial support
+
+The `sentinel-kernel` layer is Apache 2.0 forever. Commercial support
+— deployment assistance, audit preparation, BSI pre-engagement,
+custom policy libraries, incident response, SLA — is available for
+regulated organisations that need an accountable party behind the
+infrastructure. No hosted SaaS, no commercial fork, no CLOUD Act
+exposure. Contact via GitHub Issues until a formal channel exists.
+See [docs/commercial.md](docs/commercial.md).
 
 ---
 
@@ -415,6 +455,7 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 
 **Integrations & examples**
 - [docs/integration-guide.md](docs/integration-guide.md) — framework integrations
+- [docs/ci-cd-integration.md](docs/ci-cd-integration.md) — GitHub Actions, GitLab CI, Jenkins, pre-commit
 - [docs/real-world-examples.md](docs/real-world-examples.md) — industry scenarios
 - [examples/](examples/) — 13 runnable examples and 7 policy templates
 - [demo/README.md](demo/README.md) — Docker Compose demo environment
@@ -426,6 +467,7 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 - [docs/rfcs/RFC-001-sovereignty-manifest.md](docs/rfcs/RFC-001-sovereignty-manifest.md) — SovereigntyManifest spec (draft)
 - [rust-impl/](rust-impl/) — Rust reference implementation of RFC-001 (experimental)
 - [GOVERNANCE.md](GOVERNANCE.md) — governance model
+- [docs/commercial.md](docs/commercial.md) — commercial support scope
 - [CONTRIBUTING.md](CONTRIBUTING.md) — contribution guide
 - [CHANGELOG.md](CHANGELOG.md) — version history
 

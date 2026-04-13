@@ -9,6 +9,14 @@ Penalties for non-compliant high-risk AI: up to **€15M or 3% of global annual 
 
 Extra-territorial scope: applies to any organisation serving EU users regardless of headquarters location.
 
+## Scope of this layer — read first
+
+Sentinel addresses the technical requirements of Art. 9, 12, 13, 14, and 17. It does not address Art. 10 (data governance), Art. 11 (technical documentation), or Art. 15 (accuracy and robustness) — those require organisation-level action beyond what a middleware kernel can provide.
+
+Whether a specific AI system is classified as high-risk under Annex III depends on its use case. Sentinel does not make that classification. Consult legal counsel to determine your obligations.
+
+Sentinel is the decision trace and policy enforcement layer. It is not a full EU AI Act compliance solution, and no middleware kernel can be. It gives you the technical evidence, enforcement, and oversight hooks that the organisational process above it needs.
+
 ## Article mapping
 
 ### Art. 9 — Risk management
@@ -49,8 +57,3 @@ Providers must implement a quality management system including traceability.
 
 Sentinel produces a continuous, tamper-resistant, append-only record of system behaviour. Every trace includes a schema version, enabling reconstruction of historical system state against the exact policy in force at that time.
 
-## Scoping note
-
-Whether a specific AI system is classified as high-risk under Annex III depends on its use case. Sentinel does not make that classification. Consult legal counsel to determine your obligations.
-
-Sentinel addresses the technical requirements of Art. 9, 12, 13, 14, and 17. It does not address Art. 10 (data governance), Art. 11 (technical documentation), or Art. 15 (accuracy and robustness) — those require organisation-level action beyond what a middleware kernel can provide.

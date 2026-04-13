@@ -7,6 +7,91 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.1.0] — 2026-04-14
+
+**The Auditor Release.** Honest scope framing, visible CI/CD integration,
+and a signed PDF evidence pack for auditors.
+
+### Added
+
+- **`sentinel evidence-pack`** — new CLI command that generates a
+  self-contained, tamper-evident PDF evidence pack for auditors.
+  Includes cover page, executive summary, EU AI Act / DORA / NIS2
+  coverage, trace samples, SHA-256 hash manifest with a single pack
+  digest, sovereign attestation appendix, and dependency
+  sovereignty scan. Optional extra: `pip install sentinel-kernel[pdf]`
+  (pulls `reportlab`, BSD-3-Clause, UK-based, pure Python,
+  air-gapped capable).
+- **`sentinel ci-check`** — new one-stop CI/CD command that
+  aggregates the EU AI Act compliance snapshot, runtime sovereignty
+  scan, and (optional) manifesto check into a single exit code.
+  In-process, zero subprocesses, zero network.
+- **`docs/ci-cd-integration.md`** — plug-and-play copy-paste
+  snippets for GitHub Actions, GitLab CI, Jenkins, and pre-commit,
+  plus the quarterly evidence-pack workflow for audit binders.
+- **`docs/commercial.md`** — credible, non-overpromising commercial
+  support page. Apache 2.0 forever for the core layer; optional
+  commercial support for deployment assistance, audit preparation,
+  BSI pre-engagement, custom policy libraries, incident response,
+  and SLA. No hosted SaaS, no commercial fork, no CLOUD Act
+  exposure. Contact via GitHub Issues until a formal channel
+  exists.
+- **`sentinel/ci/`** — new Python package housing
+  `run_ci_checks()` and result dataclasses. Pure aggregator; no
+  reimplementation of any check logic.
+- **`sentinel/compliance/evidence_pack.py`** — new module housing
+  `render_evidence_pdf()` and pure helpers for window iteration,
+  executive summary aggregation, and hash-manifest digesting.
+
+### Changed
+
+- **Honest scope framing across all surfaces.** Sentinel is
+  consistently described as the *decision trace and policy
+  enforcement layer*, not a full compliance solution. README hero,
+  CLI `--help`, and `docs/eu-ai-act.md` now explicitly name which
+  articles the layer covers (9, 12, 13, 14, 17) and which remain
+  organisational obligations (10, 11, 15, conformity assessment,
+  post-market monitoring).
+- **README**: new „Honest scope" paragraph in the lead, new „Plug
+  into CI/CD in 3 lines" section before the documentation index,
+  new „Commercial support" section next to Governance, updated
+  capability-comparison table row from „EU AI Act Art. 12
+  compliance" → „EU AI Act Art. 12/13/14/17 evidence layer".
+- **`docs/eu-ai-act.md`**: scoping note promoted from the bottom
+  of the page to a new top-of-document „Scope of this layer —
+  read first" section, with one sentence added clarifying that
+  no middleware kernel can be a full compliance solution.
+
+### Fixed
+
+- Cosmetic duplicate `---` separator in README near the
+  „Contributing" section.
+
+### Unchanged
+
+- No changes to core abstractions, trace schema, storage backends,
+  policy evaluators, crypto layer, scanner, or existing compliance
+  checkers. The new features are strictly additive.
+- No changes to `.github/workflows/*`. SLSA provenance and OpenSSF
+  Scorecard are intentionally postponed.
+- No new hard dependencies. `reportlab` is an optional extra.
+
+### Test suite
+
+- 686 tests passing, 5 skipped, **100% line and branch coverage**
+  (up from 642 tests in v3.0.7). 46 new tests across the CI-check
+  and evidence-pack features.
+
+### Intentionally postponed to v3.2 or later
+
+- Agent identity with ML-DSA-65 trace signing (schema-affecting,
+  deferred to preserve v3.1.0 surgical scope).
+- Circuit breaker (in-memory observer) — sound in design, but
+  non-trivial concurrency story, deferred until a larger window.
+- SLSA build provenance in `release.yml`.
+- OpenSSF Scorecard workflow.
+- PydanticAI and LangGraph integrations.
+
 ## [3.0.7] — 2026-04-12
 
 **Technology-agnostic positioning: The Sovereign Decision Kernel.**
