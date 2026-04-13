@@ -237,6 +237,18 @@ def test_iter_traces_in_window_paginates(monkeypatch: pytest.MonkeyPatch) -> Non
 # ---------------------------------------------------------------------------
 
 
+def _require_reportlab() -> None:
+    """Skip the calling test if reportlab is not installed.
+
+    The CI ``Quickstart smoke test`` job installs ``sentinel-kernel``
+    without the ``[dev]`` / ``[pdf]`` extras, so reportlab is absent
+    in that environment. The main ``Test`` job does install
+    ``[dev]`` and will therefore run every render test and hit the
+    ``--cov-fail-under=100`` gate.
+    """
+    pytest.importorskip("reportlab")
+
+
 def _assert_is_pdf(path: Path) -> None:
     assert path.exists()
     data = path.read_bytes()
@@ -245,6 +257,7 @@ def _assert_is_pdf(path: Path) -> None:
 
 
 def test_render_pdf_with_traces(tmp_path: Path) -> None:
+    _require_reportlab()
     sentinel = _make_sentinel()
     _seed(
         sentinel,
@@ -264,6 +277,7 @@ def test_render_pdf_with_traces(tmp_path: Path) -> None:
 
 
 def test_render_pdf_empty_window(tmp_path: Path) -> None:
+    _require_reportlab()
     sentinel = _make_sentinel()
     out = tmp_path / "empty.pdf"
     render_evidence_pdf(
@@ -275,6 +289,7 @@ def test_render_pdf_empty_window(tmp_path: Path) -> None:
 
 
 def test_render_pdf_many_traces_truncates_display(tmp_path: Path) -> None:
+    _require_reportlab()
     sentinel = _make_sentinel()
     # More than 200 to exercise the hash-manifest truncation branch
     # and more than 10 to exercise the "tail" trace-samples branch.
@@ -300,6 +315,7 @@ def test_render_pdf_many_traces_truncates_display(tmp_path: Path) -> None:
 
 
 def test_render_pdf_with_dora_and_nis2(tmp_path: Path) -> None:
+    _require_reportlab()
     sentinel = _make_sentinel()
     _seed(sentinel, [_make_trace()])
     out = tmp_path / "full.pdf"
@@ -325,6 +341,8 @@ def test_render_pdf_with_manifesto(tmp_path: Path) -> None:
         SentinelManifesto,
         ZeroExposure,
     )
+
+    _require_reportlab()
 
     class _MyManifesto(SentinelManifesto):
         jurisdiction = EUOnly()
@@ -354,6 +372,7 @@ def test_render_pdf_with_manifesto(tmp_path: Path) -> None:
 def test_render_pdf_head_tail_overlap_dedup(tmp_path: Path) -> None:
     """Seed 15 traces so head[:10] and tail[-10:] overlap, exercising
     the ``if t.trace_id in seen: continue`` dedup branch."""
+    _require_reportlab()
     sentinel = _make_sentinel()
     base = datetime(2026, 1, 1, tzinfo=UTC)
     _seed(
@@ -378,6 +397,7 @@ def test_render_pdf_head_tail_overlap_dedup(tmp_path: Path) -> None:
 
 def test_render_pdf_trace_without_policy_evaluation(tmp_path: Path) -> None:
     """Cover the ``result = '—'`` fallback when a trace has no policy."""
+    _require_reportlab()
     sentinel = _make_sentinel()
     _seed(sentinel, [_make_trace(policy_result=None)])
     out = tmp_path / "nopolicy.pdf"
@@ -393,6 +413,7 @@ def test_render_pdf_with_critical_path_violation(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Cover the sovereignty-scan violation branch in the PDF."""
+    _require_reportlab()
     from sentinel.compliance import evidence_pack as ep_module
     from sentinel.scanner.runtime import RuntimeScanner, ScanResult
 
@@ -449,6 +470,7 @@ def test_render_pdf_import_error_when_reportlab_missing(
 def test_cli_evidence_pack_happy_path(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    _require_reportlab()
     out = tmp_path / "cli.pdf"
     rc = cli.main(
         [
@@ -468,6 +490,7 @@ def test_cli_evidence_pack_happy_path(
 def test_cli_evidence_pack_with_db_and_window(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
+    _require_reportlab()
     db = tmp_path / "traces.db"
     sentinel = Sentinel(storage=SQLiteStorage(str(db)), project="test-ep")
     sentinel.storage.save(_make_trace())
@@ -537,6 +560,7 @@ def test_cli_evidence_pack_with_valid_manifesto_file(
     tmp_path: Path, capsys: pytest.CaptureFixture[str]
 ) -> None:
     """Cover the ``manifesto_instance = cls()`` branch in _cmd_evidence_pack."""
+    _require_reportlab()
     manifesto_file = tmp_path / "m.py"
     manifesto_file.write_text(
         "from sentinel.manifesto import (\n"
