@@ -12,15 +12,15 @@
 | Tests | 686 passing |
 | Coverage | unknown |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-14 01:17 UTC |
+| Last updated | 2026-04-14 01:33 UTC |
 
 ## Last 5 commits
 
+- `ccf7c2c` docs(briefing): tighten positioning — decision-trace and policy-enforcement layer
 - `2bb5aa2` docs: add Sentinel Runtime Briefing page
 - `c2cf531` docs: remove broken Runtime Briefing link from README
 - `3f6dd57` docs: tighten evidence-pack changelog bullet + add Runtime Briefing link
 - `b3770d8` fix: skip evidence-pack render tests when reportlab is absent
-- `7b86016` feat: v3.1.0 — the auditor release
 
 ## Open issues
 
