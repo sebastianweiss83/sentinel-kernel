@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-14 02:07 UTC_
+_Last generated from HEAD commit: 2026-04-14 02:29 UTC_
 
 ## Version
 
@@ -18,7 +18,7 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 
 | | |
 |---|---|
-| Tests | 686 passing |
+| Tests | 698 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
 
@@ -41,7 +41,7 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
 - **#16** good first issue: Go implementation of RFC-001 _(labels: good first issue)_
 - **#17** good first issue: TypeScript/Node implementation of RFC-001 _(labels: good first issue)_
-- **#19** v3.1: Linux Foundation Europe formal application _(labels: roadmap)_
+- **#19** v3.2: Linux Foundation Europe formal application _(labels: roadmap)_
 - **#20** v3.2: BSI IT-Grundschutz formal assessment submission _(labels: roadmap)_
 - **#21** v3.3: EU-sovereign build pipeline (Phase 3) _(labels: roadmap)_
 - **#24** v4.0: SovereignRouter — policy-driven model selection _(labels: enhancement, roadmap)_

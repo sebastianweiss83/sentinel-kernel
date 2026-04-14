@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.1.0` |
-| Tests | 686 passing |
+| Tests | 698 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-14 02:07 UTC |
+| Last updated | 2026-04-14 02:29 UTC |
 
 ## Last 5 commits
 
+- `8e06ec9` feat(cli): consistent "Open it:" hint across every file-writing command
 - `9c11082` docs: fix sync-all generator drift (coverage, LangGraph, v3.1.0 features)
 - `33023c1` docs: v3.1.0 consistency sweep across evaluator surfaces
 - `ccf7c2c` docs(briefing): tighten positioning — decision-trace and policy-enforcement layer
 - `2bb5aa2` docs: add Sentinel Runtime Briefing page
-- `c2cf531` docs: remove broken Runtime Briefing link from README
 
 ## Open issues
 
@@ -29,7 +29,7 @@
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
 - **#16** good first issue: Go implementation of RFC-001 _(labels: good first issue)_
 - **#17** good first issue: TypeScript/Node implementation of RFC-001 _(labels: good first issue)_
-- **#19** v3.1: Linux Foundation Europe formal application _(labels: roadmap)_
+- **#19** v3.2: Linux Foundation Europe formal application _(labels: roadmap)_
 - **#20** v3.2: BSI IT-Grundschutz formal assessment submission _(labels: roadmap)_
 - **#21** v3.3: EU-sovereign build pipeline (Phase 3) _(labels: roadmap)_
 - **#24** v4.0: SovereignRouter — policy-driven model selection _(labels: enhancement, roadmap)_
