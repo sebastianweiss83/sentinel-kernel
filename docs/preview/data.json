@@ -1,6 +1,6 @@
 {
   "coverage": "91%",
-  "days_to_enforcement": 111,
+  "days_to_enforcement": 110,
   "enforcement_date": "2026-08-02",
   "eu_ai_act": {
     "Art. 10": "HUMAN_ACTION",
