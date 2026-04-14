@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.1.0` |
-| Tests | 698 passing |
+| Tests | 741 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-14 02:29 UTC |
+| Last updated | 2026-04-14 09:52 UTC |
 
 ## Last 5 commits
 
+- `e76485d` feat(pilot): self-serve audit-readiness surface — quickstart, audit-gap, fix
 - `8e06ec9` feat(cli): consistent "Open it:" hint across every file-writing command
 - `9c11082` docs: fix sync-all generator drift (coverage, LangGraph, v3.1.0 features)
 - `33023c1` docs: v3.1.0 consistency sweep across evaluator surfaces
 - `ccf7c2c` docs(briefing): tighten positioning — decision-trace and policy-enforcement layer
-- `2bb5aa2` docs: add Sentinel Runtime Briefing page
 
 ## Open issues
 
