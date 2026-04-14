@@ -483,7 +483,10 @@ def test_cli_evidence_pack_happy_path(
     )
     assert rc == 0
     assert out.exists()
-    assert "Wrote" in capsys.readouterr().out
+    text = capsys.readouterr().out
+    assert "Wrote" in text
+    # v3.1.x — every file-writing command prints a cross-platform open hint.
+    assert f"  → {cli._open_hint(str(out))}" in text
     _assert_is_pdf(out)
 
 

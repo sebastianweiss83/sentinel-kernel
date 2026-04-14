@@ -304,6 +304,42 @@ def main(argv: list[str] | None = None) -> int:
 
 
 # ---------------------------------------------------------------------------
+# Output helpers
+# ---------------------------------------------------------------------------
+
+
+def _open_hint(path: Any) -> str:
+    """
+    Return a platform-appropriate command string to open a local file.
+
+    Used by every CLI command that writes a human-viewable artefact so
+    the user sees a copy-pasteable next step after the ``Wrote <path>``
+    line. Matches the UX pattern introduced in v3.0.3 for
+    ``sentinel demo`` and generalised across all file-producing
+    commands in v3.1.x.
+
+    Behaviour per platform (from ``sys.platform``):
+
+    - ``darwin`` → ``open '<path>'``
+    - ``win32``  → ``start "" "<path>"``
+    - anything else (Linux, BSD, …) → ``xdg-open '<path>'``
+
+    The path is shell-quoted so paths with spaces work unchanged.
+    """
+    path_str = str(path)
+    if sys.platform == "darwin":
+        return f"open '{path_str}'"
+    if sys.platform == "win32":
+        return f'start "" "{path_str}"'
+    return f"xdg-open '{path_str}'"
+
+
+def _print_open_hint(path: Any) -> None:
+    """Print a one-line indented open hint after a ``Wrote`` line."""
+    print(f"  → {_open_hint(path)}")
+
+
+# ---------------------------------------------------------------------------
 # Commands
 # ---------------------------------------------------------------------------
 
@@ -465,7 +501,7 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     print(_row("HTML report generated", ""))
     print()
     print(f"  Report saved: {out_path}")
-    print(f"  Open it:      open '{out_path}'")
+    print(f"  Open it:      {_open_hint(out_path)}")
     print()
     print("  Next steps:   sentinel attestation generate")
     print("                sentinel report --output sovereignty_report.html")
@@ -599,6 +635,7 @@ def _cmd_compliance_check(args: argparse.Namespace) -> int:
             if args.output:
                 unified.save_html(args.output)
                 print(f"Wrote {args.output}")
+                _print_open_hint(args.output)
             else:
                 print(unified._render_html())
         elif args.json:
@@ -606,6 +643,7 @@ def _cmd_compliance_check(args: argparse.Namespace) -> int:
             if args.output:
                 Path(args.output).write_text(content, encoding="utf-8")
                 print(f"Wrote {args.output}")
+                _print_open_hint(args.output)
             else:
                 print(content)
         else:
@@ -613,6 +651,7 @@ def _cmd_compliance_check(args: argparse.Namespace) -> int:
             if args.output:
                 Path(args.output).write_text(content, encoding="utf-8")
                 print(f"Wrote {args.output}")
+                _print_open_hint(args.output)
             else:
                 print(content)
         return 0
@@ -628,6 +667,7 @@ def _cmd_compliance_check(args: argparse.Namespace) -> int:
     if args.output:
         Path(args.output).write_text(content, encoding="utf-8")
         print(f"Wrote {args.output}")
+        _print_open_hint(args.output)
     else:
         print(content)
     return 0
@@ -671,6 +711,7 @@ def _cmd_report(args: argparse.Namespace) -> int:
     if args.output:
         Path(args.output).write_text(html, encoding="utf-8")
         print(f"Wrote {args.output}")
+        _print_open_hint(args.output)
     else:
         print(html)
     return 0
@@ -691,6 +732,7 @@ def _cmd_export(args: argparse.Namespace) -> int:
         project=args.project,
     )
     print(f"Exported {count} traces to {args.output}")
+    _print_open_hint(args.output)
     return 0
 
 
@@ -866,6 +908,7 @@ def _cmd_evidence_pack(args: argparse.Namespace) -> int:
         print(str(exc), file=sys.stderr)
         return 2
     print(f"Wrote {path}")
+    _print_open_hint(path)
     return 0
 
 
@@ -914,6 +957,7 @@ def _cmd_attestation_generate(args: argparse.Namespace) -> int:
     if args.output:
         Path(args.output).write_text(content + "\n", encoding="utf-8")
         print(f"Wrote {args.output}")
+        _print_open_hint(args.output)
     else:
         print(content)
     return 0

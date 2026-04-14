@@ -125,7 +125,10 @@ def test_cli_export_and_import_round_trip(tmp_path: Path, capsys) -> None:
     out_file = tmp_path / "exported.ndjson"
     rc = cli.main(["export", "--output", str(out_file), "--db", str(db)])
     assert rc == 0
-    assert f"Exported 6 traces to {out_file}" in capsys.readouterr().out
+    export_out = capsys.readouterr().out
+    assert f"Exported 6 traces to {out_file}" in export_out
+    # v3.1.x — every file-writing command prints a cross-platform open hint.
+    assert f"  → {cli._open_hint(str(out_file))}" in export_out
     assert out_file.exists()
 
     dst_db = tmp_path / "dest.db"

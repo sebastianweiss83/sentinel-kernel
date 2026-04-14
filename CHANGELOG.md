@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- **Consistent „Open it:" hint across every file-writing CLI command.**
+  After `sentinel report`, `sentinel evidence-pack`,
+  `sentinel compliance check --output`, `sentinel attestation generate
+  --output`, `sentinel export`, and `sentinel demo` write their
+  artefact, each prints a second, indented line with a copy-pasteable
+  open command: `  → open '<path>'` on macOS, `  → xdg-open '<path>'`
+  on Linux, `  → start "" "<path>"` on Windows. One shared helper
+  (`sentinel.cli._open_hint`) owns the platform detection. No command
+  auto-opens the file — the hint is a next-step marker, not an
+  action. Matches the UX pattern introduced in v3.0.3 for
+  `sentinel demo` and generalises it across every file-writing
+  subcommand.
+- **README section „Viewing generated artefacts"**. Documents the
+  hint pattern with five concrete examples, explains why the
+  commands do not auto-open files, and adds an artefact table that
+  makes the distinction between locally-generated artefacts and the
+  hand-authored Runtime Briefing unambiguous.
+
+### Changed
+
+- **Documentation precision between local artefacts and the Runtime
+  Briefing.** The „Runtime Briefing" section in the README now
+  explicitly states that the briefing is a hand-authored GitHub
+  Pages artefact and not produced by any CLI command. The new
+  „Viewing generated artefacts" section immediately after it
+  enumerates every local artefact the CLI can produce and the
+  exact subcommand that writes it.
+
+### Test suite
+
+- 698 tests passing, 100% line and branch coverage (up from 686).
+  12 new tests: three platform branches of `_open_hint` (darwin,
+  win32, linux), `_print_open_hint`, and one hint-presence
+  assertion per file-writing subcommand.
+
 ## [3.1.0] — 2026-04-14
 
 **The Auditor Release.** Honest scope framing, visible CI/CD integration,

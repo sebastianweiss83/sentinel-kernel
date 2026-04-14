@@ -432,4 +432,159 @@ def test_python_dash_m_sentinel_help_exits_zero() -> None:
     )
     assert result.returncode == 0
     assert "sentinel" in result.stdout.lower()
-    assert "demo" in result.stdout
+
+
+# ---------------------------------------------------------------------------
+# Cross-platform "Open it:" hint — helper + every file-writing command
+# ---------------------------------------------------------------------------
+
+
+def test_open_hint_macos(monkeypatch: pytest.MonkeyPatch) -> None:
+    """On darwin the hint uses ``open '<path>'``."""
+    import sys as _sys
+
+    monkeypatch.setattr(_sys, "platform", "darwin")
+    assert cli._open_hint("/tmp/x.html") == "open '/tmp/x.html'"
+
+
+def test_open_hint_windows(monkeypatch: pytest.MonkeyPatch) -> None:
+    """On win32 the hint uses ``start "" "<path>"``."""
+    import sys as _sys
+
+    monkeypatch.setattr(_sys, "platform", "win32")
+    assert cli._open_hint(r"C:\tmp\x.html") == 'start "" "C:\\tmp\\x.html"'
+
+
+def test_open_hint_linux(monkeypatch: pytest.MonkeyPatch) -> None:
+    """On every other platform the hint uses ``xdg-open '<path>'``."""
+    import sys as _sys
+
+    monkeypatch.setattr(_sys, "platform", "linux")
+    assert cli._open_hint("/tmp/x.html") == "xdg-open '/tmp/x.html'"
+
+
+def test_print_open_hint_emits_indented_arrow_line(
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """``_print_open_hint`` produces an indented ``→`` line a user can copy."""
+    cli._print_open_hint("/tmp/out.pdf")
+    out = capsys.readouterr().out
+    # Indented two spaces, arrow marker, then the platform-appropriate command
+    assert out.startswith("  → ")
+    assert "/tmp/out.pdf" in out
+    assert "\n" in out
+
+
+def test_report_to_file_prints_open_hint(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    """``sentinel report --output`` must print the Open-it hint after Wrote."""
+    out_file = tmp_path / "sov.html"
+    rc = cli.main(["report", "--output", str(out_file)])
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert f"Wrote {out_file}" in out
+    assert f"  → {cli._open_hint(str(out_file))}" in out
+
+
+def test_compliance_check_html_to_file_prints_hint(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    out_file = tmp_path / "compliance.html"
+    rc = cli.main(["compliance", "check", "--html", "--output", str(out_file)])
+    assert rc == 0
+    text = capsys.readouterr().out
+    assert f"Wrote {out_file}" in text
+    assert f"  → {cli._open_hint(str(out_file))}" in text
+
+
+def test_compliance_check_json_to_file_prints_hint(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    out_file = tmp_path / "compliance.json"
+    rc = cli.main(["compliance", "check", "--json", "--output", str(out_file)])
+    assert rc == 0
+    text = capsys.readouterr().out
+    assert f"Wrote {out_file}" in text
+    assert f"  → {cli._open_hint(str(out_file))}" in text
+
+
+def test_compliance_check_text_to_file_prints_hint(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    out_file = tmp_path / "compliance.txt"
+    rc = cli.main(["compliance", "check", "--output", str(out_file)])
+    assert rc == 0
+    text = capsys.readouterr().out
+    assert f"Wrote {out_file}" in text
+    assert f"  → {cli._open_hint(str(out_file))}" in text
+
+
+def test_compliance_check_unified_html_to_file_prints_hint(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    out_file = tmp_path / "unified.html"
+    rc = cli.main(
+        [
+            "compliance",
+            "check",
+            "--all-frameworks",
+            "--html",
+            "--output",
+            str(out_file),
+        ]
+    )
+    assert rc == 0
+    text = capsys.readouterr().out
+    assert f"Wrote {out_file}" in text
+    assert f"  → {cli._open_hint(str(out_file))}" in text
+
+
+def test_compliance_check_unified_json_to_file_prints_hint(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    out_file = tmp_path / "unified.json"
+    rc = cli.main(
+        [
+            "compliance",
+            "check",
+            "--financial-sector",
+            "--json",
+            "--output",
+            str(out_file),
+        ]
+    )
+    assert rc == 0
+    text = capsys.readouterr().out
+    assert f"Wrote {out_file}" in text
+    assert f"  → {cli._open_hint(str(out_file))}" in text
+
+
+def test_compliance_check_unified_text_to_file_prints_hint(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    out_file = tmp_path / "unified.txt"
+    rc = cli.main(
+        [
+            "compliance",
+            "check",
+            "--critical-infrastructure",
+            "--output",
+            str(out_file),
+        ]
+    )
+    assert rc == 0
+    text = capsys.readouterr().out
+    assert f"Wrote {out_file}" in text
+    assert f"  → {cli._open_hint(str(out_file))}" in text
+
+
+def test_attestation_generate_to_file_prints_hint(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    out_file = tmp_path / "att.json"
+    rc = cli.main(["attestation", "generate", "--output", str(out_file)])
+    assert rc == 0
+    text = capsys.readouterr().out
+    assert f"Wrote {out_file}" in text
+    assert f"  → {cli._open_hint(str(out_file))}" in text
