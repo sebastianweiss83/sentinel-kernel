@@ -210,12 +210,75 @@ def main(argv: list[str] | None = None) -> int:
     p_ci.add_argument("--repo", default=".", help="Repository root for manifesto check")
     p_ci.add_argument("--json", action="store_true", help="Emit JSON instead of text")
 
+    # --- quickstart ---------------------------------------------------------
+    p_qs = sub.add_parser(
+        "quickstart",
+        help="Scaffold a local pilot: hello_sentinel.py + ./.sentinel/",
+    )
+    p_qs.add_argument(
+        "--force",
+        action="store_true",
+        help="Regenerate hello_sentinel.py even if it already exists",
+    )
+
+    # --- audit-gap ----------------------------------------------------------
+    p_ag = sub.add_parser(
+        "audit-gap",
+        help="Show what else your auditor will ask for (audit readiness score)",
+    )
+    p_ag.add_argument(
+        "--profile",
+        default="default",
+        choices=sorted({"default", "landesbank", "insurer", "public-sector"}),
+        help="Sector profile (default: default)",
+    )
+    p_ag.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit JSON instead of text",
+    )
+
+    # --- fix ----------------------------------------------------------------
+    p_fix = sub.add_parser(
+        "fix",
+        help="Close library-level audit-gap items",
+    )
+    fix_sub = p_fix.add_subparsers(dest="fix_command")
+    p_fix_ks = fix_sub.add_parser(
+        "kill-switch",
+        help="Register an Art. 14 kill switch handler",
+    )
+    p_fix_ks.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit JSON instead of text",
+    )
+    p_fix_ret = fix_sub.add_parser(
+        "retention",
+        help="Record a retention policy for the trace record",
+    )
+    p_fix_ret.add_argument(
+        "--days",
+        type=int,
+        default=2555,
+        help="Retention days (default: 2555, ~7 years)",
+    )
+    p_fix_ret.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit JSON instead of text",
+    )
+
     # --- evidence-pack ------------------------------------------------------
     p_ep = sub.add_parser(
         "evidence-pack",
         help="Generate a signed PDF evidence pack for auditors",
     )
-    p_ep.add_argument("--output", required=True, help="Output PDF path")
+    p_ep.add_argument(
+        "--output",
+        default=None,
+        help="Output PDF path (default: audit.pdf in the current directory)",
+    )
     p_ep.add_argument("--since", help="ISO 8601 — window start (default: no lower bound)")
     p_ep.add_argument("--until", help="ISO 8601 — window end (default: no upper bound)")
     p_ep.add_argument("--project", help="Filter by project name")
@@ -298,6 +361,17 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_ci_check(args)
     if args.command == "evidence-pack":
         return _cmd_evidence_pack(args)
+    if args.command == "quickstart":
+        return _cmd_quickstart(args)
+    if args.command == "audit-gap":
+        return _cmd_audit_gap(args)
+    if args.command == "fix":
+        if args.fix_command == "kill-switch":
+            return _cmd_fix_kill_switch(args)
+        if args.fix_command == "retention":
+            return _cmd_fix_retention(args)
+        p_fix.print_help()
+        return 1
 
     parser.print_help()
     return 1
@@ -844,6 +918,37 @@ def _cmd_ci_check(args: argparse.Namespace) -> int:
     return result.exit_code
 
 
+def _resolve_evidence_pack_db(explicit: str | None) -> str:
+    """
+    Pick which SQLite path ``sentinel evidence-pack`` should read from.
+
+    Priority:
+      1. Explicit ``--db`` flag (honoured verbatim).
+      2. The pilot database at ``./.sentinel/traces.db`` if it exists
+         — so the golden path `quickstart → run → evidence-pack` just
+         works without the user having to pass flags.
+      3. In-memory fallback (empty pack) — preserves legacy behaviour
+         for callers who invoke evidence-pack as a smoke check.
+    """
+    if explicit is not None:
+        return explicit
+
+    from sentinel.pilot.config import default_pilot_paths
+
+    _, _, pilot_db = default_pilot_paths()
+    if pilot_db.exists():
+        return str(pilot_db)
+
+    return ":memory:"
+
+
+def _resolve_evidence_pack_output(explicit: str | None) -> Path:
+    """Default the evidence pack output path to ./audit.pdf in cwd."""
+    if explicit is not None:
+        return Path(explicit)
+    return Path.cwd() / "audit.pdf"
+
+
 def _cmd_evidence_pack(args: argparse.Namespace) -> int:
     from sentinel.compliance.evidence_pack import (
         EvidencePackOptions,
@@ -870,7 +975,7 @@ def _cmd_evidence_pack(args: argparse.Namespace) -> int:
     if until is _PARSE_ERROR:
         return 2
 
-    storage = SQLiteStorage(args.db) if args.db else SQLiteStorage(":memory:")
+    storage = SQLiteStorage(_resolve_evidence_pack_db(args.db))
     sentinel = Sentinel(
         storage=storage,
         project=args.project or "sentinel-cli",
@@ -897,11 +1002,12 @@ def _cmd_evidence_pack(args: argparse.Namespace) -> int:
         max_traces=args.max_traces,
         title=args.title,
     )
+    output_path = _resolve_evidence_pack_output(args.output)
     try:
         path = render_evidence_pdf(
             sentinel=sentinel,
             options=options,
-            output=args.output,
+            output=str(output_path),
             manifesto=manifesto_instance,
         )
     except ImportError as exc:
@@ -909,6 +1015,8 @@ def _cmd_evidence_pack(args: argparse.Namespace) -> int:
         return 2
     print(f"Wrote {path}")
     _print_open_hint(path)
+    print()
+    print("  next    sentinel audit-gap     # see what else your auditor will ask for")
     return 0
 
 
@@ -978,6 +1086,134 @@ def _cmd_attestation_verify(args: argparse.Namespace) -> int:
     if result.what_failed:
         print(f"what_failed:    {result.what_failed}")
     return 0 if result.valid else 1
+
+
+# ---------------------------------------------------------------------------
+# Self-serve pilot commands
+# ---------------------------------------------------------------------------
+
+
+def _cmd_quickstart(args: argparse.Namespace) -> int:
+    from sentinel.pilot.quickstart import run_quickstart
+    from sentinel.pilot.render import render_quickstart_text
+
+    result = run_quickstart(force=args.force)
+    sys.stdout.write(render_quickstart_text(result))
+    return 0
+
+
+def _cmd_audit_gap(args: argparse.Namespace) -> int:
+    from sentinel.pilot.audit_gap import compute_audit_gap
+    from sentinel.pilot.config import default_pilot_paths, load_pilot_config
+    from sentinel.pilot.render import render_audit_gap_text
+
+    _, config_path, db_path = default_pilot_paths()
+
+    try:
+        cfg = load_pilot_config(config_path)
+    except ValueError as exc:
+        print(f"audit-gap: {exc}", file=sys.stderr)
+        return 2
+
+    trace_count = _count_traces_at(db_path)
+    storage_path = (
+        cfg.storage_path if cfg is not None else str(db_path)
+    )
+
+    report = compute_audit_gap(
+        config=cfg,
+        trace_count=trace_count,
+        storage_path=storage_path,
+        profile=args.profile,
+    )
+
+    if args.json:
+        print(json.dumps(report.to_dict(), indent=2, sort_keys=True))
+        return 0
+
+    sys.stdout.write(render_audit_gap_text(report))
+    return 0
+
+
+def _cmd_fix_kill_switch(args: argparse.Namespace) -> int:
+    from sentinel.pilot.fixes import fix_kill_switch
+    from sentinel.pilot.render import render_fix_text
+
+    result = fix_kill_switch()
+    if args.json:
+        print(
+            json.dumps(
+                {
+                    "fix_id": result.fix_id,
+                    "succeeded": result.succeeded,
+                    "points_delta": result.points_delta,
+                    "detail": result.detail,
+                    "artefact_path": str(result.artefact_path)
+                    if result.artefact_path
+                    else None,
+                    "config_path": str(result.config_path)
+                    if result.config_path
+                    else None,
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0 if result.succeeded else 1
+
+    sys.stdout.write(render_fix_text(result))
+    return 0 if result.succeeded else 1
+
+
+def _cmd_fix_retention(args: argparse.Namespace) -> int:
+    from sentinel.pilot.fixes import fix_retention
+    from sentinel.pilot.render import render_fix_text
+
+    result = fix_retention(days=args.days)
+    if args.json:
+        print(
+            json.dumps(
+                {
+                    "fix_id": result.fix_id,
+                    "succeeded": result.succeeded,
+                    "points_delta": result.points_delta,
+                    "detail": result.detail,
+                    "config_path": str(result.config_path)
+                    if result.config_path
+                    else None,
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0 if result.succeeded else 1
+
+    sys.stdout.write(render_fix_text(result))
+    return 0 if result.succeeded else 1
+
+
+def _count_traces_at(db_path: Path) -> int:
+    """
+    Cheap, safe trace count for audit-gap.
+
+    Uses a read-only SQLite connection so we never accidentally
+    create the database as a side effect of running audit-gap on a
+    fresh directory. Returns 0 on any error — a missing/empty DB is
+    indistinguishable from "no traces yet," which is what audit-gap
+    wants to see.
+    """
+    if not db_path.exists():
+        return 0
+    try:
+        import sqlite3
+
+        with sqlite3.connect(f"file:{db_path}?mode=ro", uri=True) as conn:
+            row = conn.execute(
+                "SELECT COUNT(*) FROM decision_traces"
+            ).fetchone()
+            return int(row[0]) if row else 0
+    except Exception:  # pragma: no cover - defensive only
+        return 0
 
 
 # ---------------------------------------------------------------------------

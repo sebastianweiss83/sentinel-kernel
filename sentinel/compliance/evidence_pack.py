@@ -46,8 +46,17 @@ if TYPE_CHECKING:
 
 
 _MISSING_DEP_MESSAGE = (
-    "Sentinel evidence-pack requires reportlab. Install the extra:\n"
-    "    pip install sentinel-kernel[pdf]"
+    "sentinel: evidence-pack needs the [pdf] extra (reportlab).\n"
+    "\n"
+    "  pipx (recommended)\n"
+    "    pipx install 'sentinel-kernel[pdf]' --force\n"
+    "\n"
+    "  pip (venv, Docker, CI)\n"
+    "    pip install 'sentinel-kernel[pdf]'\n"
+    "\n"
+    "  reportlab is BSD-3, UK-based, pure Python. The trace,\n"
+    "  policy, and storage paths stay dependency-free — the\n"
+    "  extra only affects PDF rendering."
 )
 
 #: Storage pagination size for trace window iteration. Overridable
@@ -468,6 +477,24 @@ def render_evidence_pdf(
             flow.append(
                 Paragraph(f"VIOLATION: {_esc(violation)}", mono)
             )
+
+    # --- Audit-gap footer -------------------------------------------------
+    # One-line pointer to `sentinel audit-gap` so auditors reading the
+    # PDF see the path to the remaining (non-library) obligations.
+    # Deliberately subtle — this is the PDF conversion trigger, and it
+    # must not look like marketing.
+    flow.append(Spacer(1, 6 * mm))
+    flow.append(
+        Paragraph(
+            "<i>This pack documents Art. 12 / 13 / 14 / 17 technical "
+            "controls only. Run "
+            "<font face='Courier'>sentinel audit-gap</font> to see the "
+            "deployment and organisational obligations that remain. A "
+            "30-minute walkthrough for regulated EU buyers is available "
+            "at https://sentinel-kernel.eu/pilot — no slides, no sales.</i>",
+            body,
+        )
+    )
 
     doc.build(flow)
     return output_path

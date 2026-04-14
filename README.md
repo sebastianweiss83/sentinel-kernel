@@ -1,45 +1,33 @@
 # sentinel-kernel
 
-**The Sovereign Decision Trace & Policy Layer.**
+**Prove your AI decisions to the auditor. In Python. In five minutes.**
 
-Sentinel sits between your business logic and any autonomous decision
-system. It records every decision — sovereign, tamper-resistant,
-append-only — and enforces what is allowed to be decided.
+One decorator. One command. One PDF evidence pack. Runs fully offline.
+No US cloud dependency. Apache 2.0, forever.
 
-Works with LLMs, ML classifiers, rule engines, and robotic systems.
-If it decides, Sentinel records it.
+```bash
+pipx install 'sentinel-kernel[pdf]'
+sentinel quickstart
+python hello_sentinel.py
+sentinel evidence-pack          # produces audit.pdf
+sentinel audit-gap              # shows what else your auditor will ask for
+```
 
-**Honest scope.** Sentinel is the enforcement and evidence layer
-for EU AI Act Art. 12 (logging), Art. 13 (transparency), Art. 14
-(human oversight), and Art. 17 (quality management traceability).
-It does **not** replace risk management (Art. 9), data governance
-(Art. 10), technical documentation (Art. 11), accuracy and
-robustness controls (Art. 15), or conformity assessment and
-post-market monitoring. Those are organisational obligations
-above this layer. See [docs/eu-ai-act.md](docs/eu-ai-act.md) for the
-full scoping note.
+Sentinel is the enforcement and evidence layer for EU AI Act Art. 12
+(logging), Art. 13 (transparency), Art. 14 (human oversight), and
+Art. 17 (quality management traceability). It does **not** replace
+Art. 9 risk management, Art. 10 data governance, Art. 11 technical
+documentation, or Art. 15 accuracy and robustness controls — those
+are organisational obligations above this layer. Run `sentinel
+audit-gap` to see the exact split.
 
-Three layers:
-
-- **Trace** — every decision recorded, sovereign, tamper-resistant
-- **Govern** — what may be decided, policy-as-code, kill switch
-- **Route** *(v4.0)* — which system decides what, based on sovereignty
-  policy and data classification
-
-No vendor lock-in. No US CLOUD Act. No deployment strategists.
-Apache 2.0, permanently.
-
-EU AI Act Annex III enforcement: **2 August 2026**. Sentinel turns that
-legal requirement into a technical fact — in five minutes, with zero
-cloud dependencies, in any environment including air-gapped.
-
-→ Full vision: [docs/vision.md](docs/vision.md) · Full roadmap: [docs/roadmap.md](docs/roadmap.md)
+→ Full scope: [docs/eu-ai-act.md](docs/eu-ai-act.md) · Vision: [docs/vision.md](docs/vision.md) · Roadmap: [docs/roadmap.md](docs/roadmap.md)
 
 <!-- SYNC_ALL_README_START -->
 [![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
 [![Version](https://img.shields.io/badge/version-v3.1.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Tests](https://img.shields.io/badge/tests-698%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Tests](https://img.shields.io/badge/tests-741%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Status](https://img.shields.io/badge/status-production%2Fstable-brightgreen)](CHANGELOG.md)
 [![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F14%2F17-green)](docs/eu-ai-act.md)
@@ -48,23 +36,109 @@ cloud dependencies, in any environment including air-gapped.
 **Live preview:** https://sebastianweiss83.github.io/sentinel-kernel/
 **Get started in 2 minutes:** [docs/getting-started.md](docs/getting-started.md)
 
-## Quick start
+## The 5-minute pilot
+
+Four commands. Zero accounts. Zero API keys. Zero network.
 
 ```bash
-# macOS (recommended)
-brew install pipx && pipx install sentinel-kernel
-sentinel demo
+pipx install 'sentinel-kernel[pdf]'   # or: pip install 'sentinel-kernel[pdf]'
+sentinel quickstart                   # scaffolds hello_sentinel.py + ./.sentinel/
+python hello_sentinel.py              # runs 10 decisions, writes traces to SQLite
+sentinel evidence-pack                # writes audit.pdf from those traces
+sentinel audit-gap                    # scores how audit-ready you actually are
+```
+
+The `[pdf]` extra pulls [reportlab](https://www.reportlab.com/) (BSD-3,
+UK-based, pure Python) so `sentinel evidence-pack` can produce a
+signed PDF your auditor can read. If you prefer to keep dependencies
+to the absolute minimum, `pip install sentinel-kernel` still works —
+every command except `evidence-pack` runs unchanged, and
+`evidence-pack` itself tells you how to add the PDF extra.
+
+`sentinel quickstart` generates a 12-line Python file wrapping a plain
+function with `@sentinel.trace`. Running it produces ten immutable,
+EU AI Act Art. 12-conformant decision records in
+`./.sentinel/traces.db`. `sentinel evidence-pack` turns those records
+into a signed PDF a compliance auditor can read. `sentinel audit-gap`
+then tells you exactly what else is still missing — and whether you
+can close it with the library, a deployment decision, or human
+authorship.
+
+### Why the plain-Python example is the golden path
+
+The scaffolded example deliberately wraps a plain function, not an
+LLM call. That means no OpenAI key, no LangChain, no Azure account,
+no network. You see the value before you spend a single second on
+credentials. When you are ready to wrap your real agent, the change
+is one line. See [docs/integration-guide.md](docs/integration-guide.md)
+for LangChain, CrewAI, AutoGen, and FastAPI integrations.
+
+### What `sentinel audit-gap` shows you
+
+```
+Sentinel Audit Readiness — local pilot
+
+  Scope            ./.sentinel/traces.db (10 traces)
+  Profile          default
+
+  +  Art. 12   Automatic logging                   10 traces recorded
+  +  Art. 13   Transparency metadata               agent, model, policy fields populated
+  +  Art. 17   Quality management record           append-only record present
+  +  Data residency declared                       EU — EU_DE
+  +  Offline / air-gapped storage                  local filesystem
+  -  Art. 14   Human oversight (kill switch)       no kill switch registered
+  -  Retention policy                              not configured
+  -  Auditor-grade signing key                     ephemeral demo key in use
+  -  Production storage backend                    using local SQLite
+  -  Art. 11   Annex IV technical documentation    requires human authorship
+
+  Audit readiness  [########......]   60 %
+
+  Library gaps      (Sentinel can close these)         2
+     > sentinel fix kill-switch
+     > sentinel fix retention --days 2555
+
+  Deployment gaps   (you must decide)                  2
+     . Auditor-grade signing key
+     . Production storage backend
+
+  Organisational    (human authorship required)        1
+     . Art. 11   Annex IV technical documentation
+
+  The library gets you to ~70 %. The last 30 % depends on
+  choices only your organisation can make: how long you
+  retain, who signs, where traces live, and what your
+  Annex IV document says.
+
+  If you want to walk through this with someone who has
+  done it for a regulated EU buyer:
+      https://sentinel-kernel.eu/pilot
+      30-minute call. No slides. No sales.
+
+  Or close the gaps yourself — the library is sufficient.
+```
+
+`sentinel audit-gap` is re-runnable. Every `sentinel fix ...` you
+apply moves the score. The split into library / deployment /
+organisational tells you exactly which gaps you can close alone and
+which ones need a human in a room.
+
+### Install notes
+
+```bash
+# macOS (recommended — avoids PEP 668 "externally-managed-environment")
+brew install pipx
+pipx install sentinel-kernel
 
 # Linux / Docker / CI
 pip install sentinel-kernel
-sentinel demo
 
-# Alternative (always works)
+# Alternative (always works, even on systems where the bin dir is off-PATH)
 python3 -m pip install sentinel-kernel
-python3 -m sentinel demo
+python3 -m sentinel quickstart
 ```
 
-### Full-stack demo (Docker)
+### Full-stack reference demo (Docker)
 
 ```bash
 git clone https://github.com/sebastianweiss83/sentinel-kernel
@@ -73,31 +147,9 @@ docker compose up --build
 ```
 
 Then open **http://localhost:3001** (Grafana, `admin` / `sentinel`).
-
 The demo runs a realistic EU defence contractor scenario — policy
-evaluation, kill switch (Art. 14), document analysis, sovereignty
-scan — and streams live traces to Grafana. See
-[demo/README.md](demo/README.md) for what to look at.
-
-## Install
-
-```bash
-# macOS (recommended — avoids PEP 668 "externally-managed-environment")
-brew install pipx
-pipx install sentinel-kernel
-sentinel demo
-
-# Linux / Docker / CI
-pip install sentinel-kernel
-sentinel demo
-
-# Alternative (always works)
-python3 -m pip install sentinel-kernel
-python3 -m sentinel demo
-```
-
-`python3 -m sentinel` is equivalent to the `sentinel` entry point and always
-works, even on systems where the bin directory is not on PATH.
+evaluation, kill switch, sovereignty scan — streaming live traces
+to Grafana. See [demo/README.md](demo/README.md) for what to look at.
 
 ## Five minutes to your first sovereign trace
 
