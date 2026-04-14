@@ -71,8 +71,14 @@ def read_version() -> str:
 
 
 def read_tests_and_coverage() -> tuple[str, str]:
-    """Run pytest once and parse both the pass count and TOTAL coverage."""
-    out = _run(["pytest", "tests/", "-q", "--tb=no"])
+    """Run pytest once and parse both the pass count and TOTAL coverage.
+
+    Invoked via ``sys.executable -m pytest`` so the subprocess always
+    uses the exact Python interpreter running this script — avoiding
+    PATH lookups that fail when the caller (e.g. ``.venv/bin/python
+    scripts/sync_all.py``) has not activated the venv.
+    """
+    out = _run([sys.executable, "-m", "pytest", "tests/", "-q", "--tb=no"])
     tests = "unknown"
     coverage = "unknown"
 
@@ -81,8 +87,11 @@ def read_tests_and_coverage() -> tuple[str, str]:
     if m:
         tests = f"{m.group(1)} passing"
 
-    # Coverage table footer: "TOTAL    ...  XX%"
-    cov = re.search(r"^TOTAL\s+\d+\s+\d+\s+(\d+)%", out, re.MULTILINE)
+    # Coverage table footer. With --cov-branch the TOTAL row has five
+    # numeric columns (statements, missing, branches, partial, coverage%);
+    # without it the row has three. Match either shape by consuming one
+    # or more whitespace+integer groups before the final coverage cell.
+    cov = re.search(r"^TOTAL(?:\s+\d+)+\s+(\d+)%", out, re.MULTILINE)
     if cov:
         coverage = f"{cov.group(1)}%"
 
@@ -90,7 +99,12 @@ def read_tests_and_coverage() -> tuple[str, str]:
 
 
 def read_smoke_test() -> str:
-    """Run the smoke test and report X/40 or 'failed at step N'."""
+    """Run the smoke test and report X/40 or 'failed at step N'.
+
+    Invoked via ``sys.executable`` for the same reason as
+    :func:`read_tests_and_coverage` — the interpreter running this
+    script is authoritative.
+    """
     out = _run([sys.executable, "examples/smoke_test.py"])
     if "ALL 40 STEPS PASSED" in out:
         return "40/40 \u2713"

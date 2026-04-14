@@ -943,6 +943,7 @@ def _section_hero(
           <span class="mono-inline">$ pipx install sentinel-kernel</span>
         </button>
         <a href="https://github.com/sebastianweiss83/sentinel-kernel" class="link-secondary">View on GitHub →</a>
+        <a href="runtime-briefing.html" class="link-secondary">Runtime briefing ↗</a>
         <a href="report.html" class="link-tertiary">sentinel report ↗</a>
       </div>
     </div>
@@ -1004,37 +1005,35 @@ def _section_v3_highlights(version: str) -> str:
 <section class="block">
   <div class="container">
     <h2>What's new in v{version}</h2>
-    <p class="sub">Sovereign-first governance primitives. Quantum-safe signing. Multi-language. No external services for any of it.</p>
+    <p class="sub">The Auditor Release. Signed PDF evidence packs. One-stop CI check. Honest-scope framing. Runtime briefing for technical evaluators.</p>
 
     <div class="industry-grid">
       <div class="industry-card">
-        <h3>Quantum-safe trace signing</h3>
-        <p><strong>ML-DSA-65 (FIPS 204)</strong>, BSI TR-02102-1 recommended. Keys stay client-side, forever. Same algorithm as cloud competitors — your keys, your infrastructure, your law.</p>
-        <div class="ks-code">pipx inject sentinel-kernel oqs-python &amp;&amp; sentinel keygen</div>
+        <h3>Signed PDF evidence pack</h3>
+        <p><strong>sentinel evidence-pack</strong> — one command produces a cover page, executive summary, EU AI Act / DORA / NIS2 coverage, trace samples, SHA-256 hash manifest, and a sovereign attestation. Reproducible, offline-verifiable, suitable as an audit binder artefact.</p>
+        <div class="ks-code">sentinel evidence-pack --output audit-q2.pdf</div>
       </div>
       <div class="industry-card">
-        <h3>Attestations · BudgetTracker · Preflight</h3>
-        <p><strong>Attestations</strong> — portable self-contained governance JSON, verifiable offline.
-        <strong>BudgetTracker</strong> — spend recorded as sovereign traces.
-        <strong>Preflight</strong> — check before you act, without writing a trace.</p>
-        <div class="ks-code">sentinel attestation generate --output governance.json</div>
+        <h3>One-stop CI check</h3>
+        <p><strong>sentinel ci-check</strong> — aggregates the EU AI Act snapshot, runtime sovereignty scan, and an optional manifesto check into a single exit code. Fully in-process. No subprocesses. No network. Works air-gapped.</p>
+        <div class="ks-code">sentinel ci-check --manifesto manifesto.py:MyManifesto</div>
       </div>
       <div class="industry-card">
-        <h3>CrewAI · AutoGen · LangFuse panel</h3>
-        <p>New framework integrations: <strong>CrewAI</strong> task callback and <strong>AutoGen</strong> agent hook. LangFuse gains a <strong>sovereignty widget</strong> — self-contained HTML, no CDN.</p>
-        <div class="ks-code">pip install sentinel-kernel[crewai,autogen]</div>
+        <h3>Runtime briefing</h3>
+        <p>New operator-grade briefing page. Operating picture, runtime walkthrough, decision record, evidence route, deployment posture, and scope. Dark and light mode, keyboard navigable, no framework, no tracking.</p>
+        <div class="ks-code"><a href="runtime-briefing.html">runtime-briefing.html ↗</a></div>
       </div>
       <div class="industry-card">
-        <h3>Rust SovereigntyManifest</h3>
-        <p>RFC-001 is <strong>ACCEPTED</strong>. Python reference plus a <strong>Rust implementation</strong> (<code>sentinel-manifest</code> v0.1.0). Go and TypeScript are wanted as good-first-issues.</p>
-        <div class="ks-code">cargo add sentinel-manifest</div>
+        <h3>Honest-scope framing</h3>
+        <p>README, CLI <code>--help</code>, and <code>docs/eu-ai-act.md</code> now consistently name Sentinel as the <strong>decision-trace and policy-enforcement layer</strong> for EU AI Act Art. 12 / 13 / 14 / 17. Not a full compliance solution, and no middleware kernel can be.</p>
+        <div class="ks-code">sentinel compliance check --all-frameworks</div>
       </div>
     </div>
 
     <div class="note" style="margin-top:1.5rem;">
-      Manifesto-as-code now runs as <strong>5 named CI theses</strong> on every PR: no US-owned deps,
-      air-gap proven, Apache 2.0 enforced, Sentinel passes its own manifesto,
-      trace immutability verified. The project dogfoods its own check.
+      Test suite: <strong>686 tests, 100% line and branch coverage enforced in CI</strong>.
+      Manifesto-as-code runs as <strong>5 named CI theses</strong> on every PR.
+      No new hard dependencies — reportlab is an optional <code>[pdf]</code> extra.
     </div>
   </div>
 </section>
@@ -1487,7 +1486,7 @@ def _section_inside() -> str:
           <li><strong>SQLite + PostgreSQL + Filesystem</strong> storage backends</li>
           <li><strong>Air-gapped</strong> — network blocked at socket level in CI</li>
           <li><strong>LangChain · CrewAI · AutoGen</strong> callbacks &amp; hooks</li>
-          <li><strong>Haystack · LangGraph</strong> integrations</li>
+          <li><strong>Haystack</strong> component wrapper</li>
           <li><strong>OpenTelemetry</strong> — sovereignty attrs in every span</li>
           <li><strong>LangFuse sovereignty panel</strong> — self-contained HTML widget</li>
           <li><strong>Jupyter · FastAPI · Django · Prometheus</strong> integrations</li>
@@ -1538,24 +1537,23 @@ def _section_roadmap(days: int) -> str:
 
     <div class="roadmap-grid">
       <div class="roadmap-col done">
-        <h3>Trace + Govern · v3.0 ✓</h3>
+        <h3>Trace + Govern · v3.0–v3.1 ✓</h3>
         <ul class="roadmap-list">
           <li><span class="tag">trace</span> Sovereign decision records</li>
           <li><span class="tag">gov</span> Policy-as-code · manifesto-as-code</li>
           <li><span class="tag">safe</span> Kill switch (Art. 14)</li>
-          <li><span class="tag">bsi</span> BSI pre-engagement ready · 576+ tests · 91% cov</li>
+          <li><span class="tag">v3.1</span> The Auditor Release — evidence pack · ci-check · runtime briefing</li>
         </ul>
         <div class="foot">Shipped and verified on main.</div>
       </div>
       <div class="roadmap-col now">
         <h3>Certify + Route · 2026 →</h3>
         <ul class="roadmap-list">
-          <li><span class="tag">v3.1</span> Linux Foundation Europe application</li>
-          <li><span class="tag">v3.2</span> BSI IT-Grundschutz assessment</li>
+          <li><span class="tag">v3.2</span> LF Europe application + BSI IT-Grundschutz assessment</li>
           <li><span class="tag">v4.0</span> SovereignRouter — policy-driven model selection</li>
           <li><span class="tag">v4.1</span> Local adapters: Ollama · vLLM · llama.cpp</li>
         </ul>
-        <div class="foot">RFC-002 in discussion. Issues #19, #20 open.</div>
+        <div class="foot">RFC-002 in discussion. Issues #20, #21 open.</div>
       </div>
       <div class="roadmap-col future">
         <h3>Ecosystem · 2027+</h3>
@@ -1712,12 +1710,13 @@ def _write_data_json(
         "smoke": smoke,
         "days_to_enforcement": days,
         "enforcement_date": "2026-08-02",
+        # LangGraph and PydanticAI are explicitly postponed per the
+        # v3.1.0 CHANGELOG and must not appear in this shipped list.
         "integrations": [
             "LangChain",
             "CrewAI",
             "AutoGen",
             "Haystack",
-            "LangGraph",
             "OpenTelemetry",
             "LangFuse",
             "Jupyter",
@@ -1770,11 +1769,13 @@ def main() -> int:
 
     tests, coverage = read_tests_and_coverage()
     # Fallback to known-good static values when pytest is unavailable
-    # (e.g. CI sync-all step, pipx venv without dev deps).
+    # (e.g. CI sync-all step, pipx venv without dev deps). Keep these
+    # aligned with the last shipping release — stale fallbacks are a
+    # trust risk on the public Pages site.
     if tests == "unknown":
-        tests = "576 passing"
+        tests = "686 passing"
     if coverage == "unknown":
-        coverage = "91%"
+        coverage = "100%"
     smoke_raw = read_smoke_test()
     # read_smoke_test returns "40/40 ✓" or "failed at step N"; we want a
     # terse label for the pill so it reads "40/40 smoke" not "40/40 ✓ smoke".
