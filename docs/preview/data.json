@@ -1,5 +1,5 @@
 {
-  "coverage": "91%",
+  "coverage": "100%",
   "days_to_enforcement": 110,
   "enforcement_date": "2026-08-02",
   "eu_ai_act": {
@@ -20,7 +20,6 @@
     "CrewAI",
     "AutoGen",
     "Haystack",
-    "LangGraph",
     "OpenTelemetry",
     "LangFuse",
     "Jupyter",

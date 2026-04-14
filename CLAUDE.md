@@ -12,15 +12,15 @@
 | Tests | 686 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-14 01:59 UTC |
+| Last updated | 2026-04-14 02:07 UTC |
 
 ## Last 5 commits
 
+- `9c11082` docs: fix sync-all generator drift (coverage, LangGraph, v3.1.0 features)
 - `33023c1` docs: v3.1.0 consistency sweep across evaluator surfaces
 - `ccf7c2c` docs(briefing): tighten positioning — decision-trace and policy-enforcement layer
 - `2bb5aa2` docs: add Sentinel Runtime Briefing page
 - `c2cf531` docs: remove broken Runtime Briefing link from README
-- `3f6dd57` docs: tighten evidence-pack changelog bullet + add Runtime Briefing link
 
 ## Open issues
 
