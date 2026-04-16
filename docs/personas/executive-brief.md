@@ -14,10 +14,11 @@ and KRITIS operators in the EU.
 
 ## The solution
 
-**Sentinel is the EU-sovereign decision trace and policy-enforcement
-layer.** One Python decorator on any decision function. One command
-to produce a signed PDF evidence pack your auditor can read. Runs
-fully offline. Apache 2.0 forever.
+**Sentinel is agility infrastructure for regulated AI.** One Python
+decorator on any decision function records every outcome. A policy
+layer enforces every rule. One command produces the signed PDF
+evidence pack your auditor accepts. Runs fully offline. Apache 2.0
+forever. Under EU jurisdiction.
 
 ## The proof
 
@@ -48,18 +49,21 @@ fully offline. Apache 2.0 forever.
   engagement time. No public pricing; no per-seat SaaS costs.
 - **Production engagement:** SLA-backed; scoped at engagement time.
 
-## The sovereignty argument
+## The provability argument
 
-The three tests every EU regulated buyer must pass:
+The three provability conditions every EU regulated buyer must pass:
 
-1. Is there a US-owned component in the critical path? For Sentinel:
-   no.
-2. Does it work air-gapped? For Sentinel: yes, tested in CI.
-3. Is it BSI-certifiable? For Sentinel: pre-engagement, actively
-   pursuing IT-Grundschutz profile.
+1. **Jurisdictional integrity** — is there a US-owned component in
+   the critical path? For Sentinel: no.
+2. **Air-gap operability** — does it work air-gapped? For Sentinel:
+   yes, tested in CI.
+3. **Certifiable evidence chain** — is it BSI-certifiable? For
+   Sentinel: pre-engagement, actively pursuing IT-Grundschutz
+   profile.
 
-Competitors fail test 1 structurally. Sentinel is the open,
-jurisdictionally clean alternative.
+US-incorporated competitors fail condition 1 structurally. Sentinel
+is the open, jurisdictionally clean alternative. Sovereignty is the
+consequence of passing these three conditions — not the headline.
 
 ## The next step
 

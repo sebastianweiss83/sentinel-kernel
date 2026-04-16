@@ -1,11 +1,11 @@
 # For CISOs / security leads
 
 You're evaluating whether Sentinel is safe to add to a regulated
-stack. You need to answer: sovereignty posture, dependency footprint,
-attack surface, key management, air-gap behaviour, incident-response
-story, and what you'd hand to your SecArch review.
+stack. You need to answer: jurisdictional posture, dependency
+footprint, attack surface, key management, air-gap behaviour,
+incident-response story, and what you'd hand to your SecArch review.
 
-## Sovereignty posture (read first)
+## Jurisdictional posture (read first)
 
 - **Jurisdiction:** Swentures UG (haftungsbeschränkt), Germany.
   Apache 2.0 forever — no CLA, no relicensing, no commercial fork.
