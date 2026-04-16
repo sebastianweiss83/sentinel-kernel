@@ -33,6 +33,7 @@
 - **#20** v3.2: BSI IT-Grundschutz formal assessment submission _(labels: roadmap)_
 - **#21** v3.3: EU-sovereign build pipeline (Phase 3) _(labels: roadmap)_
 - **#24** v4.0: SovereignRouter — policy-driven model selection _(labels: enhancement, roadmap)_
+- **#25** [Pilot] Welcome — what this intake is and how it works _(labels: pilot)_
 
 <!-- CLAUDE_MD_AUTO_END -->
 

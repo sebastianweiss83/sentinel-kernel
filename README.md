@@ -7,7 +7,7 @@ offline. No US cloud dependency. Apache 2.0, forever.*
 
 **EU AI Act enforcement starts 2 August 2026.**
 
-![Sentinel — 10 defence-logistics decisions, 3 blocked, full audit trail](docs/samples/sentinel-demo.svg)
+![Sentinel — 10 defence-logistics decisions, 3 blocked, full audit trail](docs/samples/sentinel-demo.gif)
 
 ```bash
 pipx install 'sentinel-kernel[pdf]'
@@ -17,7 +17,7 @@ sentinel demo                  # 20 seconds, no config
 **See the real artefact before you install:**
 &nbsp;📄 [Sample evidence pack (PDF)](docs/samples/audit-evidence-pack-sample.pdf)
 &nbsp;·&nbsp; 📋 [Sample `audit-gap` score](docs/samples/audit-gap-output.txt)
-&nbsp;·&nbsp; 🎬 [20-second demo](docs/samples/sentinel-demo.svg)
+&nbsp;·&nbsp; 🎬 [20-second demo (GIF)](docs/samples/sentinel-demo.gif)
 
 ### Who are you?
 
