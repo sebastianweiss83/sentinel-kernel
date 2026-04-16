@@ -12,15 +12,15 @@
 | Tests | 773 passing |
 | Coverage | 100% |
 | Smoke test | 33/40 |
-| Last updated | 2026-04-16 18:25 UTC |
+| Last updated | 2026-04-16 20:04 UTC |
 
 ## Last 5 commits
 
+- `77a966a` docs: real animated demo GIF + pilot meta issue landed
 - `343f00b` feat: product repair — dead URL, sample artefacts, persona pages, trust docs
 - `a883f46` feat: v3.2.0 — customer-validation release
 - `811f5d8` docs(readme): add "Who needs this" — five regulated sectors
 - `460bf69` docs(readme): add three-question framework for developers
-- `0b34f37` feat(cli): sentinel status + surface audit-gap as the next step
 
 ## Open issues
 
