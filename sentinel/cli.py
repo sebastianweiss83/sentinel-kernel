@@ -221,6 +221,17 @@ def main(argv: list[str] | None = None) -> int:
         help="Regenerate hello_sentinel.py even if it already exists",
     )
 
+    # --- status -------------------------------------------------------------
+    p_status = sub.add_parser(
+        "status",
+        help="Show pilot activity, sovereignty, and audit readiness",
+    )
+    p_status.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit JSON instead of text",
+    )
+
     # --- audit-gap ----------------------------------------------------------
     p_ag = sub.add_parser(
         "audit-gap",
@@ -363,6 +374,8 @@ def main(argv: list[str] | None = None) -> int:
         return _cmd_evidence_pack(args)
     if args.command == "quickstart":
         return _cmd_quickstart(args)
+    if args.command == "status":
+        return _cmd_status(args)
     if args.command == "audit-gap":
         return _cmd_audit_gap(args)
     if args.command == "fix":
@@ -577,8 +590,8 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     print(f"  Report saved: {out_path}")
     print(f"  Open it:      {_open_hint(out_path)}")
     print()
-    print("  Next steps:   sentinel attestation generate")
-    print("                sentinel report --output sovereignty_report.html")
+    print("  Next steps:   sentinel audit-gap")
+    print("                sentinel attestation generate")
     print()
     print(f"  EU AI Act enforcement: 2 August 2026 · "
           f"{compliance.days_to_enforcement} days")
@@ -1099,6 +1112,25 @@ def _cmd_quickstart(args: argparse.Namespace) -> int:
 
     result = run_quickstart(force=args.force)
     sys.stdout.write(render_quickstart_text(result))
+    return 0
+
+
+def _cmd_status(args: argparse.Namespace) -> int:
+    from sentinel import __version__
+    from sentinel.pilot.render import render_status_text
+    from sentinel.pilot.status import compute_pilot_status
+
+    try:
+        status = compute_pilot_status(version=__version__)
+    except ValueError as exc:
+        print(f"status: {exc}", file=sys.stderr)
+        return 2
+
+    if args.json:
+        print(json.dumps(status.to_dict(), indent=2, sort_keys=True))
+        return 0
+
+    sys.stdout.write(render_status_text(status))
     return 0
 
 

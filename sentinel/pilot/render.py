@@ -197,6 +197,74 @@ def render_fix_text(result: object) -> str:
     return "\n".join(lines)
 
 
+def render_status_text(status: object) -> str:
+    """
+    Render ``sentinel status`` as a compact activity + readiness block.
+
+    Short enough to fit in a terminal without scrolling, shaped like
+    the pilot-walkthrough — activity first (proof of use), then
+    sovereignty and readiness, then a single audit-gap nudge when the
+    readiness score is below a production-ready threshold.
+    """
+    from sentinel.pilot.status import PilotStatus
+
+    assert isinstance(status, PilotStatus)
+
+    act = status.activity
+    readiness_bar = _progress_bar(status.audit_readiness, PROGRESS_BAR_WIDTH)
+    sov_pct = int(round(status.sovereignty_score * 100))
+
+    lines: list[str] = []
+    lines.append("")
+    lines.append("Sentinel status")
+    lines.append("")
+    lines.append(f"  Project           {status.project}")
+    lines.append(f"  Version           {status.version}")
+    lines.append(f"  Storage           {status.storage_kind}")
+    lines.append("")
+    lines.append(f"  Decision activity  (last {act.window_days} days)")
+    if act.total == 0:
+        lines.append(
+            "     (no traces yet — run sentinel quickstart, "
+            "then python hello_sentinel.py)"
+        )
+    else:
+        lines.append(f"     Total           {act.total}")
+        lines.append(f"     ALLOW           {act.allow}  ({act.allow_pct} %)")
+        lines.append(f"     DENY            {act.deny}  ({act.deny_pct} %)")
+        if act.exception:
+            lines.append(f"     EXCEPTION       {act.exception}")
+        if act.overrides:
+            lines.append(f"     Override        {act.overrides}")
+    lines.append("")
+    lines.append(f"  Sovereignty score  {sov_pct} %")
+    lines.append(
+        f"  Audit readiness    {readiness_bar}   {status.audit_readiness} %"
+    )
+    lines.append("")
+
+    if status.audit_readiness < 80:
+        days = status.days_to_enforcement
+        countdown = (
+            f"{days} days to EU AI Act enforcement"
+            if days >= 0
+            else "EU AI Act is now enforced"
+        )
+        lines.append("  " + "-" * 58)
+        lines.append(
+            f"  {status.audit_readiness} % audit readiness — {countdown}."
+        )
+        lines.append("  Run: sentinel audit-gap")
+        lines.append("  " + "-" * 58)
+    else:
+        lines.append(
+            "  Production-ready score. Re-run `sentinel audit-gap` "
+            "for the detailed split."
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
 def _status_mark(status: str) -> str:
     if status == "complete":
         return "+"

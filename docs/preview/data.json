@@ -1,6 +1,6 @@
 {
   "coverage": "100%",
-  "days_to_enforcement": 110,
+  "days_to_enforcement": 108,
   "enforcement_date": "2026-08-02",
   "eu_ai_act": {
     "Art. 10": "HUMAN_ACTION",
@@ -28,6 +28,6 @@
     "Prometheus"
   ],
   "smoke": "40/40",
-  "tests": 741,
+  "tests": 722,
   "version": "3.1.0"
 }
