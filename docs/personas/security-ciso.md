@@ -28,8 +28,8 @@ Output lists every installed package, parent-company jurisdiction, and
 whether it makes a runtime network call. CI/CD scan inspects GitHub
 Actions / GitLab CI / Jenkins config for US-owned control-plane
 services. **Known acknowledged gap:** GitHub Actions itself is
-US-controlled — declared in the repo manifesto as a migration target
-to Forgejo.
+US-controlled — declared in the repo policy (see
+`sentinel/manifesto/base.py`) as a migration target to Forgejo.
 
 ## Signing / keys / attestation
 
