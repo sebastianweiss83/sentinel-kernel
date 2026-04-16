@@ -39,55 +39,82 @@
 
 ## SENTINEL POSITIONING
 
-Sentinel is NOT "an LLM governance tool."
-Sentinel IS "sovereign decision tracing for any autonomous system."
+Sentinel is agility infrastructure for regulated European enterprises.
+Not a governance platform, not a compliance tool, not AI observability —
+Sentinel is the layer that lets regulated institutions **Record every
+decision, Enforce every policy, and Prove every artefact** under EU AI
+Act, DORA, NIS2, BaFin BAIT and BSI IT-Grundschutz.
 
-Primary message: **The Sovereign Decision Kernel.**
+Primary message: **Record. Enforce. Prove. — Scale what you can prove.**
 
-Works with: LLMs (current primary market), ML classifiers,
-rule engines, robotic systems, any Python decision function.
+Four modules, one codebase, one CLI, one installation:
 
-The `@sentinel.trace` decorator is technology-neutral.
-The EU AI Act obligation is technology-neutral.
-Sentinel is the bridge between them.
+- **Sentinel Trace** — `@sentinel.trace` decorator, SQLite / PostgreSQL /
+  Filesystem backends, SHA-256 hashing, hash-only privacy by default.
+  Apache 2.0 forever. Distribution flywheel.
+- **Sentinel Policy** — OPA/Rego + Python rules, kill switch (EU AI Act
+  Art. 14), preflight checks. Policy-as-code. Commercial policy
+  libraries (BaFin, KRITIS, defence templates) are the first revenue
+  surface.
+- **Sentinel Evidence** — signed PDF evidence packs, attestations,
+  provability + compliance reports. Optional long-term-retention
+  signing (ML-DSA-65 footnote, not headline). Highest-ARR commercial
+  tier (HSM, RFC-3161, Legal Hold, BaFin-reporting templates).
+- **Sentinel Federation** — multi-institution aggregation, concern-group
+  compliance view, supervisory-body aggregation. Roadmap, not shipping.
 
-In every document and customer interaction:
-- Lead with "decision" not "AI"
-- Lead with "autonomous system" not "LLM"
-- Use LLMs as the primary example, not the only example
-- The sustainability argument: regulation outlasts technology
+Target: **regulated European enterprise** — financial services,
+insurance, public sector, KRITIS, defence. EU jurisdiction, Apache 2.0,
+on-premise capable.
 
-Three layers:
+Works with: LLMs (current primary market), ML classifiers, rule
+engines, robotic systems, any Python decision function. The
+`@sentinel.trace` decorator is technology-neutral; the EU AI Act
+obligation is technology-neutral; Sentinel is the bridge between them.
 
-- **TRACE (v3.0 ✓)** — sovereign decision records, Art. 12 automated
-- **GOVERN (v3.0 ✓)** — what may be decided, policy-as-code, kill switch
-- **ROUTE (v4.0 →)** — which system decides what, driven by manifesto
+### Language discipline (Manifesto Chapter IX)
 
-The Palantir thesis: when LLMs guide their own integration — and that is
-already happening — the deployment-strategist model collapses. The
-sovereign kernel underneath is what survives and scales. That is Sentinel:
-open source, EU sovereign, Apache 2.0, self-service.
+**Use:** *Agility Infrastructure*, *Provability*, *Record. Enforce.
+Prove*, *Move like a startup. Prove like a regulated bank*,
+*Enterprise-grade compliance at startup speed*, *Scale what you can
+prove*.
 
-**Market:** EU AI Act enforcement 2 August 2026. Empty field — nobody
-else is building EU-sovereign, open-source, technology-agnostic decision
-kernel. Every European bank, insurer, defence contractor, healthcare
-provider, and government agency needs what Phase 2 + Phase 3 will
-deliver.
+**Avoid as headline terms:** *Sovereignty* (Cylake-territory),
+*Governance Platform* (Dome), *Compliance Platform* (cost-centre
+framing), *AI Observability* (different category), *AI Security*
+(different category), *Quantum-Safe* (signals over-engineering),
+*Manifesto* (activist framing), *Kernel* (as lead), *AI decision
+middleware* (too generic).
+
+These are editorial conventions for customer-facing copy. The
+`SentinelManifesto` Python class is fine; *"Manifesto-as-Code"* as a
+customer-facing headline is not. The `sentinel-kernel` PyPI package
+name is fine; *"The Sovereign Decision Kernel"* as a product category
+is not.
+
+**Market:** EU AI Act enforcement 2 August 2026. The regulation is
+the only strategic position Europe structurally has in the AI era —
+and the category it forces into existence (cryptographically provable
+decision records under EU jurisdiction) has no EU-incorporated, open-
+source, model-agnostic alternative today. Sentinel fills that gap.
 
 Full strategy: [docs/vision.md](docs/vision.md) · Phases:
 [docs/roadmap.md](docs/roadmap.md).
 
 ## What this project is
 
-Sentinel is an EU-sovereign decision middleware kernel.
-It sits in the execution path of any autonomous decision system and
-turns every decision into a structured, auditable, sovereign artifact.
+Sentinel is agility infrastructure for regulated AI — a decision
+trace, policy enforcement, and evidence layer for autonomous
+decision systems in regulated European environments. The four
+modules share one codebase, one CLI, one installation, and the
+three non-negotiable invariants below.
 
-The sovereignty is the product. Everything else is implementation detail.
+Provability is the product. Sovereignty, portability, and openness
+are its consequences.
 
 - License: Apache 2.0, permanently
-- Governance: Linux Foundation Europe intended (formal engagement planned with v1.0)
-- Target: BSI reference implementation for EU-sovereign AI decision infrastructure
+- Governance: Linux Foundation Europe intended (formal engagement planned with v3.x)
+- Target: BSI reference implementation for EU-operated AI decision infrastructure
 
 ## Why this exists
 
