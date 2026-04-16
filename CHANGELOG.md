@@ -7,6 +7,162 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.3.0] — 2026-04-17
+
+### Positioning refinement (not reversal)
+
+Sentinel has always been four things: Trace, Policy, Evidence,
+and Federation. Until v3.2 we described the first three as a
+two-and-a-half-layer kernel (Trace + Govern, with Evidence
+bundled under Govern) and used Route / SovereignRouter as a
+placeholder for the fourth layer. From v3.3 onward we use four
+explicit names — Evidence stands alone because it is what
+regulated buyers pay for, and Federation replaces Route as the
+roadmap slot because multi-institution aggregation is the
+larger strategic question. Model-routing, previously Route, is
+deferred; if it returns it will be a Federation sub-capability
+rather than an independent layer.
+
+*Editorial note — positioning language refinement.* From this
+release onward, Sentinel's customer-facing language follows the
+four-module architecture (Trace, Policy, Evidence, Federation)
+and the Record. Enforce. Prove. formula described in
+[docs/vision.md](docs/vision.md). Earlier CHANGELOG entries
+preserve the vocabulary in force at the time they were written
+— including Three-Layer "Sovereign Decision Kernel" phrasing
+(up to v3.2.0) and v4.0 SovereignRouter roadmap language. No
+prior capability has been removed; the module split is a
+refinement that promotes the Evidence capability (shipped in
+v3.1) to a first-class module.
+
+### Added
+
+- **New top-level positioning** — *agility infrastructure for
+  regulated AI*. English anchor (Manifesto Chapter IX). German
+  variant: *Agilitäts-Infrastruktur für regulierte KI*.
+- **New operational formula** — *Record. Enforce. Prove. — Scale
+  what you can prove. / Move like a startup. Prove like a
+  regulated bank.*
+- **`docs/sentinel-evidence.md`** — detailed Evidence module
+  documentation. Evidence pack format, signing modes (HMAC
+  default, ECDSA-P256, ML-DSA-65 for long-term retention),
+  RFC-3161 timestamping via EU TSAs, enterprise-tier features
+  (HSM, legal hold, BaFin-reporting templates).
+- **`docs/provability.md`** — renamed from `docs/sovereignty.md`
+  with refreshed framing ("Provability — what it means, and
+  what it requires"). Three provability conditions
+  (jurisdictional integrity, air-gap operability, certifiable
+  evidence chain); sovereignty framed as consequence not
+  headline. Redirect stub retained at `docs/sovereignty.md`.
+- **Four new PyPI keywords** — `agility-infrastructure`,
+  `record-enforce-prove`, `provability`, `regulated-ai`.
+- **Four new GitHub topics** — same as above.
+
+### Changed
+
+- **Customer-facing copy** retires "manifesto-as-code" in favour
+  of "policy-as-code". Option B: `SentinelManifesto` Python
+  class name is unchanged; CLI `--manifesto` flag is unchanged;
+  RFC-001 spec name is unchanged. The editorial shift is
+  copy-only, not API.
+- **Three-Layer architecture** (Trace / Govern / Route)
+  superseded by **Four-Module architecture** (Trace / Policy /
+  Evidence / Federation) across README, docs/vision.md,
+  docs/roadmap.md, scripts/generate_preview.py, CLAUDE.md
+  positioning block, docs/bsi-pre-engagement/README.md.
+- **"Sovereign Decision Kernel"** retired as customer-facing
+  headline; replaced by *"Agility infrastructure for regulated
+  AI"*.
+- **Quantum-Safe signing** demoted from hero layer to
+  technical-docs section (capability unchanged — ML-DSA-65
+  remains available via `sentinel-kernel[pqc]` extra; preserved
+  in docs/bsi-profile.md, docs/security-posture.md,
+  docs/personas/security-ciso.md, docs/audit-verification-
+  guide.md, docs/sentinel-evidence.md).
+- **RFC-001 status:** ACCEPTED → DRAFT (paused pending
+  community stewardship). The Python reference implementation
+  in `sentinel/manifesto/base.py` ships unchanged. The Rust
+  `sentinel-manifest` crate (v0.1.0) remains available as an
+  EXPERIMENTAL port; `.github/workflows/rust.yml` stays active.
+- **GitHub issues #16 and #17** (Go and TypeScript RFC-001
+  ports) relabeled `deferred`, title prefixed `deferred:`.
+- **GitHub issue #24** (previously "v4.0: SovereignRouter")
+  retitled to *"v4.x: model-routing sub-capability under
+  Sentinel Federation"* — not closed.
+- **GitHub repository description** updated to *"Agility
+  infrastructure for regulated AI. Trace, Policy, Evidence.
+  EU-operated, Apache 2.0, on-premise capable."*
+- **CLAUDE.md SENTINEL POSITIONING block** rewritten to the
+  four-module framing with explicit language discipline
+  (Manifesto Chapter IX).
+
+### Deprecated
+
+- No API deprecations. `SentinelManifesto`, `sentinel-kernel[pqc]`,
+  and every other Python API surface classified STABLE in
+  `docs/api-stability.md` is unchanged.
+
+### Removed
+
+- Keywords from `pyproject.toml`: `sovereignty`,
+  `manifesto-as-code`, `post-quantum`.
+- GitHub topics: `sovereignty`, `manifesto-as-code`,
+  `post-quantum`, `sovereign-ai`, `sovereign-kernel`,
+  `model-router`.
+- The *"Quantum-safe signing"* row from the preview comparison
+  table.
+- The *"Manifesto-as-code CI"* row from the preview comparison
+  table.
+- The *"SovereignRouter v4.0"* and *"Local adapters (Ollama /
+  vLLM / llama.cpp)"* rows from the preview roadmap grid.
+
+### Fixed
+
+- **`docs/repo-governance.md`**: removed named-partner
+  reference (BWI, Quantum Systems) per Manifesto Chapter X
+  communication policy. v0.9.1 CHANGELOG claimed the public repo
+  was *"zero named partners, customers, or organisations"*;
+  this file had been an exception until now.
+- **`docs/bsi-pre-engagement/test-evidence.md`**: updated stale
+  test counts from 503+ to current 773 passing / 5 skipped / 8
+  air-gap tests (verified against `pytest --collect-only -q`).
+- **Cross-links** to `docs/sovereignty.md` updated across
+  README, personas, migration-v3.2, and getting-started to
+  point at the new `docs/provability.md`.
+
+### Unchanged
+
+- Trace schema (`schema_version = 1.0.0`).
+- Storage backend contracts and shipped implementations.
+- Policy evaluator contracts and shipped implementations.
+- Evidence-pack format, hash manifest, attestation JSON.
+- Every STABLE Python API surface per
+  `docs/api-stability.md`.
+- `sentinel-kernel` PyPI package name.
+- The three invariants: no US CLOUD Act exposure in the
+  critical path; air-gapped must always work; Apache 2.0
+  forever.
+
+### Test suite
+
+773 tests passing, 5 skipped, 100% line and branch coverage
+enforced in CI. No test suite additions in v3.3.0 — string
+assertions on retired positioning language were updated to new
+wording where they existed.
+
+### Intentionally postponed to v3.x or later
+
+- RFC-002 Sentinel Federation specification (draft).
+- `sentinel/dashboard/html.py` string updates to match the new
+  positioning (the generated `docs/preview/report.html` still
+  displays *"Sentinel Sovereignty Report"* as the H1). This is
+  a Phase-Five out-of-scope fix.
+- `.claude/rules/sovereignty-rules.md` file rename (optional
+  housekeeping).
+- Sample evidence-pack PDF cover-page regeneration if the
+  template in `sentinel/compliance/evidence_pack.py` still
+  carries old strings.
+
 ## [3.2.0] — 2026-04-16
 
 ### Customer-validation release — privacy by default, narrative demo, honesty alignment
