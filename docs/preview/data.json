@@ -27,7 +27,7 @@
     "Django",
     "Prometheus"
   ],
-  "smoke": "failed at step 41",
+  "smoke": "33/40",
   "tests": 773,
   "version": "3.3.0"
 }

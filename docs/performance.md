@@ -18,13 +18,14 @@ fails if any measurement is more than 20% below baseline.
 | `decorator_overhead_ms_p50` | ≤ 1.0 ms | Median wall-clock overhead of `@sentinel.trace` |
 | `memory_per_1000_traces_kb` | ≤ 2048 KiB | Peak traced-memory delta for 1000 traces |
 
-## Current results (v3.2.0, 2026-04-16)
+## Current results (v3.3.0, 2026-04-17)
 
 Measured on: Apple Silicon M-series laptop, Python 3.14, SQLite 3.x.
-Baselines above were not touched; v3.2.0 introduces the privacy-default
-flip (hash-only storage) but does not change throughput characteristics
-— the hashing step runs regardless of whether the raw payload is
-persisted. The v3.1.0 measurement run below remains representative.
+Baselines above were not touched; v3.3.0 is a positioning-only
+refinement that does not change throughput characteristics. The
+v3.1.0 / v3.2.0 measurement runs below remain representative — the
+hashing step in v3.2.0's privacy-default flip runs regardless of
+whether the raw payload is persisted.
 
 | Metric | Measured | vs baseline |
 |---|---|---|

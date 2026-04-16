@@ -8,31 +8,31 @@
 
 | | |
 |---|---|
-| Version | `3.2.0` |
+| Version | `3.3.0` |
 | Tests | 773 passing |
 | Coverage | 100% |
 | Smoke test | 33/40 |
-| Last updated | 2026-04-16 20:04 UTC |
+| Last updated | 2026-04-17 01:32 UTC |
 
 ## Last 5 commits
 
-- `77a966a` docs: real animated demo GIF + pilot meta issue landed
-- `343f00b` feat: product repair — dead URL, sample artefacts, persona pages, trust docs
-- `a883f46` feat: v3.2.0 — customer-validation release
-- `811f5d8` docs(readme): add "Who needs this" — five regulated sectors
-- `460bf69` docs(readme): add three-question framework for developers
+- `02193af` changelog(3.3.0): positioning refinement, retire manifesto-as-code, demote quantum-safe
+- `76e2462` docs(3.3.0): BSI package, onboarding, landscape, getting-started, repo-governance (named-partner fix)
+- `4987e70` docs(3.3.0): persona updates — executive-brief & security-ciso provability framing
+- `1ae2a13` docs(3.3.0): demote Quantum-Safe from hero, preserve in technical docs, new sentinel-evidence.md
+- `d34d2ff` docs(3.3.0): RFC-001 DRAFT paused (Option 2), references updated, issues relabeled
 
 ## Open issues
 
 - **#3** good first issue: add more policy examples _(labels: good first issue)_
 - **#7** RFC-001: SovereigntyManifest feedback wanted _(labels: rfc, discussion)_
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
-- **#16** good first issue: Go implementation of RFC-001 _(labels: good first issue)_
-- **#17** good first issue: TypeScript/Node implementation of RFC-001 _(labels: good first issue)_
+- **#16** deferred: Go implementation of RFC-001 _(labels: deferred)_
+- **#17** deferred: TypeScript/Node implementation of RFC-001 _(labels: deferred)_
 - **#19** v3.2: Linux Foundation Europe formal application _(labels: roadmap)_
 - **#20** v3.2: BSI IT-Grundschutz formal assessment submission _(labels: roadmap)_
 - **#21** v3.3: EU-sovereign build pipeline (Phase 3) _(labels: roadmap)_
-- **#24** v4.0: SovereignRouter — policy-driven model selection _(labels: enhancement, roadmap)_
+- **#24** v4.x: model-routing sub-capability under Sentinel Federation _(labels: enhancement, roadmap)_
 - **#25** [Pilot] Welcome — what this intake is and how it works _(labels: pilot)_
 
 <!-- CLAUDE_MD_AUTO_END -->

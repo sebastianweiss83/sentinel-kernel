@@ -6,13 +6,13 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-16 20:04 UTC_
+_Last generated from HEAD commit: 2026-04-17 01:32 UTC_
 
 ## Version
 
-**`3.2.0`** — Production/Stable
+**`3.3.0`** — Production/Stable
 
-Prove your AI decisions to the auditor. Sovereign decision trace and policy enforcement for autonomous systems. EU AI Act Art. 12/13/14/17 evidence. Air-gapped, offline-first, Apache 2.0.
+Prove your AI decisions to the auditor. Agility infrastructure for regulated AI — Trace every decision, Enforce every policy, Prove it to your auditor. EU AI Act Art. 12/13/14/17 evidence. Air-gapped, offline-first, Apache 2.0.
 
 ## Test suite
 
@@ -39,12 +39,12 @@ Prove your AI decisions to the auditor. Sovereign decision trace and policy enfo
 - **#3** good first issue: add more policy examples _(labels: good first issue)_
 - **#7** RFC-001: SovereigntyManifest feedback wanted _(labels: rfc, discussion)_
 - **#8** good first issue: add policy examples for healthcare _(labels: good first issue)_
-- **#16** good first issue: Go implementation of RFC-001 _(labels: good first issue)_
-- **#17** good first issue: TypeScript/Node implementation of RFC-001 _(labels: good first issue)_
+- **#16** deferred: Go implementation of RFC-001 _(labels: deferred)_
+- **#17** deferred: TypeScript/Node implementation of RFC-001 _(labels: deferred)_
 - **#19** v3.2: Linux Foundation Europe formal application _(labels: roadmap)_
 - **#20** v3.2: BSI IT-Grundschutz formal assessment submission _(labels: roadmap)_
 - **#21** v3.3: EU-sovereign build pipeline (Phase 3) _(labels: roadmap)_
-- **#24** v4.0: SovereignRouter — policy-driven model selection _(labels: enhancement, roadmap)_
+- **#24** v4.x: model-routing sub-capability under Sentinel Federation _(labels: enhancement, roadmap)_
 - **#25** [Pilot] Welcome — what this intake is and how it works _(labels: pilot)_
 
 ## Recent releases
@@ -64,6 +64,7 @@ Prove your AI decisions to the auditor. Sovereign decision trace and policy enfo
 
 ## Shipped
 
+- **3.3.0 (2026-04-17)** — ### Positioning refinement (not reversal)
 - **3.2.0 (2026-04-16)** — ### Customer-validation release — privacy by default, narrative demo, honesty alignment
 - **3.1.0 (2026-04-14)** — **The Auditor Release.** Honest scope framing, visible CI/CD integration,
 - **3.0.7 (2026-04-12)** — **Technology-agnostic positioning: The Sovereign Decision Kernel.**
@@ -75,6 +76,5 @@ Prove your AI decisions to the auditor. Sovereign decision trace and policy enfo
 - **3.0.1 (2026-04-11)** — **Bug fix: infrastructure scanner no longer hangs on large directories.**
 - **3.0.0 (2026-04-11)** — **Complete platform · API frozen · BSI assessment ready.**
 - **2.4.0 (2026-04-11)** — **Rust RFC-001 implementation. Closes #13. Multi-language spec.**
-- **2.3.0 (2026-04-11)** — **LangFuse sovereignty panel. Closes #14.**
 
 <!-- SYNC_ALL_STATUS_END -->
