@@ -187,6 +187,30 @@ Stored locally. No cloud account. No API key. No network call.
 
 ---
 
+## How it works
+
+Every time an autonomous system makes a decision, Sentinel answers
+three questions:
+
+1. **May it do this?** — A policy evaluator runs before execution. If
+   the decision violates policy, Sentinel blocks it and records the
+   triggering rule.
+
+2. **Why did it want to?** — The decision is traced with input hash,
+   policy result, model, agent, and sovereignty scope — tamper-resistant
+   and append-only.
+
+3. **Do we need to intervene?** — The Art. 14 kill switch halts every
+   decision instantly. Overrides are recorded as linked trace entries;
+   the original record is never mutated.
+
+That is the trace + govern loop. Art. 12, Art. 13, and Art. 14 of the
+EU AI Act are automated side-effects of this mechanism, not a separate
+project. For the deeper CIO/auditor framing (four institutional
+questions) see [docs/vision.md](docs/vision.md).
+
+---
+
 ## With policy evaluation
 
 ```python
