@@ -920,16 +920,17 @@ def _section_hero(
   <div class="container hero-grid">
     <div>
       <div class="sentinel-mark">{MARK_SVG}</div>
-      <div class="eyebrow">v{version} · EU AI Act · Any autonomous system · Apache 2.0 permanent</div>
+      <div class="eyebrow">v{version} · EU AI Act 2026-08-02 · Agility infrastructure · Apache 2.0 permanent</div>
       <h1>
-        <span>Decisions.</span>
-        <span class="underline">Sovereign.</span>
-        <span>Auditable.</span>
+        <span>Record.</span>
+        <span class="underline">Enforce.</span>
+        <span>Prove.</span>
       </h1>
       <p class="lead">
-        Sentinel wraps any autonomous decision system and records tamper-resistant
-        decision traces to local sovereign storage. Works with LLMs, ML classifiers,
-        rule engines, and robotic systems. Zero cloud. Zero US CLOUD Act exposure.
+        Sentinel is agility infrastructure for regulated AI. Wrap any
+        autonomous decision function with <code>@sentinel.trace</code>,
+        evaluate policy in-process, and produce an auditor-grade evidence
+        pack. Zero cloud. Zero US CLOUD Act exposure.
         <strong><span id="hero-days">{days}</span> days to EU AI Act enforcement.</strong>
       </p>
       <div class="stats">
@@ -968,11 +969,11 @@ def _terminal_block() -> str:
     <div class="line l1"><span class="prompt">$</span> pipx install sentinel-kernel</div>
     <div class="line l2"><span class="prompt">$</span> sentinel demo</div>
     <div class="line l3" style="opacity:0.5">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-    <div class="line l4" style="opacity:0.5">&nbsp; SENTINEL DEMO — Sovereignty walkthrough</div>
+    <div class="line l4" style="opacity:0.5">&nbsp; SENTINEL DEMO — Record. Enforce. Prove.</div>
     <div class="line l5" style="opacity:0.5">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-    <div class="line l6"><span class="ok">✓</span> 50 decisions traced (EU sovereign)</div>
+    <div class="line l6"><span class="ok">✓</span> 50 decisions recorded (EU jurisdiction)</div>
     <div class="line l7"><span class="ok">✓</span> Kill switch tested (Art. 14)</div>
-    <div class="line l8"><span class="ok">✓</span> Sovereignty scan (92% score)</div>
+    <div class="line l8"><span class="ok">✓</span> Dependency scan (92% provable)</div>
     <div class="line l9"><span class="ok">✓</span> EU AI Act compliance (PARTIAL)</div>
     <div class="line l10"><span class="ok">✓</span> HTML report generated</div>
     <div class="line l11">&nbsp;</div>
@@ -1032,7 +1033,7 @@ def _section_v3_highlights(version: str) -> str:
 
     <div class="note" style="margin-top:1.5rem;">
       Test suite: <strong>686 tests, 100% line and branch coverage enforced in CI</strong>.
-      Manifesto-as-code runs as <strong>5 named CI theses</strong> on every PR.
+      Policy-as-code runs as <strong>5 CI gates</strong> on every PR.
       No new hard dependencies — reportlab is an optional <code>[pdf]</code> extra.
     </div>
   </div>
@@ -1044,8 +1045,8 @@ def _section_problem() -> str:
     return """
 <section class="block">
   <div class="container">
-    <h2>Most solutions fail the sovereignty test</h2>
-    <p class="sub">Three ways to log autonomous decisions. Only one passes the EU AI Act, the CLOUD Act, and the air-gap test.</p>
+    <h2>Most solutions fail the provability test</h2>
+    <p class="sub">Three ways to log autonomous decisions in Europe. Only one passes the EU AI Act, the CLOUD Act, and the air-gap test together.</p>
 
     <table class="compare">
       <thead>
@@ -1064,8 +1065,7 @@ def _section_problem() -> str:
         <tr><td class="row-label">Open source</td><td class="partial">Some</td><td class="no">✗</td><td class="col-good-cell yes">✓ Apache 2.0</td></tr>
         <tr><td class="row-label">On-premise</td><td class="no">✗</td><td class="partial">Expensive</td><td class="col-good-cell yes">✓ Default</td></tr>
         <tr><td class="row-label">BSI path</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓ v3.0 ready</td></tr>
-        <tr><td class="row-label">Quantum-safe signing</td><td class="no">✗</td><td class="partial">Server-side</td><td class="col-good-cell yes">✓ ML-DSA-65, client-side</td></tr>
-        <tr><td class="row-label">Manifesto-as-code CI</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓ 5 theses, every PR</td></tr>
+        <tr><td class="row-label">Policy-as-code CI</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓ 5 gates, every PR</td></tr>
         <tr><td class="row-label">ML classifier governance</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓</td></tr>
         <tr><td class="row-label">Rule engine audit trail</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓</td></tr>
       </tbody>
@@ -1082,12 +1082,12 @@ def _section_problem() -> str:
 
 
 def _section_kernel() -> str:
-    """The Sovereign Decision Kernel — three-layer architecture diagram."""
+    """The four modules — Trace, Policy, Evidence, Federation."""
     # SVG diagram: single viewBox, all elements positioned absolutely.
     # Dimensions chosen so width scales to container up to 760px.
     svg = """
 <svg viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg" role="img"
-     aria-label="Three-layer Sentinel kernel: business logic, kernel (Govern, Route, Trace), model layer, sovereign storage.">
+     aria-label="Sentinel four-module architecture: Trace, Policy, Evidence, Federation (roadmap).">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
             markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1114,37 +1114,46 @@ def _section_kernel() -> str:
   <line x1="360" y1="72" x2="360" y2="108"
         stroke="#34d399" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <!-- Box 2: SENTINEL KERNEL (big green border) -->
+  <!-- Box 2: SENTINEL (big green border) -->
   <rect x="40" y="116" width="640" height="298" rx="14"
         fill="#0a0e14" stroke="#34d399" stroke-width="2"/>
-  <text x="60" y="148" class="lbl-big">SENTINEL KERNEL</text>
-  <text x="60" y="168" class="lbl-xs">EU-SOVEREIGN · OPEN SOURCE · APACHE 2.0</text>
+  <text x="60" y="148" class="lbl-big">SENTINEL</text>
+  <text x="60" y="168" class="lbl-xs">AGILITY INFRASTRUCTURE FOR REGULATED AI · APACHE 2.0 PERMANENT</text>
 
-  <!-- Inner GOVERN box -->
-  <rect x="64" y="186" width="292" height="112" rx="10"
+  <!-- TRACE box -->
+  <rect x="64" y="186" width="192" height="112" rx="10"
         fill="#111827" stroke="#34d399" stroke-width="1.5"/>
-  <text x="80" y="212" class="lbl">GOVERN</text>
-  <text x="326" y="212" text-anchor="end" class="tag">v3.0 ✓</text>
-  <text x="80" y="240" class="lbl-sm">Policy-as-code</text>
-  <text x="80" y="258" class="lbl-sm">Kill switch (Art. 14)</text>
-  <text x="80" y="276" class="lbl-sm">Preflight · Manifesto</text>
+  <text x="80" y="212" class="lbl">TRACE</text>
+  <text x="236" y="212" text-anchor="end" class="tag">v3.x ✓</text>
+  <text x="80" y="238" class="lbl-sm">Record</text>
+  <text x="80" y="258" class="lbl-xs">@sentinel.trace · SHA-256</text>
+  <text x="80" y="276" class="lbl-xs">Privacy by default</text>
 
-  <!-- Inner ROUTE box -->
-  <rect x="364" y="186" width="292" height="112" rx="10"
-        fill="#111827" stroke="#3b82f6" stroke-width="1.5"/>
-  <text x="380" y="212" class="lbl">ROUTE</text>
-  <text x="626" y="212" text-anchor="end" class="tag-blue">v4.0 →</text>
-  <text x="380" y="240" class="lbl-sm">Which model?</text>
-  <text x="380" y="258" class="lbl-sm">Which sovereignty?</text>
-  <text x="380" y="276" class="lbl-sm">Which data class?</text>
+  <!-- POLICY box -->
+  <rect x="264" y="186" width="192" height="112" rx="10"
+        fill="#111827" stroke="#34d399" stroke-width="1.5"/>
+  <text x="280" y="212" class="lbl">POLICY</text>
+  <text x="436" y="212" text-anchor="end" class="tag">v3.x ✓</text>
+  <text x="280" y="238" class="lbl-sm">Enforce</text>
+  <text x="280" y="258" class="lbl-xs">OPA/Rego · Python rules</text>
+  <text x="280" y="276" class="lbl-xs">Kill switch · Preflight</text>
 
-  <!-- Inner TRACE box (full width) -->
+  <!-- EVIDENCE box -->
+  <rect x="464" y="186" width="192" height="112" rx="10"
+        fill="#111827" stroke="#34d399" stroke-width="1.5"/>
+  <text x="480" y="212" class="lbl">EVIDENCE</text>
+  <text x="636" y="212" text-anchor="end" class="tag">v3.x ✓</text>
+  <text x="480" y="238" class="lbl-sm">Prove</text>
+  <text x="480" y="258" class="lbl-xs">Signed PDF packs</text>
+  <text x="480" y="276" class="lbl-xs">Attestations · CI check</text>
+
+  <!-- FEDERATION box (full width) -->
   <rect x="64" y="314" width="592" height="82" rx="10"
-        fill="#111827" stroke="#059669" stroke-width="1.5"/>
-  <text x="80" y="340" class="lbl">TRACE</text>
-  <text x="626" y="340" text-anchor="end" class="tag">v3.0 ✓</text>
-  <text x="80" y="364" class="lbl-sm">Every decision · sovereign · tamper-resistant · auditable</text>
-  <text x="80" y="382" class="lbl-xs">EU AI ACT ART. 12 AUTOMATED · ML-DSA-65 SIGNED · NDJSON PORTABLE</text>
+        fill="#111827" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="6 3"/>
+  <text x="80" y="340" class="lbl">FEDERATION</text>
+  <text x="636" y="340" text-anchor="end" class="tag-blue">→ roadmap</text>
+  <text x="80" y="364" class="lbl-sm">Multi-institution aggregation · concern groups · supervisory rollup</text>
+  <text x="80" y="382" class="lbl-xs">RFC-002 PLANNED · ARCHITECTURALLY ANCHORED · NOT SHIPPING YET</text>
 
   <!-- Arrow down -->
   <line x1="360" y1="418" x2="360" y2="454"
@@ -1161,10 +1170,10 @@ def _section_kernel() -> str:
   <line x1="360" y1="540" x2="360" y2="576"
         stroke="#34d399" stroke-width="2" marker-end="url(#arrow)"/>
 
-  <!-- Box 4: SOVEREIGN STORAGE -->
+  <!-- Box 4: LOCAL STORAGE -->
   <rect x="120" y="584" width="480" height="72" rx="10"
         fill="#111827" stroke="#1f2937" stroke-width="1"/>
-  <text x="360" y="612" text-anchor="middle" class="lbl">SOVEREIGN STORAGE</text>
+  <text x="360" y="612" text-anchor="middle" class="lbl">LOCAL STORAGE</text>
   <text x="360" y="632" text-anchor="middle" class="mono">SQLite · PostgreSQL · NDJSON</text>
   <text x="360" y="648" text-anchor="middle" class="lbl-xs">YOUR INFRASTRUCTURE. ALWAYS.</text>
 </svg>
@@ -1172,8 +1181,8 @@ def _section_kernel() -> str:
     return f"""
 <section class="block">
   <div class="container">
-    <h2>The Sovereign Decision Kernel</h2>
-    <p class="sub">Three layers between your business logic and any autonomous decision system. One thin kernel you can read end-to-end.</p>
+    <h2>The four modules</h2>
+    <p class="sub">One codebase. One CLI. One installation. Four named entry points — Trace, Policy, Evidence, Federation — for four buyer archetypes.</p>
 
     <div class="kernel-wrap">
       {svg}
@@ -1182,15 +1191,19 @@ def _section_kernel() -> str:
     <div class="kernel-taglines">
       <div class="tagline-card trace">
         <h4>Trace</h4>
-        <p>What was decided. EU AI Act Art. 12, automated.</p>
+        <p>Record every decision. EU AI Act Art. 12 automated. <code>@sentinel.trace</code> in one line.</p>
       </div>
       <div class="tagline-card govern">
-        <h4>Govern</h4>
-        <p>What may be decided. Policy-as-code, kill switch, preflight.</p>
+        <h4>Policy</h4>
+        <p>Enforce every policy. Kill switch (Art. 14), OPA/Rego, Python rules, preflight.</p>
+      </div>
+      <div class="tagline-card trace">
+        <h4>Evidence</h4>
+        <p>Prove to your auditor. Signed PDF packs, portable attestations, compliance reports.</p>
       </div>
       <div class="tagline-card route">
-        <h4>Route</h4>
-        <p>Which model decides. Coming v4.0 — RFC-002 in discussion.</p>
+        <h4>Federation</h4>
+        <p>Multi-institution aggregation. Roadmap — RFC-002 planned.</p>
       </div>
     </div>
   </div>
@@ -1208,13 +1221,13 @@ def _section_dashboard(days: int) -> str:
     <div class="panels">
 
       <div class="panel">
-        <h3>Sovereignty score</h3>
+        <h3>Provability score</h3>
         <svg class="gauge-svg" viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
           <circle class="gauge-ring" cx="100" cy="100" r="70"/>
           <circle class="gauge-fill" cx="100" cy="100" r="70" style="--g: 0.78;"/>
           <text class="gauge-text" x="100" y="112" text-anchor="middle">78%</text>
         </svg>
-        <div class="gauge-label">Overall sovereignty</div>
+        <div class="gauge-label">Overall provability</div>
         <div class="gauge-sub">Runtime: EU ✓ · Storage: On-premise ✓ · CI/CD: ⚠ acknowledged</div>
       </div>
 
@@ -1252,7 +1265,7 @@ def _section_dashboard(days: int) -> str:
         <h3>Dependency map</h3>
         <div class="dep-cols">
           <div>
-            <h4 class="ok">Sovereign ✓</h4>
+            <h4 class="ok">Provable ✓</h4>
             <ul class="dep-list">
               <li>sentinel-kernel <span class="residency">EU · DE</span></li>
               <li>postgresql <span class="residency">EU-neutral</span></li>
@@ -1300,7 +1313,7 @@ def _section_code() -> str:
 <section class="block">
   <div class="container">
     <h2>Start in 2 minutes</h2>
-    <p class="sub">Evaluate the full sovereignty stack — or embed it in your code.</p>
+    <p class="sub">Evaluate the full Record · Enforce · Prove stack — or embed it in your code.</p>
 
     <div class="tabs">
       <div class="tab-headers">
@@ -1315,17 +1328,17 @@ def _section_code() -> str:
 <span class="prompt">$</span> pipx install sentinel-kernel
 <span class="prompt">$</span> sentinel demo
 
-<span class="cm"># Sovereignty scan of your environment</span>
+<span class="cm"># Dependency scan of your environment</span>
 <span class="prompt">$</span> sentinel scan
 
 <span class="cm"># EU AI Act compliance check</span>
 <span class="prompt">$</span> sentinel compliance check
 
-<span class="cm"># Generate a self-contained HTML sovereignty report</span>
-<span class="prompt">$</span> sentinel report --output sovereignty.html
+<span class="cm"># Generate a self-contained HTML provability report</span>
+<span class="prompt">$</span> sentinel report --output provability.html
 
-<span class="cm"># Generate a portable governance attestation</span>
-<span class="prompt">$</span> sentinel attestation generate --output governance.json</pre></div>
+<span class="cm"># Generate a portable attestation</span>
+<span class="prompt">$</span> sentinel attestation generate --output attestation.json</pre></div>
 
       <div id="tab-minimal" class="tab-panel"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel
 
@@ -1335,7 +1348,7 @@ sentinel = <span class="fn">Sentinel</span>()  <span class="cm"># SQLite, zero c
 <span class="kw">async def</span> <span class="fn">my_agent</span>(context: <span class="cls">dict</span>) -&gt; <span class="cls">dict</span>:
     <span class="kw">return</span> {<span class="st">"decision"</span>: <span class="st">"approved"</span>}
 
-<span class="cm"># Every call produces a sovereign trace</span>
+<span class="cm"># Every call produces an auditor-grade decision record</span>
 result = <span class="kw">await</span> <span class="fn">my_agent</span>({<span class="st">"amount"</span>: <span class="nu">5000</span>})
 <span class="fn">print</span>(result)  <span class="cm"># {"decision": "approved"}</span>
 
@@ -1371,14 +1384,14 @@ sentinel = <span class="fn">Sentinel</span>(
 <span class="kw">from</span> sentinel.compliance.euaiact <span class="kw">import</span> EUAIActChecker
 
 <span class="kw">class</span> <span class="cls">OurPolicy</span>(SentinelManifesto):
-    name = <span class="st">"Production Sovereignty Policy v1"</span>
+    name = <span class="st">"Production provability policy v1"</span>
     jurisdiction = <span class="fn">EUOnly</span>()
     kill_switch = <span class="fn">Required</span>()
     ci_cd = <span class="fn">AcknowledgedGap</span>(
         provider=<span class="st">"GitHub Actions (Microsoft/US)"</span>,
         migrating_to=<span class="st">"Self-hosted Forgejo"</span>,
         by=<span class="st">"2027-Q2"</span>,
-        reason=<span class="st">"No EU-sovereign CI with comparable UX"</span>,
+        reason=<span class="st">"No EU-operated CI with comparable UX"</span>,
     )
 
 sentinel = <span class="fn">Sentinel</span>()
@@ -1388,38 +1401,38 @@ report = <span class="fn">EUAIActChecker</span>().<span class="fn">check</span>(
 <span class="fn">print</span>(report.<span class="fn">diff</span>())
 
 <span class="cm"># Generate self-contained HTML report</span>
-report.<span class="fn">save_html</span>(<span class="st">"sovereignty_report.html"</span>)
+report.<span class="fn">save_html</span>(<span class="st">"provability_report.html"</span>)
 
-<span class="cm"># Check manifesto vs reality</span>
-manifesto_report = <span class="fn">OurPolicy</span>().<span class="fn">check</span>(sentinel_instance=sentinel)
-<span class="fn">print</span>(<span class="st">f"Score: {manifesto_report.overall_score:.0%}"</span>)</pre></div>
+<span class="cm"># Check policy vs reality</span>
+policy_report = <span class="fn">OurPolicy</span>().<span class="fn">check</span>(sentinel_instance=sentinel)
+<span class="fn">print</span>(<span class="st">f"Score: {policy_report.overall_score:.0%}"</span>)</pre></div>
 
       <div id="tab-governance" class="tab-panel"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> (
     Sentinel, BudgetTracker,
     generate_attestation, verify_attestation,
 )
-<span class="kw">from</span> sentinel.crypto <span class="kw">import</span> QuantumSafeSigner
 
-<span class="cm"># Quantum-safe signing — keys stay on your infrastructure</span>
-signer = <span class="fn">QuantumSafeSigner</span>(
-    key_path=<span class="st">"/etc/sentinel/keys/signing.key"</span>,
-    public_key_path=<span class="st">"/etc/sentinel/keys/signing.pub"</span>,
-)
-sentinel = <span class="fn">Sentinel</span>(signer=signer)
+sentinel = <span class="fn">Sentinel</span>()
+
+<span class="cm"># Evidence — signed PDF pack an auditor accepts</span>
+<span class="cm"># (sentinel evidence-pack --output audit.pdf --financial-sector)</span>
 
 <span class="cm"># Preflight — check before you act, no trace written</span>
 result = sentinel.<span class="fn">preflight</span>(<span class="st">"data:delete:production"</span>)
 <span class="kw">if not</span> result.cleared:
     <span class="kw">raise</span> <span class="cls">RuntimeError</span>(result.reasons)
 
-<span class="cm"># BudgetTracker — every cost entry is a sovereign trace</span>
+<span class="cm"># BudgetTracker — every cost entry is a traced decision</span>
 budget = <span class="fn">BudgetTracker</span>(sentinel=sentinel, limit=<span class="nu">10.0</span>)
 check = budget.<span class="fn">check</span>(estimated_cost=<span class="nu">0.25</span>)
 budget.<span class="fn">record</span>(<span class="st">"api:mistral"</span>, actual_cost=<span class="nu">0.23</span>)
 
 <span class="cm"># Portable attestation — verifiable offline, no service needed</span>
 att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
-<span class="kw">assert</span> <span class="fn">verify_attestation</span>(att).valid</pre></div>
+<span class="kw">assert</span> <span class="fn">verify_attestation</span>(att).valid
+
+<span class="cm"># Optional long-term-retention signing (ML-DSA-65, FIPS 204)</span>
+<span class="cm"># lives in sentinel-kernel[pqc] — see docs/sentinel-evidence.md</span></pre></div>
 
     </div>
   </div>
@@ -1477,24 +1490,22 @@ def _section_inside() -> str:
           <li><strong>@sentinel.trace</strong> — any agent, sync or async</li>
           <li><strong>Kill switch</strong> — Art. 14, no restart, thread-safe</li>
           <li><strong>Preflight</strong> — check before you act, no trace written</li>
-          <li><strong>BudgetTracker</strong> — spend as sovereign DecisionTrace</li>
+          <li><strong>BudgetTracker</strong> — every cost entry is a traced decision</li>
           <li><strong>Attestations</strong> — portable, verifiable offline</li>
           <li><strong>Output verification</strong> — hash-check any stored output</li>
-          <li><strong>Quantum-safe signing</strong> — ML-DSA-65, client-side keys</li>
-          <li><strong>RFC 3161 timestamping</strong> — EU TSAs only (DFN, D-Trust)</li>
           <li><strong>SimpleRule + LocalRego (OPA)</strong> policy evaluation</li>
           <li><strong>SQLite + PostgreSQL + Filesystem</strong> storage backends</li>
           <li><strong>Air-gapped</strong> — network blocked at socket level in CI</li>
           <li><strong>LangChain · CrewAI · AutoGen</strong> callbacks &amp; hooks</li>
           <li><strong>Haystack</strong> component wrapper</li>
-          <li><strong>OpenTelemetry</strong> — sovereignty attrs in every span</li>
-          <li><strong>LangFuse sovereignty panel</strong> — self-contained HTML widget</li>
+          <li><strong>OpenTelemetry</strong> — provability attrs in every span</li>
+          <li><strong>LangFuse provability panel</strong> — self-contained HTML widget</li>
           <li><strong>Jupyter · FastAPI · Django · Prometheus</strong> integrations</li>
-          <li><strong>Sovereignty scanner</strong> — 60+ packages mapped</li>
-          <li><strong>Manifesto-as-code</strong> — 5 theses as named CI checks</li>
+          <li><strong>Dependency scanner</strong> — 60+ packages mapped by jurisdiction</li>
+          <li><strong>Policy-as-code</strong> — 5 named CI gates</li>
           <li><strong>EU AI Act · DORA · NIS2</strong> compliance checkers</li>
-          <li><strong>RFC-001 SovereigntyManifest</strong> — Python + Rust impls</li>
-          <li><strong>Full CLI</strong> — demo, scan, compliance, report, attestation, keygen</li>
+          <li><strong>RFC-001 SovereigntyManifest</strong> — Python reference (Rust experimental; DRAFT paused)</li>
+          <li><strong>Full CLI</strong> — demo, scan, compliance, report, attestation, evidence-pack</li>
           <li><strong>Docker Compose</strong> — Grafana + LangFuse + OTel</li>
         </ul>
       </div>
@@ -1537,33 +1548,34 @@ def _section_roadmap(days: int) -> str:
 
     <div class="roadmap-grid">
       <div class="roadmap-col done">
-        <h3>Trace + Govern · v3.0–v3.1 ✓</h3>
+        <h3>Trace · Policy · Evidence · v3.0–v3.3 ✓</h3>
         <ul class="roadmap-list">
-          <li><span class="tag">trace</span> Sovereign decision records</li>
-          <li><span class="tag">gov</span> Policy-as-code · manifesto-as-code</li>
-          <li><span class="tag">safe</span> Kill switch (Art. 14)</li>
-          <li><span class="tag">v3.1</span> The Auditor Release — evidence pack · ci-check · runtime briefing</li>
+          <li><span class="tag">trace</span> Tamper-resistant decision records</li>
+          <li><span class="tag">policy</span> Policy-as-code · kill switch (Art. 14)</li>
+          <li><span class="tag">evid</span> Signed PDF evidence packs · CI check</li>
+          <li><span class="tag">v3.2</span> Privacy by default (hash-only storage)</li>
+          <li><span class="tag">v3.3</span> Agility Infrastructure positioning</li>
         </ul>
         <div class="foot">Shipped and verified on main.</div>
       </div>
       <div class="roadmap-col now">
-        <h3>Certify + Route · 2026 →</h3>
+        <h3>Certify · 2026 →</h3>
         <ul class="roadmap-list">
-          <li><span class="tag">v3.2</span> LF Europe application + BSI IT-Grundschutz assessment</li>
-          <li><span class="tag">v4.0</span> SovereignRouter — policy-driven model selection</li>
-          <li><span class="tag">v4.1</span> Local adapters: Ollama · vLLM · llama.cpp</li>
+          <li><span class="tag">v3.x</span> LF Europe stewardship application</li>
+          <li><span class="tag">v3.x</span> BSI IT-Grundschutz formal assessment</li>
+          <li><span class="tag">v3.x</span> First lighthouse design-partner deployments</li>
         </ul>
-        <div class="foot">RFC-002 in discussion. Issues #20, #21 open.</div>
+        <div class="foot">Issues #19, #20 open.</div>
       </div>
       <div class="roadmap-col future">
-        <h3>Ecosystem · 2027+</h3>
+        <h3>Federation · Ecosystem · 2027+</h3>
         <ul class="roadmap-list">
-          <li><span class="tag">pipe</span> EU-sovereign build pipeline</li>
-          <li><span class="tag">ml</span> Multi-language: Python · Rust · Go · TS</li>
-          <li><span class="tag">llm</span> LLM-guided deployment</li>
+          <li><span class="tag">v4.0</span> Federation module — multi-institution aggregation (RFC-002 planned)</li>
+          <li><span class="tag">pipe</span> EU-sovereign build pipeline (Gitea/Forgejo)</li>
           <li><span class="tag">pkg</span> EU package registry instead of PyPI</li>
+          <li><span class="tag">sign</span> Signed build artefacts, keys on EU hardware</li>
         </ul>
-        <div class="foot">Breaking the American convenience layer completely.</div>
+        <div class="foot">Close the last acknowledged gap in the supply chain.</div>
       </div>
     </div>
 
@@ -1657,9 +1669,9 @@ def _render_index(
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Sovereign decision tracing for any autonomous system v{version}. LLMs, ML classifiers, rule engines, robotics. EU AI Act compliant. Air-gapped. Apache 2.0.">
+<meta name="description" content="Agility infrastructure for regulated AI v{version}. Record every decision, Enforce every policy, Prove it to your auditor. EU AI Act Art. 12/13/14/17. Apache 2.0. Air-gapped capable.">
 <link rel="icon" type="image/svg+xml" href="{FAVICON_DATA_URI}">
-<title>Sentinel v{version} — Sovereign Decision Kernel</title>
+<title>Sentinel v{version} — Agility infrastructure for regulated AI</title>
 <style>{CSS}</style>
 </head>
 <body>

@@ -5,6 +5,9 @@
 *One decorator. One command. One signed PDF evidence pack. Runs fully
 offline. No US cloud dependency. Apache 2.0, forever.*
 
+*Agility infrastructure for regulated AI. Move like a startup. Prove
+like a regulated bank.*
+
 **EU AI Act enforcement starts 2 August 2026.**
 
 ![Sentinel — 10 defence-logistics decisions, 3 blocked, full audit trail](docs/samples/sentinel-demo.gif)
@@ -23,7 +26,7 @@ sentinel demo                  # 20 seconds, no config
 
 - [**I'm a developer**](docs/personas/developer.md) — integrate in 12 lines, see the trace
 - [**I'm a compliance officer / DPO**](docs/personas/compliance-officer.md) — Art. 12/13/14/17 evidence, honest gap report
-- [**I'm a CISO / security lead**](docs/personas/security-ciso.md) — sovereignty posture, SBOM, incident response
+- [**I'm a CISO / security lead**](docs/personas/security-ciso.md) — jurisdictional posture, SBOM, incident response
 - [**I'm an auditor**](docs/personas/auditor.md) — verify the evidence pack independently
 - [**Buying for my team**](docs/personas/executive-brief.md) — one-page commercial brief
 
@@ -31,7 +34,8 @@ sentinel demo                  # 20 seconds, no config
 
 ## What Sentinel is. What it is not.
 
-Sentinel is the **enforcement and evidence layer** for EU AI Act Art. 12
+Sentinel is **agility infrastructure for regulated AI** — the decision
+trace, policy enforcement, and evidence layer for EU AI Act Art. 12
 (logging), Art. 13 (transparency), Art. 14 (human oversight), and Art. 17
 (quality-management traceability).
 
@@ -137,7 +141,7 @@ The demo runs a realistic EU defence contractor scenario — policy
 evaluation, kill switch, sovereignty scan — streaming live traces
 to Grafana. See [demo/README.md](demo/README.md) for what to look at.
 
-## Five minutes to your first sovereign trace
+## Five minutes to your first decision record
 
 ```python
 from sentinel import Sentinel
@@ -200,10 +204,35 @@ three questions:
    decision instantly. Overrides are recorded as linked trace entries;
    the original record is never mutated.
 
-That is the trace + govern loop. Art. 12, Art. 13, and Art. 14 of the
-EU AI Act are automated side-effects of this mechanism, not a separate
-project. For the deeper CIO/auditor framing (four institutional
-questions) see [docs/vision.md](docs/vision.md).
+That is the Record. Enforce. Prove. loop. Art. 12, Art. 13, and Art. 14
+of the EU AI Act are automated side-effects of this mechanism, not a
+separate project. For the deeper framing (Agility Infrastructure, the
+three operative levels, the four modules) see
+[docs/vision.md](docs/vision.md).
+
+---
+
+## Record. Enforce. Prove.
+
+Three verbs. Each a clearly defined operation. Together, the full
+lifecycle of an AI decision in a regulated environment.
+
+**Record.** Every AI decision is recorded with context, input hash,
+timestamp, and outcome. Append-only, tamper-resistant, privacy-by-
+default (SHA-256 hash instead of raw input unless explicitly
+configured), stored under the operator's jurisdiction. The
+`@sentinel.trace` decorator shipped in v1.0 delivers this in one line.
+
+**Enforce.** Every AI decision passes through a policy layer before it
+executes. Policy-as-code — OPA/Rego or Python rules. Versioned,
+testable, CI/CD-deployable. EU AI Act Art. 14 kill-switch is a
+first-class primitive. Multi-party approval gates are available via
+`HumanOverride`.
+
+**Prove.** Every record, every policy decision can be aggregated into
+an evidence pack — cryptographically signed, mapped to EU AI Act,
+DORA, NIS2, and BSI IT-Grundschutz, in a format an auditor accepts.
+`sentinel evidence-pack --output audit.pdf` is the one command.
 
 ---
 
@@ -256,7 +285,7 @@ async def evaluate_procurement(ctx: dict) -> dict:
 
 | | Sentinel | Cloud observability tools | Proprietary platforms |
 |---|---|---|---|
-| Sovereign decision records | ✓ | — | Vendor-jurisdicted |
+| Decision records (EU-operated, tamper-resistant) | ✓ | — | Vendor-jurisdicted |
 | In-process policy evaluation | ✓ | — | — |
 | Air-gapped operation | ✓ | — | — |
 | BSI IT-Grundschutz path | ✓ | — | — |
@@ -265,7 +294,7 @@ async def evaluate_procurement(ctx: dict) -> dict:
 | Apache 2.0 permanently | ✓ | Varies | — |
 | US CLOUD Act exposure | **None** | Varies | **Unconditional** |
 
-Sentinel is not an observability tool. It is not a content filter. It does not replace your LLM, your ML model, or your rule engine — it does not care which technology makes the decision. It wraps any Python function and produces a legally-valid, portable, sovereign record of every decision it makes.
+Sentinel is not an observability tool. It is not a content filter. It does not replace your LLM, your ML model, or your rule engine — it does not care which technology makes the decision. It wraps any Python function and produces a legally-valid, portable, auditor-grade record of every decision it makes.
 
 ---
 
@@ -328,43 +357,39 @@ sentinel = Sentinel(
 
 ---
 
-## Why sovereignty matters
+## Why EU jurisdiction matters
 
-The US CLOUD Act (18 U.S.C. § 2713) requires US-incorporated companies to produce data stored anywhere in the world on valid legal process. This applies to EU data centres operated by US companies. No contract eliminates it.
+The US CLOUD Act is the reason EU jurisdiction is not a preference but a structural constraint. 18 U.S.C. § 2713 requires US-incorporated companies to produce data stored anywhere in the world on valid legal process. This applies to EU data centres operated by US companies. No contract eliminates it.
 
 EU AI Act Article 12 mandates automatic, tamper-resistant logging for high-risk AI systems from **2 August 2026**. Decision logs that are simultaneously accessible to US authorities do not satisfy this requirement from EU jurisdiction.
 
-Sentinel's critical path — interceptor, policy evaluation, trace emission, storage — contains no US-owned components. This is architectural. Not a configuration option.
+Sentinel's critical path contains no US-owned components. Sovereignty is the consequence, not the headline. The three provability conditions (jurisdictional integrity, air-gap operability, certifiable evidence chain) produce EU sovereignty as an outcome — see [docs/provability.md](docs/provability.md).
 
 ---
 
 ## Roadmap
 
-| Phase | Status | What |
+| Module | Status | What |
 |---|---|---|
-| **Trace + Govern** | ✓ v3.0 | Sovereign traces, policy-as-code, kill switch |
-| **Certify** | → 2026 | BSI IT-Grundschutz, LF Europe |
-| **Route** | → v4.0 | Sovereign model router |
-| **Ecosystem** | 2027+ | EU build pipeline, multi-language |
+| **Trace** | ✓ shipped (v1.0 → v3.3) | `@sentinel.trace`, SQLite / PostgreSQL / Filesystem backends, SHA-256 hashing, hash-only privacy by default |
+| **Policy** | ✓ shipped (v1.0 → v3.3) | Policy-as-code, OPA/Rego + Python rules, kill switch (EU AI Act Art. 14), preflight checks |
+| **Evidence** | ✓ shipped (v3.1 → v3.3) | Signed PDF evidence packs, portable attestations, provability + compliance reports, optional long-term-retention signing |
+| **Federation** | → roadmap | Multi-institution, concern-group, and supervisory aggregation. Architecturally anchored, RFC-002 planned. |
 
-Full phase detail, including the SovereignRouter design and the
-market thesis, lives in [docs/roadmap.md](docs/roadmap.md).
+Phase detail in [docs/roadmap.md](docs/roadmap.md).
 
 ### Version history
 
 | Version | Status | Milestone |
 |---------|--------|-----------|
-| **v1.0** | ✓ shipped | Core production baseline |
-| **v1.5** | ✓ shipped | DORA, NIS2, VS-NfD compliance |
-| **v2.0** | ✓ shipped | Production stable, BSI ready |
-| **v2.1** | ✓ shipped | BudgetTracker, attestations, CrewAI, AutoGen |
-| **v2.2** | ✓ shipped | ML-DSA-65 quantum-safe signing |
-| **v2.3** | ✓ shipped | LangFuse sovereignty panel |
-| **v2.4** | ✓ shipped | Rust RFC-001 implementation |
-| **v3.0** | ✓ shipped | API frozen, BSI pre-engagement package |
-| **v3.1** | ✓ shipped | The Auditor Release — evidence pack, ci-check, runtime briefing |
-| **v3.2** | Q3–Q4 2026 | LF Europe application + BSI IT-Grundschutz assessment |
-| **v4.0** | 2026-27 | SovereignRouter |
+| **v3.0** | ✓ shipped | API freeze, BSI pre-engagement package |
+| **v3.1** | ✓ shipped | Evidence module — signed PDF evidence pack, one-stop CI check, honest-scope framing |
+| **v3.2** | ✓ shipped | Privacy by default, customer-validation release |
+| **v3.3** | ✓ shipped | Four-module refactor (Trace, Policy, Evidence, Federation), Agility Infrastructure positioning |
+| **v3.x** | → 2026 | LF Europe stewardship application, BSI IT-Grundschutz assessment |
+| **v4.0** | → roadmap | Federation — multi-institution aggregation |
+
+Earlier milestones (v1.x, v2.x) are recorded in [CHANGELOG.md](CHANGELOG.md).
 
 ## EU AI Act compliance
 
@@ -399,19 +424,19 @@ Your business logic
         │
         ▼
 ┌─────────────────────────────────────────┐
-│           SENTINEL KERNEL               │
+│              SENTINEL                   │
+│   Agility infrastructure for AI         │
 │                                         │
-│  ┌───────────────┐  ┌─────────────────┐ │
-│  │    GOVERN ✓   │  │   ROUTE → v4.0  │ │
-│  │  Policy-code  │  │  Which model?   │ │
-│  │  Kill switch  │  │  Sovereignty?   │ │
-│  │  Preflight    │  │  Data class?    │ │
-│  └───────────────┘  └─────────────────┘ │
+│  ┌────────┐ ┌────────┐ ┌────────┐       │
+│  │ TRACE  │ │ POLICY │ │EVIDENCE│       │
+│  │   ✓    │ │   ✓    │ │   ✓    │       │
+│  │ Record │ │Enforce │ │  Prove │       │
+│  └────────┘ └────────┘ └────────┘       │
 │                                         │
-│  ┌─────────────────────────────────┐    │
-│  │          TRACE ✓                │    │
-│  │  Sovereign · Tamper-resistant   │    │
-│  └─────────────────────────────────┘    │
+│  ┌───────────────────────────────┐      │
+│  │       FEDERATION → roadmap    │      │
+│  │   Multi-institution aggregate │      │
+│  └───────────────────────────────┘      │
 └─────────────────────────────────────────┘
         │
         ▼
@@ -420,9 +445,8 @@ Your business logic
   Switch anytime. No lock-in.
         │
         ▼
-  SOVEREIGN STORAGE
+  LOCAL STORAGE (your infrastructure)
   SQLite · PostgreSQL · NDJSON
-  Your infrastructure. Always.
 ```
 
 **Critical-path guarantees:**
@@ -441,7 +465,7 @@ navigable, no framework, no tracking.
 The Runtime Briefing is a **hand-authored architecture artefact**
 served on GitHub Pages. It is not generated by the CLI and not part
 of any local output. For artefacts you generate yourself locally —
-sovereignty reports, compliance reports, signed PDF evidence packs,
+provability reports, compliance reports, signed PDF evidence packs,
 attestations, NDJSON exports — see the next section.
 
 ## Viewing generated artefacts
@@ -485,10 +509,10 @@ hosted, cloud-visible „runs" of hyperscaler agent platforms.
 
 | Artefact | Produced by | Format | Where it goes |
 |---|---|---|---|
-| Sovereignty / Compliance report | `sentinel report` | Self-contained HTML | Your filesystem |
+| Provability / Compliance report | `sentinel report` | Self-contained HTML | Your filesystem |
 | EU AI Act / DORA / NIS2 report | `sentinel compliance check --html / --json / --output` | HTML, JSON, or text | Your filesystem |
 | Signed PDF evidence pack | `sentinel evidence-pack --output` | PDF (reportlab) | Your filesystem |
-| Governance attestation | `sentinel attestation generate --output` | Self-contained JSON with SHA-256 digest | Your filesystem |
+| Portable attestation | `sentinel attestation generate --output` | Self-contained JSON with SHA-256 digest | Your filesystem |
 | Trace NDJSON export | `sentinel export --output` | NDJSON, one trace per line | Your filesystem |
 | Runtime Briefing | Hand-authored, deployed on GitHub Pages | HTML (live web page) | `https://sebastianweiss83.github.io/sentinel-kernel/runtime-briefing.html` |
 
@@ -499,8 +523,8 @@ Article 12 requires automatic, tamper-resistant logging of every decision
 made by a high-risk system — regardless of the technology underneath.
 
 An LLM, a gradient-boosted classifier, a rule engine, an industrial
-robot: if it makes a high-risk decision, it needs a sovereign decision
-record.
+robot: if it makes a high-risk decision, it needs an auditor-grade
+decision record under EU jurisdiction.
 
 ```python
 # Works with any decision function
@@ -511,18 +535,50 @@ async def my_decision(context: dict) -> dict:
     # Sentinel doesn't care. It records the decision.
 ```
 
-## Why not Palantir AIP
+## Why this category — and why the other options fall short
 
-Palantir AIP costs €5–20M per year. It is US-incorporated (CLOUD Act
-applies to all your data). It requires deployment strategists. It is
-proprietary.
+Regulated European enterprises in 2026 face three imperfect
+options for running autonomous AI under EU AI Act and BaFin
+BAIT constraints. None of them fit.
 
-When LLMs guide their own integration — and that is already happening —
-the deployment-strategist model collapses. What survives is the trusted
-kernel underneath: policy, audit trail, model router, sovereignty proof.
+**Palantir AIP** costs €5–20M per year and is US-incorporated
+(CLOUD Act applies to all your data). The deployment-
+strategist model collapses as LLMs guide their own
+integration — which is already happening.
 
-Sentinel is that kernel. Open source. EU sovereign. Self-service.
-Apache 2.0, permanently. The full argument is in [docs/vision.md](docs/vision.md).
+**Dome Systems** (US-incorporated, closed beta) has strong
+positioning for the US Fortune-500 but cannot serve EU
+regulated institutions: any US entity carries CLOUD Act
+exposure, and BaFin BAIT 8.2 exit capability is not credibly
+demonstrable under closed SaaS.
+
+**Microsoft Agent Governance Toolkit** (MIT, US-incorporated)
+wins every Microsoft-shop without a sales call. It is the
+default for enterprises without explicit EU-jurisdiction
+requirements. Sentinel is the answer for enterprises that
+must work model-agnostically or hold evidence artefacts
+under EU jurisdiction — a co-existence, not a replacement.
+
+**Cylake** (US-incorporated, hardware + software) owns the
+word *Sovereignty* in the cybersecurity category with
+billions of marketing weight. Sentinel does not compete for
+that word; it leads with *Provability*.
+
+**Native cloud governance** (Azure AI Foundry, AWS Bedrock
+Guardrails, GCP Vertex AI) is excellent for single-cloud
+deployments and loses value the moment multi-cloud or
+on-premise appears.
+
+The gap in this landscape is observable. No solution
+simultaneously offers model-spanning consistency, EU
+jurisdiction for evidence, open source with exit capability,
+and cryptographic provability in a regulation-mapped format.
+Sentinel sits precisely in that intersection.
+
+**Scale what you can prove.** Open source, EU-operated,
+Apache 2.0 forever. The full landscape analysis is in
+[docs/landscape.md](docs/landscape.md); the strategic thesis
+is in [docs/vision.md](docs/vision.md).
 
 ---
 
@@ -530,7 +586,7 @@ Apache 2.0, permanently. The full argument is in [docs/vision.md](docs/vision.md
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a PR.
 
-Every integration must document its sovereignty posture. Schema changes require an RFC. Breaking changes to the trace format go through a 14-day comment period.
+Every integration must document its jurisdictional posture. Schema changes require an RFC. Breaking changes to the trace format go through a 14-day comment period.
 
 ```bash
 git clone https://github.com/sebastianweiss83/sentinel-kernel
@@ -568,14 +624,14 @@ Sentinel is pursuing stewardship under **Linux Foundation Europe**. Until confir
 ```
 
 `sentinel ci-check` runs the EU AI Act snapshot, the runtime
-sovereignty scan, and (optionally) a manifesto check in-process,
+dependency scan, and (optionally) a policy check in-process,
 with one aggregate exit code. Fully offline, air-gapped capable.
 GitHub Actions, GitLab CI, Jenkins, and pre-commit snippets in
 [docs/ci-cd-integration.md](docs/ci-cd-integration.md).
 
 For auditors: `sentinel evidence-pack --output audit.pdf` generates
 a signed, self-contained PDF evidence pack with EU AI Act / DORA /
-NIS2 coverage, trace hash manifest, and sovereign attestation
+NIS2 coverage, trace hash manifest, and portable attestation
 appendix. Install via `pip install sentinel-kernel[pdf]`.
 
 ---
@@ -595,8 +651,8 @@ See [docs/commercial.md](docs/commercial.md).
 ## Documentation
 
 **Core**
-- [docs/vision.md](docs/vision.md) — the Sovereign Decision Kernel, in full
-- [docs/roadmap.md](docs/roadmap.md) — three phases, Router design
+- [docs/vision.md](docs/vision.md) — Sentinel vision: agility infrastructure for regulated AI, in full
+- [docs/roadmap.md](docs/roadmap.md) — four modules, phase plan
 - [docs/getting-started.md](docs/getting-started.md) — two-minute quickstart
 - [docs/architecture.md](docs/architecture.md) — detailed architecture
 - [docs/schema.md](docs/schema.md) — full trace schema reference
@@ -621,8 +677,8 @@ See [docs/commercial.md](docs/commercial.md).
 - [docs/provability.md](docs/provability.md) — Sentinel's three provability conditions
 - [docs/landscape.md](docs/landscape.md) — how Sentinel relates to the ecosystem
 - [docs/ecosystem.md](docs/ecosystem.md) — sovereign project registry
-- [docs/rfcs/RFC-001-sovereignty-manifest.md](docs/rfcs/RFC-001-sovereignty-manifest.md) — SovereigntyManifest spec (draft)
-- [rust-impl/](rust-impl/) — Rust reference implementation of RFC-001 (experimental)
+- [docs/rfcs/RFC-001-sovereignty-manifest.md](docs/rfcs/RFC-001-sovereignty-manifest.md) — SovereigntyManifest spec (DRAFT — paused pending community stewardship; Python reference in `sentinel/manifesto/`)
+- [rust-impl/](rust-impl/) — Rust reference implementation of RFC-001 (experimental, community stewardship pending)
 - [GOVERNANCE.md](GOVERNANCE.md) — governance model
 - [docs/commercial.md](docs/commercial.md) — commercial support scope
 - [CONTRIBUTING.md](CONTRIBUTING.md) — contribution guide

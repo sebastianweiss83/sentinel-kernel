@@ -1,6 +1,6 @@
 {
   "coverage": "100%",
-  "days_to_enforcement": 108,
+  "days_to_enforcement": 107,
   "enforcement_date": "2026-08-02",
   "eu_ai_act": {
     "Art. 10": "HUMAN_ACTION",
@@ -27,7 +27,7 @@
     "Django",
     "Prometheus"
   ],
-  "smoke": "33/40",
+  "smoke": "failed at step 41",
   "tests": 773,
-  "version": "3.2.0"
+  "version": "3.3.0"
 }
