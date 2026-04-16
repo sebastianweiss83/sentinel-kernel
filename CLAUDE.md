@@ -12,15 +12,15 @@
 | Tests | 773 passing |
 | Coverage | 100% |
 | Smoke test | 33/40 |
-| Last updated | 2026-04-17 01:41 UTC |
+| Last updated | 2026-04-17 01:46 UTC |
 
 ## Last 5 commits
 
+- `7da6e10` docs(3.3.0): remove named-partner leaks (BWI ref in CLAUDE, Marc/Atruvia/BWI in LinkedIn draft) — Chapter X
 - `fd0a132` docs(3.3.0): LinkedIn post draft for release announcement
 - `3421433` test(3.3.0): regenerate sample evidence pack from v3.3.0 build
 - `4cb8f9c` chore(3.3.0): sync-all regenerated, docs/performance.md v3.3.0 alignment (smoke step 42)
 - `02193af` changelog(3.3.0): positioning refinement, retire manifesto-as-code, demote quantum-safe
-- `76e2462` docs(3.3.0): BSI package, onboarding, landscape, getting-started, repo-governance (named-partner fix)
 
 ## Open issues
 
