@@ -6,13 +6,15 @@ Sentinel's test suite is that evidence.
 
 ## Numbers
 
-- **Tests:** 503+ (grows per release)
+- **Tests:** 773 passing, 5 skipped (v3.3.0; grows per release)
 - **Line coverage:** **100%** on every module in `sentinel/`
+- **Branch coverage:** **100%** enforced in CI
 - **Smoke test:** 40 steps, runs on every release
-- **Air-gap tests:** 11, runs on every PR
+- **Air-gap tests:** 8, runs on every PR (socket-level network
+  denial; full `@sentinel.trace` critical path)
 
-Coverage is enforced in CI with `--cov-fail-under=75` as a floor;
-the actual measurement is 100%.
+Coverage is enforced in CI with `--cov-fail-under=100 --cov-branch`
+on the full test suite.
 
 ## Test categories
 
@@ -81,7 +83,7 @@ cd sentinel-kernel
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
 
-pytest tests/ -v                               # 503+ tests
+pytest tests/ -v                               # 773+ tests
 pytest tests/test_airgap.py -v                 # 11 sovereignty invariants
 pytest tests/ --cov=sentinel --cov-report=term # 100% coverage
 python scripts/check_sovereignty.py            # runtime scanner

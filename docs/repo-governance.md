@@ -1,10 +1,10 @@
 # Sentinel-Kernel Repo Governance
 
-**Status:** Active | **Updated:** April 12, 2026 | **Coverage:** 100%
+**Status:** Active | **Updated:** 2026-04-17 (v3.3.0) | **Coverage:** 100%
 
 ## Purpose
 
-World-class sovereign decision infrastructure for enterprises.
+Agility infrastructure for regulated European enterprises.
 
 ## Decisions
 
@@ -23,7 +23,7 @@ World-class sovereign decision infrastructure for enterprises.
 - **Typography:** Strong sans, technical
 - **Radii:** 4px / 6px discipline
 - **Motion:** Opacity only, restrained
-- **Tone:** Sovereign infrastructure
+- **Tone:** Institutional infrastructure — restraint over flourish
 - **Anti-patterns:** AI glow, pill overload, decorative terminal
 
 ### Source of Truth
@@ -68,8 +68,8 @@ World-class sovereign decision infrastructure for enterprises.
 
 ## Operating Principle
 
-Shortest path to undeniable proof.
+Scale what you can prove.
 
 ## Next Update
 
-Post BWI / Quantum Systems feedback.
+After the first three pilot conversations land.

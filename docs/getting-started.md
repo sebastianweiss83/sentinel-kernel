@@ -1,6 +1,6 @@
 # Getting started with Sentinel
 
-Two minutes from install to your first sovereign decision trace.
+Two minutes from install to your first auditor-grade decision record.
 
 ---
 
@@ -28,7 +28,7 @@ Zero required dependencies. Works with Python 3.11 and 3.12.
 
 ---
 
-## 2. Your first sovereign trace
+## 2. Your first decision record
 
 Create `first_trace.py`:
 
@@ -64,7 +64,7 @@ You just produced a tamper-resistant decision record with:
 - ISO-8601 UTC timestamp
 - wall-clock latency in milliseconds
 - policy result (`NOT_EVALUATED` — you haven't attached a policy yet)
-- sovereignty metadata (`data_residency`, `sovereign_scope`,
+- jurisdictional metadata (`data_residency`, `sovereign_scope`,
   `schema_version`)
 
 Stored locally. No network call. No cloud account. No API key.
@@ -175,7 +175,7 @@ references, safe to email.
 
 ---
 
-## 6. Scan your sovereignty posture
+## 6. Scan your dependency posture
 
 ```bash
 sentinel scan
@@ -193,10 +193,10 @@ CI/CD    2 files, 2 findings, us_controlled=2
 INFRA    0 files, 0 findings, us_controlled=0
 ```
 
-For a full sovereignty report as HTML:
+For a full provability report as HTML:
 
 ```bash
-sentinel report --output sovereignty.html
+sentinel report --output provability.html
 ```
 
 ---
@@ -222,7 +222,7 @@ class MyPolicy(SentinelManifesto):
         provider="GitHub Actions",
         migrating_to="Forgejo (self-hosted)",
         by="2027-Q2",
-        reason="No production-ready EU-sovereign CI alternative",
+        reason="No production-ready EU-operated CI alternative",
     )
 
 report = MyPolicy().check()

@@ -1,6 +1,6 @@
 # LLMOps and AI Agent Landscape
 
-Sentinel sits at the intersection of LLM tracing and enterprise governance. This document clarifies where it fits, what it does not do, and where it is headed.
+Sentinel sits at the intersection of LLM tracing and regulated-enterprise infrastructure. This document clarifies where it fits, what it does not do, and where it is headed. For the strategic framing — agility infrastructure for regulated AI, the Record / Enforce / Prove formula, the four modules — see [docs/vision.md](vision.md).
 
 ---
 
@@ -8,9 +8,14 @@ Sentinel sits at the intersection of LLM tracing and enterprise governance. This
 
 | Category | Examples | What they do | Sentinel |
 |---|---|---|---|
-| **LLMOps / Tracing** | Langfuse, LangSmith, Phoenix, Helicone | Debug LLM calls, latency/cost metrics, prompt iteration, evals | **No** — does not trace individual LLM calls or provide dev debugging |
-| **AI Agent Frameworks** | LangGraph, CrewAI, AutoGen, Semantic Kernel | Build agent workflows and state machines | **No** — does not build agents, wraps them for governance |
-| **Enterprise Platforms** | Proprietary full-stack AI platforms with built-in decision layers | End-to-end AI deployment with vendor-controlled decision recording | **Designed for** — sovereign decision record layer for deployments where proprietary platforms are jurisdictionally excluded |
+| **LLMOps / Tracing** | Langfuse, LangSmith, Phoenix, Helicone | Debug LLM calls, latency/cost metrics, prompt iteration, evals | **Complementary** — does not trace individual LLM calls or provide dev debugging; LangFuse ships a Sentinel-compatible integration |
+| **AI Agent Frameworks** | LangGraph, CrewAI, AutoGen, Semantic Kernel | Build agent workflows and state machines | **Complementary** — does not build agents, wraps them for policy + evidence |
+| **AI agent governance (closed beta)** | Dome Systems | Runtime control layer for enterprise agent fleets | **Adjacent** — Dome is US-incorporated (CLOUD Act on every evidence record); Sentinel is the EU-jurisdictional alternative |
+| **AI agent governance (OSS)** | Microsoft Agent Governance Toolkit | OWASP Agentic Top-10 coverage for LangChain / CrewAI / Dify | **Complementary for Microsoft-first shops** — MS AGT is US-incorporated; Sentinel is the answer when EU-jurisdictional evidence is required |
+| **Sovereignty-first cybersecurity** | Cylake | Hardware + software for sovereign agent environments at national scale | **Adjacent** — Cylake is US-incorporated and owns the *Sovereignty* word in cybersecurity; Sentinel leads with *Provability* instead |
+| **Native cloud governance** | Azure AI Foundry, AWS Bedrock Guardrails, GCP Vertex AI | Deeply cloud-integrated policy and observability | **Multi-cloud clasp** — excellent per-cloud; loses value in multi-cloud / on-premise / air-gapped scenarios |
+| **Enterprise Platforms** | Proprietary full-stack AI platforms with built-in decision layers | End-to-end AI deployment with vendor-controlled decision recording | **Alternative** — auditor-grade evidence layer for deployments where proprietary platforms are jurisdictionally excluded |
+| **GRC platforms** | Sastrify, Enactia, Kovrr, ADOGRC | Inventory, risk classification, and management of AI systems | **Partner candidates**, not competitors — runtime layer (Sentinel) vs. inventory layer (GRC) |
 | **Prompt Management** | Langfuse Prompt Mgmt, PromptLayer, Humanloop | Version prompts, A/B test, human-in-loop iteration | **No** — does not manage prompts or do prompt engineering |
 | **Eval Frameworks** | DeepEval, RAGAS, UpTrain | LLM output quality scoring, RAG evaluation | **No** — does not score LLM quality or run evals |
 | **Observability** | OpenTelemetry, Grafana, Datadog | General infrastructure monitoring, distributed tracing | **Complementary** — OTel export shipped as `sentinel-kernel[otel]`; native JSON/NDJSON remains the primary format |
@@ -21,7 +26,7 @@ Sentinel sits at the intersection of LLM tracing and enterprise governance. This
 
 ## What Sentinel does
 
-Sentinel occupies a category that does not have an established name yet: **decision record infrastructure**. It produces a structured, append-only, sovereign artifact for every autonomous decision — capturing what was decided, under which policy, by which system, and under whose jurisdiction.
+Sentinel occupies a category with a distinctive shape: **agility infrastructure for regulated AI**. It produces a structured, append-only, auditor-grade artefact for every autonomous decision — capturing what was decided, under which policy, by which system, and under whose jurisdiction.
 
 This is complementary to observability and LLMOps, not competing with them. A team can use Langfuse for prompt debugging and Sentinel for compliance records. They answer different questions:
 
@@ -72,7 +77,7 @@ truth and cannot be gated by the exporter.
 
 ## Why a separate layer
 
-Observability tools record what happened. Sentinel records what was *decided* — and attaches policy evaluation, sovereignty metadata, and human override records that make the trace legally meaningful under EU AI Act Article 12.
+Observability tools record what happened. Sentinel records what was *decided* — and attaches policy evaluation, jurisdictional metadata, and human override records that make the trace legally meaningful under EU AI Act Article 12.
 
 The distinction matters in regulated environments:
 
@@ -80,3 +85,20 @@ The distinction matters in regulated environments:
 - A Sentinel trace says "this agent decided to approve this request, under this policy, which returned ALLOW, with inputs hashed as SHA-256, stored on EU-DE infrastructure, at this timestamp, with this schema version."
 
 The second is what a regulator, auditor, or court needs.
+
+## The gap in this landscape
+
+Manifesto Chapter VIII names the gap explicitly: **no other
+solution simultaneously offers model-spanning consistency, EU
+jurisdiction for evidence, open source with exit capability, and
+cryptographic provability in a regulation-mapped format.**
+
+Sentinel sits precisely in this intersection. LLMOps tools watch
+performance, not decisions. Cloud governance is locked to one
+cloud. Closed-beta governance platforms are US-incorporated.
+Sovereignty-first cybersecurity leads with the wrong noun. GRC
+platforms manage AI systems, they do not sit in the runtime path
+of a decision.
+
+That is the category Sentinel occupies. See
+[docs/vision.md](vision.md) for the full strategic framing.

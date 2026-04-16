@@ -2,11 +2,13 @@
 
 ## What it is
 
-`sentinel-kernel` is an open-source Python library that sits in the
-execution path of any autonomous decision system and produces a
-tamper-resistant decision trace for every decision it makes. It is the
-evidence layer required by EU AI Act Art. 12 (automatic logging),
-Art. 13 (transparency), and Art. 14 (human oversight). It is
+`sentinel-kernel` is an open-source Python library that implements
+agility infrastructure for regulated AI: it sits in the execution
+path of any autonomous decision system and produces an auditor-
+grade evidence record for every decision it makes. It is the
+technical layer regulated European enterprises need to satisfy
+EU AI Act Art. 12 (automatic logging), Art. 13 (transparency),
+and Art. 14 (human oversight) under EU jurisdiction. It is
 designed to run in air-gapped classified environments.
 
 ## Target deployments
