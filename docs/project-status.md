@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-16 09:14 UTC_
+_Last generated from HEAD commit: 2026-04-16 09:15 UTC_
 
 ## Version
 
@@ -18,7 +18,7 @@ Prove your AI decisions to the auditor. Sovereign decision trace and policy enfo
 
 | | |
 |---|---|
-| Tests | 731 passing |
+| Tests | 770 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
 

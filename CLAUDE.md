@@ -9,14 +9,14 @@
 | | |
 |---|---|
 | Version | `3.2.0` |
-| Tests | 731 passing |
+| Tests | 770 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-16 09:14 UTC |
+| Last updated | 2026-04-16 09:15 UTC |
 
 ## Last 5 commits
 
-- `2369508` feat: v3.2.0 — customer-validation release
+- `a883f46` feat: v3.2.0 — customer-validation release
 - `811f5d8` docs(readme): add "Who needs this" — five regulated sectors
 - `460bf69` docs(readme): add three-question framework for developers
 - `0b34f37` feat(cli): sentinel status + surface audit-gap as the next step
