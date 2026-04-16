@@ -27,7 +27,7 @@ audit-gap` to see the exact split.
 [![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
 [![Version](https://img.shields.io/badge/version-v3.1.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Tests](https://img.shields.io/badge/tests-761%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Tests](https://img.shields.io/badge/tests-722%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Status](https://img.shields.io/badge/status-production%2Fstable-brightgreen)](CHANGELOG.md)
 [![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F14%2F17-green)](docs/eu-ai-act.md)
@@ -270,6 +270,30 @@ async def evaluate_procurement(ctx: dict) -> dict:
 | US CLOUD Act exposure | **None** | Varies | **Unconditional** |
 
 Sentinel is not an observability tool. It is not a content filter. It does not replace your LLM, your ML model, or your rule engine — it does not care which technology makes the decision. It wraps any Python function and produces a legally-valid, portable, sovereign record of every decision it makes.
+
+---
+
+## Who needs this
+
+Sentinel is built for organisations deploying autonomous decisions in
+regulated contexts. The urgent users, in order of regulatory pressure:
+
+- **Financial services** — credit, fraud, AML and transaction approval
+  under DORA-aligned logging and EU AI Act Annex III.
+- **Insurance** — underwriting, claims triage and pricing with
+  explainable decision records per GDPR Art. 22.
+- **Public sector** — benefit eligibility, permit approval and
+  administrative AI where transparency is statutory.
+- **KRITIS / critical infrastructure** — operational AI decisions
+  inside essential services under NIS2 and sector-specific regulation.
+- **Defence** — logistics, procurement and dual-use assessment with
+  air-gapped and classified deployment paths.
+
+If your AI makes decisions that touch rights, access to services,
+safety, or meaningful financial outcomes, EU AI Act Annex III likely
+applies from 2 August 2026. Sentinel is the audit-trail layer for
+those decisions. The architecture stays technology-agnostic — the
+sectors above are where the deadline bites first.
 
 ---
 
