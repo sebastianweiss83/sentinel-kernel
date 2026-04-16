@@ -12,15 +12,15 @@
 | Tests | 773 passing |
 | Coverage | 100% |
 | Smoke test | 33/40 |
-| Last updated | 2026-04-17 01:32 UTC |
+| Last updated | 2026-04-17 01:34 UTC |
 
 ## Last 5 commits
 
+- `3421433` test(3.3.0): regenerate sample evidence pack from v3.3.0 build
+- `4cb8f9c` chore(3.3.0): sync-all regenerated, docs/performance.md v3.3.0 alignment (smoke step 42)
 - `02193af` changelog(3.3.0): positioning refinement, retire manifesto-as-code, demote quantum-safe
 - `76e2462` docs(3.3.0): BSI package, onboarding, landscape, getting-started, repo-governance (named-partner fix)
 - `4987e70` docs(3.3.0): persona updates — executive-brief & security-ciso provability framing
-- `1ae2a13` docs(3.3.0): demote Quantum-Safe from hero, preserve in technical docs, new sentinel-evidence.md
-- `d34d2ff` docs(3.3.0): RFC-001 DRAFT paused (Option 2), references updated, issues relabeled
 
 ## Open issues
 
