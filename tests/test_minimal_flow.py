@@ -73,7 +73,8 @@ async def test_trace_has_correct_project(sentinel_instance):
 
 
 @pytest.mark.asyncio
-async def test_trace_records_output(sentinel_instance):
+async def test_trace_records_output_hash(sentinel_instance):
+    """Hash-only default: trace records output_hash, not raw output."""
     @sentinel_instance.trace
     async def output_fn(n: int) -> dict:
         return {"square": n * n}
@@ -81,7 +82,30 @@ async def test_trace_records_output(sentinel_instance):
     await output_fn(7)
 
     traces = sentinel_instance.query(project="flow-test")
+    assert traces[0].output == {}  # privacy default
+    assert traces[0].output_hash is not None
+    assert len(traces[0].output_hash) == 64  # SHA-256 hex
+
+
+@pytest.mark.asyncio
+async def test_trace_records_raw_output_when_opted_in():
+    """Explicit opt-in: store_outputs=True preserves the raw output."""
+    sentinel = Sentinel(
+        storage=SQLiteStorage(":memory:"),
+        project="opt-in-test",
+        data_residency=DataResidency.LOCAL,
+        store_outputs=True,
+    )
+
+    @sentinel.trace
+    async def output_fn(n: int) -> dict:
+        return {"square": n * n}
+
+    await output_fn(7)
+
+    traces = sentinel.query(project="opt-in-test")
     assert traces[0].output == {"square": 49}
+    assert traces[0].output_hash is not None
 
 
 @pytest.mark.asyncio
@@ -125,15 +149,23 @@ async def test_trace_id_is_unique_per_call(sentinel_instance):
 
 
 @pytest.mark.asyncio
-async def test_non_dict_return_is_wrapped(sentinel_instance):
-    @sentinel_instance.trace
+async def test_non_dict_return_is_wrapped():
+    """Non-dict returns are wrapped as {'result': repr(value)} before
+    hashing. Uses store_outputs=True so the wrapped payload is visible."""
+    sentinel = Sentinel(
+        storage=SQLiteStorage(":memory:"),
+        project="wrap-test",
+        data_residency=DataResidency.LOCAL,
+        store_outputs=True,
+    )
+
+    @sentinel.trace
     async def returns_string() -> str:
         return "hello"
 
     await returns_string()
 
-    traces = sentinel_instance.query(project="flow-test")
-    # Non-dict results are wrapped as {"result": repr(value)}
+    traces = sentinel.query(project="wrap-test")
     assert "result" in traces[0].output
 
 

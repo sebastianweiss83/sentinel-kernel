@@ -15,7 +15,12 @@ from sentinel.storage import SQLiteStorage
 # --- Sync function wrapping ---
 
 def test_sync_function_traced():
-    sentinel = Sentinel(storage=SQLiteStorage(":memory:"), project="sync-test")
+    """Sync wrapping. Uses store_outputs=True to inspect the raw dict."""
+    sentinel = Sentinel(
+        storage=SQLiteStorage(":memory:"),
+        project="sync-test",
+        store_outputs=True,
+    )
 
     @sentinel.trace
     def decide(x: int) -> dict:
@@ -222,7 +227,10 @@ async def test_store_outputs_false_omits_outputs():
 
 @pytest.mark.asyncio
 async def test_store_inputs_false_still_hashes():
-    """Even when inputs are not stored, the hash should be computed from the actual inputs."""
+    """Privacy-by-default: raw inputs are stripped, but the SHA-256
+    input hash is still computed from the actual inputs. This is the
+    proof-of-logging invariant for EU AI Act Art. 12.
+    """
     sentinel = Sentinel(
         storage=SQLiteStorage(":memory:"),
         project="hash-no-store",
@@ -236,10 +244,102 @@ async def test_store_inputs_false_still_hashes():
     await decide(x=42)
 
     traces = sentinel.query(project="hash-no-store")
-    # inputs_hash should be None or empty since inputs dict is empty
-    # (hash is computed from the stored inputs, which are {})
+    trace = traces[0]
+    assert trace.inputs == {}  # raw stripped at storage boundary
+    assert trace.inputs_hash is not None  # proof still present
+    assert len(trace.inputs_hash) == 64  # SHA-256 hex
+
+
+@pytest.mark.asyncio
+async def test_store_outputs_false_still_hashes():
+    """Mirror of the input invariant: output_hash is always populated
+    even when the raw output is not stored."""
+    sentinel = Sentinel(
+        storage=SQLiteStorage(":memory:"),
+        project="out-hash-no-store",
+        store_outputs=False,
+    )
+
+    @sentinel.trace
+    async def decide(x: int) -> dict:
+        return {"secret": "very-sensitive-payload"}
+
+    await decide(x=1)
+
+    traces = sentinel.query(project="out-hash-no-store")
+    trace = traces[0]
+    assert trace.output == {}
+    assert trace.output_hash is not None
+    assert len(trace.output_hash) == 64
+
+
+def test_finalise_trace_hashes_output_if_complete_was_bypassed():
+    """Direct regression guard: if a future code path sets trace.output
+    without going through trace.complete(), _finalise_trace still
+    produces an output_hash. Keeps proof-of-logging robust against
+    internal refactors."""
+    sentinel = Sentinel(
+        storage=SQLiteStorage(":memory:"),
+        project="finalise-defensive",
+        store_outputs=True,
+    )
+    trace = DecisionTrace(project="finalise-defensive", agent="manual")
+    trace.output = {"result": "manual"}
+    trace.output_hash = None  # simulate bypassed complete()
+
+    sentinel._finalise_trace(trace)
+
+    assert trace.output_hash is not None
+    assert len(trace.output_hash) == 64
+    assert trace.output == {"result": "manual"}  # store_outputs=True preserves raw
+
+
+@pytest.mark.asyncio
+async def test_span_with_late_input_mutation_still_hashes():
+    """_finalise_trace recomputes inputs_hash if the user sets trace.inputs
+    after construction (a span pattern). Covers the late-mutation branch."""
+    sentinel = Sentinel(
+        storage=SQLiteStorage(":memory:"),
+        project="span-late-input",
+        store_inputs=True,  # keep the raw so the recomputed hash is
+                            # visible for assertion
+    )
+
+    async with sentinel.span("workflow") as trace:
+        trace.inputs = {"secret": "classified-payload"}
+        trace.output = {"result": "processed"}
+
+    traces = sentinel.query(project="span-late-input")
+    assert traces[0].inputs_hash is not None
+    assert len(traces[0].inputs_hash) == 64
+    assert traces[0].output_hash is not None
+
+
+@pytest.mark.asyncio
+async def test_default_constructor_is_privacy_by_default():
+    """v3.2.0+: `Sentinel()` with no flags does not store raw payloads.
+
+    This is the contractual invariant behind the privacy-by-default
+    claim in the README, CLAUDE.md, and the rules. Anything that
+    silently regresses this has to trip this test.
+    """
+    sentinel = Sentinel(
+        storage=SQLiteStorage(":memory:"),
+        project="default-privacy",
+    )
+
+    @sentinel.trace
+    async def decide(customer_email: str) -> dict:
+        return {"decision": "approved", "pii_note": customer_email}
+
+    await decide(customer_email="alice@example.com")
+
+    traces = sentinel.query(project="default-privacy")
     trace = traces[0]
     assert trace.inputs == {}
+    assert trace.output == {}
+    assert trace.inputs_hash is not None
+    assert trace.output_hash is not None
 
 
 # --- Human override ---

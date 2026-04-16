@@ -99,9 +99,13 @@ async def test_trace_has_inputs_hash(sentinel_no_policy):
 
 
 @pytest.mark.asyncio
-async def test_trace_has_output(sentinel_no_policy):
-    """Art. 12: logs must capture what was decided."""
+async def test_trace_has_output_hash(sentinel_no_policy):
+    """Art. 12: logs must capture *proof* of what was decided.
 
+    Privacy-by-default (v3.2.0+): raw output is not persisted, but
+    SHA-256 ``output_hash`` is — which satisfies the proof-of-logging
+    requirement without exposing decision payloads to the trace store.
+    """
     @sentinel_no_policy.trace
     async def decide(x: int) -> dict:
         return {"decision": "approved"}
@@ -109,7 +113,9 @@ async def test_trace_has_output(sentinel_no_policy):
     await decide(x=1)
     d = sentinel_no_policy.query(project="eu-ai-act-test")[0].to_dict()
 
-    assert d["output"] == {"decision": "approved"}
+    assert d["output"] == {}  # privacy default
+    assert d["output_hash"] is not None
+    assert len(d["output_hash"]) == 64  # SHA-256 hex
 
 
 @pytest.mark.asyncio

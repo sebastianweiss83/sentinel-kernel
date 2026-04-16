@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sentinel-kernel"
-version = "3.1.0"
-description = "Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule engines, and robotic systems. EU AI Act compliant. Air-gapped capable. Apache 2.0."
+version = "3.2.0"
+description = "Prove your AI decisions to the auditor. Sovereign decision trace and policy enforcement for autonomous systems. EU AI Act Art. 12/13/14/17 evidence. Air-gapped, offline-first, Apache 2.0."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"

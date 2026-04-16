@@ -43,7 +43,9 @@ def test_demo_runs_end_to_end(
     assert rc == 0
     out = capsys.readouterr().out
     assert "SENTINEL DEMO" in out
-    assert "50 realistic decisions" in out
+    assert "Defence logistics" in out
+    assert "10 realistic decisions" in out
+    assert "BLOCKED" in out  # at least one narrative blocked moment
     assert "EU AI Act compliance checker" in out
     assert "HTML sovereignty report" in out
     assert "Report saved" in out
@@ -51,6 +53,22 @@ def test_demo_runs_end_to_end(
     content = out_path.read_text()
     assert content.startswith("<!doctype html>")
     assert "Sentinel Sovereignty Report" in content
+
+
+def test_demo_output_surfaces_narrative_payoff(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    """The demo's 'what just happened' block is the pitch moment — it
+    must surface the total blocked value and the BLOCKED count so a
+    first-time reader sees the story, not just a log."""
+    out_path = tmp_path / "demo_report.html"
+    rc = cli.main(["demo", "--output", str(out_path), "--no-kill-switch"])
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "What just happened" in out
+    assert "€1,260,000" in out  # sum of three blocked scenarios
+    assert "3 transactions" in out
+    assert "immutable audit trail" in out
 
 
 def test_demo_with_kill_switch(
@@ -123,6 +141,47 @@ def test_demo_falls_back_to_tempdir_when_cwd_not_writable(
     assert "CWD not writable" in out
     # Open line must still quote an absolute path
     assert "open '" in out
+
+
+def test_extract_policy_rule_canonical_shape() -> None:
+    """Standard PolicyDeniedError message yields the rule name."""
+    msg = (
+        "Policy 'policies/export.py' denied the action. "
+        "Rule: dual_use_review_required. "
+        "Trace ID: 01hx7k"
+    )
+    assert cli._extract_policy_rule(msg) == "dual_use_review_required"
+
+
+def test_extract_policy_rule_unknown_shape_falls_back() -> None:
+    """Unexpected message shape falls back to 'policy_denied'."""
+    assert cli._extract_policy_rule("some garbled thing") == "policy_denied"
+    assert cli._extract_policy_rule("") == "policy_denied"
+
+
+def test_demo_all_allow_path_still_prints_summary(
+    capsys: pytest.CaptureFixture[str],
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """If the scenarios produced zero BLOCKED decisions, the 'What just
+    happened' block still renders — the trail-is-still-recorded message
+    is the correct framing. Exercised by patching the demo scenarios to
+    an all-under-cap set."""
+    monkeypatch.setattr(
+        cli,
+        "_DEMO_SCENARIOS",
+        (
+            ("Low-value routine A", 1_000, False),
+            ("Low-value routine B", 2_000, False),
+        ),
+    )
+    rc = cli.main(["demo", "--output", str(tmp_path / "r.html"), "--no-kill-switch"])
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "What just happened" in out
+    assert "Every request passed policy" in out
+    assert "immutable audit trail" in out
 
 
 def test_resolve_demo_output_honours_explicit_path(tmp_path: Path) -> None:

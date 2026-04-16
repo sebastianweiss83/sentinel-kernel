@@ -22,7 +22,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from sentinel import DataResidency, Sentinel
+from sentinel import DataResidency, PolicyDeniedError, Sentinel
 from sentinel.storage import SQLiteStorage
 
 
@@ -431,20 +431,34 @@ def _print_open_hint(path: Any) -> None:
 # ---------------------------------------------------------------------------
 
 
+_DEMO_SCENARIOS: tuple[tuple[str, int, bool], ...] = (
+    # (label, amount EUR, dual_use classification)
+    ("Standard component export (civilian use)",       4_200,  False),
+    ("Spare parts (allied military logistics)",       12_000,  False),
+    ("Medical supplies (humanitarian shipment)",       8_700,  False),
+    ("High-value dual-use electronics export",       890_000,  True),   # BLOCKED
+    ("Routine training equipment",                     6_500,  False),
+    ("Replacement avionics (certified civilian)",     45_000,  False),
+    ("Encrypted comms equipment (dual-use)",         220_000,  True),   # BLOCKED
+    ("Sensor array (weather application)",            31_000,  False),
+    ("Surveillance optics (dual-use)",               150_000,  True),   # BLOCKED
+    ("Standard power supplies",                        3_400,  False),
+)
+
+
 def _cmd_demo(args: argparse.Namespace) -> int:
     """
-    Run an end-to-end demo:
-      - 50 realistic decisions with a policy evaluator
-      - kill-switch demonstration (5 blocked calls)
-      - runtime & CI/CD sovereignty scanners
-      - EU AI Act automated check
-      - self-contained HTML report
-      - terminal summary
+    Narrative end-to-end demo.
+
+    Walks ten concrete export-approval decisions for a defence-logistics
+    AI agent. Three are blocked by policy (single-transaction cap or
+    dual-use review threshold). Every decision lands in the immutable
+    audit trail. Then: kill switch, sovereignty scan, EU AI Act check,
+    self-contained HTML report.
 
     Exits 0 on success. Temp database is cleaned up automatically.
     """
     import contextlib
-    import random
     import tempfile
     from pathlib import Path as _Path
 
@@ -453,23 +467,26 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     from sentinel.policy.evaluator import SimpleRuleEvaluator
     from sentinel.scanner import CICDScanner, RuntimeScanner
 
-    # Create a dedicated empty temp directory for the demo. Using this as
-    # repo_root for the scanners keeps `sentinel demo` O(1) regardless of
-    # where the user invokes it from — we never walk their home dir.
+    # Dedicated temp dir so scanners never walk the caller's home.
     demo_dir = _Path(tempfile.mkdtemp(prefix="sentinel-demo-"))
     db_path = demo_dir / "demo.db"
 
     print("━" * 64)
-    print("  SENTINEL DEMO — End-to-end sovereignty walkthrough")
+    print("  SENTINEL DEMO — Defence logistics export-approval walkthrough")
     print("━" * 64)
-    print(f"  Temp database: {db_path}")
+    print("  Scenario: an AI agent triages export-approval requests.")
+    print("  Policy:   single-transaction cap €500 000 · dual-use review €100 000+")
+    print(f"  Storage:  {db_path}")
     print()
 
     def _policy(inputs: dict[str, Any]) -> tuple[bool, str | None]:
         req = inputs.get("request", {})
-        amount = req.get("amount", 0)
-        if amount > 10_000:
-            return False, "amount_exceeds_cap"
+        amount = int(req.get("amount", 0))
+        dual_use = bool(req.get("dual_use", False))
+        if amount > 500_000:
+            return False, "export_control_hard_cap"
+        if dual_use and amount > 100_000:
+            return False, "dual_use_review_required"
         return True, None
 
     sentinel = Sentinel(
@@ -477,44 +494,62 @@ def _cmd_demo(args: argparse.Namespace) -> int:
         project="sentinel-demo",
         data_residency=DataResidency.EU_DE,
         sovereign_scope="EU",
-        policy_evaluator=SimpleRuleEvaluator({"policies/approval.py": _policy}),
+        policy_evaluator=SimpleRuleEvaluator(
+            {"policies/export_control.py": _policy}
+        ),
     )
 
-    @sentinel.trace(policy="policies/approval.py")
+    @sentinel.trace(policy="policies/export_control.py")
     def approve(request: dict[str, Any]) -> dict[str, Any]:
         return {"decision": "approved", "amount": request["amount"]}
 
-    # Scenario 1: 50 realistic decisions
-    print("[1/5] Running 50 realistic decisions...")
-    rng = random.Random(42)
+    # Step 1 — 10 realistic, named decisions
+    print(f"[1/5] Running {len(_DEMO_SCENARIOS)} realistic decisions...")
     allow = deny = 0
-    for i in range(50):
-        amount = int(rng.triangular(100, 25_000, 5_000))
+    total_blocked_value = 0
+    for idx, (label, amount, dual_use) in enumerate(_DEMO_SCENARIOS, start=1):
+        request = {
+            "amount": amount,
+            "dual_use": dual_use,
+            "requester": f"agent-{idx:02d}",
+        }
         try:
-            approve(request={"amount": amount, "requester": f"user{i}"})
+            approve(request=request)
             allow += 1
-        except Exception:
+            mark = "ALLOW"
+            detail = ""
+        except PolicyDeniedError as exc:
             deny += 1
-        _bar(i + 1, 50)
-    print(f"      ALLOW: {allow} · DENY: {deny}")
+            total_blocked_value += amount
+            mark = "BLOCKED"
+            detail = f"rule={_extract_policy_rule(str(exc))}"
+        label_col = f"{label:<46}"
+        amount_col = f"€{amount:>9,}"
+        if mark == "BLOCKED":
+            print(f"  [{idx:02d}/10] {label_col} {amount_col}  {mark}")
+            print(f"         └─ {detail}   (halted before execution, audit trail recorded)")
+        else:
+            print(f"  [{idx:02d}/10] {label_col} {amount_col}  {mark}")
+    print(f"      ALLOW: {allow} · BLOCKED: {deny}")
     print()
 
-    # Scenario 2: Kill switch
+    # Step 2 — Kill switch (Art. 14 human oversight)
     if not args.no_kill_switch:
         print("[2/5] Engaging kill switch (EU AI Act Art. 14)...")
-        sentinel.engage_kill_switch("demo halt")
+        sentinel.engage_kill_switch("compliance review in progress")
         blocked = 0
-        for i in range(5):
+        for i in range(3):
             try:
-                approve(request={"amount": 1000, "requester": f"halted{i}"})
+                approve(request={"amount": 1_000, "dual_use": False,
+                                 "requester": f"halted-{i}"})
             except Exception:
                 blocked += 1
-        print(f"      Blocked {blocked} calls while engaged")
-        sentinel.disengage_kill_switch("demo resume")
-        print("      Kill switch disengaged")
+        print(f"      Blocked {blocked} further requests while engaged")
+        sentinel.disengage_kill_switch("review complete")
+        print("      Kill switch disengaged — decisions resume")
         print()
     else:
-        print("[2/5] (kill-switch demo skipped)")
+        print("[2/5] (kill-switch demo skipped via --no-kill-switch)")
         print()
 
     # Scenario 3: Sovereignty scanners
@@ -561,7 +596,7 @@ def _cmd_demo(args: argparse.Namespace) -> int:
 
     # Structured completion block — what just happened, where the report
     # is, and what to do next. Designed for a first-time user who has
-    # never seen Sentinel before.
+    # never seen Sentinel before. The BLOCKED line carries the story.
     total_decisions = allow + deny
     score_pct = int(round(runtime.sovereignty_score * 100))
 
@@ -578,14 +613,38 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     print("  SENTINEL DEMO COMPLETE")
     print("═" * 64)
     print()
-    print(_row(f"{total_decisions} decisions traced", "(EU sovereign, local storage)"))
+    print(_row(
+        f"{total_decisions} decisions traced",
+        f"({allow} ALLOW · {deny} BLOCKED, EU-sovereign storage)",
+    ))
     print(ks_row)
     print(_row("Sovereignty scan", f"({score_pct}% score)"))
     print(_row(
         "EU AI Act compliance check",
         f"({compliance.overall} — {compliance.days_to_enforcement} days remaining)",
     ))
+    print(_row("Privacy", "inputs/outputs stored as SHA-256 hashes"))
     print(_row("HTML report generated", ""))
+    print()
+    print("  What just happened")
+    print("  ──────────────────")
+    if deny > 0:
+        print(
+            f"  The AI agent wanted to approve €{total_blocked_value:,} of "
+            "dual-use / above-cap exports."
+        )
+        print(
+            f"  Sentinel halted {deny} transaction{'s' if deny != 1 else ''} "
+            "pending human review."
+        )
+    else:
+        print(
+            "  Every request passed policy this run — but the trail still "
+            "records agent, policy, input hash, and result for each one."
+        )
+    print(
+        "  Every decision — ALLOW or BLOCKED — is in the immutable audit trail."
+    )
     print()
     print(f"  Report saved: {out_path}")
     print(f"  Open it:      {_open_hint(out_path)}")
@@ -608,14 +667,16 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     return 0
 
 
-def _bar(done: int, total: int, width: int = 40) -> None:
-    """Simple inline progress bar (no rich dependency)."""
-    filled = int(width * done / total)
-    bar = "█" * filled + "░" * (width - filled)
-    sys.stdout.write(f"\r      [{bar}] {done}/{total}")
-    sys.stdout.flush()
-    if done == total:
-        sys.stdout.write("\n")
+def _extract_policy_rule(exception_message: str) -> str:
+    """Pick the triggering rule name out of a PolicyDeniedError message.
+
+    Falls back to a readable sentinel when the message does not follow
+    the canonical ``... Rule: <name>. Trace ID: ...`` shape, so the demo
+    always prints *something* meaningful on the BLOCKED line.
+    """
+    if "Rule:" in exception_message:
+        return exception_message.split("Rule:")[1].split(".")[0].strip()
+    return "policy_denied"
 
 
 def _resolve_demo_output(

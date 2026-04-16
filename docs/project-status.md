@@ -6,19 +6,19 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-16 08:45 UTC_
+_Last generated from HEAD commit: 2026-04-16 09:14 UTC_
 
 ## Version
 
-**`3.1.0`** — Production/Stable
+**`3.2.0`** — Production/Stable
 
-Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule engines, and robotic systems. EU AI Act compliant. Air-gapped capable. Apache 2.0.
+Prove your AI decisions to the auditor. Sovereign decision trace and policy enforcement for autonomous systems. EU AI Act Art. 12/13/14/17 evidence. Air-gapped, offline-first, Apache 2.0.
 
 ## Test suite
 
 | | |
 |---|---|
-| Tests | 761 passing |
+| Tests | 731 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
 
@@ -63,6 +63,7 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 
 ## Shipped
 
+- **3.2.0 (2026-04-16)** — ### Customer-validation release — privacy by default, narrative demo, honesty alignment
 - **3.1.0 (2026-04-14)** — **The Auditor Release.** Honest scope framing, visible CI/CD integration,
 - **3.0.7 (2026-04-12)** — **Technology-agnostic positioning: The Sovereign Decision Kernel.**
 - **3.0.6 (2026-04-12)** — **Complete hardening audit — 48/48 functional tests, 576/576 test suite,
@@ -74,6 +75,5 @@ Sovereign decision tracing for any autonomous system. LLMs, ML classifiers, rule
 - **3.0.0 (2026-04-11)** — **Complete platform · API frozen · BSI assessment ready.**
 - **2.4.0 (2026-04-11)** — **Rust RFC-001 implementation. Closes #13. Multi-language spec.**
 - **2.3.0 (2026-04-11)** — **LangFuse sovereignty panel. Closes #14.**
-- **2.2.0 (2026-04-11)** — **Quantum-safe trace signing.**
 
 <!-- SYNC_ALL_STATUS_END -->

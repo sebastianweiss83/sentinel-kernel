@@ -25,9 +25,9 @@ audit-gap` to see the exact split.
 
 <!-- SYNC_ALL_README_START -->
 [![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
-[![Version](https://img.shields.io/badge/version-v3.1.0-blue)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v3.2.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Tests](https://img.shields.io/badge/tests-761%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Tests](https://img.shields.io/badge/tests-731%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Status](https://img.shields.io/badge/status-production%2Fstable-brightgreen)](CHANGELOG.md)
 [![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F14%2F17-green)](docs/eu-ai-act.md)
@@ -176,7 +176,9 @@ That's it. Every call now produces a tamper-resistant decision record:
   "model": "mistral/large-2",
   "policy_result": "ALLOW",
   "inputs_hash": "sha256:a3f8c2d19e4b67f0c1a5d8e2b9c3f4a7",
-  "output": {"decision": "approved"},
+  "inputs": {},
+  "output_hash": "sha256:d12c93f0a1b7e6d58a2490f3c1d7b8e4",
+  "output": {},
   "sovereign_scope": "EU",
   "data_residency": "local",
   "schema_version": "1.0.0"
@@ -184,6 +186,14 @@ That's it. Every call now produces a tamper-resistant decision record:
 ```
 
 Stored locally. No cloud account. No API key. No network call.
+
+**Privacy by default (v3.2.0+):** the default `Sentinel()` records the
+SHA-256 hash of every input and output — enough for Art. 12 proof of
+logging and for re-verification against the original — but does **not**
+store the raw payloads. Opt in explicitly with
+`Sentinel(store_inputs=True, store_outputs=True)` when you control the
+data and have a legal basis. See
+[docs/sovereignty.md#privacy-by-default](docs/sovereignty.md#privacy-by-default-v320).
 
 ---
 

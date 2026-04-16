@@ -58,10 +58,27 @@ class Sentinel:
         data_residency: DataResidency = DataResidency.LOCAL,
         sovereign_scope: str = "local",
         policy_evaluator: PolicyEvaluator | None = None,
-        store_inputs: bool = True,
-        store_outputs: bool = True,
+        store_inputs: bool = False,
+        store_outputs: bool = False,
         signer: Any | None = None,
     ):
+        """
+        Construct a Sentinel kernel.
+
+        Privacy defaults (v3.2.0+)
+        --------------------------
+        ``store_inputs`` and ``store_outputs`` default to ``False``.
+        Every trace still records a SHA-256 ``inputs_hash`` and
+        ``output_hash`` — so Art. 12 proof-of-logging holds — but the
+        raw payload is discarded before it reaches storage.
+
+        To opt into raw-payload storage (e.g. for debugging in a
+        closed development environment where you control the data and
+        have legal basis), pass ``store_inputs=True`` and/or
+        ``store_outputs=True`` explicitly. Do so only when GDPR
+        Art. 6/9 and Art. 25 ("data protection by design") obligations
+        are met at your end.
+        """
         # Storage
         self.storage: StorageBackend
         if storage is None:
@@ -85,6 +102,30 @@ class Sentinel:
         self._kill_switch_reason: str | None = None
 
         self.storage.initialise()
+
+    def _finalise_trace(self, trace: DecisionTrace) -> None:
+        """
+        Last step before ``storage.save`` — privacy redaction boundary.
+
+        - Ensures ``inputs_hash`` and ``output_hash`` are populated
+          even if the raw payloads are empty (so proof-of-logging
+          invariants hold).
+        - Strips raw ``inputs`` / ``output`` from the trace when the
+          kernel was constructed with ``store_inputs=False`` /
+          ``store_outputs=False`` (the v3.2.0+ default).
+
+        Callers must invoke this immediately before ``storage.save``
+        so policy evaluators, signers, and in-process observers can
+        still see raw payloads if they need them.
+        """
+        if trace.inputs and not trace.inputs_hash:
+            trace.inputs_hash = DecisionTrace._hash(trace.inputs)
+        if trace.output and not trace.output_hash:
+            trace.output_hash = DecisionTrace._hash(trace.output)
+        if not self.store_inputs:
+            trace.inputs = {}
+        if not self.store_outputs:
+            trace.output = {}
 
     @property
     def kill_switch_active(self) -> bool:
@@ -180,7 +221,7 @@ class Sentinel:
         trace = DecisionTrace(
             project=self.project,
             agent=agent_name,
-            inputs=inputs if self.store_inputs else {},
+            inputs=inputs,
             data_residency=self.data_residency,
             sovereign_scope=self.sovereign_scope,
             storage_backend=self.storage.backend_name,
@@ -208,6 +249,7 @@ class Sentinel:
             )
             trace.tags["kill_switch"] = "engaged"
             trace.complete(output={}, latency_ms=0)
+            self._finalise_trace(trace)
             self.storage.save(trace)
             raise KillSwitchEngaged(
                 f"Sentinel kill switch engaged: {ks_reason}. "
@@ -225,6 +267,7 @@ class Sentinel:
 
             if policy_eval.result == PolicyResult.DENY:
                 # Persist the denial trace before raising
+                self._finalise_trace(trace)
                 self.storage.save(trace)
                 raise PolicyDeniedError(
                     f"Policy '{policy}' denied the action. "
@@ -245,18 +288,17 @@ class Sentinel:
             elapsed = int((time.monotonic() - start) * 1000)
             trace.complete(output={}, latency_ms=elapsed)
             self._sign_trace(trace)
+            self._finalise_trace(trace)
             self.storage.save(trace)
             raise
 
         elapsed = int((time.monotonic() - start) * 1000)
 
         output = result if isinstance(result, dict) else {"result": repr(result)}
-        trace.complete(
-            output=output if self.store_outputs else {},
-            latency_ms=elapsed,
-        )
+        trace.complete(output=output, latency_ms=elapsed)
 
         self._sign_trace(trace)
+        self._finalise_trace(trace)
         self.storage.save(trace)
         return result
 
@@ -306,6 +348,7 @@ class Sentinel:
         finally:
             if trace.completed_at is None:
                 trace.complete(output=trace.output or {}, latency_ms=0)
+            self._finalise_trace(trace)
             self.storage.save(trace)
 
     def query(

@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `3.1.0` |
-| Tests | 761 passing |
+| Version | `3.2.0` |
+| Tests | 731 passing |
 | Coverage | 100% |
 | Smoke test | 40/40 ✓ |
-| Last updated | 2026-04-16 08:45 UTC |
+| Last updated | 2026-04-16 09:14 UTC |
 
 ## Last 5 commits
 
+- `2369508` feat: v3.2.0 — customer-validation release
 - `811f5d8` docs(readme): add "Who needs this" — five regulated sectors
 - `460bf69` docs(readme): add three-question framework for developers
 - `0b34f37` feat(cli): sentinel status + surface audit-gap as the next step
 - `e76485d` feat(pilot): self-serve audit-readiness surface — quickstart, audit-gap, fix
-- `8e06ec9` feat(cli): consistent "Open it:" hint across every file-writing command
 
 ## Open issues
 

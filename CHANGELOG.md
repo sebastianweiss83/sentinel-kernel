@@ -7,42 +7,84 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### Added
+## [3.2.0] — 2026-04-16
 
-- **Consistent „Open it:" hint across every file-writing CLI command.**
-  After `sentinel report`, `sentinel evidence-pack`,
-  `sentinel compliance check --output`, `sentinel attestation generate
-  --output`, `sentinel export`, and `sentinel demo` write their
-  artefact, each prints a second, indented line with a copy-pasteable
-  open command: `  → open '<path>'` on macOS, `  → xdg-open '<path>'`
-  on Linux, `  → start "" "<path>"` on Windows. One shared helper
-  (`sentinel.cli._open_hint`) owns the platform detection. No command
-  auto-opens the file — the hint is a next-step marker, not an
-  action. Matches the UX pattern introduced in v3.0.3 for
-  `sentinel demo` and generalises it across every file-writing
-  subcommand.
-- **README section „Viewing generated artefacts"**. Documents the
-  hint pattern with five concrete examples, explains why the
-  commands do not auto-open files, and adds an artefact table that
-  makes the distinction between locally-generated artefacts and the
-  hand-authored Runtime Briefing unambiguous.
+### Customer-validation release — privacy by default, narrative demo, honesty alignment
+
+This release closes a material contradiction between the documented
+privacy claims and the shipped default behaviour, replaces the generic
+demo walkthrough with a concrete defence-logistics narrative, and
+unifies the hero line across developer-facing surfaces. The three
+together bring Sentinel to a state where a regulated design partner
+can open it cold and not find a single honesty gap.
 
 ### Changed
 
-- **Documentation precision between local artefacts and the Runtime
-  Briefing.** The „Runtime Briefing" section in the README now
-  explicitly states that the briefing is a hand-authored GitHub
-  Pages artefact and not produced by any CLI command. The new
-  „Viewing generated artefacts" section immediately after it
-  enumerates every local artefact the CLI can produce and the
-  exact subcommand that writes it.
+- **BREAKING: privacy by default.** `Sentinel()` now defaults to
+  `store_inputs=False` and `store_outputs=False`. Every trace still
+  records a SHA-256 `inputs_hash` and `output_hash` — the proof-of-
+  logging invariant for EU AI Act Art. 12 holds — but the raw payloads
+  are discarded before reaching storage. To preserve the old behaviour,
+  pass `store_inputs=True, store_outputs=True` explicitly; only do so
+  when you have a GDPR Art. 6/9 legal basis and controlled access to
+  the trace store. Documented in `docs/sovereignty.md#privacy-by-default`.
+- **`sentinel demo` — narrative rewrite.** The 50-decision triangular-
+  distribution loop is replaced with ten concrete, named export-
+  approval scenarios from a defence-logistics agent. Three of the ten
+  trigger explicit policy rules (`export_control_hard_cap`,
+  `dual_use_review_required`) and are BLOCKED with the triggering rule
+  surfaced inline. The terminal summary now carries a "What just
+  happened" block naming the total blocked value and the human-review
+  path — so a first-time reader sees the story, not a log.
+- **Hero line aligned across developer surfaces.** `pyproject.toml`
+  description now leads with the same value proposition as the README
+  hero — "Prove your AI decisions to the auditor." — rather than with
+  the technology-agnostic category claim. The deeper framings
+  ("Sovereign Decision Kernel" in `docs/vision.md`, BSI profile
+  language in `docs/bsi-profile.md`) stay as-is — they serve different
+  audiences and don't contradict.
 
-### Test suite
+### Added
 
-- 698 tests passing, 100% line and branch coverage (up from 686).
-  12 new tests: three platform branches of `_open_hint` (darwin,
-  win32, linux), `_print_open_hint`, and one hint-presence
-  assertion per file-writing subcommand.
+- **`Sentinel._finalise_trace`** — new storage-boundary helper that
+  ensures `inputs_hash` / `output_hash` are populated before the raw
+  payloads are stripped per the privacy flags. Policy evaluators,
+  signers, and in-process observers still see raw payloads during
+  execution; redaction happens once, at the storage boundary. See
+  `sentinel/core/tracer.py`.
+- **Privacy regression tests.** `test_default_constructor_is_privacy_by_default`,
+  `test_store_outputs_false_still_hashes`, and
+  `test_finalise_trace_hashes_output_if_complete_was_bypassed` guard
+  the new default against silent regressions.
+- **README "How it works" section.** Three-question framework
+  (May it? Why did it want to? Do we need to intervene?) as the
+  developer-audience shorthand. Links through to the deeper four-
+  question framing in `docs/vision.md`.
+- **README "Who needs this" section.** Five regulated sectors named
+  explicitly — financial services, insurance, public sector, KRITIS,
+  defence — each anchored to the regulation that applies.
+- **README privacy-by-default callout** directly under the first-trace
+  example, so the claim is visible without clicking into the
+  sovereignty doc.
+- **`sentinel status` command** (shipped on `main` in this cycle):
+  decision activity for the last 7 days, sovereignty score, and
+  audit-readiness score in one read-only snapshot. Intended as the
+  re-engagement moment after a user has run the library for a while.
+- **HTML sovereignty report** — understated commercial-support
+  footnote (mailto only; air-gapped invariant preserved with no
+  external http(s) references).
+- **Consistent „Open it:" hint across every file-writing CLI command.**
+  `sentinel report`, `evidence-pack`, `compliance check --output`,
+  `attestation generate --output`, `export`, and `demo` each now print
+  a platform-aware open command (`open` / `xdg-open` / `start`) so the
+  user never has to guess where the file landed. One shared helper
+  (`sentinel.cli._open_hint`) owns platform detection.
+
+### Removed
+
+- **`sentinel.cli._bar`** — the generic progress-bar helper is no
+  longer used by the narrative demo. Removed rather than kept as
+  dead code.
 
 ## [3.1.0] — 2026-04-14
 

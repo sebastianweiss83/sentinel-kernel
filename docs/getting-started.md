@@ -59,7 +59,8 @@ python first_trace.py
 You just produced a tamper-resistant decision record with:
 
 - a unique trace id (ULID-style)
-- SHA-256 hash of the inputs
+- SHA-256 hash of the inputs (raw payload **not** stored by default —
+  see [sovereignty.md#privacy-by-default](sovereignty.md#privacy-by-default-v320))
 - ISO-8601 UTC timestamp
 - wall-clock latency in milliseconds
 - policy result (`NOT_EVALUATED` — you haven't attached a policy yet)
@@ -67,6 +68,7 @@ You just produced a tamper-resistant decision record with:
   `schema_version`)
 
 Stored locally. No network call. No cloud account. No API key.
+GDPR Art. 25 by design: Sentinel records the proof, not the payload.
 
 ---
 
