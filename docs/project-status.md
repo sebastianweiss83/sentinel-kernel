@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-17 01:34 UTC_
+_Last generated from HEAD commit: 2026-04-17 01:41 UTC_
 
 ## Version
 
@@ -49,6 +49,7 @@ Prove your AI decisions to the auditor. Agility infrastructure for regulated AI 
 
 ## Recent releases
 
+- **v3.3.0** — v3.3.0 — Positioning refinement: Agility Infrastructure for Regulated AI
 - **v3.0.7** — v3.0.7 — Technology-agnostic: The Sovereign Decision Kernel
 - **v3.0.6** — v3.0.6 — Complete hardening + 100% functional audit
 - **v3.0.5** — v3.0.5 — Deep last-mile audit
@@ -60,7 +61,6 @@ Prove your AI decisions to the auditor. Agility infrastructure for regulated AI 
 - **v2.4.0** — v2.4.0 — Rust SovereigntyManifest, RFC-001 implementations, closes #13
 - **v2.3.0** — v2.3.0 — LangFuse sovereignty panel, closes #14
 - **v2.2.0** — v2.2.0 — Quantum-safe signing: ML-DSA-65, client-side
-- **v2.1.0** — v2.1.0 — BudgetTracker, Attestations, CrewAI, AutoGen
 
 ## Shipped
 
