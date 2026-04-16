@@ -19,7 +19,7 @@ stewardship application, planned alongside v2.0.
 - [x] Apache 2.0 license, permanent (see ADR-002)
 - [x] Governance documentation complete
   ([GOVERNANCE.md](../../GOVERNANCE.md))
-- [x] RFC process documented and exercised (RFC-001 accepted)
+- [x] RFC process documented and exercised (RFC-001 DRAFT — paused pending community stewardship)
 - [x] BSI IT-Grundschutz profile drafted and ready for
   pre-engagement ([docs/bsi-profile.md](../bsi-profile.md))
 - [x] Stable public API with SemVer commitments
@@ -37,7 +37,7 @@ stewardship application, planned alongside v2.0.
 |---|---|
 | API stable since | v1.0.0 (2026-04-11) |
 | Governance docs | GOVERNANCE.md, CONTRIBUTING.md, SECURITY.md |
-| RFC process | Documented, exercised (RFC-001 ACCEPTED) |
+| RFC process | Documented, exercised (RFC-001 DRAFT — paused) |
 | BSI profile | Pre-engagement draft |
 | Contributors | Seeking additional maintainers |
 | Test coverage | 96% |

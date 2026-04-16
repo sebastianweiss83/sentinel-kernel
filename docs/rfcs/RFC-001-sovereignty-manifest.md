@@ -1,21 +1,29 @@
 # RFC-001: SovereigntyManifest specification
 
-| Field        | Value                                    |
-|--------------|------------------------------------------|
-| Status       | ACCEPTED                                 |
-| Author       | Sebastian Weiss                          |
-| Date         | 2026-04-11                               |
-| Comment period | Closed — 14 days elapsed                |
-| Implementation | `sentinel/manifesto/base.py` (v1.2.0+)  |
+| Field        | Value                                                   |
+|--------------|---------------------------------------------------------|
+| Status       | **DRAFT — paused pending community stewardship (2026-04-17)** |
+| Author       | Sebastian Weiss                                         |
+| Original date | 2026-04-11 (ACCEPTED → DRAFT on 2026-04-17 with v3.3.0) |
+| Comment period | Closed — 14 days elapsed                              |
+| Implementation | `sentinel/manifesto/base.py` (v1.2.0+, unchanged)     |
+
+> **Banner.** The Python reference implementation inside Sentinel
+> is unchanged and under active development. The Rust
+> `sentinel-manifest` crate (v0.1.0) remains available as an
+> EXPERIMENTAL port. Language ports beyond Python require
+> committed maintainers; we will re-open `ACCEPTED` status when
+> sponsors emerge. Contact sentinel@swentures.com for stewardship
+> discussions.
 
 ### Implementations
 
-| Language   | Package             | Status                       |
-|------------|---------------------|------------------------------|
-| Python     | `sentinel-kernel`   | Reference, v2.x stable       |
-| Rust       | `sentinel-manifest` | v0.1.0 (`rust-impl/`)        |
-| Go         | —                   | Wanted — see issues          |
-| TypeScript | —                   | Wanted — see issues          |
+| Language   | Package             | Status                                   |
+|------------|---------------------|------------------------------------------|
+| Python     | `sentinel-kernel`   | Reference, v3.x stable                   |
+| Rust       | `sentinel-manifest` | v0.1.0 (`rust-impl/`) — EXPERIMENTAL     |
+| Go         | —                   | Deferred (issue #16, community sponsors needed) |
+| TypeScript | —                   | Deferred (issue #17, community sponsors needed) |
 
 ---
 

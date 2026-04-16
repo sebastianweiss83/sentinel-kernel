@@ -93,13 +93,15 @@ Terraform to see what you have today.
 
 ---
 
-## Coming
+## Work in progress
 
-- **RFC-001** — `SovereigntyManifest` specification. A machine-readable
-  standard for expressing and verifying sovereignty requirements,
-  designed to be portable beyond Sentinel. See
+- **RFC-001** — `SovereigntyManifest` specification (**DRAFT —
+  paused pending community stewardship**). The Python reference
+  implementation in `sentinel.manifesto` ships and is stable;
+  cross-language ports (Rust experimental, Go and TypeScript
+  deferred) are paused until community sponsors emerge. See
   [docs/rfcs/RFC-001-sovereignty-manifest.md](rfcs/RFC-001-sovereignty-manifest.md).
-- **BSI profile** — v3.2 target. See
+- **BSI profile** — v3.x target. See
   [docs/bsi-profile.md](bsi-profile.md).
 
 ---

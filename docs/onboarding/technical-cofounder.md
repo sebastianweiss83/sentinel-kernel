@@ -82,7 +82,9 @@ sentinel demo                       # expect exit 0 + sovereignty_report.html
 5. **`tests/test_airgap.py`** — the sovereignty invariants enforced
    by CI. Read this before adding any dependency.
 6. **`docs/rfcs/RFC-001-sovereignty-manifest.md`** — the portable
-   manifesto spec. Language-agnostic.
+   sovereignty-manifest spec (DRAFT — paused pending community
+   stewardship). The Python reference implementation in
+   `sentinel.manifesto` is the shipping artefact.
 7. **`docs/bsi-profile.md`** — BSI IT-Grundschutz mapping. What we
    automate, what the operator must do.
 

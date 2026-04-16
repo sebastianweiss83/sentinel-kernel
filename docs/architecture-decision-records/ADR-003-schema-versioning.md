@@ -45,8 +45,9 @@ look up the exact schema at that version.
   any trace file, regardless of how far the library has evolved.
 - Breaking changes are rare and deliberate — they require RFC
   consensus, not a solo decision.
-- Third-party implementations (e.g. a Rust port of the SovereigntyManifest
-  from RFC-001) can target specific schema versions.
+- Third-party implementations (e.g. the experimental Rust port of
+  SovereigntyManifest from RFC-001, currently DRAFT — paused) can
+  target specific schema versions.
 - Old traces are always parseable by newer versions of Sentinel.
 
 ### Negative
