@@ -18,9 +18,9 @@ Prove your AI decisions to the auditor. Sovereign decision trace and policy enfo
 
 | | |
 |---|---|
-| Tests | 770 passing |
+| Tests | 734 passing |
 | Coverage | 100% |
-| Smoke test | 40/40 ✓ |
+| Smoke test | 33/40 |
 
 ## What's inside
 

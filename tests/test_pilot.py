@@ -278,8 +278,8 @@ def test_render_audit_gap_text_contains_conversion_trigger() -> None:
     )
     text = render_audit_gap_text(report)
     assert "Audit readiness" in text
-    assert "https://sentinel-kernel.eu/pilot" in text
-    assert "No slides" in text and "No sales" in text
+    assert "github.com/sebastianweiss83/sentinel-kernel" in text
+    assert "pilot enquiry" in text.lower()
     assert "Or close the gaps yourself" in text
 
 
@@ -485,7 +485,7 @@ def test_cli_audit_gap_on_empty_dir(
     assert rc == 0
     out = capsys.readouterr().out
     assert "Audit readiness" in out
-    assert "https://sentinel-kernel.eu/pilot" in out
+    assert "github.com/sebastianweiss83/sentinel-kernel" in out
     # No config, no traces => score is 0
     assert "0 %" in out
 
@@ -513,8 +513,8 @@ def test_cli_audit_gap_after_quickstart_and_traces(
     assert match is not None
     score = int(match.group(1))
     assert 55 <= score <= 70
-    # Conversion trigger present
-    assert "No slides" in out and "No sales" in out
+    # Conversion trigger present (tracked-on-GitHub intake)
+    assert "pilot enquiry" in out.lower()
 
 
 def test_cli_audit_gap_json(
@@ -532,7 +532,8 @@ def test_cli_audit_gap_json(
     assert "items" in payload
     assert "gaps" in payload
     assert "library" in payload["gaps"]
-    assert payload["contact"]["url"] == "https://sentinel-kernel.eu/pilot"
+    assert "github.com/sebastianweiss83/sentinel-kernel" in payload["contact"]["url"]
+    assert "pilot" in payload["contact"]["url"].lower()
 
 
 def test_cli_fix_kill_switch_moves_score(

@@ -217,8 +217,11 @@ class AuditGapReport:
                 "organisational": [g.key for g in self.organisational_gaps],
             },
             "contact": {
-                "url": "https://sentinel-kernel.eu/pilot",
-                "copy": "30-minute call. No slides. No sales.",
+                "url": (
+                    "https://github.com/sebastianweiss83/sentinel-kernel/"
+                    "issues/new?labels=pilot&template=pilot_enquiry.md"
+                ),
+                "copy": "Open a pilot enquiry on GitHub — tracked and public.",
                 "required": False,
             },
         }

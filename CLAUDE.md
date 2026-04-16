@@ -9,9 +9,9 @@
 | | |
 |---|---|
 | Version | `3.2.0` |
-| Tests | 770 passing |
+| Tests | 734 passing |
 | Coverage | 100% |
-| Smoke test | 40/40 ✓ |
+| Smoke test | 33/40 |
 | Last updated | 2026-04-16 09:15 UTC |
 
 ## Last 5 commits

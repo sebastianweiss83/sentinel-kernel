@@ -52,7 +52,7 @@ def test_unified_report_with_dora_and_nis2() -> None:
     from sentinel.compliance.nis2 import NIS2Checker
     from sentinel.compliance.unified import UnifiedReport
 
-    s = Sentinel()
+    s = Sentinel(storage=":memory:")
     report = UnifiedReport(
         timestamp=datetime.now(UTC),
         eu_ai_act=EUAIActChecker().check(s),
@@ -72,7 +72,7 @@ def test_unified_report_without_dora_and_nis2() -> None:
     from sentinel.compliance.euaiact import EUAIActChecker
     from sentinel.compliance.unified import UnifiedReport
 
-    s = Sentinel()
+    s = Sentinel(storage=":memory:")
     report = UnifiedReport(
         timestamp=datetime.now(UTC),
         eu_ai_act=EUAIActChecker().check(s),
@@ -96,7 +96,7 @@ def test_attestation_manifesto_without_check_method() -> None:
     class FakeManifesto:
         pass
 
-    s = Sentinel()
+    s = Sentinel(storage=":memory:")
     att = generate_attestation(s, manifesto=FakeManifesto())
     assert "manifesto_summary" not in att or att["manifesto_summary"] is None
 
@@ -109,7 +109,7 @@ def test_attestation_manifesto_check_returns_none() -> None:
         def check(self, **kwargs: Any) -> None:
             return None
 
-    s = Sentinel()
+    s = Sentinel(storage=":memory:")
     att = generate_attestation(s, manifesto=FakeManifesto())
     assert "attestation_hash" in att
 
@@ -122,7 +122,7 @@ def test_attestation_manifesto_check_raises() -> None:
         def check(self, **kwargs: Any) -> None:
             raise RuntimeError("boom")
 
-    s = Sentinel()
+    s = Sentinel(storage=":memory:")
     att = generate_attestation(s, manifesto=FakeManifesto())
     assert "error" in str(att.get("manifesto_summary", {}))
 
@@ -196,7 +196,7 @@ def test_link_precedent_duplicate() -> None:
 
 def test_span_with_explicit_complete() -> None:
     """Branch: tracer.py line 307→309 (completed_at already set)."""
-    s = Sentinel()
+    s = Sentinel(storage=":memory:")
 
     async def _run() -> None:
         async with s.span("test-span") as trace:

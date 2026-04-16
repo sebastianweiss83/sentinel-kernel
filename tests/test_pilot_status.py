@@ -393,7 +393,7 @@ def test_cli_status_invalid_config_surfaces_error(
 def test_html_report_contains_commercial_footer() -> None:
     from sentinel import Sentinel
 
-    sentinel = Sentinel(project="demo-project")
+    sentinel = Sentinel(storage=":memory:", project="demo-project")
     html = HTMLReport().generate(sentinel)
     assert "sentinel@swentures.com" in html
     assert "commercial-footer" in html

@@ -489,9 +489,11 @@ def render_evidence_pdf(
             "<i>This pack documents Art. 12 / 13 / 14 / 17 technical "
             "controls only. Run "
             "<font face='Courier'>sentinel audit-gap</font> to see the "
-            "deployment and organisational obligations that remain. A "
-            "30-minute walkthrough for regulated EU buyers is available "
-            "at https://sentinel-kernel.eu/pilot — no slides, no sales.</i>",
+            "deployment and organisational obligations that remain. "
+            "Pilot or BSI-pre-engagement enquiries are tracked publicly "
+            "on GitHub: "
+            "github.com/sebastianweiss83/sentinel-kernel/issues — label "
+            "<b>pilot</b>.</i>",
             body,
         )
     )

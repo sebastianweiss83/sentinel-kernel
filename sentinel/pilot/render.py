@@ -17,8 +17,13 @@ from __future__ import annotations
 from sentinel.pilot.audit_gap import AuditGapReport
 
 PROGRESS_BAR_WIDTH = 14
-PILOT_CONTACT_URL = "https://sentinel-kernel.eu/pilot"
-PILOT_CONTACT_COPY = "30-minute call. No slides. No sales."
+# Public, tracked, always-on intake. Resolves to the Pilot-enquiry issue
+# template in this repo — no marketing site required, no dead links.
+PILOT_CONTACT_URL = (
+    "https://github.com/sebastianweiss83/sentinel-kernel/"
+    "issues/new?labels=pilot&template=pilot_enquiry.md"
+)
+PILOT_CONTACT_COPY = "Open a pilot enquiry on GitHub — tracked and public."
 
 
 def render_audit_gap_text(report: AuditGapReport) -> str:

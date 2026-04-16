@@ -35,11 +35,35 @@ version bump and a minimum six-month deprecation notice:
 
 | Label | Meaning |
 |---|---|
-| **STABLE** | Guaranteed no breaking changes in 2.x. New fields may be added. Existing fields, methods, and call signatures are frozen. |
+| **STABLE** | Guaranteed no breaking changes within a major version (e.g. 3.x). New fields may be added. Existing fields, methods, and call signatures are frozen. |
 | **BETA** | May change with a deprecation notice — at least one minor release warning before any breaking change. |
 | **EXPERIMENTAL** | May change without notice. Use at your own risk in production. Document the specific revision in your dependencies. |
 
-Breaking changes to STABLE APIs require a major version bump (3.0).
+Breaking changes to STABLE APIs require a major version bump
+(e.g. 3.x → 4.0). One documented exception exists — see below.
+
+### Documented exception — v3.2.0 privacy-default flip
+
+In **v3.2.0** the default values of
+`Sentinel(store_inputs=..., store_outputs=...)` changed from `True`
+to `False`. This is a breaking *default-behaviour* change to an API
+previously classified STABLE. It was released as a minor bump, not a
+major bump, because:
+
+- the function signature is unchanged (source-compatible — callers
+  that passed either flag explicitly see no change);
+- the stored trace format is unchanged (traces written by v3.1.x
+  remain readable verbatim under v3.2.0);
+- the default corrects a long-standing contradiction between the
+  shipped default and the documented privacy-by-default claim.
+
+A one-time `UserWarning` fires at `Sentinel()` construction when the
+new defaults would change behaviour for an apparent-v3.1 deployment
+(existing `sentinel-traces.db` in the working directory, no explicit
+flags). Migration guide: [docs/migration-v3.2.md](migration-v3.2.md).
+
+If this grey-zone call is unacceptable for your deployment, pin the
+previous minor: `pip install 'sentinel-kernel>=3.1,<3.2'`.
 
 ## Classification
 

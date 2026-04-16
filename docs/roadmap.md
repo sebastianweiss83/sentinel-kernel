@@ -8,7 +8,8 @@ the Palantir thesis, and the market timing — see
 
 ## Phase 1: Trace + Govern (v1.0–v3.1) ✓
 
-**Status: Production / stable. API frozen as of v3.0.**
+**Status: Production / stable. API frozen since v3.0 (one documented
+exception in v3.2.0 — see [docs/api-stability.md](api-stability.md)).**
 
 The kernel and every governance primitive around it.
 

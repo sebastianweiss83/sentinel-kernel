@@ -185,8 +185,8 @@ IT-Grundschutz.
 - [x] Policy evaluation is fully in-process (no remote policy service)
 - [x] Network-isolated CI test suite
 - [x] Export format (NDJSON) is human-readable and tool-independent
-- [ ] Tested and validated in a real network-isolated environment
-- [ ] Formal VS-NfD assessment (targeted v3.2)
+- [ ] Tested and validated in a real network-isolated environment *(target: first VS-NfD design-partner engagement)*
+- [ ] Formal VS-NfD assessment *(target deferred to v3.3 — honest update; v3.2.0 shipped with customer-validation content, not with formal assessment evidence)*
 
 ---
 

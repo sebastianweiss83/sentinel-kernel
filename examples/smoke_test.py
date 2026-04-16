@@ -552,6 +552,24 @@ def main() -> int:
             assert r.returncode == 0, r.stdout[-2000:]
         st.run(40, "Full test suite green", _40)
 
+        # 41 — surface alignment (version + CHANGELOG)
+        def _41() -> None:
+            r = subprocess.run(
+                [sys.executable, str(ROOT / "scripts" / "check_surfaces.py")],
+                capture_output=True, text=True, timeout=15,
+            )
+            assert r.returncode == 0, r.stdout + r.stderr
+        st.run(41, "Surface alignment (version + CHANGELOG)", _41)
+
+        # 42 — no stale version claims in docs
+        def _42() -> None:
+            r = subprocess.run(
+                [sys.executable, str(ROOT / "scripts" / "check_doc_dates.py")],
+                capture_output=True, text=True, timeout=15,
+            )
+            assert r.returncode == 0, r.stdout + r.stderr
+        st.run(42, "No stale version claims in docs", _42)
+
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
@@ -564,7 +582,7 @@ def main() -> int:
 
     print()
     print("=" * 64)
-    print(f"  ALL 40 STEPS PASSED — Sentinel v{__version__} is working correctly")
+    print(f"  ALL 42 STEPS PASSED — Sentinel v{__version__} is working correctly")
     print("=" * 64)
     return 0
 

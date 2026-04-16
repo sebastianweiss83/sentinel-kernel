@@ -2,32 +2,53 @@
 
 **Prove your AI decisions to the auditor. In Python. In five minutes.**
 
-One decorator. One command. One PDF evidence pack. Runs fully offline.
-No US cloud dependency. Apache 2.0, forever.
+*One decorator. One command. One signed PDF evidence pack. Runs fully
+offline. No US cloud dependency. Apache 2.0, forever.*
+
+**EU AI Act enforcement starts 2 August 2026.**
+
+![Sentinel — 10 defence-logistics decisions, 3 blocked, full audit trail](docs/samples/sentinel-demo.svg)
 
 ```bash
 pipx install 'sentinel-kernel[pdf]'
-sentinel quickstart
-python hello_sentinel.py
-sentinel evidence-pack          # produces audit.pdf
-sentinel audit-gap              # shows what else your auditor will ask for
+sentinel demo                  # 20 seconds, no config
 ```
 
-Sentinel is the enforcement and evidence layer for EU AI Act Art. 12
-(logging), Art. 13 (transparency), Art. 14 (human oversight), and
-Art. 17 (quality management traceability). It does **not** replace
-Art. 9 risk management, Art. 10 data governance, Art. 11 technical
-documentation, or Art. 15 accuracy and robustness controls — those
-are organisational obligations above this layer. Run `sentinel
-audit-gap` to see the exact split.
+**See the real artefact before you install:**
+&nbsp;📄 [Sample evidence pack (PDF)](docs/samples/audit-evidence-pack-sample.pdf)
+&nbsp;·&nbsp; 📋 [Sample `audit-gap` score](docs/samples/audit-gap-output.txt)
+&nbsp;·&nbsp; 🎬 [20-second demo](docs/samples/sentinel-demo.svg)
 
-→ Full scope: [docs/eu-ai-act.md](docs/eu-ai-act.md) · Vision: [docs/vision.md](docs/vision.md) · Roadmap: [docs/roadmap.md](docs/roadmap.md)
+### Who are you?
+
+- [**I'm a developer**](docs/personas/developer.md) — integrate in 12 lines, see the trace
+- [**I'm a compliance officer / DPO**](docs/personas/compliance-officer.md) — Art. 12/13/14/17 evidence, honest gap report
+- [**I'm a CISO / security lead**](docs/personas/security-ciso.md) — sovereignty posture, SBOM, incident response
+- [**I'm an auditor**](docs/personas/auditor.md) — verify the evidence pack independently
+- [**Buying for my team**](docs/personas/executive-brief.md) — one-page commercial brief
+
+---
+
+## What Sentinel is. What it is not.
+
+Sentinel is the **enforcement and evidence layer** for EU AI Act Art. 12
+(logging), Art. 13 (transparency), Art. 14 (human oversight), and Art. 17
+(quality-management traceability).
+
+Sentinel does **not** replace Art. 9 risk management, Art. 10 data
+governance, Art. 11 technical documentation, or Art. 15 accuracy and
+robustness controls — those are organisational obligations above this
+layer. Run `sentinel audit-gap` to see the exact split for your setup.
+
+→ Full article mapping: [docs/eu-ai-act.md](docs/eu-ai-act.md)
+&nbsp;·&nbsp; Strategic context: [docs/vision.md](docs/vision.md)
+&nbsp;·&nbsp; Phases: [docs/roadmap.md](docs/roadmap.md)
 
 <!-- SYNC_ALL_README_START -->
 [![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
 [![Version](https://img.shields.io/badge/version-v3.2.0-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Tests](https://img.shields.io/badge/tests-770%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Tests](https://img.shields.io/badge/tests-734%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Status](https://img.shields.io/badge/status-production%2Fstable-brightgreen)](CHANGELOG.md)
 [![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F14%2F17-green)](docs/eu-ai-act.md)
@@ -75,48 +96,13 @@ for LangChain, CrewAI, AutoGen, and FastAPI integrations.
 
 ### What `sentinel audit-gap` shows you
 
-```
-Sentinel Audit Readiness — local pilot
+A typical first run scores **60 %** (library gaps closable with one
+command each, deployment choices, and one Annex-IV-authorship item).
+After `sentinel fix kill-switch` and `sentinel fix retention`, you're
+at **80 %**. The remaining 20 % is explicitly organisational — no
+tool can close it for you, and Sentinel is honest about that.
 
-  Scope            ./.sentinel/traces.db (10 traces)
-  Profile          default
-
-  +  Art. 12   Automatic logging                   10 traces recorded
-  +  Art. 13   Transparency metadata               agent, model, policy fields populated
-  +  Art. 17   Quality management record           append-only record present
-  +  Data residency declared                       EU — EU_DE
-  +  Offline / air-gapped storage                  local filesystem
-  -  Art. 14   Human oversight (kill switch)       no kill switch registered
-  -  Retention policy                              not configured
-  -  Auditor-grade signing key                     ephemeral demo key in use
-  -  Production storage backend                    using local SQLite
-  -  Art. 11   Annex IV technical documentation    requires human authorship
-
-  Audit readiness  [########......]   60 %
-
-  Library gaps      (Sentinel can close these)         2
-     > sentinel fix kill-switch
-     > sentinel fix retention --days 2555
-
-  Deployment gaps   (you must decide)                  2
-     . Auditor-grade signing key
-     . Production storage backend
-
-  Organisational    (human authorship required)        1
-     . Art. 11   Annex IV technical documentation
-
-  The library gets you to ~70 %. The last 30 % depends on
-  choices only your organisation can make: how long you
-  retain, who signs, where traces live, and what your
-  Annex IV document says.
-
-  If you want to walk through this with someone who has
-  done it for a regulated EU buyer:
-      https://sentinel-kernel.eu/pilot
-      30-minute call. No slides. No sales.
-
-  Or close the gaps yourself — the library is sufficient.
-```
+See the full static output: [docs/samples/audit-gap-output.txt](docs/samples/audit-gap-output.txt)
 
 `sentinel audit-gap` is re-runnable. Every `sentinel fix ...` you
 apply moves the score. The split into library / deployment /

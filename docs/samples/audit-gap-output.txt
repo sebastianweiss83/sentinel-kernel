@@ -1,0 +1,42 @@
+
+Sentinel Audit Readiness — local pilot
+
+  Scope            ./.sentinel/traces.db (10 traces)
+  Profile          default
+
+  +  Art. 12   Automatic logging                 10 traces recorded
+  +  Art. 13   Transparency metadata             agent, model, policy fields populated
+  +  Art. 17   Quality management record         append-only record present
+  +  Data residency declared                     EU — EU_DE
+  +  Offline / air-gapped storage                local filesystem at ./.sentinel/traces.db
+  -  Art. 14   Human oversight (kill switch)     no kill switch registered
+  -  Retention policy                            not configured
+  -  Auditor-grade signing key                   ephemeral demo key in use
+  -  Production storage backend                  using local SQLite at ./.sentinel/traces.db
+  -  Art. 11   Annex IV technical documentation  requires human authorship (Annex IV)
+
+  Audit readiness  [########......]   60 %
+
+  Library gaps      (Sentinel can close these)         2
+     > sentinel fix kill-switch
+     > sentinel fix retention --days 2555
+
+  Deployment gaps   (you must decide)                  2
+     . Auditor-grade signing key
+     . Production storage backend
+
+  Organisational    (human authorship required)        1
+     . Art. 11   Annex IV technical documentation
+
+  ----------------------------------------------------------
+  The library gets you to ~70 %. The last 30 % depends on
+  choices only your organisation can make: how long you
+  retain, who signs, where traces live, and what your
+  Annex IV document says.
+
+  If you want to walk through this with someone who has
+  done it for a regulated EU buyer:
+      https://github.com/sebastianweiss83/sentinel-kernel/issues/new?labels=pilot&template=pilot_enquiry.md
+      Open a pilot enquiry on GitHub — tracked and public.
+
+  Or close the gaps yourself — the library is sufficient.

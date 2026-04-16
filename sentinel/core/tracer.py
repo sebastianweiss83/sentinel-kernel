@@ -15,6 +15,7 @@ import time
 from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 from sentinel.core.trace import (
@@ -27,6 +28,13 @@ from sentinel.core.trace import (
 from sentinel.policy.evaluator import NullPolicyEvaluator, PolicyEvaluator
 from sentinel.storage.base import StorageBackend
 from sentinel.storage.sqlite import SQLiteStorage
+
+# Sentinel values for "default not passed explicitly" — lets __init__
+# distinguish between Sentinel() (honour new defaults, warn on upgrade)
+# and Sentinel(store_inputs=False) (explicit opt-in, no warning).
+_DEFAULT = object()
+_DEFAULT_DB_PATH = "./sentinel-traces.db"
+_MIGRATION_WARNING_EMITTED = False
 
 
 class Sentinel:
@@ -58,8 +66,8 @@ class Sentinel:
         data_residency: DataResidency = DataResidency.LOCAL,
         sovereign_scope: str = "local",
         policy_evaluator: PolicyEvaluator | None = None,
-        store_inputs: bool = False,
-        store_outputs: bool = False,
+        store_inputs: Any = _DEFAULT,
+        store_outputs: Any = _DEFAULT,
         signer: Any | None = None,
     ):
         """
@@ -78,11 +86,45 @@ class Sentinel:
         ``store_outputs=True`` explicitly. Do so only when GDPR
         Art. 6/9 and Art. 25 ("data protection by design") obligations
         are met at your end.
+
+        A one-time ``UserWarning`` is emitted if a legacy v3.1-era
+        trace DB is detected at the default location and neither flag
+        was passed explicitly — this is the upgrade-path tripwire
+        described in ``docs/migration-v3.2.md``.
         """
+        # One-time v3.1 -> v3.2 upgrade warning. Fires only when the
+        # user got here via the default code path (no explicit flags)
+        # and an existing default-path trace DB suggests a prior v3.1
+        # install. Never fires twice per process.
+        global _MIGRATION_WARNING_EMITTED
+        defaults_applied = (
+            store_inputs is _DEFAULT and store_outputs is _DEFAULT
+        )
+        if (
+            defaults_applied
+            and not _MIGRATION_WARNING_EMITTED
+            and storage is None
+            and Path(_DEFAULT_DB_PATH).exists()
+        ):
+            import warnings
+            warnings.warn(
+                "Sentinel v3.2.0+ defaults changed: store_inputs and "
+                "store_outputs now default to False (hash-only storage). "
+                f"An existing trace database was detected at "
+                f"{_DEFAULT_DB_PATH!r}, which suggests a prior install. "
+                "New traces will NOT store raw inputs/outputs. To "
+                "preserve the pre-v3.2 behaviour, pass "
+                "store_inputs=True, store_outputs=True explicitly. "
+                "See docs/migration-v3.2.md.",
+                UserWarning,
+                stacklevel=2,
+            )
+            _MIGRATION_WARNING_EMITTED = True
+
         # Storage
         self.storage: StorageBackend
         if storage is None:
-            self.storage = SQLiteStorage("./sentinel-traces.db")
+            self.storage = SQLiteStorage(_DEFAULT_DB_PATH)
         elif isinstance(storage, str):
             self.storage = SQLiteStorage(storage)
         else:
@@ -92,8 +134,8 @@ class Sentinel:
         self.data_residency = data_residency
         self.sovereign_scope = sovereign_scope
         self.policy_evaluator = policy_evaluator or NullPolicyEvaluator()
-        self.store_inputs = store_inputs
-        self.store_outputs = store_outputs
+        self.store_inputs = False if store_inputs is _DEFAULT else bool(store_inputs)
+        self.store_outputs = False if store_outputs is _DEFAULT else bool(store_outputs)
         self._signer = signer
 
         # Kill switch state (EU AI Act Art. 14 — human oversight halt)

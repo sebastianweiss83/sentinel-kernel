@@ -315,6 +315,72 @@ async def test_span_with_late_input_mutation_still_hashes():
     assert traces[0].output_hash is not None
 
 
+def test_v32_migration_warning_fires_for_legacy_db(
+    tmp_path, monkeypatch
+):
+    """v3.1 -> v3.2 upgrade tripwire: if a default-path trace DB
+    exists and the user did not pass store_inputs/store_outputs
+    explicitly, a one-time UserWarning fires."""
+    import warnings
+
+    from sentinel.core import tracer as tracer_mod
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "sentinel-traces.db").write_text("")
+    monkeypatch.setattr(tracer_mod, "_MIGRATION_WARNING_EMITTED", False)
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        Sentinel()
+        messages = [str(w.message) for w in caught]
+
+    assert any("v3.2.0+ defaults changed" in m for m in messages)
+    assert any("migration-v3.2.md" in m for m in messages)
+
+
+def test_v32_migration_warning_silent_when_flags_explicit(
+    tmp_path, monkeypatch
+):
+    import warnings
+
+    from sentinel.core import tracer as tracer_mod
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "sentinel-traces.db").write_text("")
+    monkeypatch.setattr(tracer_mod, "_MIGRATION_WARNING_EMITTED", False)
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        Sentinel(store_inputs=True, store_outputs=True)
+        messages = [str(w.message) for w in caught]
+
+    assert not any("v3.2.0+ defaults changed" in m for m in messages)
+
+
+def test_v32_migration_warning_fires_only_once(
+    tmp_path, monkeypatch
+):
+    import warnings
+
+    from sentinel.core import tracer as tracer_mod
+
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "sentinel-traces.db").write_text("")
+    monkeypatch.setattr(tracer_mod, "_MIGRATION_WARNING_EMITTED", False)
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        Sentinel()
+        Sentinel()
+        Sentinel()
+        emits = [
+            w for w in caught
+            if "v3.2.0+ defaults changed" in str(w.message)
+        ]
+
+    assert len(emits) == 1
+
+
 @pytest.mark.asyncio
 async def test_default_constructor_is_privacy_by_default():
     """v3.2.0+: `Sentinel()` with no flags does not store raw payloads.

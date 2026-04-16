@@ -469,8 +469,8 @@ prepare the codebase for formal BSI IT-Grundschutz assessment.
 - **`docs/api-stability.md`** — every public API classified as
   STABLE, BETA, or EXPERIMENTAL. Breaking changes to STABLE APIs
   now require a major version bump.
-- **`docs/migration-v2.md`** — v1.x → v2.0 migration guide.
-  Short answer: no breaking changes, just upgrade the pin.
+- **`docs/archive/migration-v2.md`** — v1.x → v2.0 migration guide
+  *(archived in v3.2.0; retained for historical reference)*.
 - **`docs/bsi-pre-engagement/`** — complete 4-document package
   ready for the first BSI meeting:
   - `README.md` — what and why
