@@ -47,7 +47,7 @@ basis and controlled access, opt in explicitly:
 sentinel = Sentinel(store_inputs=True, store_outputs=True)
 ```
 
-See the honest reasoning: [docs/sovereignty.md](../sovereignty.md) and
+See the honest reasoning: [docs/provability.md](../provability.md) and
 [docs/explainability-art-22.md](../explainability-art-22.md).
 
 ## Framework integrations

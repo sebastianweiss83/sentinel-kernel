@@ -1,75 +1,160 @@
-# Sentinel Vision — The Sovereign Decision Kernel
+# Sentinel Vision — Agility Infrastructure for Regulated AI
 
-Sentinel is not compliance middleware. Sentinel is the **Sovereign Decision
-Kernel** — a thin, open-source, EU-sovereign layer that sits between your
-business logic and any autonomous decision system, and answers four questions
-every regulated enterprise has to answer in 2026.
+*Strategic reference. Last updated for v3.3.0. Drawn from the
+Sentinel positioning memo (April 2026).*
 
-## The problem
+---
 
-Every CIO and every BSI auditor now has four questions about autonomous
-systems in production:
+## The situation
 
-1. **What did the system decide, and can we prove it later?**
-   EU AI Act Art. 12 and Art. 17 require automatic, tamper-resistant decision
-   records from 2 August 2026. A screenshot in Slack will not do.
+In April 2026 the European regulated economy has a structural
+problem that has built up over two years and becomes an
+existential question in the next eighteen months.
 
-2. **What is the system allowed to decide in the first place?**
-   Policy cannot live in a Word document. It must be machine-checked at the
-   moment of the decision, and the result must be provable later. Art. 14
-   (human oversight) requires a working kill switch, not a meeting.
+The American AI platforms — OpenAI, Anthropic, Google, Microsoft —
+have won the frontier-model layer. That is irreversible. The
+Chinese open-weight models — DeepSeek, Qwen, GLM, Kimi — have
+broken the cost layer. The cost difference between open-weight
+and proprietary APIs sits at ten-to-thirty times. Europe did not
+win the model layer and will not. Mistral is real and
+significant, but an order of magnitude smaller than Anthropic
+and structurally capped. Aleph Alpha has repositioned as an
+orchestration stack. European AI investment is a fraction of
+American investment.
 
-3. **Which system made that decision, and is it even legal for this
-   data class?**
-   A classified procurement decision cannot be sent to an API in Oregon.
-   "Which system" is itself a compliance question — one that grows more
-   urgent every month as the technology landscape fragments.
+What Europe has is the regulatory layer. The EU AI Act enters
+full force on 2 August 2026. DORA is in force. NIS2 is in force.
+BaFin BAIT 8 and MaRisk AT 9 have been substantially tightened.
+BSI IT-Grundschutz is binding for critical infrastructure. This
+is not a burden. It is the only strategic position Europe
+structurally still holds in the AI era, and it will be copied
+worldwide the way GDPR was copied.
 
-4. **Does this work for our ML pipeline, not just our LLM?**
-   Yes. Sentinel traces decisions, not models. The `@sentinel.trace`
-   decorator wraps any Python function — LLM calls, ML classifiers,
-   rule engines, robotic control systems. If it decides, Sentinel records it.
+Between these three realities — American models, Chinese cost,
+European regulation — sits the European regulated institution
+and does not understand what to do. It pilots. It does not
+scale. Every quarter it loses strategic time against greenfield
+startups that compete without its constraints. That is not a
+tool problem. That is an infrastructure problem.
 
-Most products on the market answer exactly one of these questions. Sentinel
-answers all four, in one thin kernel that you can read end-to-end.
+## How the problem shows up
 
-## The three-layer architecture
+A platform-engineering lead at a German tier-1 bank put it in
+six sentences in April 2026: *"Agents is a huge topic for us,
+governance and security included. Feels completely unplannable
+— you run a workshop and three new tools have shipped before
+it ends. Microsoft and Entra-ID look most promising. Including
+Copilot as an agent platform. Everything in motion. We're
+starting with small PoCs."*
 
-```
-Your business logic
-        │
-        ▼
-┌──────────────────────────────────────────┐
-│           SENTINEL KERNEL                │
-│                                          │
-│  ┌───────────────┐  ┌──────────────────┐ │
-│  │   GOVERN ✓    │  │    ROUTE → v4.0  │ │
-│  │  policy-code  │  │   which model?   │ │
-│  │  kill switch  │  │   sovereignty?   │ │
-│  │  preflight    │  │   data class?    │ │
-│  └───────────────┘  └──────────────────┘ │
-│                                          │
-│  ┌──────────────────────────────────┐    │
-│  │           TRACE ✓                │    │
-│  │  sovereign · tamper-resistant    │    │
-│  └──────────────────────────────────┘    │
-└──────────────────────────────────────────┘
-        │
-        ▼
-   DECISION LAYER (your choice)
-   LLMs · ML classifiers · Rule engines · Robotic systems
-        │
-        ▼
-   SOVEREIGN STORAGE
-   SQLite · PostgreSQL · NDJSON
-```
+Six sentences that contain the entire strategic dilemma. The
+institution sees the problem, has run the workshops, is
+piloting small, and is on the way to adopting Microsoft — not
+because Microsoft is the best solution but because it is the
+only one that feels as if it would work. The buyer is not
+careless; the buyer has no better option.
 
-### Layer 1 — Trace (v3.0, shipped)
+The same pattern shows up across the top 150 DACH enterprises
+in banking, insurance, public-sector IT, defence logistics,
+and industrial manufacturing. They see the pattern. They
+pilot. They do not scale. They slow down. Greenfield startups
+that do not carry the regulatory load win accounts at their
+competitors. The accumulated IT landscape turns from an
+advantage into a structural disadvantage.
 
-Every autonomous decision becomes a structured, append-only, sovereign record. SHA-256
-hashed inputs. UTC timestamps. Policy result. Model used. Sovereignty scope.
-Data residency. Art. 12 compliance is an automated side-effect of the
-interceptor, not a project.
+Meanwhile, European startups build modern AI applications —
+autonomous systems, defence reconnaissance, precision
+industrial — that regulated integrators would like to procure
+but cannot, because the compliance cycles are incompatible
+with the startups' development speed. In the US this
+integration problem is solved by capital. In China it is
+solved by state coordination. Europe has neither mechanism.
+The integration between European innovation and European
+institutional infrastructure does not happen, and that is
+why Europe strategically falls behind.
+
+## The reframing
+
+European regulation is read by most decision-makers today as a
+blocker. That is wrong. It is the way out.
+
+The EU AI Act forces American and Chinese AI systems deployed
+in Europe to demonstrable decision records under EU
+jurisdiction. That is not only a compliance burden. It is the
+legal grounding on which a European CISO can, for the first
+time since the cloud era, say "no" to American standard
+platforms — without having to argue against the business case.
+*"BAIT 8.2 requires evidence under our jurisdiction"* is not
+the burial of an idea. It is the opening of an alternative.
+
+The EU AI Act and its successor regulations convert regulatory
+requirements into strategic levers — if the infrastructure
+exists to make them operational. *"We satisfy the regulation"*
+is defensive. *"We use the regulation to scale faster than our
+competitors"* is offensive and commercially stronger.
+
+Regulation, operationalised as infrastructure, makes
+established enterprises competitive again against greenfield
+startups. Not because the regulation goes away — it does not
+go away, it will increase — but because it can be transformed
+from process overhead into infrastructure overhead. Process
+overhead slows things down. Infrastructure overhead speeds
+things up, because every future regulation builds on the same
+base instead of being redistributed.
+
+## The central thesis
+
+**Sentinel is the agility infrastructure for regulated European
+enterprises, enabling them to move like startups and prove like
+banks.**
+
+This thesis has three operative levels that engage in sequence
+and build on each other.
+
+**Individual value.** Sentinel is a tool for the single
+institution. It lets a regulated enterprise deploy AI systems
+faster because the regulatory provability arises automatically
+instead of being distributed across processes. The six-week
+compliance review every bank knows becomes a three-day routine
+check. The PoC that otherwise dies in pilot scales to
+production.
+
+**Ecosystem value.** Sentinel is a bridge in mixed ecosystems.
+When an established integrator and a fast-moving startup must
+work on the same system, Sentinel sits between them. The
+startup develops quickly; Sentinel records every decision in a
+format the integrator's compliance processes accept. The
+integrator does not need to match the startup's pace. The
+startup does not need to learn the integrator's bureaucracy.
+The infrastructure layer mediates.
+
+**Structural value.** Sentinel is Europe's technical answer to
+the integration problem the US solves through capital and
+China solves through power. Europe has neither the capital for
+acquisition-driven consolidation nor the political structure
+for mandated integration. So it must happen through
+infrastructure — through a common language for AI decisions
+that both fast-moving startups and established institutions
+can speak.
+
+These three levels are not three products. They are three
+zoom levels of the same thing. The infrastructure that
+delivers level one is exactly the infrastructure that enables
+level two, which is exactly the infrastructure that carries
+level three.
+
+## Record. Enforce. Prove.
+
+Three verbs. Each a clearly defined operation. Together the
+complete lifecycle of an AI decision in a regulated
+environment.
+
+**Record.** Every AI decision is recorded with context,
+input hash, timestamp, and outcome. Append-only, tamper-
+resistant, privacy-by-default (SHA-256 hash instead of raw
+input, unless explicitly configured), stored under the
+operator's jurisdiction. Sentinel's `@sentinel.trace`
+decorator delivers this today. Apache 2.0. One-line install.
 
 ```python
 from sentinel import Sentinel
@@ -81,200 +166,307 @@ async def approve(request: dict) -> dict:
     return await your_agent.run(request)    # unchanged
 
 await approve({"amount": 50_000})
-# → DecisionTrace persisted: sovereign_scope=EU, data_residency=local,
+# → DecisionTrace persisted: data_residency=local,
 #   inputs_hash=sha256:..., policy_result=ALLOW
 ```
 
-Optional ML-DSA-65 (FIPS 204, BSI TR-02102-1) signing keeps the records
-tamper-resistant against a quantum-era adversary, with keys that never leave
-your infrastructure.
+**Enforce.** Every AI decision passes through a policy layer
+before it executes. Policy-as-Code — OPA/Rego or Python.
+Versioned, testable, CI/CD-deployable. The EU AI Act Art. 14
+kill-switch primitive is first-class. Multi-party approval
+gates are available. Sentinel implements this today.
 
-### Layer 2 — Govern (v3.0, shipped)
+**Prove.** Every record, every policy decision can be
+aggregated into an evidence pack — cryptographically signed,
+mapped to EU AI Act, DORA, NIS2, and BSI IT-Grundschutz, in a
+format an auditor accepts. The basic generator is open source.
+Enterprise features (HSM signing, RFC-3161 timestamping via
+EU TSAs, long-term retention of ten-plus years, automated
+BaFin reporting templates, legal-hold management) are
+commercial.
 
-What the system is allowed to decide is policy-as-code, evaluated in-process,
-recorded in every trace. The kill switch (Art. 14) halts every wrapped call
-instantly without a restart. The manifesto declares which dependencies,
-models, jurisdictions, and data classes are acceptable — and runs as five
-named CI theses on every pull request.
+This formula is distinctive. Dome Systems uses "Connect.
+Secure. Operate." as its agent-governance lifecycle. That is
+good but general — it could apply to IoT or classical
+microservices equally. *Record. Enforce. Prove.* is specific to
+the AI-decision context and leads directly to the evidence
+artefact European regulation requires.
 
-```python
-from sentinel import Sentinel
-from sentinel.manifesto import SentinelManifesto
-from sentinel.manifesto.requirements import EUOnly, Required, AcknowledgedGap
+## The four modules
 
-class OurPolicy(SentinelManifesto):
-    name = "Production Sovereignty Policy v1"
-    jurisdiction = EUOnly()
-    kill_switch = Required()
-    ci_cd = AcknowledgedGap(
-        provider="GitHub Actions (Microsoft/US)",
-        migrating_to="Self-hosted Forgejo",
-        by="2027-Q2",
-    )
+Sentinel is one product with four functional modules. The
+modules share a single codebase, a single data model, a single
+CLI, and a single installation. They are not four products.
+They are four faces of the same product, each serving a
+different buyer archetype.
 
-sentinel = Sentinel()
-report = OurPolicy().check(sentinel_instance=sentinel)
-print(f"Score: {report.overall_score:.0%}")
+```
+Your business logic
+        │
+        ▼
+┌─────────────────────────────────────────┐
+│              SENTINEL                   │
+│   Agility infrastructure for AI         │
+│                                         │
+│  ┌────────┐ ┌────────┐ ┌────────┐       │
+│  │ TRACE  │ │ POLICY │ │EVIDENCE│       │
+│  │   ✓    │ │   ✓    │ │   ✓    │       │
+│  │ Record │ │Enforce │ │  Prove │       │
+│  └────────┘ └────────┘ └────────┘       │
+│                                         │
+│  ┌───────────────────────────────┐      │
+│  │       FEDERATION → roadmap    │      │
+│  │   Multi-institution aggregate │      │
+│  └───────────────────────────────┘      │
+└─────────────────────────────────────────┘
+        │
+        ▼
+  DECISION LAYER (your choice)
+  LLMs · ML classifiers · Rule engines · Robotic systems
+  Switch anytime. No lock-in.
+        │
+        ▼
+  LOCAL STORAGE (your infrastructure)
+  SQLite · PostgreSQL · NDJSON
 ```
 
-Govern is not an afterthought layer bolted on top of Trace. It is evaluated
-by the same kernel, in the same interceptor, and recorded in the same
-DecisionTrace. There is no way for a policy to fail silently.
+**Sentinel Trace** is the entry point for developers. The
+`@sentinel.trace` decorator, install via `python3 -m pip
+install --user sentinel-kernel`, value in five minutes: the
+developer sees what their AI agent decided, with which inputs,
+under which policy evaluation, in what time. This module stays
+Apache 2.0 permanently. It is the distribution flywheel. The
+developer does not pay, but they carry Sentinel into their
+team, and the team into the organisation.
 
-### Layer 3 — Route (v4.0, roadmap)
+**Sentinel Policy** is the entry point for platform-
+engineering teams. OPA/Rego-based or Python-rule-based policy
+enforcement on every traced call. The base engine stays Apache
+2.0. Commercial are preconfigured industry policy libraries —
+BaFin catalogues, KRITIS rulebooks, defence use-case templates,
+EU AI Act Art. 5 prohibition lists. The value is consistency
+across models and systems. Deploying a new AI system does not
+mean "new compliance processes" but "apply existing policies."
 
-Layer 3 answers the last, and hardest, question: **which system should even
-handle this decision?**
+**Sentinel Evidence** is the entry point for CISOs, DPOs,
+compliance officers, and internal audit. Evidence packs as
+PDF and NDJSON, cryptographically signed, mapped to EU AI Act,
+DORA, NIS2, BSI IT-Grundschutz. The default generator stays
+Apache 2.0. Commercial enterprise features are HSM integration,
+RFC-3161 timestamping via EU timestamping authorities, multi-
+party signing for critical decisions, long-term retention of
+ten-plus years (BaFin retention obligation), automated BaFin
+reporting templates, legal-hold management. This is the
+highest revenue per buyer, typically €300k+ ARR per
+enterprise. It is the Vault parallel to HashiCorp — the module
+that carries the enterprise price.
 
-The same SentinelManifesto that defines what may be decided defines which
-systems are acceptable for each data class. The router reuses the existing
-policy engine, selects the right decision system, records the choice and the
-reason as part of the sovereign trace, and falls back automatically if the
-preferred system is unavailable.
+**Sentinel Federation** is the entry point for multi-
+institution scenarios: holding-group structures, industry
+consortia, supervisory oversight. This is the future module,
+not shipping today but architecturally anchored and publicly
+committed as roadmap. It will enable aggregated compliance
+visibility across federated institutions without individual
+data disclosure. Relevance: holding-company subsidiaries,
+supervisory oversight over banking groups, KRITIS sector
+coordination, the bridge between fast movers and slow
+institutions at larger scale.
 
-```python
-# Layer 3 — Route (v4.0 vision)
-result = await sentinel.route(
-    task="classify_document",
-    context={
-        "classification": "VS-NfD",
-        "content": document,
-    },
-)
-# Sentinel decides, based on manifesto:
-#   classification "VS-NfD" → requires air-gapped model
-#   → uses llama3-70b-local, not claude-api
-#   → records: model chosen, why, sovereignty proof, decision trace
-print(result.model_used)         # "llama3-70b-local"
-print(result.reason)             # "VS-NfD requires air-gapped model"
-print(result.sovereignty_proof)  # attestation hash
-```
+The modules are not invented by marketing. They correspond
+exactly to the structure that already exists in the code:
+`sentinel/core/` has the tracer and storage backends;
+`sentinel/policy/` has the evaluator with OPA integration;
+`sentinel/compliance/` has the checkers for EU AI Act, DORA,
+NIS2, BSI, plus the evidence-pack generator; `sentinel/core/
+attestation.py` has the signing infrastructure;
+`sentinel/federation/` exists as a roadmap placeholder with a
+defined interface.
 
-Route is what turns "we use Sentinel for logging" into "we use Sentinel as
-our decision platform." It is also what breaks vendor lock-in: the choice
-of decision system becomes a configuration of your manifesto, not a rewrite
-of your code.
+### Note on the refinement from "Three-Layer" to "Four-Module"
 
-## Why the technology doesn't matter
+Sentinel has always been four things. Until v3.2 we described
+the first three as a two-and-a-half-layer kernel (Trace +
+Govern, with Evidence bundled under Govern) and used Route /
+SovereignRouter as a placeholder for the fourth layer. From
+v3.3 onward we use four explicit names. Evidence stands alone
+because it is what regulated buyers pay for. Federation
+replaces Route as the roadmap slot because multi-institution
+aggregation is the larger strategic question; routing between
+models is a narrower capability that may re-emerge as a
+Federation sub-feature, not an independent layer.
 
-The EU AI Act Art. 12 requirement is technology-neutral. It requires
-automatic, tamper-resistant logging of every decision made by a high-risk
-AI system. The regulation does not define "AI system" as "large language
-model." It defines it as any system that influences decisions affecting
-people's rights, safety, or access to services.
+## What Sentinel is not
 
-That includes:
-- LLMs making procurement approvals
-- ML classifiers making credit decisions
-- Rule engines making insurance eligibility decisions
-- Autonomous systems making operational decisions
-- Robotic systems making physical action decisions
+Errors in positioning arise from scope creep, not from
+under-positioning.
 
-Sentinel wraps any Python function that makes such a decision. The
-`@sentinel.trace` decorator is technology-neutral by design.
+Sentinel is not an AI platform. Sentinel hosts no models,
+calls no LLMs, runs no inference. Sentinel is the layer that
+records, enforces, and proves the decisions of other AI
+systems.
 
-This means Sentinel is sustainable beyond any single technology wave.
-LLMs are the current dominant paradigm. They will not be the last. The
-regulatory obligation to produce a sovereign decision record will outlast
-every specific technology.
+Sentinel is not a complete compliance solution. EU AI Act
+compliance spans Articles 9 through 17 and more. Sentinel
+primarily addresses Articles 12, 13, and 14, and partially 9,
+11, 16, 17, 26, and 72. The rest organisations must cover
+themselves or with other tools. This honesty builds trust;
+the alternative (overclaiming) loses it.
 
-## Why not Palantir AIP
+Sentinel is not an observability tool. LangFuse, LangSmith,
+Weights & Biases do observability. Sentinel tracks decisions
+and policies. Complementary.
 
-Palantir AIP is an excellent product. It is also, structurally, the wrong
-answer for regulated European buyers, for three reasons that are architectural
-rather than tactical.
+Sentinel is not a security platform. NeMo Guardrails, LLM
+Guard, garak filter prompts and detect jailbreaks. Sentinel
+comes after the security layer: what did the system that
+passed security decide, and is the resulting artefact
+provable.
 
-**Jurisdiction.** Palantir is US-incorporated. The US CLOUD Act (18 U.S.C.
-§ 2713) applies to all data it handles, regardless of where the servers are.
-No EU data-centre agreement, no contractual clause, eliminates this. For a
-defence contractor, a Landesbank, or a Bundesbehörde, that is a structural
-barrier, not a preference.
+Sentinel will not pursue a closed-source strategy. The kernel
+stays Apache 2.0 permanently. Enterprise features are always
+add-ons to a permanently open core. This commitment is not
+negotiable — it guarantees the BaFin BAIT 8.2 exit capability
+regulated buyers require.
 
-**Cost and lock-in.** AIP engagements start at €5–20M per year and require
-deployment strategists — Palantir's own consultants — to integrate it with
-your business. The ontology, the pipelines, and the UI are proprietary. When
-you want to leave, you have to rebuild everything.
+Sentinel will never be US-incorporated. The company stays
+Swentures UG under German jurisdiction. An American
+subsidiary for US market access can exist later, but the core
+entity and the evidence infrastructure stay EU-incorporated.
 
-**The shape of the next decade.** When LLMs guide their own integration — and
-that is already happening — the deployment-strategist model collapses. A good
-agent with a good manifesto and a good kernel can wire up the pipelines by
-itself. What survives is the trusted kernel underneath: policy, audit trail,
-model router, sovereignty proof. That is Sentinel. Open source, EU sovereign,
-Apache 2.0, self-service.
+## The competitive landscape
 
-| Solution | Jurisdiction  | Open       | System-agnostic | Air-gapped | Router      |
-|----------|---------------|------------|-----------------|-----------|-------------|
-| Palantir AIP | US CLOUD Act | ✗         | Partial         | ✗          | Proprietary |
-| LangSmith    | US CLOUD Act | ✗         | LLMs only       | ✗          | ✗           |
-| asqav-sdk    | US cloud     | MIT        | ✗               | ✗          | ✗           |
-| **Sentinel** | **EU**       | **Apache 2.0** | **✓ any system** | **✓**  | **→ v4.0**  |
+**Dome Systems.** US-incorporated, closed beta, founded by
+Dave McJannet (ex-HashiCorp CEO) and Marc Holmes. Redpoint,
+Bessemer, Mango Capital. Intellectually strong positioning
+through three essays. Dome will take the US market and
+western Fortune-500. Sentinel does not compete directly with
+Dome; the markets are geographically and jurisdictionally
+separated. Dome cannot effectively serve regulated European
+institutions because any US-incorporated entity falls under
+the CLOUD Act (18 U.S.C. § 2713), regardless of data-centre
+location. BaFin BAIT 8.2 exit capability is not credibly
+demonstrable under closed SaaS, even with escrow.
 
-| Non-LLM capability           | Cloud obs. | Proprietary | Sentinel |
-|-------------------------------|-----------|-------------|----------|
-| ML classifier governance      | ✗         | ✗           | ✓        |
-| Rule engine audit trail        | ✗         | ✗           | ✓        |
-| Robotic decision logging       | ✗         | ✗           | ✓        |
+**Microsoft Agent Governance Toolkit (AGT).** US-incorporated,
+MIT-licensed. Covers OWASP Agentic Top 10, framework-agnostic
+with LangChain/CrewAI/Dify integration. Microsoft AGT wins
+every Microsoft-shop without a sales call. Sentinel is not a
+direct competitor in Microsoft-first shops without an
+explicit EU-jurisdiction requirement. Sentinel is the answer
+for enterprises that must work model-agnostically or must
+hold evidence artefacts explicitly under EU jurisdiction.
+This is often a co-existence in the reality of European
+banking, not a replacement.
+
+**Cylake.** US-incorporated, founded by Nir Zuk (Palo Alto
+Networks). "Sovereignty is the next firewall." Targets nation
+states and tier-1 banks with hardware + software. Cylake is
+not a direct competitor but is currently claiming the word
+*Sovereignty* in the cybersecurity context with billions of
+marketing weight. The semantic shadow is real. That is why
+Sentinel does not lead with Sovereignty — it leads with
+*Provability*, operationalised as *Record. Enforce. Prove.*,
+with Sovereignty as a consequence rather than a thesis.
+
+**Native cloud governance — Azure AI Foundry, AWS Bedrock
+Guardrails, GCP Vertex AI.** Deeply integrated. Excellent
+when an organisation stays on one cloud. Loses value the
+moment multi-cloud or on-premise scenarios appear. Sentinel
+is the multi-cloud-plus-on-premise clasp.
+
+**Native AI-provider governance.** Anthropic, OpenAI, Google
+will build proprietary governance features into their models.
+These will work excellently — per model. They will not be
+structurally model-spanning, because that contradicts their
+business model. They will also not be under EU jurisdiction,
+because the firms are US-incorporated. Sentinel sits one
+layer above and abstracts.
+
+**LangFuse, LangSmith, Weights & Biases.** Observability.
+Measure performance, tokens, latency. Complementary, not
+competing. LangFuse ships a Sentinel-compatible integration.
+
+**Sastrify, Enactia, Kovrr, ADOGRC — GRC platforms.** Not
+competitors. Partner candidates. They operate on the
+inventory-and-management layer. Sentinel operates on the
+runtime layer. The layers complement each other.
+
+The gap in this landscape is observable. No other solution
+simultaneously offers: model-spanning consistency, EU
+jurisdiction for evidence, open source with exit capability,
+cryptographic provability in regulation-mapped format.
+Sentinel positions precisely in this intersection.
 
 ## The market timing
 
-Three independent clocks line up in 2026.
+Three independent clocks align in 2026.
 
-**The EU AI Act.** Annex III high-risk enforcement begins 2 August 2026.
-Every European bank, insurer, critical-infrastructure operator, healthcare
-provider, defence contractor, and government agency has to demonstrate
-automatic tamper-resistant decision logging from that date, under penalty
-of up to €15M or 3% of global turnover. The procurement conversations for
-Q4 2026 are happening now.
+**The regulator.** EU AI Act Annex III high-risk enforcement
+begins 2 August 2026. Penalties up to €15M or 3% of global
+annual turnover. Every regulated European buyer must
+demonstrate automatic tamper-resistant decision logging from
+that date. The procurement conversations for Q4 2026 are
+happening now.
 
-**The sovereignty moment.** After two years of CLOUD Act headlines and
-Schrems-era jurisprudence, "EU-sovereign" has stopped being marketing and
-started being a purchase criterion. Bundesamt für Sicherheit in der
-Informationstechnik (BSI) has published reference profiles. Linux
-Foundation Europe exists specifically to give open-source projects an
-EU-governed home. The infrastructure to be credibly sovereign exists for
-the first time.
+**The sovereignty moment.** After two years of CLOUD Act
+headlines and Schrems-era jurisprudence, *"EU-jurisdictional"*
+has stopped being marketing and started being a purchase
+criterion. BSI publishes reference profiles. Linux Foundation
+Europe exists specifically to give open-source projects an
+EU-governed home. The infrastructure to be credibly operated
+under EU jurisdiction exists for the first time.
 
-**The empty field.** Nobody is building this exact thing. The big US
-observability tools are observability tools — tied to LLMs. The cloud
-providers are cloud providers. The EU-sovereign projects we respect —
-Mistral, Mittagessen, Nextcloud — are model vendors or collaboration
-platforms, not decision kernels. Sentinel is the only open-source,
-EU-sovereign, technology-agnostic decision kernel we can find. That will
-not last forever. It should last long enough to become the default.
+**The empty field.** Nobody is building this exact thing.
+Large US observability tools are observability tools, tied to
+LLMs. Cloud providers are cloud providers. The EU-operated
+projects we respect — Mistral, Aleph Alpha, Haystack,
+Nextcloud — are model vendors, orchestration stacks, or
+collaboration platforms, not decision infrastructure.
+Sentinel is the only open-source, EU-operated, technology-
+agnostic decision infrastructure we can find. That will not
+last forever. It should last long enough to become the
+default.
 
-## Roadmap
+## Realistic scope
 
-**Phase 1 — Trace + Govern (v1.0–v3.1, shipped).**
-Sovereign decision traces, policy-as-code, kill switch, manifesto-as-code,
-EU AI Act compliance checker, sovereignty scanner, quantum-safe signing,
-RFC-001 cross-language manifest. v3.0 froze the public API. v3.1 — The
-Auditor Release — added `sentinel ci-check`, `sentinel evidence-pack`
-(signed PDF evidence packs), and honest-scope framing across all
-surfaces. Production stable. 686 tests. 100% line and branch coverage
-enforced in CI.
+Sentinel will not be Mistral. Sentinel will not be Anthropic.
+Sentinel will not be HashiCorp in the pre-IBM era. Those
+scales require venture capital in US or Chinese ecosystems
+and conditions Europe structurally does not offer.
 
-**Phase 2 — Certify (v3.2, 2026).**
-Linux Foundation Europe stewardship application and BSI IT-Grundschutz
-formal assessment, both targeted for v3.2 in Q3/Q4 2026. First
-lighthouse deployments. Go and TypeScript reference implementations
-of RFC-001.
+What Sentinel can realistically become, at a good outcome
+over five-to-seven years: a company with 50 to 500 enterprise
+customers in Europe, annually recurring revenue between €20M
+and €200M, in a category that must exist because regulation
+forces it to, occupied by an EU-incorporated vendor because
+US competitors structurally cannot occupy it.
 
-**Phase 3 — Route (v4.0–v4.x, 2026–2027).**
-SovereignRouter. Policy-driven model selection. Local model adapters
-(Ollama, vLLM, llama.cpp). Multi-model consensus for high-stakes decisions.
-LLM-guided deployment — the kernel wires itself into new environments.
+Exit perspective in this frame: acquisition by a hyperscaler
+that needs a European compliance entry (AWS, Azure, GCP), by
+a European enterprise-software champion (SAP, Siemens, Schwarz
+IT, Deutsche Telekom), by a regulated main customer as
+vertical integration (BaFin banking consortium, KRITIS
+consortium), or by a European IPO on Euronext Frankfurt or
+Amsterdam.
 
-**Phase 4 — Ecosystem (v5.x, 2027+).**
-EU-sovereign build pipeline (Gitea/Forgejo instead of GitHub Actions). EU
-package registry (instead of PyPI). Signed build artifacts end-to-end.
-Multi-language parity.
+This is not "change the world." It is "occupy a structural
+position in Europe that a US competitor would otherwise take,
+and give Europe an option it otherwise would not have." That
+is an honest, realistic, achievable ambition. It is smaller
+than the maximum formulated in session-high moments. It is
+bigger than most European infrastructure firms have ever
+managed.
 
 ## The bottom line
 
-Sentinel is a thin, open, auditable kernel. You can read every line of it.
-You can run it air-gapped. You can swap the model layer without rewriting
-your business logic. You can hand the whole thing to a BSI auditor without
-a single proprietary black box in the critical path. And when v4.0 ships,
-the same kernel that recorded your decisions will also decide which model
-makes them — under the same manifesto, with the same sovereignty guarantees,
-with no vendor in the loop. That is the product. The rest is implementation.
+Scale what you can prove. Move like a startup. Prove like a
+regulated bank.
+
+The rest is implementation.
+
+---
+
+*Full competitive detail: [docs/landscape.md](landscape.md) ·
+Phase plan: [docs/roadmap.md](roadmap.md) · Provability
+conditions: [docs/provability.md](provability.md) ·
+What Sentinel is not, extended: [docs/commercial.md](commercial.md).*

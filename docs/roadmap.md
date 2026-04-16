@@ -1,161 +1,197 @@
 # Sentinel Roadmap
 
-Three phases. Every version reflects shipped code, not plans.
-
-For the deeper strategic picture — the Sovereign Decision Kernel architecture,
-the Palantir thesis, and the market timing — see
+Four modules. Three shipped, one on the roadmap. Every version
+reflects shipped code, not plans. For the deeper strategic
+picture — the Agility Infrastructure thesis, the four-module
+architecture, and the market timing — see
 [docs/vision.md](vision.md).
 
-## Phase 1: Trace + Govern (v1.0–v3.1) ✓
+## Phase 1: Trace + Policy + Evidence (v1.0 → v3.3) ✓
 
-**Status: Production / stable. API frozen since v3.0 (one documented
-exception in v3.2.0 — see [docs/api-stability.md](api-stability.md)).**
+**Status: Production / stable. API frozen since v3.0 (two
+documented exceptions — the v3.2.0 privacy-default flip and
+the v3.3.0 positioning refinement; see
+[docs/api-stability.md](api-stability.md)).**
 
-The kernel and every governance primitive around it.
+The three shipped modules, one set of capabilities each.
 
-- **v1.0** — Core kernel. Sentinel interceptor, DecisionTrace, SQLite and
-  Filesystem storage, in-process policy evaluation, kill switch (EU AI Act
-  Art. 14), full async and sync support.
-- **v1.5** — Compliance checkers. EU AI Act, DORA, NIS2. BSI profile and
-  VS-NfD deployment guide.
-- **v2.0** — Manifesto-as-code. `SentinelManifesto`, sovereignty scanner,
-  five named CI theses, full CLI (`sentinel scan`, `sentinel demo`,
-  `sentinel report`). Production stable.
-- **v2.1** — BudgetTracker, portable attestations, CrewAI and AutoGen
-  integrations, preflight checks.
-- **v2.2** — Quantum-safe signing. ML-DSA-65 (FIPS 204), BSI TR-02102-1
-  recommended. RFC 3161 timestamping with EU-only TSAs.
-- **v2.3** — LangFuse sovereignty panel (self-contained HTML widget,
-  no CDN).
-- **v2.4** — RFC-001 `SovereigntyManifest` Rust reference implementation.
-- **v3.0** — API freeze. BSI pre-engagement package ready. v1→v3
-  capability parity on the public site.
-- **v3.0.1 / v3.0.2** — Reentrant scanner timeout, workflow concurrency
-  guards, walk-time directory pruning. Operational hardening.
-- **v3.1 — The Auditor Release** — `sentinel ci-check` (one-stop CI
-  aggregator), `sentinel evidence-pack` (signed PDF evidence packs
-  for auditors), runtime briefing, honest-scope framing across all
-  surfaces. 686 tests, 100% line and branch coverage enforced in CI.
+### Sentinel Trace
 
-## Phase 2: Certify (v3.2, 2026)
+- `@sentinel.trace` decorator, sync and async, any Python
+  callable.
+- Append-only, tamper-resistant `DecisionTrace` schema,
+  versioned at `schema_version = 1.0.0`.
+- SQLite, Filesystem (NDJSON), PostgreSQL storage backends —
+  all local-first.
+- Air-gapped validation suite (11 dedicated tests; socket-layer
+  denial in CI).
+- SHA-256 hashing on every input and output by default.
+- Privacy-by-default: `store_inputs=False` / `store_outputs=False`
+  by default from v3.2.0 onward.
+- Trace integrity verification (`verify_integrity`), retention
+  purge (`purge_before`), NDJSON export/import.
+
+### Sentinel Policy
+
+- Three policy evaluators: `NullPolicyEvaluator`,
+  `SimpleRuleEvaluator` (Python callables),
+  `LocalRegoEvaluator` (in-process OPA binary).
+- Kill switch (EU AI Act Art. 14): `engage_kill_switch` /
+  `disengage_kill_switch`, thread-safe, no restart required.
+- Preflight checks: `sentinel.preflight(action)` without
+  writing a trace.
+- `SentinelManifesto` — policy-as-code declaration with
+  requirement types (`EUOnly`, `Required`, `OnPremiseOnly`,
+  `Targeting`, `AcknowledgedGap`, `BSIProfile`, `GDPRCompliant`,
+  `RetentionPolicy`, `AuditTrailIntegrity`, `VSNfDReady`,
+  `ZeroExposure`).
+- Five named CI gates on every PR enforcing the above.
+
+### Sentinel Evidence
+
+- `sentinel evidence-pack` — signed PDF evidence packs for
+  auditors. Cover page, executive summary, EU AI Act / DORA /
+  NIS2 coverage, trace samples, hash manifest with pack
+  digest, attestation appendix.
+- `sentinel ci-check` — one-stop CI aggregator of EU AI Act
+  snapshot, runtime dependency scan, and policy check.
+- Provability reports (`sentinel report`) — self-contained
+  HTML, no CDN, air-gap-safe.
+- Portable attestations (`generate_attestation` /
+  `verify_attestation`) — SHA-256 over canonical content.
+- Optional long-term-retention signing via ML-DSA-65 (FIPS 204)
+  and RFC-3161 timestamping through EU-sovereign TSAs (DFN-CERT,
+  D-Trust). Keys stay operator-side. See
+  [docs/sentinel-evidence.md](sentinel-evidence.md) for the
+  detailed posture.
+
+### v3.3 — positioning refinement
+
+- Customer-facing language aligned to *Agility Infrastructure
+  for Regulated AI* and the *Record. Enforce. Prove.* formula.
+- Four-module architecture (Trace / Policy / Evidence /
+  Federation) replaces the earlier Three-Layer (Trace / Govern /
+  Route) framing as a refinement, not reversal — Evidence is
+  promoted from "inside Govern" to a first-class module because
+  it carries the highest-ARR commercial tier.
+- No code changes. No API breaks. No schema changes. The v3.3
+  scope is positioning, narrative, and documentation only.
+
+## Phase 2: Certify (v3.x, 2026)
 
 **Status: in progress.**
 
 | Version | Milestone                                               | Window  |
 |---------|---------------------------------------------------------|---------|
-| v3.2    | Linux Foundation Europe application                     | Q3 2026 |
-| v3.2    | BSI IT-Grundschutz formal assessment                    | Q4 2026 |
+| v3.x    | Linux Foundation Europe application                     | Q3 2026 |
+| v3.x    | BSI IT-Grundschutz formal assessment                    | Q4 2026 |
 | v3.x    | First production deployments (lighthouse customers)     | 2026    |
-| v3.x    | Go + TypeScript RFC-001 implementations                 | 2026    |
 
-Phase 2 exists to turn "technically sovereign" into "independently
-verifiable." LF Europe stewardship gives the project an EU-governed
-home. BSI assessment produces a profile that every German public-sector
-buyer can reference. The multi-language RFC-001 implementations take
-SovereigntyManifest from a Python library to a cross-ecosystem standard.
+Phase 2 turns "technically operable under EU jurisdiction"
+into "independently verifiable". LF Europe stewardship gives
+the project an EU-governed home. BSI assessment produces a
+profile that every German public-sector buyer can reference.
 
-## Phase 3: Route (v4.x, 2026–2027)
+## Phase 3: Federation (v4.x, roadmap)
 
-**Status: design / RFC-002 in progress.**
+**Status: architecturally anchored. Not committing to a ship
+date yet. RFC-002 planned.**
 
-Phase 3 is the **SovereignRouter** — the third layer of the Sentinel
-Kernel. The thesis is simple: your SentinelManifesto already defines
-which systems are permitted for each data class. The router reuses the
-same policy engine to select the right decision system automatically.
+Phase 3 is **Sentinel Federation** — the fourth module of the
+product. Multi-institution aggregation: holding-group
+compliance visibility, industry-consortium evidence rollup,
+supervisory-body oversight across federated institutions
+without individual data disclosure.
 
-The router is technology-agnostic by design. The same policy that decides
-"this data is classified, use a local model" also decides "this decision
-requires a deterministic rule engine, not a probabilistic LLM." The
-router selects the right system for the right decision — not just between
-LLMs, but between any decision system in your inventory.
+Federation is the answer to the structural question that
+emerges after single-institution adoption: how do a
+supervisory authority, a banking holding, or a KRITIS
+coordination body gain aggregate visibility without breaking
+the sovereignty of each underlying institution? The answer is
+not "share the raw traces" — that would destroy the privacy
+guarantee. The answer is federation: cryptographic
+aggregation, selective disclosure, and schema-compatible
+attestations that let an aggregator prove compliance rollup
+without seeing the underlying decisions.
 
-```python
-# Define once in your manifesto:
-class OurPolicy(SentinelManifesto):
-    models = ModelPolicy(
-        public_data=["claude-3", "mistral-api", "gpt-4"],
-        internal_data=["mistral-eu-hosted", "azure-eu"],
-        confidential=["llama3-70b-local", "mistral-local"],
-        classified=["llama3-70b-airgapped"],   # offline only
-    )
+**Architectural anchor.** `sentinel/federation/` exists today
+as a placeholder with a defined interface. The cryptographic
+primitives (SHA-256 attestations, ML-DSA-65 signing) are
+already shipped. The aggregation protocol is the subject of
+RFC-002, to be drafted as part of Phase 3 kickoff.
 
-# Use everywhere:
-result = await sentinel.route(
-    task="process_document",
-    context={"classification": "confidential"},
-)
-# → automatically uses llama3-70b-local
-# → records: model, why, sovereignty proof in the DecisionTrace
-```
-
-| Version | Milestone                                                          |
-|---------|--------------------------------------------------------------------|
-| v4.0    | `SovereignRouter`, `ModelPolicy`, policy-driven model selection    |
-| v4.1    | Local adapters: Ollama, vLLM, llama.cpp                            |
-| v4.2    | Multi-model consensus for high-stakes decisions                    |
-| v4.3    | LLM-guided deployment — the kernel self-configures new pipelines   |
-
-RFC-002 (`SovereignRouter`) is the formal design gate for Phase 3.
-See the RFC-002 GitHub Discussion for the open questions and comment
-window.
+**Note on model-routing / SovereignRouter.** The previously
+announced Phase 3 module — SovereignRouter, policy-driven
+model selection — is deferred. It may reappear as a Federation
+sub-capability if and when real multi-institution deployments
+surface a concrete need. It is not an independent layer.
+Issue #24 has been relabeled accordingly.
 
 ## Phase 4: Ecosystem (v5.x, 2027+)
 
 **Status: scoped, not yet started.**
 
-The last acknowledged gap is the build pipeline itself. Phase 4 closes it.
+The last acknowledged gap is the build pipeline itself. Phase 4
+closes it.
 
-- **EU-sovereign build pipeline** — Gitea or Forgejo instead of GitHub
-  Actions. The project stops acknowledging a gap and stops having one.
-- **EU package registry** — instead of PyPI, for the critical path.
-- **Signed build artifacts** — end-to-end supply-chain verification,
-  with keys that never leave EU hardware.
-- **Multi-language parity** — Python, Rust, Go, TypeScript all at
-  first-class status, not just manifest implementations.
+- **EU-sovereign build pipeline** — Gitea or Forgejo instead of
+  GitHub Actions. The project stops acknowledging a gap and
+  stops having one.
+- **EU package registry** — instead of PyPI, for the critical
+  path.
+- **Signed build artefacts** — end-to-end supply-chain
+  verification with keys that never leave EU hardware.
 
 ## Why Sentinel is built for the long term
 
-Every technology wave produces new systems that make autonomous decisions.
-Expert systems in the 1980s. ML classifiers in the 2000s. LLMs in the
-2020s. Agentic systems today. Neurosymbolic systems tomorrow.
+Every technology wave produces new systems that make
+autonomous decisions. Expert systems in the 1980s. ML
+classifiers in the 2000s. LLMs in the 2020s. Agentic systems
+today. Neurosymbolic systems tomorrow.
 
-Sentinel is built around the regulatory requirement, not the technology:
+Sentinel is built around the regulatory requirement, not the
+technology:
 
-> "Every high-risk autonomous decision must be automatically recorded
-> in a tamper-resistant, sovereign audit trail."
+> *"Every high-risk autonomous decision must be automatically
+> recorded in a tamper-resistant, regulator-accepted evidence
+> trail."*
 
-This requirement does not mention LLMs. It does not mention any specific
-technology. It describes a property of decision-making systems.
+This requirement does not mention LLMs. It does not mention
+any specific technology. It describes a property of decision-
+making systems.
 
-`@sentinel.trace` is that property, implemented. It wrapped expert systems
-in principle. It wraps LLMs today. It will wrap whatever comes next.
+`@sentinel.trace` is that property, implemented. It wrapped
+expert systems in principle. It wraps LLMs today. It will
+wrap whatever comes next.
 
 ## The market thesis
 
-Three clocks line up in 2026.
+Three clocks align in 2026.
 
-**The regulator.** EU AI Act Annex III high-risk enforcement begins
-2 August 2026, with penalties up to €15M or 3% of global turnover.
-Every regulated European buyer needs automatic, tamper-resistant decision
-logging from that date. The procurement conversations for Q4 2026 are
-happening now.
+**The regulator.** EU AI Act Annex III high-risk enforcement
+begins 2 August 2026, with penalties up to €15M or 3% of
+global turnover. Every regulated European buyer needs
+automatic, tamper-resistant decision logging from that date.
+The procurement conversations for Q4 2026 are happening now.
 
-**The sovereignty moment.** "EU-sovereign" has stopped being marketing
-and started being a purchase criterion. BSI publishes reference profiles.
-LF Europe exists to host projects under EU governance. The infrastructure
-to be credibly sovereign exists for the first time.
+**The sovereignty moment.** *"EU-jurisdictional"* has stopped
+being marketing and started being a purchase criterion. BSI
+publishes reference profiles. LF Europe exists to host
+projects under EU governance. The infrastructure to be
+credibly operated under EU jurisdiction exists for the first
+time.
 
-**The empty field.** Palantir AIP costs €5–20M per year, is
-US-incorporated, and requires deployment strategists. When LLMs guide
-their own integration — and that is already happening — the
-deployment-strategist model collapses. What survives is the trusted
-kernel underneath: policy, audit trail, model router, sovereignty proof.
-Nobody else is building this as an open-source, EU-sovereign,
-model-agnostic kernel. The field is empty and the regulation creates
-the demand.
+**The empty field.** No EU-operated, open-source, model-
+agnostic, cryptographically-provable decision infrastructure
+exists today. US competitors cannot occupy this category
+because US incorporation means CLOUD Act exposure on every
+evidence record. The field is empty; the regulation creates
+demand; Sentinel fills the intersection.
 
-That is the roadmap. Ship Phase 1, certify in Phase 2, build the router
-in Phase 3, close the build pipeline in Phase 4. The destination is a
-thin, open, auditable kernel that any European enterprise can run under
-its own law, with any model, with a decision record good enough for a
-BSI auditor.
+That is the roadmap. Ship Trace, Policy, and Evidence (done).
+Certify in Phase 2. Build Federation when the first real
+multi-institution scenarios surface. Close the build pipeline
+when the rest matures. The destination is a thin, open,
+auditable infrastructure any European enterprise can run
+under its own law, with any decision system, with a record a
+BSI auditor accepts.

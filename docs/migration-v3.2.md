@@ -33,7 +33,7 @@ sentinel = Sentinel(
 Preserve the v3.1 behaviour exactly. Only enable this when you have
 a legal basis (GDPR Art. 6/9) and controlled access to the trace
 store. The rationale is in
-[docs/sovereignty.md#privacy-by-default-v320](sovereignty.md#privacy-by-default-v320).
+[docs/provability.md#privacy-by-default-v320](provability.md#privacy-by-default-v320).
 
 ## If you're fine with hash-only
 

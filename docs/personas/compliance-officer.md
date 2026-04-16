@@ -22,7 +22,7 @@ inspection.
 | EU AI Act | Art. 13 (transparency to deployers) | **Automated** | agent, model, policy, and evaluator fields on every trace |
 | EU AI Act | Art. 14 (human oversight) | **Automated** | runtime kill switch halts every decision in ≤1 ms, records the halt as a linked DENY trace |
 | EU AI Act | Art. 17 (quality-management traceability) | **Automated** | schema-versioned immutable record, NDJSON export, portable |
-| GDPR | Art. 25 (data protection by design) | **Automated** | hash-only storage by default — see [sovereignty.md](../sovereignty.md#privacy-by-default-v320) |
+| GDPR | Art. 25 (data protection by design) | **Automated** | hash-only storage by default — see [provability.md](../provability.md#privacy-by-default-v320) |
 | GDPR | Art. 22 (right to explanation) | **Pattern** | explicit `store_outputs=True` opt-in documented in [explainability-art-22.md](../explainability-art-22.md) |
 | DORA | Art. 10 / Art. 16 logging | **Automated** | trace store doubles as DORA incident logging substrate; [dora-compliance.md](../dora-compliance.md) |
 | NIS2 | Art. 21 / Art. 23 | **Partial** | decision-side covered; sector-specific thresholds (BNetzA, etc.) are operator scope |

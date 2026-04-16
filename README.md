@@ -179,7 +179,7 @@ logging and for re-verification against the original — but does **not**
 store the raw payloads. Opt in explicitly with
 `Sentinel(store_inputs=True, store_outputs=True)` when you control the
 data and have a legal basis. See
-[docs/sovereignty.md#privacy-by-default](docs/sovereignty.md#privacy-by-default-v320).
+[docs/provability.md#privacy-by-default](docs/provability.md#privacy-by-default-v320).
 
 ---
 
@@ -618,7 +618,7 @@ See [docs/commercial.md](docs/commercial.md).
 - [demo/README.md](demo/README.md) — Docker Compose demo environment
 
 **Ecosystem & governance**
-- [docs/sovereignty.md](docs/sovereignty.md) — what sovereignty means
+- [docs/provability.md](docs/provability.md) — Sentinel's three provability conditions
 - [docs/landscape.md](docs/landscape.md) — how Sentinel relates to the ecosystem
 - [docs/ecosystem.md](docs/ecosystem.md) — sovereign project registry
 - [docs/rfcs/RFC-001-sovereignty-manifest.md](docs/rfcs/RFC-001-sovereignty-manifest.md) — SovereigntyManifest spec (draft)

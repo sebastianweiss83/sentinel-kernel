@@ -60,7 +60,7 @@ You just produced a tamper-resistant decision record with:
 
 - a unique trace id (ULID-style)
 - SHA-256 hash of the inputs (raw payload **not** stored by default —
-  see [sovereignty.md#privacy-by-default](sovereignty.md#privacy-by-default-v320))
+  see [provability.md#privacy-by-default](provability.md#privacy-by-default-v320))
 - ISO-8601 UTC timestamp
 - wall-clock latency in milliseconds
 - policy result (`NOT_EVALUATED` — you haven't attached a policy yet)

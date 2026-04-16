@@ -84,13 +84,13 @@ present in your checkout; under construction).
 
 ## Reference documents
 
-- [sovereignty.md](../sovereignty.md) — three tests: jurisdiction /
+- [provability.md](../provability.md) — three provability conditions: jurisdictional integrity /
   air-gap / BSI-certifiable.
 - [bsi-profile.md](../bsi-profile.md) — BSI IT-Grundschutz Baustein
   mapping.
 - [vsnfd-deployment.md](../vsnfd-deployment.md) — classified-environment
   deployment profile.
-- [sovereignty.md#privacy-by-default-v320](../sovereignty.md#privacy-by-default-v320)
+- [provability.md#privacy-by-default-v320](../provability.md#privacy-by-default-v320)
   — why the default is hash-only.
 
 ## SecArch enquiry
