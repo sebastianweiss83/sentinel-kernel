@@ -653,6 +653,7 @@ See [docs/commercial.md](docs/commercial.md).
 **Core**
 - [docs/vision.md](docs/vision.md) — Sentinel vision: agility infrastructure for regulated AI, in full
 - [docs/roadmap.md](docs/roadmap.md) — four modules, phase plan
+- [docs/sentinel-evidence.md](docs/sentinel-evidence.md) — Evidence module in depth (evidence packs, attestations, long-term retention)
 - [docs/getting-started.md](docs/getting-started.md) — two-minute quickstart
 - [docs/architecture.md](docs/architecture.md) — detailed architecture
 - [docs/schema.md](docs/schema.md) — full trace schema reference
