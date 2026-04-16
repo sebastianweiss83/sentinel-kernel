@@ -176,8 +176,10 @@ If 2 and 3 are both yes: not in the critical path.
 The preview page (`scripts/generate_preview.py`) is the design source of
 truth. All tokens are CSS custom properties in the `:root` block.
 
-**Tone:** Sovereign infrastructure product — not AI startup. Think BWI +
-Linear: institutional confidence, operational precision, European restraint.
+**Tone:** Institutional infrastructure — not AI startup. Think Linear
+plus a German federal agency: institutional confidence, operational
+precision, European restraint. Never name specific partners, customers,
+or agencies in this file (Manifesto Chapter X).
 
 **Palette:**
 - `--green: #34d399` (emerald-400 — cooler, less "crypto mint")
