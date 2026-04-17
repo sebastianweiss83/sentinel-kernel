@@ -12,15 +12,15 @@
 | Tests | 773 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-17 20:51 UTC |
+| Last updated | 2026-04-17 21:06 UTC |
 
 ## Last 5 commits
 
+- `635cd3c` docs: surface live preview link prominently in README hero
 - `6b39d45` fix: align customer-facing test count to CI authority (773)
 - `617f0a5` chore: cosmetic cleanup — stubs, stale numbers, smoke regex, Chapter X follow-up
 - `1c51aa3` docs: strategic content consolidation (Chapter X full sweep, no release)
 - `4584280` chore(3.3.1): sync-all after performance.md alignment
-- `cb3f3ac` chore(3.3.1): docs/performance.md v3.3.1 alignment (smoke step 42)
 
 ## Open issues
 
