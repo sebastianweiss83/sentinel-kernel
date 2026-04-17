@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.3.1` |
-| Tests | 734 passing |
+| Tests | 773 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-17 17:25 UTC |
+| Last updated | 2026-04-17 20:39 UTC |
 
 ## Last 5 commits
 
+- `617f0a5` chore: cosmetic cleanup — stubs, stale numbers, smoke regex, Chapter X follow-up
 - `1c51aa3` docs: strategic content consolidation (Chapter X full sweep, no release)
 - `4584280` chore(3.3.1): sync-all after performance.md alignment
 - `cb3f3ac` chore(3.3.1): docs/performance.md v3.3.1 alignment (smoke step 42)
 - `0456b25` chore(3.3.1): sync-all regenerated derived content
-- `cd6ee72` fix(3.3.1): align report HTML strings with v3.3.0 Manifesto positioning
 
 ## Open issues
 
