@@ -14,22 +14,14 @@ stewardship application, planned alongside v2.0.
 - Alignment with the EU sovereignty agenda and the EU Open Source
   Policy.
 
-## Prerequisites — checklist
+## Prerequisites
 
-- [x] Apache 2.0 license, permanent (see ADR-002)
-- [x] Governance documentation complete
-  ([GOVERNANCE.md](../../GOVERNANCE.md))
-- [x] RFC process documented and exercised (RFC-001 DRAFT — paused pending community stewardship)
-- [x] BSI IT-Grundschutz profile drafted and ready for
-  pre-engagement ([docs/bsi-profile.md](../bsi-profile.md))
-- [x] Stable public API with SemVer commitments
-- [x] Test coverage ≥ 95% and air-gap CI gate
-- [ ] Six months of API stability from v1.0 baseline
-  (ticking — v1.0 = 2026-04-11)
-- [ ] Two or more active contributors beyond the founder
-- [ ] Production deployment evidence from at least one regulated-
-  sector customer
-- [ ] BSI pre-engagement meeting completed
+Sentinel is actively working toward LF Europe application
+prerequisites, including contributor base expansion, production
+deployment references from regulated-sector customers, and BSI
+pre-engagement. Interested parties are invited to discuss
+contribution via sentinel@swentures.com. The current shipping
+series is v3.3.x.
 
 ## Current status
 

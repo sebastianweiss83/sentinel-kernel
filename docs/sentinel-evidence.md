@@ -162,8 +162,8 @@ uses. No network calls, no external services. Air-gap-capable.
 ## Enterprise tier — commercial features
 
 The base generator is Apache 2.0. The commercial Evidence tier
-addresses requirements that regulated buyers with €300k+
-budgets actually have:
+addresses requirements that regulated enterprise buyers
+actually have:
 
 - **HSM integration** for key material — AWS CloudHSM, Azure
   Key Vault, Thales PKCS#11, Utimaco, Futurex. The

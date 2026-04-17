@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Strategic content consolidation: removed revenue projections,
+  exit scenarios, per-customer ACV references, and named-
+  competitor financial details from public documentation. Such
+  content now lives exclusively in Sebastian's private strategy
+  archive. No functional or API changes.
+- Removed docs/announcements/3.3.0-linkedin-post.md which
+  contained draft communication material that did not belong in
+  the public repository.
+- Cleaned historical v3.3.0 CHANGELOG entry to remove partner
+  names.
+
+### Notes
+
+- Current published version on PyPI: 3.3.1 (unchanged).
+- This is a content-only patch; no version bump, no release, no
+  tag.
+
 ## [3.3.1] — 2026-04-17
 
 ### Fixed
@@ -129,11 +148,9 @@ v3.1) to a first-class module.
 
 ### Fixed
 
-- **`docs/repo-governance.md`**: removed named-partner
-  reference (BWI, Quantum Systems) per Manifesto Chapter X
-  communication policy. v0.9.1 CHANGELOG claimed the public repo
-  was *"zero named partners, customers, or organisations"*;
-  this file had been an exception until now.
+- Fixed: internal documentation references to specific customer
+  and partner names have been removed from public-facing files
+  per communication policy.
 - **`docs/bsi-pre-engagement/test-evidence.md`**: updated stale
   test counts from 503+ to current 773 passing / 5 skipped / 8
   air-gap tests (verified against `pytest --collect-only -q`).

@@ -256,10 +256,7 @@ Apache 2.0. Commercial enterprise features are HSM integration,
 RFC-3161 timestamping via EU timestamping authorities, multi-
 party signing for critical decisions, long-term retention of
 ten-plus years (BaFin retention obligation), automated BaFin
-reporting templates, legal-hold management. This is the
-highest revenue per buyer, typically €300k+ ARR per
-enterprise. It is the Vault parallel to HashiCorp — the module
-that carries the enterprise price.
+reporting templates, legal-hold management.
 
 **Sentinel Federation** is the entry point for multi-
 institution scenarios: holding-group structures, industry
@@ -335,17 +332,17 @@ entity and the evidence infrastructure stay EU-incorporated.
 
 ## The competitive landscape
 
-**Dome Systems.** US-incorporated, closed beta, founded by
-Dave McJannet (ex-HashiCorp CEO) and Marc Holmes. Redpoint,
-Bessemer, Mango Capital. Intellectually strong positioning
-through three essays. Dome will take the US market and
-western Fortune-500. Sentinel does not compete directly with
-Dome; the markets are geographically and jurisdictionally
-separated. Dome cannot effectively serve regulated European
-institutions because any US-incorporated entity falls under
-the CLOUD Act (18 U.S.C. § 2713), regardless of data-centre
-location. BaFin BAIT 8.2 exit capability is not credibly
-demonstrable under closed SaaS, even with escrow.
+**Dome Systems** — US-incorporated, closed beta, building an
+agentic infrastructure platform with significant venture
+backing. Intellectually strong positioning through three
+essays. Dome will take the US market and western Fortune-500.
+Sentinel does not compete directly with Dome; the markets are
+geographically and jurisdictionally separated. Dome cannot
+effectively serve regulated European institutions because any
+US-incorporated entity falls under the CLOUD Act (18 U.S.C.
+§ 2713), regardless of data-centre location. BaFin BAIT 8.2
+exit capability is not credibly demonstrable under closed
+SaaS, even with escrow.
 
 **Microsoft Agent Governance Toolkit (AGT).** US-incorporated,
 MIT-licensed. Covers OWASP Agentic Top 10, framework-agnostic
@@ -435,19 +432,9 @@ scales require venture capital in US or Chinese ecosystems
 and conditions Europe structurally does not offer.
 
 What Sentinel can realistically become, at a good outcome
-over five-to-seven years: a company with 50 to 500 enterprise
-customers in Europe, annually recurring revenue between €20M
-and €200M, in a category that must exist because regulation
-forces it to, occupied by an EU-incorporated vendor because
-US competitors structurally cannot occupy it.
-
-Exit perspective in this frame: acquisition by a hyperscaler
-that needs a European compliance entry (AWS, Azure, GCP), by
-a European enterprise-software champion (SAP, Siemens, Schwarz
-IT, Deutsche Telekom), by a regulated main customer as
-vertical integration (BaFin banking consortium, KRITIS
-consortium), or by a European IPO on Euronext Frankfurt or
-Amsterdam.
+over five-to-seven years: a category that must exist because
+regulation forces it to, occupied by an EU-incorporated
+vendor because US competitors structurally cannot occupy it.
 
 This is not "change the world." It is "occupy a structural
 position in Europe that a US competitor would otherwise take,

@@ -72,8 +72,9 @@ The three shipped modules, one set of capabilities each.
 - Four-module architecture (Trace / Policy / Evidence /
   Federation) replaces the earlier Three-Layer (Trace / Govern /
   Route) framing as a refinement, not reversal — Evidence is
-  promoted from "inside Govern" to a first-class module because
-  it carries the highest-ARR commercial tier.
+  promoted to first-class module status because it is the primary
+  artefact regulated enterprises need for BaFin and audit
+  compliance.
 - No code changes. No API breaks. No schema changes. The v3.3
   scope is positioning, narrative, and documentation only.
 

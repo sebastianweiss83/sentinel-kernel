@@ -99,6 +99,7 @@ Public, tracked, no marketing follow-up:
 Note in the enquiry if you prefer private follow-up — an email address
 in the issue body is sufficient.
 
-Real pricing, real contracts, and a full commercial org will follow
-once there are enough design partners to justify them. Until then,
-the offer above is handled case by case, transparently, in writing.
+Commercial terms are currently structured as design-partner
+agreements, handled directly with Swentures UG. Formal pricing and
+standard contracts are in development and will be published as the
+design-partner program scales.

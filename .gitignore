@@ -26,3 +26,10 @@ sovereignty_report.html
 sentinel_demo_report.html
 *.prom
 
+
+# Strategic content — never commit
+TRANSITION_SPEC.md
+SENTINEL_MANIFESTO.md
+MARC_BRIEFING*.md
+SENTINEL_PHASE_*.md
+SENTINEL_REPORT_HTML_FIX.md
