@@ -17,6 +17,8 @@ pipx install 'sentinel-kernel[pdf]'
 sentinel demo                  # 20 seconds, no config
 ```
 
+**🔗 [Live preview & interactive demo](https://sebastianweiss83.github.io/sentinel-kernel/)**
+
 **See the real artefact before you install:**
 &nbsp;📄 [Sample evidence pack (PDF)](docs/samples/audit-evidence-pack-sample.pdf)
 &nbsp;·&nbsp; 📋 [Sample `audit-gap` score](docs/samples/audit-gap-output.txt)
@@ -58,7 +60,6 @@ layer. Run `sentinel audit-gap` to see the exact split for your setup.
 [![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F14%2F17-green)](docs/eu-ai-act.md)
 <!-- SYNC_ALL_README_END -->
 
-**Live preview:** https://sebastianweiss83.github.io/sentinel-kernel/
 **Get started in 2 minutes:** [docs/getting-started.md](docs/getting-started.md)
 
 ## The 5-minute pilot
