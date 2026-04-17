@@ -18,9 +18,9 @@ Prove your AI decisions to the auditor. Agility infrastructure for regulated AI 
 
 | | |
 |---|---|
-| Tests | 773 passing |
+| Tests | 734 passing |
 | Coverage | 100% |
-| Smoke test | 33/40 |
+| Smoke test | 42/42 ✓ |
 
 ## What's inside
 

@@ -57,7 +57,7 @@ explanation. No pretending that software can automate governance.
 
 ## Test evidence
 
-- **686 tests** across unit, integration, and air-gap suites.
+- **734 tests** across unit, integration, and air-gap suites.
 - **100% line and branch coverage** — enforced in CI via
   `--cov-fail-under=100`. No module is under the bar.
 - **40/40 smoke test** — a 40-step end-to-end validation that

@@ -245,9 +245,9 @@ proprietary platforms — we will not name them again — answer that
 question by locking the buyer in: one ontology, one deployment
 strategist, one jurisdiction, one vendor for the next decade. European
 buyers who go that route are trading one structural dependency for
-another, and paying €5–20M per year for the privilege. When LLMs guide
-their own integration — and that is already happening at the agent
-layer — the deployment-strategist moat evaporates. What survives is the
+another, at enterprise-only commercial tiers. When LLMs guide their
+own integration — and that is already happening at the agent layer —
+the deployment-strategist moat evaporates. What survives is the
 trusted kernel underneath: policy, audit trail, model router,
 sovereignty proof.
 

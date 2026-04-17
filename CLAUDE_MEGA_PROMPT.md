@@ -7,6 +7,6 @@
 > This file is retained only so existing links and session references
 > do not break. **Do not update this file — update CLAUDE.md instead.**
 >
-> *Previous content was frozen at v1.0.1 while the project is at v3.0.7+.
+> *Previous content was frozen at v1.0.1 while the project is at v3.3.1+.
 > See CLAUDE.md for the current source of truth.*
 

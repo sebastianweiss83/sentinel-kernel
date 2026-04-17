@@ -74,7 +74,7 @@ Run this list in order. Every item must be ticked before you tag.
 - [ ] `CHANGELOG.md` updated with the new section (keep the
       `[Unreleased]` header above it)
 - [ ] `pytest tests/ -q` → all green
-- [ ] `python examples/smoke_test.py` → `ALL 40 STEPS PASSED`
+- [ ] `python examples/smoke_test.py` → `ALL N STEPS PASSED` (N matches current smoke-test step count)
 - [ ] `python scripts/check_sovereignty.py` → passes
 - [ ] `ruff check sentinel/ tests/ scripts/ examples/` → no errors
 - [ ] `git status` shows only the intended version / CHANGELOG /

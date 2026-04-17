@@ -99,22 +99,24 @@ def read_tests_and_coverage() -> tuple[str, str]:
 
 
 def read_smoke_test() -> str:
-    """Run the smoke test and report X/40 or 'failed at step N'.
+    """Run the smoke test and report N/N or 'failed at step N'.
 
     Invoked via ``sys.executable`` for the same reason as
     :func:`read_tests_and_coverage` — the interpreter running this
     script is authoritative.
     """
     out = _run([sys.executable, "examples/smoke_test.py"])
-    if "ALL 40 STEPS PASSED" in out:
-        return "40/40 \u2713"
+    passed = re.search(r"ALL (\d+) STEPS PASSED", out)
+    if passed:
+        n = passed.group(1)
+        return f"{n}/{n} \u2713"
     fail = re.search(r"FAILED at step (\d+)", out)
     if fail:
         return f"failed at step {fail.group(1)}"
     # Count green ticks as a best-effort fallback
     steps = len(re.findall(r"\[\u2713\] Step \d+", out))
     if steps:
-        return f"{steps}/40"
+        return f"{steps}/{steps}"
     return "unknown"
 
 

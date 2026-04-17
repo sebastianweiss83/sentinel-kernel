@@ -1032,7 +1032,7 @@ def _section_v3_highlights(version: str) -> str:
     </div>
 
     <div class="note" style="margin-top:1.5rem;">
-      Test suite: <strong>686 tests, 100% line and branch coverage enforced in CI</strong>.
+      Test suite: <strong>734 tests, 100% line and branch coverage enforced in CI</strong>.
       Policy-as-code runs as <strong>5 CI gates</strong> on every PR.
       No new hard dependencies — reportlab is an optional <code>[pdf]</code> extra.
     </div>
@@ -1600,7 +1600,7 @@ def _section_try() -> str:
       <div><div class="step">$ pip install sentinel-kernel</div></div>
       <div><div class="step">$ sentinel demo</div></div>
       <div class="small">Runs 50 decisions · Kill switch demo · Compliance check<br>
-        Generates sovereignty_report.html · No Docker required</div>
+        Generates a self-contained HTML evidence report · No Docker required</div>
       <div class="sep">or — full Grafana demo (requires Docker)</div>
       <pre>git clone https://github.com/sebastianweiss83/sentinel-kernel
 cd sentinel-kernel/demo
