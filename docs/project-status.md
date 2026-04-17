@@ -6,11 +6,11 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-17 01:46 UTC_
+_Last generated from HEAD commit: 2026-04-17 08:39 UTC_
 
 ## Version
 
-**`3.3.0`** — Production/Stable
+**`3.3.1`** — Production/Stable
 
 Prove your AI decisions to the auditor. Agility infrastructure for regulated AI — Trace every decision, Enforce every policy, Prove it to your auditor. EU AI Act Art. 12/13/14/17 evidence. Air-gapped, offline-first, Apache 2.0.
 
@@ -20,7 +20,7 @@ Prove your AI decisions to the auditor. Agility infrastructure for regulated AI 
 |---|---|
 | Tests | 773 passing |
 | Coverage | 100% |
-| Smoke test | 33/40 |
+| Smoke test | failed at step 42 |
 
 ## What's inside
 
@@ -64,6 +64,7 @@ Prove your AI decisions to the auditor. Agility infrastructure for regulated AI 
 
 ## Shipped
 
+- **3.3.1 (2026-04-17)** — ### Fixed
 - **3.3.0 (2026-04-17)** — ### Positioning refinement (not reversal)
 - **3.2.0 (2026-04-16)** — ### Customer-validation release — privacy by default, narrative demo, honesty alignment
 - **3.1.0 (2026-04-14)** — **The Auditor Release.** Honest scope framing, visible CI/CD integration,
@@ -75,6 +76,5 @@ Prove your AI decisions to the auditor. Agility infrastructure for regulated AI 
 - **3.0.2 (2026-04-11)** — **Scanner gets a reentrant cooperative timeout. Workflow concurrency
 - **3.0.1 (2026-04-11)** — **Bug fix: infrastructure scanner no longer hangs on large directories.**
 - **3.0.0 (2026-04-11)** — **Complete platform · API frozen · BSI assessment ready.**
-- **2.4.0 (2026-04-11)** — **Rust RFC-001 implementation. Closes #13. Multi-language spec.**
 
 <!-- SYNC_ALL_STATUS_END -->

@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `3.3.0` |
+| Version | `3.3.1` |
 | Tests | 773 passing |
 | Coverage | 100% |
-| Smoke test | 33/40 |
-| Last updated | 2026-04-17 01:46 UTC |
+| Smoke test | failed at step 42 |
+| Last updated | 2026-04-17 08:39 UTC |
 
 ## Last 5 commits
 
+- `cd6ee72` fix(3.3.1): align report HTML strings with v3.3.0 Manifesto positioning
 - `7da6e10` docs(3.3.0): remove named-partner leaks (BWI ref in CLAUDE, Marc/Atruvia/BWI in LinkedIn draft) — Chapter X
 - `fd0a132` docs(3.3.0): LinkedIn post draft for release announcement
 - `3421433` test(3.3.0): regenerate sample evidence pack from v3.3.0 build
 - `4cb8f9c` chore(3.3.0): sync-all regenerated, docs/performance.md v3.3.0 alignment (smoke step 42)
-- `02193af` changelog(3.3.0): positioning refinement, retire manifesto-as-code, demote quantum-safe
 
 ## Open issues
 
