@@ -548,11 +548,11 @@ def _render_html(
 
     # Executive summary — plain English
     if score >= 0.9:
-        summary_headline = "Your system meets EU sovereignty requirements."
+        summary_headline = "Your system produces EU-jurisdiction evidence under the Record-Enforce-Prove model."
     elif score >= 0.6:
-        summary_headline = "Your system is partially sovereign. Action required."
+        summary_headline = "Your system has partial provability. Action required."
     else:
-        summary_headline = "Your system has significant sovereignty gaps."
+        summary_headline = "Your system has significant provability gaps."
 
     overall = getattr(compliance, "overall", "UNKNOWN")
     auto_coverage = getattr(compliance, "automated_coverage", 0.0)
@@ -703,13 +703,13 @@ def _render_html(
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Sentinel Sovereignty Report — {e(sentinel.project)}</title>
+<title>Sentinel Evidence Report — {e(sentinel.project)}</title>
 <style>{_CSS}</style>
 </head>
 <body>
 <div class="container">
 
-<h1>Sentinel Sovereignty Report</h1>
+<h1>Sentinel Evidence Report</h1>
 <div class="meta">Project: <b>{e(sentinel.project)}</b> · Storage: <b>{e(sentinel.storage.backend_name)}</b> · Data residency: <b>{e(sentinel.data_residency.value)}</b> · Sovereign scope: <b>{e(sentinel.sovereign_scope)}</b></div>
 <div class="meta">Generated: {now}</div>
 

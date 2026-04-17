@@ -163,9 +163,9 @@ def test_html_report_exec_summary_all_three_ranges(tmp_path: Path) -> None:
     )
 
     cases = [
-        (0.95, "meets EU sovereignty requirements"),
-        (0.75, "partially sovereign"),
-        (0.40, "significant sovereignty gaps"),
+        (0.95, "produces EU-jurisdiction evidence"),
+        (0.75, "partial provability"),
+        (0.40, "significant provability gaps"),
     ]
     for score, fragment in cases:
         fake_runtime = SimpleNamespace(

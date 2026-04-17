@@ -71,7 +71,7 @@ def test_terminal_dashboard_renders_trace_counts(monkeypatch: pytest.MonkeyPatch
 def test_html_report_generated() -> None:
     html = HTMLReport().generate(_sentinel())
     assert "<html" in html
-    assert "Sentinel Sovereignty Report" in html
+    assert "Sentinel Evidence Report" in html
 
 
 def test_html_report_self_contained() -> None:
@@ -193,7 +193,7 @@ def test_cli_report_command() -> None:
     code, out = _run_cli(["report"])
     assert code == 0
     assert "<html" in out
-    assert "Sentinel Sovereignty Report" in out
+    assert "Sentinel Evidence Report" in out
 
 
 def test_cli_report_writes_file(tmp_path: Path) -> None:

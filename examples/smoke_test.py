@@ -476,7 +476,7 @@ def main() -> int:
             assert html_path is not None
             html = html_path.read_text()
             for section in (
-                "Sentinel Sovereignty Report",
+                "Sentinel Evidence Report",
                 "EU AI Act compliance",
                 "Runtime packages",
                 "CI/CD findings",

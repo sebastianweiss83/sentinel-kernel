@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.3.1] — 2026-04-17
+
+### Fixed
+- `sentinel report` HTML output: title changed from "Sentinel Sovereignty Report" to "Sentinel Evidence Report" to align with v3.3.0 Manifesto vocabulary.
+- Executive-summary sentence in the generated report now references EU-jurisdiction evidence under the Record-Enforce-Prove model, aligning customer-facing language with README and preview site.
+
+### Notes
+- No API changes.
+- No functional changes in trace, policy, or evidence generation — only the customer-facing labels in the report output.
+- Closes: the remaining Phase-Four inconsistency between the preview site and the linked report.
+
 ## [3.3.0] — 2026-04-17
 
 ### Positioning refinement (not reversal)

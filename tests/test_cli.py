@@ -52,7 +52,7 @@ def test_demo_runs_end_to_end(
     assert out_path.exists()
     content = out_path.read_text()
     assert content.startswith("<!doctype html>")
-    assert "Sentinel Sovereignty Report" in content
+    assert "Sentinel Evidence Report" in content
 
 
 def test_demo_output_surfaces_narrative_payoff(

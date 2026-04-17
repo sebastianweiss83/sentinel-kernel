@@ -75,7 +75,7 @@ def test_demo_sovereignty_report_generated(
     assert html_path.exists()
     html = html_path.read_text()
     assert "<html" in html
-    assert "Sentinel Sovereignty Report" in html
+    assert "Sentinel Evidence Report" in html
     # Must be self-contained (air-gapped safe)
     assert "src=\"http" not in html
     assert "href=\"http" not in html
