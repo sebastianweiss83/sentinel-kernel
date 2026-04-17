@@ -1001,7 +1001,8 @@ def _section_enforcement(days: int) -> str:
 """
 
 
-def _section_v3_highlights(version: str) -> str:
+def _section_v3_highlights(version: str, tests: str) -> str:
+    tests_n = "".join(ch for ch in tests if ch.isdigit()) or tests
     return f"""
 <section class="block">
   <div class="container">
@@ -1032,7 +1033,7 @@ def _section_v3_highlights(version: str) -> str:
     </div>
 
     <div class="note" style="margin-top:1.5rem;">
-      Test suite: <strong>734 tests, 100% line and branch coverage enforced in CI</strong>.
+      Test suite: <strong>{tests_n} tests, 100% line and branch coverage enforced in CI</strong>.
       Policy-as-code runs as <strong>5 CI gates</strong> on every PR.
       No new hard dependencies — reportlab is an optional <code>[pdf]</code> extra.
     </div>
@@ -1677,7 +1678,7 @@ def _render_index(
 <body>
 {_section_hero(days, version=version, tests=tests, coverage=coverage, smoke=smoke)}
 {_section_enforcement(days)}
-{_section_v3_highlights(version)}
+{_section_v3_highlights(version, tests)}
 {_section_problem()}
 {_section_kernel()}
 {_section_dashboard(days)}
@@ -1785,7 +1786,7 @@ def main() -> int:
     # aligned with the last shipping release — stale fallbacks are a
     # trust risk on the public Pages site.
     if tests == "unknown":
-        tests = "686 passing"
+        tests = "773 passing"
     if coverage == "unknown":
         coverage = "100%"
     smoke_raw = read_smoke_test()
