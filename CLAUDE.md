@@ -11,16 +11,16 @@
 | Version | `3.3.1` |
 | Tests | 773 passing |
 | Coverage | 100% |
-| Smoke test | failed at step 42 |
-| Last updated | 2026-04-17 08:39 UTC |
+| Smoke test | 33/40 |
+| Last updated | 2026-04-17 08:40 UTC |
 
 ## Last 5 commits
 
+- `cb3f3ac` chore(3.3.1): docs/performance.md v3.3.1 alignment (smoke step 42)
+- `0456b25` chore(3.3.1): sync-all regenerated derived content
 - `cd6ee72` fix(3.3.1): align report HTML strings with v3.3.0 Manifesto positioning
 - `7da6e10` docs(3.3.0): remove named-partner leaks (BWI ref in CLAUDE, Marc/Atruvia/BWI in LinkedIn draft) — Chapter X
 - `fd0a132` docs(3.3.0): LinkedIn post draft for release announcement
-- `3421433` test(3.3.0): regenerate sample evidence pack from v3.3.0 build
-- `4cb8f9c` chore(3.3.0): sync-all regenerated, docs/performance.md v3.3.0 alignment (smoke step 42)
 
 ## Open issues
 

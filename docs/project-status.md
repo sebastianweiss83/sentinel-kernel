@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-17 08:39 UTC_
+_Last generated from HEAD commit: 2026-04-17 08:40 UTC_
 
 ## Version
 
@@ -20,7 +20,7 @@ Prove your AI decisions to the auditor. Agility infrastructure for regulated AI 
 |---|---|
 | Tests | 773 passing |
 | Coverage | 100% |
-| Smoke test | failed at step 42 |
+| Smoke test | 33/40 |
 
 ## What's inside
 
