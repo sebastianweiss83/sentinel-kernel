@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.4.0` |
-| Tests | 838 passing |
+| Tests | 877 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-20 23:15 UTC |
+| Last updated | 2026-04-20 23:28 UTC |
 
 ## Last 5 commits
 
+- `22080a9` release: v3.4.0 Evidence Release
 - `af2504c` feat(homepage): unified V8-design homepage with operational substance
 - `7236ddd` fix(ci): resolve mypy errors in Ed25519 + PAdES signers
 - `e6c82e8` fix(ci): resolve ruff lint errors blocking CI on Phase 3–6 commits
 - `da5ef1d` docs: BLOCKERS.md — document Phase 7/8 state for v3.4.0 Evidence Release
-- `30b5ce0` feat(comply): PAdES PDF signing (v3.4 Evidence Release, Phase 6)
 
 ## Open issues
 
