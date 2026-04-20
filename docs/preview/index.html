@@ -4,1309 +4,1533 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Evidence infrastructure for the regulated AI era v3.3.1. Trace every decision, attest it cryptographically, audit the record, comply with EU AI Act Art. 12/13/14/17. Apache 2.0. Air-gapped capable.">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='%2334d399' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='%2334d399' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='%2334d399' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='%2334d399'/></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20viewBox%3D%270%200%2024%2024%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%3E%3Crect%20x%3D%273%27%20y%3D%273%27%20width%3D%2718%27%20height%3D%2718%27%20rx%3D%274%27%20fill%3D%27none%27%20stroke%3D%27%23111%27%20stroke-width%3D%271.5%27%2F%3E%3Crect%20x%3D%278%27%20y%3D%278%27%20width%3D%278%27%20height%3D%278%27%20fill%3D%27%23111%27%20transform%3D%27rotate(45%2012%2012)%27%2F%3E%3C%2Fsvg%3E">
 <title>Sentinel v3.3.1 — Evidence infrastructure for the regulated AI era</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0e14;
-  --surface: #111827;
-  --surface2: #1a2332;
-  --border: #1f2937;
-  --text: #e5e7eb;
-  --text2: #9ca3af;
-  --text3: #6b7280;
-  --green: #34d399;
-  --green-dim: #059669;
-  --red: #ff3b3b;
-  --amber: #f5a623;
-  --blue: #3b82f6;
-  --purple: #a78bfa;
+  --bg: #FAF7F2;
+  --bg-card: #FFFFFF;
+  --bg-card-soft: #FDFBF7;
+  --bg-subtle: #F3EFE6;
+  --ink: #111111;
+  --ink-soft: #2A2A2A;
+  --ink-muted: #5F5F5F;
+  --ink-dim: #8A8A8A;
+  --ink-faint: #C5C5C5;
+  --accent: #2D5A4F;
+  --accent-bright: #3A7262;
+  --accent-deep: #1F3D33;
+  --accent-soft: #E3EBE7;
+  --accent-pale: #F0F5F2;
+  --green: #2D5A4F;
+  --green-bright: #3A7262;
+  --green-soft: #E3EBE7;
+  --green-pale: #F0F5F2;
+  --signal-red: #B8463A;
+  --signal-red-soft: #F8E6E3;
+  --signal-amber: #B8812E;
+  --signal-amber-soft: #F5EDD9;
+  --border: #E5E0D5;
+  --border-soft: #EEE9DD;
+  --border-strong: #D5CFC1;
+  --term-bg: #0E1424;
+  --term-bar: #161D33;
+  --term-ink: #E8E8EE;
+  --term-dim: #6C7291;
+  --term-green: #85C48B;
+  --term-cyan: #7BBAD6;
+  --term-yellow: #E5C07B;
+  --term-orange: #E0896C;
+  --term-red: #D27876;
+  --term-gray: #7D8399;
+  --shadow-xs: 0 1px 2px rgba(17, 17, 17, 0.03);
+  --shadow-sm: 0 2px 4px rgba(17, 17, 17, 0.04);
+  --shadow: 0 4px 12px rgba(17, 17, 17, 0.05);
+  --shadow-md: 0 8px 20px rgba(17, 17, 17, 0.07);
+  --shadow-lg: 0 16px 36px rgba(17, 17, 17, 0.09);
+  --shadow-xl: 0 24px 56px rgba(17, 17, 17, 0.12);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 80px; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px; line-height: 1.55;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
-a { color: var(--green); text-decoration: none; }
-a:hover { text-decoration: underline; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
-.mono { font-family: ui-monospace, "Cascadia Code", "Fira Code", "Menlo", monospace; }
+::selection { background: var(--accent); color: white; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+.icon {
+  width: 20px; height: 20px; stroke-width: 1.75;
+  stroke: currentColor; fill: none;
+  stroke-linecap: round; stroke-linejoin: round;
+  flex-shrink: 0;
+}
+.icon-sm { width: 16px; height: 16px; }
 
-/* ---------- SENTINEL MARK ---------- */
-.sentinel-mark {
-  width: 52px;
-  height: 62px;
-  margin-bottom: 1.6rem;
-  display: block;
+/* NAV */
+.nav {
+  padding: 18px 0; position: sticky; top: 0;
+  background: rgba(250, 247, 242, 0.82);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  z-index: 100;
+  border-bottom: 1px solid rgba(229, 224, 213, 0.5);
+  transition: border-color 0.3s var(--ease);
 }
-.sentinel-mark svg { width: 100%; height: 100%; display: block; }
-.sentinel-mark-sm {
-  width: 22px;
-  height: 26px;
-  display: inline-block;
-  vertical-align: middle;
-  margin-right: 0.5rem;
+.nav.scrolled { border-bottom-color: var(--border); }
+.nav-inner { display: flex; justify-content: space-between; align-items: center; }
+.logo {
+  display: flex; align-items: center; gap: 11px;
+  text-decoration: none;
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-weight: 700; font-size: 17px; color: var(--ink);
+  letter-spacing: 0.06em; text-transform: uppercase;
+  transition: opacity 0.2s var(--ease);
 }
+.logo:hover { opacity: 0.75; }
+.logo-mark {
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--ink); border-radius: 5px;
+  position: relative; flex-shrink: 0;
+}
+.logo-mark::before {
+  content: ''; width: 8px; height: 8px;
+  background: var(--ink); transform: rotate(45deg);
+}
+.nav-middle {
+  display: flex; gap: 2px;
+  background: var(--bg-subtle); padding: 4px; border-radius: 999px;
+}
+.nav-middle a {
+  padding: 7px 16px; border-radius: 999px;
+  font-size: 13.5px; color: var(--ink-soft);
+  text-decoration: none; font-weight: 500;
+  transition: all 0.2s var(--ease); letter-spacing: -0.005em;
+}
+.nav-middle a:hover { color: var(--ink); }
+.nav-middle a.active { background: white; color: var(--ink); box-shadow: var(--shadow-xs); }
+.nav-right { display: flex; align-items: center; gap: 18px; }
+.nav-signin {
+  font-size: 13.5px; color: var(--ink-soft);
+  text-decoration: none; font-weight: 500;
+  transition: color 0.2s var(--ease);
+}
+.nav-signin:hover { color: var(--ink); }
+.nav-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 20px; background: var(--ink); color: white;
+  font-size: 13.5px; font-weight: 600; text-decoration: none;
+  border-radius: 6px; transition: all 0.2s var(--ease);
+  letter-spacing: -0.005em;
+}
+.nav-cta:hover { background: var(--accent); transform: translateY(-1px); box-shadow: var(--shadow); }
+.nav-cta:active { transform: translateY(0); }
 
-/* ---------- HERO ---------- */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding: 4rem 0 3rem;
-  border-bottom: 1px solid var(--border);
-}
-.hero-grid {
-  display: grid;
-  grid-template-columns: 55fr 45fr;
-  gap: 3rem;
-  align-items: center;
-  width: 100%;
-}
+/* HERO */
+.hero { padding: 120px 0 80px; position: relative; overflow: hidden; }
 .eyebrow {
-  font-size: 0.85rem;
-  color: var(--green);
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-bottom: 1.2rem;
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 12.5px; font-weight: 600;
+  letter-spacing: 0.12em; color: var(--accent);
+  text-transform: uppercase; margin-bottom: 32px;
+  opacity: 0; animation: reveal 0.7s var(--ease) 0.1s forwards;
 }
-.hero h1 {
-  font-size: clamp(3rem, 6vw, 5rem);
-  font-weight: 800;
-  line-height: 1.02;
-  letter-spacing: -0.03em;
-  margin-bottom: 1.8rem;
+h1.hero-title {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 76px; line-height: 1.02; font-weight: 700;
+  letter-spacing: -0.038em; color: var(--ink);
+  margin-bottom: 36px; max-width: 1040px;
+  opacity: 0; animation: reveal 0.8s var(--ease) 0.2s forwards;
 }
-.hero h1 span { display: block; }
-.hero h1 .underline { color: var(--green); }
-.hero p.lead {
-  color: var(--text2);
-  font-size: 1.1rem;
-  max-width: 52ch;
-  margin-bottom: 2rem;
+.hero-subtitle {
+  font-size: 21px; line-height: 1.5;
+  color: var(--ink-muted); max-width: 600px;
+  font-weight: 400; letter-spacing: -0.005em;
+  opacity: 0; animation: reveal 0.8s var(--ease) 0.35s forwards;
 }
-.stats {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.stat-pill {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 0.35rem 0.75rem;
-  font-size: 0.82rem;
-  font-family: ui-monospace, monospace;
-  color: var(--text2);
+.trust-row {
+  margin-top: 44px; padding-top: 32px;
+  border-top: 1px solid var(--border);
+  display: flex; flex-wrap: wrap; gap: 14px 32px;
+  max-width: 980px;
+  opacity: 0; animation: reveal 0.8s var(--ease) 0.5s forwards;
 }
-.stat-pill .ok { color: var(--green); margin-right: 0.3rem; }
-.cta-row { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
-.btn-primary {
-  background: var(--green);
-  color: #001b0e;
-  border: 0;
-  padding: 0.9rem 1.4rem;
-  border-radius: 6px;
-  font-weight: 700;
-  font-family: inherit;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background 0.15s;
+.trust-item {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11.5px; color: var(--ink-muted);
+  font-weight: 500; letter-spacing: 0.01em;
 }
-.btn-primary:hover { background: #6ee7b7; }
-.btn-primary:active { background: var(--green-dim); }
-.btn-primary .mono-inline { font-family: ui-monospace, monospace; font-weight: 600; }
-.link-secondary { color: var(--text); font-weight: 500; }
-.link-tertiary { color: var(--text2); }
+.trust-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
 
-/* ---------- TERMINAL ---------- */
+/* ENFORCEMENT COUNTDOWN */
+.countdown {
+  padding: 28px 0; border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+.countdown-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; flex-wrap: wrap;
+}
+.countdown-text {
+  display: flex; align-items: center; gap: 14px;
+  font-size: 14.5px; color: var(--ink-soft); line-height: 1.55;
+}
+.countdown-icon {
+  width: 28px; height: 28px; flex-shrink: 0;
+  border-radius: 50%; background: var(--signal-amber-soft);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--signal-amber);
+}
+.countdown-text strong { color: var(--ink); font-weight: 600; }
+.countdown-days {
+  display: flex; align-items: baseline; gap: 10px;
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+}
+.countdown-n {
+  font-size: 44px; font-weight: 700; color: var(--accent);
+  letter-spacing: -0.03em; line-height: 1;
+}
+.countdown-label {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11px; color: var(--ink-muted);
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+
+/* JOURNEY */
+.journey { padding: 120px 0 160px; }
+.journey-grid {
+  display: grid; grid-template-columns: 300px 1fr;
+  gap: 80px; align-items: start;
+}
+.steps-col { position: relative; }
+.steps-inner { position: sticky; top: 120px; }
+.step {
+  display: flex; gap: 18px; padding: 22px 0;
+  cursor: pointer; position: relative;
+  min-height: 88px; transition: opacity 0.3s var(--ease);
+}
+.step:not(:last-child)::after {
+  content: ''; position: absolute;
+  left: 17px; top: 68px; bottom: 4px;
+  width: 1.5px; background: var(--border-strong);
+  transition: background 0.5s var(--ease);
+}
+.step.completed:not(:last-child)::after, .step.active:not(:last-child)::after {
+  background: var(--accent);
+}
+.step-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; background: var(--bg);
+  border: 1.5px solid var(--border-strong);
+  transition: all 0.4s var(--ease);
+  position: relative; z-index: 2;
+}
+.step-icon .icon { width: 16px; height: 16px; color: var(--ink-dim); transition: color 0.4s var(--ease); }
+.step.active .step-icon { background: var(--accent); border-color: var(--accent); transform: scale(1.05); }
+.step.active .step-icon .icon { color: white; }
+.step.completed .step-icon { background: var(--accent-pale); border-color: var(--accent); }
+.step.completed .step-icon .icon { color: var(--accent); }
+.step-content { flex: 1; padding-top: 6px; }
+.step-title {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 20px; font-weight: 600;
+  color: var(--ink-dim); letter-spacing: -0.018em;
+  transition: color 0.4s var(--ease); margin-bottom: 3px;
+}
+.step.active .step-title, .step.completed .step-title { color: var(--accent); }
+.step-subtitle {
+  font-size: 13px; color: var(--ink-faint);
+  font-weight: 400; transition: color 0.4s var(--ease);
+  letter-spacing: -0.003em;
+}
+.step.active .step-subtitle { color: var(--ink-muted); }
+.step-bullets {
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 0.5s var(--ease), opacity 0.3s var(--ease), margin-top 0.3s var(--ease);
+}
+.step.active .step-bullets { max-height: 260px; opacity: 1; margin-top: 16px; }
+.bullet {
+  display: flex; gap: 10px; margin-bottom: 10px;
+  font-size: 13px; color: var(--ink-soft); line-height: 1.5;
+  letter-spacing: -0.003em;
+}
+.bullet::before {
+  content: ''; width: 4px; height: 4px;
+  border-radius: 50%; background: var(--ink-muted);
+  margin-top: 7px; flex-shrink: 0;
+}
+.bullet b { font-weight: 600; color: var(--ink); }
+.display-col { position: relative; min-height: 620px; }
+.display-sticky { position: sticky; top: 120px; }
+.panel {
+  position: absolute; top: 0; left: 0; right: 0;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
+  pointer-events: none;
+}
+.panel.active { opacity: 1; transform: translateY(0); pointer-events: all; position: relative; }
+
+/* TERMINAL (dark operational widget — intentional contrast) */
 .terminal {
-  background: #0d1117;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  background: var(--term-bg); border-radius: 12px;
+  overflow: hidden; box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 .terminal-bar {
-  background: #161b22;
-  padding: 0.7rem 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  border-bottom: 1px solid var(--border);
+  padding: 11px 16px; background: var(--term-bar);
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
-.terminal-bar .dot {
-  width: 12px; height: 12px; border-radius: 50%;
+.term-dots { display: flex; gap: 6px; }
+.term-dot { width: 11px; height: 11px; border-radius: 50%; background: #3A4263; }
+.term-title {
+  color: var(--term-dim);
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11.5px; margin-left: 6px; letter-spacing: 0.01em;
 }
-.dot-red { background: #ff5f56; }
-.dot-amber { background: #ffbd2e; }
-.dot-green { background: #27c93f; }
-.terminal-bar .title {
-  margin-left: 0.8rem;
-  font-size: 0.8rem;
-  color: var(--text3);
-  font-family: ui-monospace, monospace;
+.term-status {
+  margin-left: auto; font-family: 'Inter', sans-serif;
+  font-size: 11.5px; color: var(--term-green);
+  font-weight: 500; display: flex; align-items: center; gap: 7px;
+}
+.term-status::before {
+  content: ''; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--term-green);
+  box-shadow: 0 0 8px rgba(133, 196, 139, 0.5);
+  animation: pulse-green 2s var(--ease) infinite;
+}
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(133, 196, 139, 0.5); }
+  50% { box-shadow: 0 0 0 6px rgba(133, 196, 139, 0); }
 }
 .terminal-body {
-  padding: 1.2rem 1.4rem;
-  font-family: ui-monospace, "Cascadia Code", monospace;
-  font-size: 0.85rem;
-  line-height: 1.7;
-  color: var(--text);
-  min-height: 420px;
+  padding: 24px 24px 28px;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 13px; line-height: 1.85;
+  color: var(--term-ink); overflow-x: auto; min-height: 380px;
 }
-.terminal-body .line {
-  opacity: 0;
-  animation: fade-in 0.2s ease forwards;
+.tline { display: block; white-space: pre; min-height: 1.85em; }
+.t-prompt { color: var(--term-cyan); }
+.t-key { color: var(--term-red); }
+.t-flag { color: var(--term-yellow); }
+.t-str { color: var(--term-orange); }
+.t-ok { color: var(--term-green); }
+.t-err { color: var(--term-red); }
+.t-comment { color: var(--term-gray); font-style: italic; }
+.t-dim { color: var(--term-dim); }
+.t-ink { color: var(--term-ink); }
+.cursor {
+  display: inline-block; width: 8px; height: 15px;
+  background: var(--term-orange); vertical-align: text-bottom;
+  animation: blink 1s infinite;
 }
-.terminal-body .prompt { color: var(--green); }
-.terminal-body .py { color: var(--purple); }
-.terminal-body .str { color: #c3e88d; }
-.terminal-body .kw { color: var(--purple); }
-.terminal-body .fn { color: #82aaff; }
-.terminal-body .cm { color: var(--text3); }
-.terminal-body .json { color: #f78c6c; }
-.terminal-body .success { color: var(--green); font-weight: 600; }
-.l1  { animation-delay: 0.1s; }
-.l2  { animation-delay: 0.8s; }
-.l3  { animation-delay: 1.4s; }
-.l4  { animation-delay: 1.6s; }
-.l5  { animation-delay: 1.8s; }
-.l6  { animation-delay: 2.4s; }
-.l7  { animation-delay: 2.7s; }
-.l8  { animation-delay: 3.0s; }
-.l9  { animation-delay: 3.3s; }
-.l10 { animation-delay: 3.6s; }
-.l11 { animation-delay: 4.0s; }
-.l12 { animation-delay: 4.3s; }
-@keyframes fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
+@keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
 
-/* ---------- ENFORCEMENT BANNER ---------- */
-.enforce {
-  background: #2d1f00;
-  border-top: 1px solid var(--amber);
-  border-bottom: 1px solid var(--amber);
-  padding: 1.1rem 0;
+/* JSON */
+.json-body {
+  padding: 24px 28px 28px;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 12.5px; line-height: 1.85;
+  color: var(--term-ink); overflow-x: auto; min-height: 380px;
 }
-.enforce-inner {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  justify-content: space-between;
-  flex-wrap: wrap;
+.jline {
+  display: block; white-space: pre; min-height: 1.85em;
+  opacity: 0; transform: translateX(-6px);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
 }
-.enforce-text { color: #ffd580; font-size: 0.95rem; max-width: 80ch; }
-.enforce-text strong { color: var(--amber); }
-.enforce-days {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: rgba(245, 166, 35, 0.1);
-  border: 1px solid var(--amber);
-  border-radius: 4px;
-  padding: 0.5rem 1.2rem;
+.jline.shown { opacity: 1; transform: translateX(0); }
+.j-key { color: var(--term-cyan); }
+.j-str { color: var(--term-orange); }
+.j-num { color: var(--term-yellow); }
+.j-punct { color: var(--term-ink); }
+.j-comment { color: var(--term-gray); font-style: italic; }
+.verify-strip {
+  margin-top: 12px; background: var(--term-bg);
+  border-radius: 12px; border: 1px solid rgba(133, 196, 139, 0.2);
+  padding: 14px 18px; display: flex; align-items: center; gap: 14px;
+  font-family: 'JetBrains Mono', 'Menlo', monospace; font-size: 11.5px;
 }
-.enforce-days .n {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--amber);
-  line-height: 1;
+.verify-strip .check {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--term-green);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
 }
-.enforce-days .label { font-size: 0.7rem; color: #ffd580; text-transform: uppercase; }
+.verify-strip .check .icon { width: 12px; height: 12px; color: var(--term-bg); stroke-width: 2.5; }
+.verify-strip .verify-text { color: var(--term-green); flex: 1; font-weight: 500; }
+.verify-strip .verify-cmd { color: var(--term-dim); font-size: 11px; }
 
-/* ---------- SECTIONS ---------- */
-section.block {
-  padding: 5rem 0;
-  border-bottom: 1px solid var(--border);
-}
-.block h2 {
-  font-size: 2.2rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.6rem;
-}
-.block .sub {
-  color: var(--text2);
-  font-size: 1.05rem;
-  margin-bottom: 2.5rem;
-  max-width: 72ch;
-}
-
-/* ---------- COMPARISON TABLE ---------- */
-.compare {
-  width: 100%;
-  border-collapse: collapse;
-  background: var(--surface);
+/* DASHBOARD (light widget — CI-authoritative when possible) */
+.dashboard {
+  background: var(--bg-card); border-radius: 12px;
+  overflow: hidden; box-shadow: var(--shadow-xl);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  overflow: hidden;
 }
-.compare th, .compare td {
-  padding: 0.85rem 1rem;
-  text-align: left;
+.dash-header {
+  padding: 16px 22px; border-bottom: 1px solid var(--border);
+  background: var(--bg-card-soft);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.dash-title {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13.5px; font-weight: 600; color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.live-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green-bright);
+  animation: live-pulse 2s var(--ease) infinite;
+}
+@keyframes live-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(74, 138, 118, 0.5); }
+  70% { box-shadow: 0 0 0 8px rgba(74, 138, 118, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(74, 138, 118, 0); }
+}
+.dash-live {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 10.5px; color: var(--ink-muted);
+  letter-spacing: 0.1em; font-weight: 500;
+}
+.dash-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr);
   border-bottom: 1px solid var(--border);
-  font-size: 0.92rem;
 }
-.compare thead th {
-  background: var(--surface2);
-  font-size: 0.82rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text2);
+.dstat { padding: 18px 20px; border-right: 1px solid var(--border); }
+.dstat:last-child { border-right: none; }
+.dstat-value {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 26px; font-weight: 600; color: var(--ink);
+  line-height: 1; margin-bottom: 6px; letter-spacing: -0.025em;
 }
-.compare thead th.col-bad { color: var(--red); }
-.compare thead th.col-good { color: var(--green); }
-.compare tbody tr:last-child td { border-bottom: none; }
-.compare .yes { color: var(--green); font-weight: 600; }
-.compare .no { color: var(--red); font-weight: 600; }
-.compare .partial { color: var(--amber); font-weight: 600; }
-.compare .row-label { color: var(--text); font-weight: 500; }
-.compare .col-good-cell {
-  background: rgba(52, 211, 153, 0.04);
+.dstat-value .small { font-size: 0.6em; color: var(--ink-muted); margin-left: 3px; font-weight: 500; }
+.dstat-label {
+  font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-muted);
+  font-weight: 500;
 }
-.note {
-  margin-top: 1.5rem;
-  padding: 1rem 1.2rem;
-  background: var(--surface);
-  border-left: 3px solid var(--amber);
-  border-radius: 4px;
-  color: var(--text2);
-  font-size: 0.9rem;
-}
-
-/* ---------- DASHBOARD PANELS ---------- */
-.panels {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-}
-.panel {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 1.5rem;
-}
-.panel h3 {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text2);
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-.panel h3 .big { display: block; font-size: 2.4rem; color: var(--text); margin-top: 0.3rem; text-transform: none; letter-spacing: -0.02em; }
-.gauge-svg { display: block; margin: 0.5rem auto; }
-.gauge-ring { fill: none; stroke: #1f2937; stroke-width: 14; }
-.gauge-fill { fill: none; stroke: var(--green); stroke-width: 14; stroke-linecap: round;
-              stroke-dasharray: 440; stroke-dashoffset: 440; transform: rotate(-90deg); transform-origin: 100px 100px;
-              animation: gauge-draw 2s ease-out forwards; animation-delay: 0.3s; }
-@keyframes gauge-draw { to { stroke-dashoffset: calc(440 - 440 * var(--g, 0.78)); } }
-.gauge-text {
-  font-family: ui-monospace, monospace;
-  font-size: 2.4rem;
-  font-weight: 800;
-  fill: var(--text);
-}
-.gauge-label {
-  text-align: center;
-  color: var(--text2);
-  font-size: 0.9rem;
-  margin-top: 0.4rem;
-}
-.gauge-sub {
-  text-align: center;
-  color: var(--text3);
-  font-size: 0.75rem;
-  margin-top: 0.2rem;
-}
-
-/* Bars panel */
-.bars { display: flex; flex-direction: column; gap: 0.7rem; }
-.bar-row { display: grid; grid-template-columns: 60px 1fr 120px; align-items: center; gap: 0.8rem; font-size: 0.85rem; }
-.bar-row .art { color: var(--text2); font-family: ui-monospace, monospace; font-weight: 600; }
-.bar-track { background: #0a0e14; height: 18px; border-radius: 4px; position: relative; overflow: hidden; }
-.bar-fill {
-  position: absolute; left: 0; top: 0; bottom: 0;
-  width: 0;
-  animation: bar-grow 1.4s ease-out forwards;
-  animation-delay: 0.4s;
-}
-@keyframes bar-grow { to { width: var(--w, 0%); } }
-.bar-fill.green { background: var(--green); }
-.bar-fill.amber { background: var(--amber); }
-.bar-fill.blue  { background: var(--blue); }
-.bar-row .status { font-size: 0.75rem; font-weight: 600; color: var(--text2); letter-spacing: 0.05em; text-transform: uppercase; text-align: right; }
-
-/* Feed table */
-.feed-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-.feed-table th, .feed-table td {
-  padding: 0.5rem 0.6rem;
-  text-align: left;
+.dstat.denied .dstat-value { color: var(--signal-red); }
+.dstat.denied .dstat-label { color: var(--signal-red); opacity: 0.85; }
+.dash-table-head {
+  display: grid; grid-template-columns: 90px 170px 120px 1fr 110px;
+  padding: 10px 22px;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 10px; letter-spacing: 0.08em;
+  color: var(--ink-muted); text-transform: uppercase;
+  background: var(--bg-card-soft);
   border-bottom: 1px solid var(--border);
-  font-family: ui-monospace, monospace;
+  font-weight: 500;
 }
-.feed-table th { color: var(--text3); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; }
-.feed-table td.ms { text-align: right; color: var(--text3); }
-.feed-row {
-  opacity: 0;
-  animation: fade-in 0.5s ease forwards;
+.dash-row {
+  display: grid; grid-template-columns: 90px 170px 120px 1fr 110px;
+  padding: 13px 22px; font-size: 13px;
+  border-bottom: 1px solid var(--border-soft);
+  align-items: center;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), background 0.2s var(--ease);
 }
-.feed-row:nth-child(1) { animation-delay: 0.1s; }
-.feed-row:nth-child(2) { animation-delay: 0.3s; }
-.feed-row:nth-child(3) { animation-delay: 0.5s; }
-.feed-row:nth-child(4) { animation-delay: 0.7s; }
-.feed-row:nth-child(5) { animation-delay: 0.9s; }
-.feed-row:nth-child(6) { animation-delay: 1.1s; }
-.feed-row:nth-child(7) { animation-delay: 1.3s; }
-.feed-row:nth-child(8) { animation-delay: 1.5s; }
+.dash-row.shown { opacity: 1; transform: translateY(0); }
+.dash-row:last-child { border-bottom: none; }
+.dash-row:hover { background: var(--bg-card-soft); }
+.dr-time { font-family: 'JetBrains Mono', 'Menlo', monospace; font-size: 11.5px; color: var(--ink-muted); }
+.dr-agent { font-weight: 500; color: var(--ink); font-size: 12.5px; letter-spacing: -0.005em; }
+.dr-policy { font-family: 'JetBrains Mono', 'Menlo', monospace; font-size: 11px; color: var(--ink-muted); }
+.dr-outcome {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11.5px; color: var(--ink-soft);
+  display: flex; align-items: center; gap: 10px;
+}
 .pill {
-  display: inline-block;
-  padding: 0.12rem 0.55rem;
-  border-radius: 999px;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 10px; padding: 3px 8px; border-radius: 3px;
+  letter-spacing: 0.04em; font-weight: 600;
+  text-transform: uppercase; display: inline-block;
 }
-.pill.allow { background: rgba(52, 211, 153, 0.15); color: var(--green); }
-.pill.deny { background: rgba(255, 59, 59, 0.15); color: var(--red); }
-.pill.exc  { background: rgba(245, 166, 35, 0.15); color: var(--amber); }
+.pill-approved { background: var(--green-soft); color: var(--accent); }
+.pill-denied { background: var(--signal-red-soft); color: var(--signal-red); }
+.pill-review { background: var(--signal-amber-soft); color: var(--signal-amber); }
+.att-tag {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11px; padding: 4px 10px;
+  background: var(--green-pale); color: var(--accent);
+  border: 1px solid rgba(45, 90, 79, 0.2);
+  border-radius: 3px; justify-self: end;
+  font-weight: 500; transition: all 0.2s var(--ease);
+}
+.att-tag:hover { background: var(--green-soft); border-color: var(--accent); cursor: default; }
 
-/* Deps list */
-.dep-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-.dep-cols h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; }
-.dep-cols h4.ok { color: var(--green); }
-.dep-cols h4.warn { color: var(--amber); }
-.dep-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.82rem; }
-.dep-list li { font-family: ui-monospace, monospace; color: var(--text2); }
-.dep-list li::before { content: "● "; color: var(--green); margin-right: 0.3rem; }
-.dep-list.warn li::before { content: "○ "; color: var(--amber); }
-.dep-list li .residency { color: var(--text3); font-size: 0.75rem; }
-.dep-note { margin-top: 0.9rem; font-size: 0.75rem; color: var(--text3); }
-
-/* Kill switch */
-.killswitch {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 1rem 0;
-}
-.ks-indicator {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: var(--green);
-  border: 3px solid var(--green-dim);
-}
-.ks-label { color: var(--green); font-weight: 700; letter-spacing: 0.05em; }
-.ks-sub { color: var(--text2); font-size: 0.85rem; text-align: center; }
-.ks-code {
-  font-family: ui-monospace, monospace;
-  font-size: 0.78rem;
-  background: #0a0e14;
-  padding: 0.5rem 0.8rem;
-  border-radius: 4px;
-  color: var(--text2);
+/* BINDER (audit-pack mock) */
+.binder {
+  background: var(--bg-card); border-radius: 12px;
+  overflow: hidden; box-shadow: var(--shadow-xl);
   border: 1px solid var(--border);
 }
+.binder-chrome {
+  padding: 10px 16px; background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 14px;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11px; color: var(--ink-muted);
+}
+.binder-chrome-actions { display: flex; gap: 4px; }
+.binder-chrome-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--border-strong); }
+.binder-filename { flex: 1; text-align: center; color: var(--ink-soft); font-weight: 500; }
+.binder-pages { color: var(--ink-muted); }
+.binder-page { padding: 32px 40px; background: white; min-height: 480px; }
+.binder-docheader {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding-bottom: 18px; margin-bottom: 26px;
+  border-bottom: 2px solid var(--ink);
+}
+.binder-doctitle {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 18px; font-weight: 700;
+  color: var(--ink); letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+.binder-docsub { font-family: 'JetBrains Mono', 'Menlo', monospace; font-size: 11px; color: var(--ink-muted); }
+.binder-docmeta {
+  text-align: right;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 10px; color: var(--ink-muted); line-height: 1.7;
+}
+.binder-field {
+  display: grid; grid-template-columns: 170px 1fr;
+  padding: 11px 0; border-bottom: 1px solid var(--border-soft);
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+.binder-field.shown { opacity: 1; transform: translateY(0); }
+.binder-field-label {
+  font-size: 10.5px; font-weight: 600;
+  color: var(--ink-muted); text-transform: uppercase;
+  letter-spacing: 0.08em; padding-top: 2px;
+}
+.binder-field-value {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 12px; color: var(--ink); line-height: 1.55;
+}
+.binder-field-value .dim { color: var(--ink-muted); }
+.binder-seal {
+  margin-top: 24px; padding: 14px 18px;
+  background: var(--green-pale);
+  border-left: 3px solid var(--accent);
+  display: flex; align-items: center; gap: 14px;
+  border-radius: 0 6px 6px 0;
+}
+.binder-seal-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  animation: pulse-green-seal 2.5s var(--ease) infinite;
+}
+@keyframes pulse-green-seal {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(45, 90, 79, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(45, 90, 79, 0); }
+}
+.binder-seal-icon .icon { width: 13px; height: 13px; color: white; stroke-width: 2.5; }
+.binder-seal-text { flex: 1; font-size: 12.5px; color: var(--accent); font-weight: 500; }
+.binder-seal-cmd { font-family: 'JetBrains Mono', 'Menlo', monospace; font-size: 11px; color: var(--ink-muted); }
 
-/* Countdown panel */
-.count-big {
-  font-size: 5rem;
-  font-weight: 800;
-  color: var(--amber);
-  line-height: 1;
+/* OUTCOMES */
+.outcomes-bar {
+  padding: 96px 0; background: var(--bg-subtle);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   text-align: center;
-  letter-spacing: -0.03em;
-  font-family: ui-monospace, monospace;
 }
-.count-label { text-align: center; color: var(--text); font-weight: 600; margin-top: 0.4rem; }
-.count-sub { text-align: center; color: var(--text3); font-size: 0.8rem; margin-top: 0.3rem; }
+.outcomes-eyebrow {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600;
+  color: var(--accent); letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 24px;
+}
+.outcomes-line {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 40px; line-height: 1.18; font-weight: 700;
+  color: var(--ink); letter-spacing: -0.032em;
+  max-width: 980px; margin: 0 auto 20px;
+}
+.outcomes-line em { font-style: normal; color: var(--accent); }
+.outcomes-sub {
+  font-size: 15.5px; color: var(--ink-muted);
+  max-width: 620px; margin: 0 auto; line-height: 1.6;
+}
 
-/* ---------- CODE TABS ---------- */
-.tabs { margin-top: 1rem; }
-.tab-headers { display: flex; gap: 0.4rem; margin-bottom: 0; }
-.tab-btn {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-bottom: none;
-  color: var(--text2);
-  padding: 0.7rem 1.2rem;
-  font-family: inherit;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 4px 4px 0 0;
+/* ARCHITECTURE */
+.architecture { padding: 120px 0; border-top: 1px solid var(--border); }
+.arch-layout {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: start;
 }
-.tab-btn.active { background: var(--surface2); color: var(--text); border-color: var(--border); }
-.tab-panel {
-  display: none;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 0 6px 6px 6px;
-  padding: 1.4rem;
+.arch-text h2 {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 48px; line-height: 1.05; font-weight: 700;
+  letter-spacing: -0.032em; color: var(--ink); margin-bottom: 24px;
 }
-.tab-panel.active { display: block; }
-.tab-panel pre {
-  font-family: ui-monospace, "Cascadia Code", monospace;
-  font-size: 0.85rem;
-  line-height: 1.6;
-  color: var(--text);
-  overflow-x: auto;
-  white-space: pre;
+.arch-text p {
+  font-size: 16px; line-height: 1.6;
+  color: var(--ink-muted); max-width: 500px; margin-bottom: 18px;
 }
-.kw { color: #c792ea; }
-.fn { color: #82aaff; }
-.st { color: #c3e88d; }
-.cm { color: #546e7a; }
-.nu { color: #f78c6c; }
-.cls { color: #ffcb6b; }
+.arch-text p b { color: var(--accent); font-weight: 600; }
+.arch-diagram {
+  background: var(--bg-card-soft);
+  border: 1px solid var(--border); border-radius: 14px;
+  padding: 30px; box-shadow: var(--shadow);
+}
+.arch-frame-label {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 11px; font-weight: 600;
+  color: var(--accent); letter-spacing: 0.12em;
+  text-transform: uppercase; text-align: center; margin-bottom: 10px;
+}
+.arch-reg-bracket {
+  background: var(--accent-pale);
+  border: 1.5px dashed var(--accent);
+  border-radius: 8px; padding: 16px 22px; margin-bottom: 16px;
+}
+.arch-reg-items {
+  display: flex; flex-wrap: wrap; gap: 10px 18px;
+  justify-content: center;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11.5px; color: var(--accent); font-weight: 500;
+}
+.arch-reg-note { text-align: center; font-size: 11px; color: var(--ink-muted); margin-top: 10px; font-style: italic; }
+.arch-arrow-down { display: flex; justify-content: center; padding: 6px 0; }
+.arch-arrow-down .icon { width: 14px; height: 14px; color: var(--ink-faint); }
+.arch-layers { display: flex; flex-direction: column; gap: 6px; }
+.arch-layer {
+  background: white; border: 1px solid var(--border);
+  border-radius: 6px; padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; transition: all 0.2s var(--ease);
+}
+.arch-layer:hover { border-color: var(--border-strong); transform: translateX(2px); }
+.arch-layer-name {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  flex-shrink: 0; min-width: 130px;
+  display: flex; align-items: center; gap: 8px;
+  letter-spacing: -0.01em;
+}
+.arch-layer-desc { font-size: 12px; color: var(--ink-muted); flex: 1; line-height: 1.4; }
+.arch-layer-tools {
+  display: flex; gap: 4px; flex-wrap: wrap;
+  justify-content: flex-end; max-width: 220px;
+}
+.arch-tool {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 10px; color: var(--ink-muted);
+  background: var(--bg-subtle); padding: 2px 7px;
+  border-radius: 2px; letter-spacing: 0.01em;
+}
+.arch-layer.sentinel {
+  background: var(--accent-pale);
+  border: 1.5px solid var(--accent);
+  position: relative; padding: 14px 16px;
+  transition: all 0.2s var(--ease);
+}
+.arch-layer.sentinel:hover { transform: translateX(2px); box-shadow: var(--shadow-sm); }
+.arch-layer.sentinel .arch-layer-name { color: var(--accent); }
+.arch-layer.sentinel .arch-tool {
+  background: white; color: var(--accent);
+  border: 1px solid rgba(45, 90, 79, 0.25); font-weight: 500;
+}
+.runtime-tag {
+  display: inline-block; padding: 2px 7px;
+  background: var(--accent); color: white;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 9px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  border-radius: 3px;
+}
+.arch-gap-caption {
+  margin-top: 16px; padding: 14px 16px;
+  font-size: 12.5px; color: var(--ink-soft); line-height: 1.6;
+  background: white; border-left: 3px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+}
+.arch-gap-caption b { color: var(--accent); font-weight: 600; }
 
-/* ---------- INDUSTRY CARDS ---------- */
-.industry-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+/* QUICKSTART (operational widget — code lives in dark console) */
+.quickstart { padding: 120px 0; border-top: 1px solid var(--border); }
+.quickstart-head { margin-bottom: 48px; max-width: 760px; }
+.quickstart-eyebrow {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600;
+  color: var(--accent); letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 20px;
 }
-.industry-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 1.8rem;
+.quickstart-title {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 44px; line-height: 1.06; font-weight: 700;
+  letter-spacing: -0.032em; color: var(--ink); margin-bottom: 20px;
 }
-.industry-card .icon { width: 48px; height: 48px; margin-bottom: 1rem; color: var(--green); }
-.industry-card h3 { font-size: 1.2rem; margin-bottom: 0.6rem; }
-.industry-card p { color: var(--text2); font-size: 0.92rem; }
+.quickstart-lede {
+  font-size: 16.5px; line-height: 1.6;
+  color: var(--ink-muted); max-width: 620px;
+}
+.quickstart-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+}
+.qs-col h3 {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 15px; font-weight: 600; color: var(--ink);
+  letter-spacing: -0.008em; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.qs-col h3 .icon { width: 18px; height: 18px; color: var(--accent); }
+.qs-caption {
+  margin-top: 14px; font-size: 13px;
+  color: var(--ink-muted); line-height: 1.55;
+}
+.qs-caption code {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11.5px; background: var(--bg-subtle);
+  padding: 1px 6px; border-radius: 3px; color: var(--ink);
+}
 
-/* ---------- INSIDE SECTION ---------- */
-.inside-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+/* COMPLIANCE ARTICLES TABLE */
+.compliance-articles { padding: 120px 0; border-top: 1px solid var(--border); background: var(--bg-card-soft); }
+.compliance-head { margin-bottom: 48px; max-width: 760px; }
+.compliance-eyebrow {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600;
+  color: var(--accent); letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 20px;
 }
-.feature-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.compliance-title {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 44px; line-height: 1.06; font-weight: 700;
+  letter-spacing: -0.032em; color: var(--ink); margin-bottom: 20px;
 }
-.feature-list li {
-  color: var(--text2);
-  font-size: 0.92rem;
-  padding-left: 1.6rem;
-  position: relative;
-}
-.feature-list li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: var(--green);
-  font-weight: 700;
+.compliance-lede {
+  font-size: 16.5px; line-height: 1.6;
+  color: var(--ink-muted); max-width: 620px;
 }
 .compliance-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.88rem;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; overflow: hidden;
 }
-.compliance-table th {
-  background: var(--surface);
-  color: var(--text2);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  text-align: left;
-  padding: 0.6rem 0.8rem;
+.ct-head {
+  display: grid; grid-template-columns: 90px 1fr 200px;
+  padding: 14px 22px;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 10.5px; letter-spacing: 0.1em;
+  color: var(--ink-muted); text-transform: uppercase;
+  background: var(--bg-card-soft);
   border-bottom: 1px solid var(--border);
+  font-weight: 600;
 }
-.compliance-table td {
-  padding: 0.55rem 0.8rem;
-  border-bottom: 1px solid var(--border);
-  color: var(--text2);
+.ct-row {
+  display: grid; grid-template-columns: 90px 1fr 200px;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--border-soft);
+  align-items: center; font-size: 13.5px;
+  transition: background 0.15s var(--ease);
 }
-.compliance-table .art { color: var(--text); font-family: ui-monospace, monospace; font-weight: 600; }
-.compliance-table .full    { color: var(--green); font-weight: 600; }
-.compliance-table .partial { color: var(--amber); font-weight: 600; }
-.compliance-table .human   { color: var(--blue); font-weight: 600; }
-
-/* ---------- KERNEL DIAGRAM ---------- */
-.kernel-wrap {
-  max-width: 760px;
-  margin: 0 auto;
+.ct-row:last-child { border-bottom: none; }
+.ct-row:hover { background: var(--bg-card-soft); }
+.ct-article { font-family: 'JetBrains Mono', 'Menlo', monospace; font-size: 12.5px; color: var(--ink); font-weight: 500; }
+.ct-req { color: var(--ink-soft); }
+.ct-status {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11px; padding: 4px 10px; border-radius: 3px;
+  letter-spacing: 0.03em; font-weight: 600;
+  text-transform: uppercase; display: inline-block;
+  justify-self: end;
 }
-.kernel-wrap svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-.kernel-taglines {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-top: 2rem;
-  max-width: 760px;
-  margin-left: auto;
-  margin-right: auto;
-}
-.tagline-card {
-  background: var(--surface);
+.ct-status.full { background: var(--green-soft); color: var(--accent); }
+.ct-status.partial { background: var(--signal-amber-soft); color: var(--signal-amber); }
+.ct-status.human { background: var(--bg-subtle); color: var(--ink-muted); }
+.ct-status.conditional { background: var(--accent-pale); color: var(--accent-bright); }
+.compliance-note {
+  margin-top: 24px; padding: 18px 22px;
+  background: var(--bg-card);
   border: 1px solid var(--border);
-  border-left: 4px solid var(--green);
-  border-radius: 4px;
-  padding: 1rem 1.1rem;
+  border-left: 3px solid var(--ink);
+  border-radius: 0 6px 6px 0;
+  font-size: 14.5px; line-height: 1.6;
+  color: var(--ink-soft);
 }
-.tagline-card.govern  { border-left-color: var(--green); }
-.tagline-card.route   { border-left-color: var(--blue); }
-.tagline-card.trace   { border-left-color: var(--green-dim); }
-.tagline-card h4 {
-  font-size: 0.92rem;
-  color: var(--text);
-  font-weight: 700;
-  margin-bottom: 0.35rem;
+.compliance-note strong { color: var(--ink); font-weight: 600; }
+
+/* INDUSTRY CARDS */
+.industry { padding: 120px 0; border-top: 1px solid var(--border); }
+.industry-head { margin-bottom: 56px; max-width: 760px; }
+.industry-eyebrow {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600;
+  color: var(--accent); letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 20px;
 }
-.tagline-card p {
-  color: var(--text2);
-  font-size: 0.82rem;
-  line-height: 1.4;
+.industry-title {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 44px; line-height: 1.06; font-weight: 700;
+  letter-spacing: -0.032em; color: var(--ink); margin-bottom: 20px;
 }
-@media (max-width: 900px) {
-  .kernel-taglines { grid-template-columns: 1fr; }
+.industry-lede {
+  font-size: 16.5px; line-height: 1.6;
+  color: var(--ink-muted); max-width: 620px;
+}
+.industry-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+.industry-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 28px; transition: all 0.25s var(--ease);
+}
+.industry-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--border-strong); }
+.industry-card h4 {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 19px; font-weight: 600; color: var(--ink);
+  letter-spacing: -0.015em; margin-bottom: 10px;
+}
+.industry-card p {
+  font-size: 14px; line-height: 1.55;
+  color: var(--ink-muted); margin-bottom: 14px;
+}
+.industry-card-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.industry-card-tag {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 10.5px; padding: 3px 8px;
+  background: var(--accent-pale); color: var(--accent);
+  border: 1px solid rgba(45, 90, 79, 0.15);
+  border-radius: 3px; font-weight: 500;
 }
 
-/* ---------- ROADMAP ---------- */
-.roadmap-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+/* CONTENT BLOCKS */
+.content-blocks { padding: 0 0 120px; }
+.cblock { padding: 100px 0; border-top: 1px solid var(--border); }
+.cblock-grid { display: grid; grid-template-columns: 360px 1fr; gap: 80px; align-items: start; }
+.cblock-left h3 {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 38px; line-height: 1.08; font-weight: 700;
+  letter-spacing: -0.03em; color: var(--ink);
+  margin-bottom: 0; max-width: 320px;
 }
-.roadmap-col {
-  border-radius: 6px;
-  padding: 1.6rem 1.5rem;
+.cblock-eyebrow {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600;
+  color: var(--accent); letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 20px;
+}
+.cblock-body {
+  font-size: 16.5px; line-height: 1.6;
+  color: var(--ink-muted); margin-bottom: 48px; max-width: 620px;
+}
+.cblock-bullets {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 36px 48px; max-width: 780px;
+}
+.cbullet {
+  display: grid; grid-template-columns: 28px 1fr;
+  gap: 14px; align-items: start;
+}
+.cbullet-icon-wrap {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: -2px;
+}
+.cbullet-icon-wrap .icon { width: 20px; height: 20px; color: var(--ink); stroke-width: 1.6; }
+.cbullet-text { font-size: 14px; line-height: 1.55; color: var(--ink-muted); }
+.cbullet-text b { color: var(--ink); font-weight: 600; }
+
+/* ROADMAP */
+.roadmap { padding: 120px 0; border-top: 1px solid var(--border); }
+.roadmap-head { margin-bottom: 56px; max-width: 800px; }
+.roadmap-eyebrow {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600;
+  color: var(--accent); letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 20px;
+}
+.roadmap-title {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 44px; line-height: 1.06; font-weight: 700;
+  letter-spacing: -0.032em; color: var(--ink); margin-bottom: 20px;
+}
+.roadmap-lede {
+  font-size: 16.5px; line-height: 1.6;
+  color: var(--ink-muted); max-width: 620px;
+}
+.roadmap-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+.stage {
+  background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 28px; position: relative;
+  transition: all 0.25s var(--ease);
+}
+.stage:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.stage-status {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 600;
+}
+.stage-status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; }
+.stage.today { background: var(--green-pale); border-color: rgba(45, 90, 79, 0.2); }
+.stage.today .stage-status { color: var(--accent); }
+.stage.today .stage-status::before { background: var(--accent); animation: live-pulse 2s var(--ease) infinite; }
+.stage.soon .stage-status { color: var(--signal-amber); }
+.stage.soon .stage-status::before { background: var(--signal-amber); }
+.stage.future .stage-status { color: var(--ink); }
+.stage.future .stage-status::before { background: var(--ink); }
+.stage-title {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 22px; font-weight: 600; color: var(--ink);
+  letter-spacing: -0.02em; margin-bottom: 12px; line-height: 1.2;
+}
+.stage-description { font-size: 13.5px; color: var(--ink-muted); line-height: 1.6; margin-bottom: 18px; }
+.stage-description code {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 12px; background: var(--bg-subtle);
+  padding: 2px 6px; border-radius: 3px; color: var(--ink);
+}
+.stage.today .stage-description code { background: white; border: 1px solid var(--border-soft); }
+.stage-items { display: flex; flex-wrap: wrap; gap: 6px; }
+.stage-item {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 11px; color: var(--ink-soft);
+  background: var(--bg-card-soft);
   border: 1px solid var(--border);
-  background: var(--surface);
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  padding: 4px 9px; border-radius: 3px;
+  transition: all 0.2s var(--ease);
 }
-.roadmap-col.done {
-  background: rgba(52, 211, 153, 0.06);
-  border-color: rgba(52, 211, 153, 0.35);
-}
-.roadmap-col.now {
-  background: rgba(245, 166, 35, 0.06);
-  border-color: rgba(245, 166, 35, 0.35);
-}
-.roadmap-col.future { background: var(--surface); }
-.roadmap-col h3 {
-  font-size: 0.82rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text2);
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-}
-.roadmap-col.done h3 { color: var(--green); }
-.roadmap-col.now h3 { color: var(--amber); }
-.roadmap-col.future h3 { color: var(--text2); }
-.roadmap-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
-.roadmap-list li {
-  font-size: 0.88rem;
-  color: var(--text2);
-  line-height: 1.5;
-  padding-left: 1.4rem;
-  position: relative;
-  font-family: ui-monospace, monospace;
-}
-.roadmap-list li .tag {
-  color: var(--text);
-  font-weight: 700;
-  display: inline-block;
-  min-width: 3.2rem;
-}
-.roadmap-col.done .roadmap-list li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  color: var(--green);
-  font-weight: 700;
-}
-.roadmap-col.now .roadmap-list li::before {
-  content: "→";
-  position: absolute;
-  left: 0;
-  color: var(--amber);
-  font-weight: 700;
-}
-.roadmap-col.future .roadmap-list li::before {
-  content: "○";
-  position: absolute;
-  left: 0;
-  color: var(--text3);
-}
-.roadmap-col .foot {
-  margin-top: auto;
-  color: var(--text3);
-  font-size: 0.78rem;
-  padding-top: 0.6rem;
-  border-top: 1px dashed var(--border);
-}
-.roadmap-bar {
-  margin-top: 1.8rem;
-  padding: 1rem 1.2rem;
-  background: rgba(245, 166, 35, 0.08);
-  border: 1px solid var(--amber);
-  border-radius: 4px;
-  color: #ffd580;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  justify-content: center;
-}
-.roadmap-bar strong { color: var(--amber); }
-
-/* ---------- TRY IT ---------- */
-.try {
-  background: var(--surface);
+.stage-item:hover { border-color: var(--border-strong); }
+.stage.today .stage-item { background: white; color: var(--accent); border-color: rgba(45, 90, 79, 0.2); }
+.roadmap-note {
+  margin-top: 40px; padding: 22px 26px;
+  background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 3rem 2rem;
-  text-align: center;
+  border-left: 3px solid var(--ink);
+  border-radius: 0 6px 6px 0;
+  font-size: 15px; line-height: 1.6;
+  color: var(--ink-soft); max-width: 900px;
+  font-style: italic;
 }
-.try h2 { margin-bottom: 1.5rem; }
-.try .step { font-family: ui-monospace, monospace; background: #0a0e14; padding: 0.9rem 1.4rem;
-             border-radius: 4px; display: inline-block; margin: 0.3rem 0; color: var(--green); font-size: 0.95rem; }
-.try .sep { color: var(--text3); margin: 1.2rem 0 0.8rem; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em; }
-.try pre {
-  text-align: left;
-  max-width: 560px;
-  margin: 0 auto;
-  font-family: ui-monospace, monospace;
-  background: #0a0e14;
-  padding: 1.2rem;
-  border-radius: 4px;
-  color: var(--text);
-  font-size: 0.85rem;
-  overflow-x: auto;
-}
-.try .small { color: var(--text3); font-size: 0.78rem; margin-top: 0.6rem; }
+.roadmap-note strong { color: var(--ink); font-weight: 600; font-style: normal; }
 
-/* ---------- FOOTER ---------- */
-footer {
-  padding: 3rem 0 4rem;
-  text-align: center;
-  color: var(--text3);
-  font-size: 0.88rem;
+/* CTA */
+.cta-block {
+  padding: 120px 0; text-align: center;
+  background: var(--bg-subtle);
+  border-top: 1px solid var(--border);
 }
-footer .links { display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
-footer .motto { color: var(--text2); margin-top: 0.6rem; }
+.cta-eyebrow {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600;
+  color: var(--accent); letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 24px;
+}
+.cta-title {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 52px; line-height: 1.05; font-weight: 700;
+  letter-spacing: -0.032em; color: var(--ink); margin-bottom: 26px;
+}
+.cta-body {
+  font-size: 17px; line-height: 1.6;
+  color: var(--ink-muted); max-width: 580px;
+  margin: 0 auto 36px;
+}
+.cta-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 24px; background: var(--ink); color: white;
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  border-radius: 6px; transition: all 0.2s var(--ease);
+  letter-spacing: -0.005em;
+}
+.btn-primary:hover { background: var(--accent); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-primary:active { transform: translateY(0); }
+.btn-primary .icon { width: 16px; height: 16px; transition: transform 0.2s var(--ease); }
+.btn-primary:hover .icon { transform: translateX(3px); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 24px; background: white; color: var(--ink);
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  border-radius: 6px; border: 1px solid var(--border-strong);
+  transition: all 0.2s var(--ease); letter-spacing: -0.005em;
+}
+.btn-secondary:hover { border-color: var(--ink); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.btn-secondary .icon { width: 16px; height: 16px; }
 
-/* ---------- RESPONSIVE ---------- */
-@media (max-width: 900px) {
-  .hero { min-height: auto; padding: 3rem 0; }
-  .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .hero h1 { font-size: 2.6rem; }
-  .panels { grid-template-columns: 1fr; }
-  .industry-grid { grid-template-columns: 1fr; }
-  .inside-grid { grid-template-columns: 1fr; }
-  .dep-cols { grid-template-columns: 1fr; }
-  .enforce-inner { flex-direction: column; align-items: flex-start; }
-  .compare { font-size: 0.82rem; }
-  .roadmap-grid { grid-template-columns: 1fr; }
+/* FOOTER */
+.footer { background: var(--ink); color: rgba(255, 255, 255, 0.7); padding: 56px 0 32px; }
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr;
+  gap: 56px; padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.footer-brand {
+  display: flex; align-items: center; gap: 11px;
+  margin-bottom: 16px;
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-weight: 700; font-size: 17px; color: white;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.footer-brand .logo-mark { border-color: white; }
+.footer-brand .logo-mark::before { background: white; }
+.footer-tagline {
+  font-size: 13px; color: rgba(255, 255, 255, 0.5);
+  max-width: 340px; line-height: 1.6; margin-bottom: 12px;
+}
+.footer-contact {
+  font-size: 13px; color: rgba(255, 255, 255, 0.8);
+  text-decoration: none; transition: color 0.2s var(--ease);
+}
+.footer-contact:hover { color: white; }
+.footer-col h4 {
+  font-size: 12px; color: white;
+  font-weight: 600; margin-bottom: 18px; letter-spacing: 0.02em;
+}
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 10px; }
+.footer-col a {
+  font-size: 13px; color: rgba(255, 255, 255, 0.6);
+  text-decoration: none; transition: color 0.2s var(--ease);
+}
+.footer-col a:hover { color: white; }
+.footer-bottom { padding-top: 32px; text-align: center; font-size: 12px; color: rgba(255, 255, 255, 0.4); }
+.footer-bottom a {
+  color: rgba(255, 255, 255, 0.4); text-decoration: none;
+  margin-left: 18px; transition: color 0.2s var(--ease);
+}
+.footer-bottom a:hover { color: white; }
+
+/* FADE */
+.fade-section {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+}
+.fade-section.visible { opacity: 1; transform: translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 960px) {
+  .container { padding: 0 24px; }
+  .nav-middle { display: none; }
+  .hero { padding: 64px 0 48px; }
+  h1.hero-title { font-size: 44px; letter-spacing: -0.03em; }
+  .hero-subtitle { font-size: 17px; }
+  .trust-row { gap: 10px 22px; margin-top: 32px; padding-top: 24px; }
+  .trust-item { font-size: 10.5px; }
+  .countdown-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .journey { padding: 60px 0 80px; }
+  .journey-grid { grid-template-columns: 1fr; gap: 36px; }
+  .steps-inner { position: static; }
+  .display-col { min-height: auto; }
+  .display-sticky { position: static; }
+  .panel { position: relative; display: none; }
+  .panel.active { display: block; }
+  .outcomes-bar { padding: 64px 0; }
+  .outcomes-line { font-size: 28px; }
+  .architecture, .quickstart, .compliance-articles, .industry, .roadmap { padding: 64px 0; }
+  .arch-layout { grid-template-columns: 1fr; gap: 40px; }
+  .arch-text h2 { font-size: 32px; }
+  .quickstart-title, .compliance-title, .industry-title, .roadmap-title { font-size: 32px; }
+  .quickstart-grid { grid-template-columns: 1fr; }
+  .ct-head, .ct-row { grid-template-columns: 70px 1fr 120px; padding: 12px 16px; }
+  .arch-diagram { padding: 20px; }
+  .arch-layer { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .arch-layer-tools { justify-content: flex-start; max-width: 100%; }
+  .cblock { padding: 60px 0; }
+  .cblock-grid { grid-template-columns: 1fr; gap: 20px; }
+  .cblock-left h3 { font-size: 28px; }
+  .cblock-body { font-size: 15px; margin-bottom: 32px; }
+  .cblock-bullets { grid-template-columns: 1fr; gap: 24px; }
+  .roadmap-grid { grid-template-columns: 1fr; gap: 14px; }
+  .cta-block { padding: 80px 0; }
+  .cta-title { font-size: 36px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .dash-table-head, .dash-row { grid-template-columns: 80px 140px 1fr 100px; }
+  .dash-table-head .col-policy, .dash-row .dr-policy { display: none; }
+  .dash-stats { grid-template-columns: 1fr 1fr; }
+  .dstat:nth-child(2) { border-right: none; }
+  .dstat:nth-child(1), .dstat:nth-child(2) { border-bottom: 1px solid var(--border); }
+  .binder-page { padding: 20px 24px; }
+  .binder-field { grid-template-columns: 1fr; gap: 4px; }
+  .terminal-body, .json-body { font-size: 11.5px; padding: 18px; min-height: 320px; }
+  .countdown-n { font-size: 36px; }
+}
+@media (max-width: 640px) {
+  h1.hero-title { font-size: 36px; }
+  .cta-title { font-size: 30px; }
+  .arch-text h2 { font-size: 28px; }
+  .cblock-left h3 { font-size: 24px; }
+  .outcomes-line { font-size: 24px; }
+  .nav-right .nav-signin { display: none; }
 }
 </style>
 </head>
 <body>
 
+<nav class="nav" id="nav">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <div class="logo-mark"></div>
+        Sentinel
+      </a>
+      <div class="nav-middle">
+        <a href="#" class="active">Platform</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#quickstart">Quickstart</a>
+        <a href="#compliance">Compliance</a>
+        <a href="#roadmap">Roadmap</a>
+      </div>
+      <div class="nav-right">
+        <a href="https://github.com/sebastianweiss83/sentinel-kernel" class="nav-signin">GitHub</a>
+        <a href="mailto:sebastian@swentures.com" class="nav-cta">
+          Get in touch
+          <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
 <section class="hero">
-  <div class="container hero-grid">
-    <div>
-      <div class="sentinel-mark"><svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='#34d399' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='#34d399' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='#34d399' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='#34d399'/></svg></div>
-      <div class="eyebrow">v3.3.1 · EU AI Act 2026-08-02 · Evidence infrastructure · Apache 2.0 permanent</div>
-      <h1>
-        <span>Trace.</span>
-        <span class="underline">Attest.</span>
-        <span>Audit.</span>
-        <span>Comply.</span>
-      </h1>
-      <p class="lead">
-        Sentinel is evidence infrastructure for the regulated AI era.
-        Wrap any autonomous decision function with <code>@sentinel.trace</code>,
-        cryptographically attest every record, and deliver an audit
-        package your auditor can verify independently. Zero cloud. Zero
-        US CLOUD Act exposure.
-        <strong><span id="hero-days">104</span> days to EU AI Act enforcement.</strong>
-      </p>
-      <div class="stats">
-        <span class="stat-pill"><span class="ok">✓</span><span id="stat-version">v3.3.1</span></span>
-        <span class="stat-pill"><span class="ok">✓</span><span id="stat-tests">877 passing</span></span>
-        <span class="stat-pill"><span class="ok">✓</span><span id="stat-coverage">100% coverage</span></span>
-        <span class="stat-pill"><span class="ok">✓</span><span id="stat-smoke">42/42 smoke</span></span>
-      </div>
-      <div class="cta-row">
-        <button id="install-btn" class="btn-primary">
-          <span class="mono-inline">$ pipx install sentinel-kernel</span>
-        </button>
-        <a href="https://github.com/sebastianweiss83/sentinel-kernel" class="link-secondary">View on GitHub →</a>
-        <a href="runtime-briefing.html" class="link-secondary">Runtime briefing ↗</a>
-        <a href="report.html" class="link-tertiary">sentinel report ↗</a>
-      </div>
-    </div>
-    <div>
-      
-<div class="terminal">
-  <div class="terminal-bar">
-    <span class="dot dot-red"></span>
-    <span class="dot dot-amber"></span>
-    <span class="dot dot-green"></span>
-    <span class="title">~/projects — terminal</span>
-  </div>
-  <div class="terminal-body">
-    <div class="line l1"><span class="prompt">$</span> pipx install sentinel-kernel</div>
-    <div class="line l2"><span class="prompt">$</span> sentinel demo</div>
-    <div class="line l3" style="opacity:0.5">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-    <div class="line l4" style="opacity:0.5">&nbsp; SENTINEL DEMO — Trace. Attest. Audit. Comply.</div>
-    <div class="line l5" style="opacity:0.5">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-    <div class="line l6"><span class="ok">✓</span> 50 decisions recorded (EU jurisdiction)</div>
-    <div class="line l7"><span class="ok">✓</span> Kill switch tested (Art. 14)</div>
-    <div class="line l8"><span class="ok">✓</span> Dependency scan (92% provable)</div>
-    <div class="line l9"><span class="ok">✓</span> EU AI Act compliance (PARTIAL)</div>
-    <div class="line l10"><span class="ok">✓</span> HTML report generated</div>
-    <div class="line l11">&nbsp;</div>
-    <div class="line l12 success">Report: sentinel_demo_report.html</div>
-  </div>
-</div>
-
+  <div class="container">
+    <div class="eyebrow">The Sentinel Platform · <span data-ci="version">v3.3.1</span></div>
+    <h1 class="hero-title">Evidence infrastructure<br>for the regulated AI era</h1>
+    <p class="hero-subtitle">Every agent decision, turned into a signed and independently verifiable audit package: on-premise, under your jurisdiction, compatible with your existing stack.</p>
+    <div class="trust-row">
+      <div class="trust-item"><span class="trust-dot"></span>Apache 2.0</div>
+      <div class="trust-item"><span class="trust-dot"></span><span data-ci="tests">838 tests passing</span></div>
+      <div class="trust-item"><span class="trust-dot"></span><span data-ci="coverage">100% branch coverage</span></div>
+      <div class="trust-item"><span class="trust-dot"></span>Ed25519 attestations</div>
+      <div class="trust-item"><span class="trust-dot"></span>RFC-3161 timestamping</div>
+      <div class="trust-item"><span class="trust-dot"></span>Air-gapped deployable</div>
+      <div class="trust-item"><span class="trust-dot"></span>BSI IT-Grundschutz preparation</div>
     </div>
   </div>
 </section>
 
 
-<div class="enforce">
-  <div class="container enforce-inner">
-    <div class="enforce-text">
-      <strong>⚠ EU AI Act Annex III enforcement: 2 August 2026</strong> —
-      High-risk AI systems must prove automatic tamper-resistant logging.
-      Penalties: up to €15M or 3% of global annual turnover.
-    </div>
-    <div class="enforce-days">
-      <div class="n" id="days-count">104</div>
-      <div class="label">days remaining</div>
-    </div>
-  </div>
-</div>
-
-
-<section class="block">
-  <div class="container">
-    <h2>What's new in v3.3.1</h2>
-    <p class="sub">The Auditor Release. Signed PDF evidence packs. One-stop CI check. Honest-scope framing. Runtime briefing for technical evaluators.</p>
-
-    <div class="industry-grid">
-      <div class="industry-card">
-        <h3>Signed PDF evidence pack</h3>
-        <p><strong>sentinel evidence-pack</strong> — one command produces a cover page, executive summary, EU AI Act / DORA / NIS2 coverage, trace samples, SHA-256 hash manifest, and a sovereign attestation. Reproducible, offline-verifiable, suitable as an audit binder artefact.</p>
-        <div class="ks-code">sentinel evidence-pack --output audit-q2.pdf</div>
-      </div>
-      <div class="industry-card">
-        <h3>One-stop CI check</h3>
-        <p><strong>sentinel ci-check</strong> — aggregates the EU AI Act snapshot, runtime sovereignty scan, and an optional manifesto check into a single exit code. Fully in-process. No subprocesses. No network. Works air-gapped.</p>
-        <div class="ks-code">sentinel ci-check --manifesto manifesto.py:MyManifesto</div>
-      </div>
-      <div class="industry-card">
-        <h3>Runtime briefing</h3>
-        <p>New operator-grade briefing page. Operating picture, runtime walkthrough, decision record, evidence route, deployment posture, and scope. Dark and light mode, keyboard navigable, no framework, no tracking.</p>
-        <div class="ks-code"><a href="runtime-briefing.html">runtime-briefing.html ↗</a></div>
-      </div>
-      <div class="industry-card">
-        <h3>Honest-scope framing</h3>
-        <p>README, CLI <code>--help</code>, and <code>docs/eu-ai-act.md</code> now consistently name Sentinel as the <strong>decision-trace and policy-enforcement layer</strong> for EU AI Act Art. 12 / 13 / 14 / 17. Not a full compliance solution, and no middleware kernel can be.</p>
-        <div class="ks-code">sentinel compliance check --all-frameworks</div>
-      </div>
-    </div>
-
-    <div class="note" style="margin-top:1.5rem;">
-      Test suite: <strong>877 tests, 100% line and branch coverage enforced in CI</strong>.
-      Policy-as-code runs as <strong>5 CI gates</strong> on every PR.
-      No new hard dependencies — reportlab is an optional <code>[pdf]</code> extra.
-    </div>
-  </div>
-</section>
-
-
-<section class="block">
-  <div class="container">
-    <h2>Most solutions fail the provability test</h2>
-    <p class="sub">Three ways to log autonomous decisions in Europe. Only one passes the EU AI Act, the CLOUD Act, and the air-gap test together.</p>
-
-    <table class="compare">
-      <thead>
-        <tr>
-          <th>Requirement</th>
-          <th class="col-bad">Cloud observability</th>
-          <th class="col-bad">Proprietary platforms</th>
-          <th class="col-good">Sentinel</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="row-label">Decision records</td><td class="yes">✓</td><td class="yes">✓</td><td class="col-good-cell yes">✓</td></tr>
-        <tr><td class="row-label">EU AI Act Art. 12</td><td class="partial">Partial</td><td class="partial">Partial</td><td class="col-good-cell yes">✓ Full</td></tr>
-        <tr><td class="row-label">US CLOUD Act exposure</td><td class="no">✗ Applies</td><td class="no">✗ Applies</td><td class="col-good-cell yes">✓ None</td></tr>
-        <tr><td class="row-label">Air-gapped capable</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓</td></tr>
-        <tr><td class="row-label">Open source</td><td class="partial">Some</td><td class="no">✗</td><td class="col-good-cell yes">✓ Apache 2.0</td></tr>
-        <tr><td class="row-label">On-premise</td><td class="no">✗</td><td class="partial">Expensive</td><td class="col-good-cell yes">✓ Default</td></tr>
-        <tr><td class="row-label">BSI path</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓ v3.0 ready</td></tr>
-        <tr><td class="row-label">Policy-as-code CI</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓ 5 gates, every PR</td></tr>
-        <tr><td class="row-label">ML classifier governance</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓</td></tr>
-        <tr><td class="row-label">Rule engine audit trail</td><td class="no">✗</td><td class="no">✗</td><td class="col-good-cell yes">✓</td></tr>
-      </tbody>
-    </table>
-
-    <div class="note">
-      The US CLOUD Act (18 U.S.C. § 2713) requires US-incorporated companies
-      to produce data stored anywhere in the world. No EU data-centre
-      agreement eliminates this obligation.
-    </div>
-  </div>
-</section>
-
-
-<section class="block">
-  <div class="container">
-    <h2>The four modules</h2>
-    <p class="sub">One codebase. One CLI. One installation. Four named entry points — Trace, Policy, Evidence, Federation — for four buyer archetypes.</p>
-
-    <div class="kernel-wrap">
-      
-<svg viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg" role="img"
-     aria-label="Sentinel four-module architecture: Trace, Policy, Evidence, Federation (roadmap).">
-  <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
-            markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/>
-    </marker>
-    <style>
-      .lbl        { font: 600 14px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #e5e7eb; }
-      .lbl-sm     { font: 500 12px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #9ca3af; }
-      .lbl-xs     { font: 500 10px ui-monospace, monospace; letter-spacing: 0.05em; fill: #6b7280; }
-      .lbl-big    { font: 800 18px system-ui, -apple-system, "Segoe UI", sans-serif; fill: #e5e7eb; letter-spacing: 0.02em; }
-      .tag        { font: 700 11px ui-monospace, monospace; fill: #34d399; }
-      .tag-blue   { font: 700 11px ui-monospace, monospace; fill: #3b82f6; }
-      .mono       { font: 500 11px ui-monospace, monospace; fill: #9ca3af; }
-    </style>
-  </defs>
-
-  <!-- Box 1: Your business logic -->
-  <rect x="220" y="14" width="280" height="52" rx="8"
-        fill="#111827" stroke="#1f2937" stroke-width="1"/>
-  <text x="360" y="40" text-anchor="middle" class="lbl">Your business logic</text>
-  <text x="360" y="56" text-anchor="middle" class="lbl-xs">any agent, any framework</text>
-
-  <!-- Arrow down -->
-  <line x1="360" y1="72" x2="360" y2="108"
-        stroke="#34d399" stroke-width="2" marker-end="url(#arrow)"/>
-
-  <!-- Box 2: SENTINEL (big green border) -->
-  <rect x="40" y="116" width="640" height="298" rx="14"
-        fill="#0a0e14" stroke="#34d399" stroke-width="2"/>
-  <text x="60" y="148" class="lbl-big">SENTINEL</text>
-  <text x="60" y="168" class="lbl-xs">AGILITY INFRASTRUCTURE FOR REGULATED AI · APACHE 2.0 PERMANENT</text>
-
-  <!-- TRACE box -->
-  <rect x="64" y="186" width="192" height="112" rx="10"
-        fill="#111827" stroke="#34d399" stroke-width="1.5"/>
-  <text x="80" y="212" class="lbl">TRACE</text>
-  <text x="236" y="212" text-anchor="end" class="tag">v3.x ✓</text>
-  <text x="80" y="238" class="lbl-sm">Record</text>
-  <text x="80" y="258" class="lbl-xs">@sentinel.trace · SHA-256</text>
-  <text x="80" y="276" class="lbl-xs">Privacy by default</text>
-
-  <!-- POLICY box -->
-  <rect x="264" y="186" width="192" height="112" rx="10"
-        fill="#111827" stroke="#34d399" stroke-width="1.5"/>
-  <text x="280" y="212" class="lbl">POLICY</text>
-  <text x="436" y="212" text-anchor="end" class="tag">v3.x ✓</text>
-  <text x="280" y="238" class="lbl-sm">Enforce</text>
-  <text x="280" y="258" class="lbl-xs">OPA/Rego · Python rules</text>
-  <text x="280" y="276" class="lbl-xs">Kill switch · Preflight</text>
-
-  <!-- EVIDENCE box -->
-  <rect x="464" y="186" width="192" height="112" rx="10"
-        fill="#111827" stroke="#34d399" stroke-width="1.5"/>
-  <text x="480" y="212" class="lbl">EVIDENCE</text>
-  <text x="636" y="212" text-anchor="end" class="tag">v3.x ✓</text>
-  <text x="480" y="238" class="lbl-sm">Prove</text>
-  <text x="480" y="258" class="lbl-xs">Signed PDF packs</text>
-  <text x="480" y="276" class="lbl-xs">Attestations · CI check</text>
-
-  <!-- FEDERATION box (full width) -->
-  <rect x="64" y="314" width="592" height="82" rx="10"
-        fill="#111827" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="6 3"/>
-  <text x="80" y="340" class="lbl">FEDERATION</text>
-  <text x="636" y="340" text-anchor="end" class="tag-blue">→ roadmap</text>
-  <text x="80" y="364" class="lbl-sm">Multi-institution aggregation · concern groups · supervisory rollup</text>
-  <text x="80" y="382" class="lbl-xs">RFC-002 PLANNED · ARCHITECTURALLY ANCHORED · NOT SHIPPING YET</text>
-
-  <!-- Arrow down -->
-  <line x1="360" y1="418" x2="360" y2="454"
-        stroke="#34d399" stroke-width="2" marker-end="url(#arrow)"/>
-
-  <!-- Box 3: DECISION LAYER -->
-  <rect x="120" y="462" width="480" height="72" rx="10"
-        fill="#2d1f00" stroke="#f5a623" stroke-width="1"/>
-  <text x="360" y="490" text-anchor="middle" class="lbl">DECISION LAYER (your choice)</text>
-  <text x="360" y="510" text-anchor="middle" class="mono">LLMs · ML classifiers · Rule engines · Robotic systems</text>
-  <text x="360" y="526" text-anchor="middle" class="lbl-xs">SWITCH ANYTIME. NO LOCK-IN.</text>
-
-  <!-- Arrow down -->
-  <line x1="360" y1="540" x2="360" y2="576"
-        stroke="#34d399" stroke-width="2" marker-end="url(#arrow)"/>
-
-  <!-- Box 4: LOCAL STORAGE -->
-  <rect x="120" y="584" width="480" height="72" rx="10"
-        fill="#111827" stroke="#1f2937" stroke-width="1"/>
-  <text x="360" y="612" text-anchor="middle" class="lbl">LOCAL STORAGE</text>
-  <text x="360" y="632" text-anchor="middle" class="mono">SQLite · PostgreSQL · NDJSON</text>
-  <text x="360" y="648" text-anchor="middle" class="lbl-xs">YOUR INFRASTRUCTURE. ALWAYS.</text>
-</svg>
-
-    </div>
-
-    <div class="kernel-taglines">
-      <div class="tagline-card trace">
-        <h4>Trace</h4>
-        <p>Trace every decision. EU AI Act Art. 12 automated. <code>@sentinel.trace</code> in one line.</p>
-      </div>
-      <div class="tagline-card govern">
-        <h4>Policy</h4>
-        <p>Enforce policy in-process. Kill switch (Art. 14), OPA/Rego, Python rules, preflight.</p>
-      </div>
-      <div class="tagline-card trace">
-        <h4>Evidence</h4>
-        <p>Attest, audit, comply. Signed PDF evidence packs, portable attestations, compliance reports.</p>
-      </div>
-      <div class="tagline-card route">
-        <h4>Federation</h4>
-        <p>Multi-institution aggregation. Roadmap — RFC-002 planned.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section class="block">
-  <div class="container">
-    <h2>What Sentinel shows you</h2>
-    <p class="sub">Live data from a sample deployment. Every chart is inline SVG — zero external resources.</p>
-
-    <div class="panels">
-
-      <div class="panel">
-        <h3>Provability score</h3>
-        <svg class="gauge-svg" viewBox="0 0 200 200" width="200" height="200" xmlns="http://www.w3.org/2000/svg">
-          <circle class="gauge-ring" cx="100" cy="100" r="70"/>
-          <circle class="gauge-fill" cx="100" cy="100" r="70" style="--g: 0.78;"/>
-          <text class="gauge-text" x="100" y="112" text-anchor="middle">78%</text>
-        </svg>
-        <div class="gauge-label">Overall provability</div>
-        <div class="gauge-sub">Runtime: EU ✓ · Storage: On-premise ✓ · CI/CD: ⚠ acknowledged</div>
-      </div>
-
-      <div class="panel">
-        <h3>EU AI Act coverage</h3>
-        <div class="bars">
-          <div class="bar-row"><span class="art">Art. 12</span><div class="bar-track"><div class="bar-fill green" style="--w: 100%;"></div></div><span class="status">compliant</span></div>
-          <div class="bar-row"><span class="art">Art. 13</span><div class="bar-track"><div class="bar-fill green" style="--w: 100%;"></div></div><span class="status">compliant</span></div>
-          <div class="bar-row"><span class="art">Art. 14</span><div class="bar-track"><div class="bar-fill green" style="--w: 100%;"></div></div><span class="status">compliant</span></div>
-          <div class="bar-row"><span class="art">Art. 9</span><div class="bar-track"><div class="bar-fill amber" style="--w: 60%;"></div></div><span class="status">partial</span></div>
-          <div class="bar-row"><span class="art">Art. 17</span><div class="bar-track"><div class="bar-fill amber" style="--w: 70%;"></div></div><span class="status">partial</span></div>
-          <div class="bar-row"><span class="art">Art. 10</span><div class="bar-track"><div class="bar-fill blue" style="--w: 0%;"></div></div><span class="status">human action</span></div>
-          <div class="bar-row"><span class="art">Art. 15</span><div class="bar-track"><div class="bar-fill blue" style="--w: 0%;"></div></div><span class="status">human action</span></div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h3>Live decision feed</h3>
-        <table class="feed-table">
-          <thead><tr><th>Time</th><th>Agent</th><th>Result</th><th class="ms">ms</th></tr></thead>
-          <tbody>
-            <tr class="feed-row"><td>12:34:51</td><td>procurement_agent</td><td><span class="pill allow">ALLOW</span></td><td class="ms">3</td></tr>
-            <tr class="feed-row"><td>12:34:52</td><td>access_control</td><td><span class="pill deny">DENY</span></td><td class="ms">2</td></tr>
-            <tr class="feed-row"><td>12:34:53</td><td>doc_classifier</td><td><span class="pill allow">ALLOW</span></td><td class="ms">4</td></tr>
-            <tr class="feed-row"><td>12:34:54</td><td>procurement_agent</td><td><span class="pill allow">ALLOW</span></td><td class="ms">3</td></tr>
-            <tr class="feed-row"><td>12:34:55</td><td>mission_eval</td><td><span class="pill exc">EXCEPTION</span></td><td class="ms">8</td></tr>
-            <tr class="feed-row"><td>12:34:56</td><td>access_control</td><td><span class="pill allow">ALLOW</span></td><td class="ms">2</td></tr>
-            <tr class="feed-row"><td>12:34:57</td><td>doc_classifier</td><td><span class="pill deny">DENY</span></td><td class="ms">3</td></tr>
-            <tr class="feed-row"><td>12:34:58</td><td>procurement_agent</td><td><span class="pill allow">ALLOW</span></td><td class="ms">4</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="panel">
-        <h3>Dependency map</h3>
-        <div class="dep-cols">
-          <div>
-            <h4 class="ok">Provable ✓</h4>
-            <ul class="dep-list">
-              <li>sentinel-kernel <span class="residency">EU · DE</span></li>
-              <li>postgresql <span class="residency">EU-neutral</span></li>
-              <li>langfuse/self <span class="residency">EU · DE (self-hosted)</span></li>
-              <li>prometheus <span class="residency">CNCF · neutral</span></li>
-            </ul>
-          </div>
-          <div>
-            <h4 class="warn">Acknowledged gaps ⚠</h4>
-            <ul class="dep-list warn">
-              <li>github-actions <span class="residency">US · Microsoft</span></li>
-              <li>pypi <span class="residency">US-hosted</span></li>
-            </ul>
-          </div>
-        </div>
-        <div class="dep-note">Acknowledged gaps are documented. Not violations.</div>
-      </div>
-
-      <div class="panel">
-        <h3>Kill switch</h3>
-        <div class="killswitch">
-          <div class="ks-indicator"></div>
-          <div class="ks-label">● INACTIVE</div>
-          <div class="ks-sub">EU AI Act Art. 14 — human oversight active</div>
-          <div class="ks-code">sentinel.engage_kill_switch("reason")</div>
-          <div class="ks-sub">Halts all agent calls instantly. No restart.</div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h3>Enforcement countdown</h3>
-        <div class="count-big" id="days-count-2">104</div>
-        <div class="count-label">Days to EU AI Act Annex III</div>
-        <div class="count-sub">2 August 2026 · Penalties up to €15M</div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-
-<section class="block">
-  <div class="container">
-    <h2>Start in 2 minutes</h2>
-    <p class="sub">Evaluate the full Record · Enforce · Prove stack — or embed it in your code.</p>
-
-    <div class="tabs">
-      <div class="tab-headers">
-        <button class="tab-btn active" data-tab="cli">Evaluate (CLI)</button>
-        <button class="tab-btn" data-tab="minimal">Python SDK</button>
-        <button class="tab-btn" data-tab="policy">With Policy</button>
-        <button class="tab-btn" data-tab="full">Full Pipeline</button>
-        <button class="tab-btn" data-tab="governance">Governance</button>
-      </div>
-
-      <div id="tab-cli" class="tab-panel active"><pre><span class="cm"># Install + full end-to-end demo (no code required)</span>
-<span class="prompt">$</span> pipx install sentinel-kernel
-<span class="prompt">$</span> sentinel demo
-
-<span class="cm"># Dependency scan of your environment</span>
-<span class="prompt">$</span> sentinel scan
-
-<span class="cm"># EU AI Act compliance check</span>
-<span class="prompt">$</span> sentinel compliance check
-
-<span class="cm"># Generate a self-contained HTML provability report</span>
-<span class="prompt">$</span> sentinel report --output provability.html
-
-<span class="cm"># Generate a portable attestation</span>
-<span class="prompt">$</span> sentinel attestation generate --output attestation.json</pre></div>
-
-      <div id="tab-minimal" class="tab-panel"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel
-
-sentinel = <span class="fn">Sentinel</span>()  <span class="cm"># SQLite, zero config</span>
-
-<span class="fn">@sentinel.trace</span>
-<span class="kw">async def</span> <span class="fn">my_agent</span>(context: <span class="cls">dict</span>) -&gt; <span class="cls">dict</span>:
-    <span class="kw">return</span> {<span class="st">"decision"</span>: <span class="st">"approved"</span>}
-
-<span class="cm"># Every call produces an auditor-grade decision record</span>
-result = <span class="kw">await</span> <span class="fn">my_agent</span>({<span class="st">"amount"</span>: <span class="nu">5000</span>})
-<span class="fn">print</span>(result)  <span class="cm"># {"decision": "approved"}</span>
-
-<span class="cm"># Query traces</span>
-traces = sentinel.<span class="fn">query</span>(limit=<span class="nu">1</span>)
-<span class="fn">print</span>(traces[<span class="nu">0</span>].policy_result)  <span class="cm"># ALLOW</span></pre></div>
-
-      <div id="tab-policy" class="tab-panel"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel
-<span class="kw">from</span> sentinel.policy.evaluator <span class="kw">import</span> SimpleRuleEvaluator
-<span class="kw">from</span> sentinel.storage.filesystem <span class="kw">import</span> FilesystemStorage
-
-sentinel = <span class="fn">Sentinel</span>(
-    policy_evaluator=<span class="fn">SimpleRuleEvaluator</span>({
-        <span class="st">"threshold"</span>: <span class="kw">lambda</span> ctx: ctx[<span class="st">"amount"</span>] &lt;= <span class="nu">10_000</span>
-    }),
-    storage=<span class="fn">FilesystemStorage</span>(<span class="st">"/mnt/traces"</span>),
-    sovereign_scope=<span class="st">"EU"</span>,
-    data_residency=<span class="st">"on-premise-de"</span>,
-)
-
-<span class="fn">@sentinel.trace</span>
-<span class="kw">async def</span> <span class="fn">approve_procurement</span>(ctx: <span class="cls">dict</span>) -&gt; <span class="cls">dict</span>:
-    <span class="kw">return</span> {<span class="st">"approved"</span>: ctx[<span class="st">"amount"</span>] &lt;= <span class="nu">10_000</span>}
-
-<span class="cm"># DENY recorded automatically for high-value requests</span>
-<span class="kw">await</span> <span class="fn">approve_procurement</span>({<span class="st">"amount"</span>: <span class="nu">50_000</span>})</pre></div>
-
-      <div id="tab-full" class="tab-panel"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> Sentinel
-<span class="kw">from</span> sentinel.manifesto <span class="kw">import</span> SentinelManifesto
-<span class="kw">from</span> sentinel.manifesto.requirements <span class="kw">import</span> (
-    EUOnly, Required, AcknowledgedGap,
-)
-<span class="kw">from</span> sentinel.compliance.euaiact <span class="kw">import</span> EUAIActChecker
-
-<span class="kw">class</span> <span class="cls">OurPolicy</span>(SentinelManifesto):
-    name = <span class="st">"Production provability policy v1"</span>
-    jurisdiction = <span class="fn">EUOnly</span>()
-    kill_switch = <span class="fn">Required</span>()
-    ci_cd = <span class="fn">AcknowledgedGap</span>(
-        provider=<span class="st">"GitHub Actions (Microsoft/US)"</span>,
-        migrating_to=<span class="st">"Self-hosted Forgejo"</span>,
-        by=<span class="st">"2027-Q2"</span>,
-        reason=<span class="st">"No EU-operated CI with comparable UX"</span>,
-    )
-
-sentinel = <span class="fn">Sentinel</span>()
-
-<span class="cm"># Check EU AI Act compliance</span>
-report = <span class="fn">EUAIActChecker</span>().<span class="fn">check</span>(sentinel)
-<span class="fn">print</span>(report.<span class="fn">diff</span>())
-
-<span class="cm"># Generate self-contained HTML report</span>
-report.<span class="fn">save_html</span>(<span class="st">"provability_report.html"</span>)
-
-<span class="cm"># Check policy vs reality</span>
-policy_report = <span class="fn">OurPolicy</span>().<span class="fn">check</span>(sentinel_instance=sentinel)
-<span class="fn">print</span>(<span class="st">f"Score: {policy_report.overall_score:.0%}"</span>)</pre></div>
-
-      <div id="tab-governance" class="tab-panel"><pre><span class="kw">from</span> sentinel <span class="kw">import</span> (
-    Sentinel, BudgetTracker,
-    generate_attestation, verify_attestation,
-)
-
-sentinel = <span class="fn">Sentinel</span>()
-
-<span class="cm"># Evidence — signed PDF pack an auditor accepts</span>
-<span class="cm"># (sentinel evidence-pack --output audit.pdf --financial-sector)</span>
-
-<span class="cm"># Preflight — check before you act, no trace written</span>
-result = sentinel.<span class="fn">preflight</span>(<span class="st">"data:delete:production"</span>)
-<span class="kw">if not</span> result.cleared:
-    <span class="kw">raise</span> <span class="cls">RuntimeError</span>(result.reasons)
-
-<span class="cm"># BudgetTracker — every cost entry is a traced decision</span>
-budget = <span class="fn">BudgetTracker</span>(sentinel=sentinel, limit=<span class="nu">10.0</span>)
-check = budget.<span class="fn">check</span>(estimated_cost=<span class="nu">0.25</span>)
-budget.<span class="fn">record</span>(<span class="st">"api:mistral"</span>, actual_cost=<span class="nu">0.23</span>)
-
-<span class="cm"># Portable attestation — verifiable offline, no service needed</span>
-att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
-<span class="kw">assert</span> <span class="fn">verify_attestation</span>(att).valid
-
-<span class="cm"># Optional long-term-retention signing (ML-DSA-65, FIPS 204)</span>
-<span class="cm"># lives in sentinel-kernel[pqc] — see docs/sentinel-evidence.md</span>
-
-<span class="cm"># Optional RFC-3161 timestamping via EU-sovereign TSAs</span>
-<span class="cm"># (DFN-CERT, D-Trust) — sentinel.crypto.RFC3161Timestamper</span></pre></div>
-
-    </div>
-  </div>
-</section>
-
-
-<section class="block">
-  <div class="container">
-    <h2>Built for regulated industries</h2>
-    <p class="sub">Four scenarios where a missing trace is worse than a crash.</p>
-    <div class="industry-grid">
-      <div class="industry-card">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-        <h3>Defence &amp; Aerospace</h3>
-        <p>Autonomous go/no-go decisions with mission policy evaluation. Kill switch for immediate halt (Art. 14). Air-gapped deployment verified by dedicated test suite. VS-NfD roadmap.</p>
-      </div>
-      <div class="industry-card">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6v6h6v6h-6v6H9v-6H3V8h6z"/></svg>
-        <h3>Healthcare AI</h3>
-        <p>Treatment recommendation audit trail. GDPR-compliant data residency. Every clinical AI decision recorded with SHA-256 hash. Art. 14 human oversight for escalation workflows.</p>
-      </div>
-      <div class="industry-card">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg>
-        <h3>Financial Services</h3>
-        <p>Transaction approval automation with DORA-aligned logging. Append-only tamper-resistant records. Regulators get the full trace: what, when, which model, which policy.</p>
-      </div>
-      <div class="industry-card">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/></svg>
-        <h3>Public Administration</h3>
-        <p>Government AI transparency requirements met by default. Sovereign deployment — no foreign jurisdiction access possible. EU AI Act compliance diff for internal auditors.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section class="block">
-  <div class="container">
-    <h2>What's inside</h2>
-    <p class="sub">Every v1 → v3 capability. Eleven articles mapped. One honest compliance story.</p>
-
-    <div class="inside-grid">
-      <div>
-        <ul class="feature-list">
-          <li><strong>@sentinel.trace</strong> — any agent, sync or async</li>
-          <li><strong>Kill switch</strong> — Art. 14, no restart, thread-safe</li>
-          <li><strong>Preflight</strong> — check before you act, no trace written</li>
-          <li><strong>BudgetTracker</strong> — every cost entry is a traced decision</li>
-          <li><strong>Attestations</strong> — portable, verifiable offline</li>
-          <li><strong>Output verification</strong> — hash-check any stored output</li>
-          <li><strong>SimpleRule + LocalRego (OPA)</strong> policy evaluation</li>
-          <li><strong>SQLite + PostgreSQL + Filesystem</strong> storage backends</li>
-          <li><strong>Air-gapped</strong> — network blocked at socket level in CI</li>
-          <li><strong>LangChain · CrewAI · AutoGen</strong> callbacks &amp; hooks</li>
-          <li><strong>Haystack</strong> component wrapper</li>
-          <li><strong>OpenTelemetry</strong> — provability attrs in every span</li>
-          <li><strong>LangFuse provability panel</strong> — self-contained HTML widget</li>
-          <li><strong>Jupyter · FastAPI · Django · Prometheus</strong> integrations</li>
-          <li><strong>Dependency scanner</strong> — 60+ packages mapped by jurisdiction</li>
-          <li><strong>Policy-as-code</strong> — 5 named CI gates</li>
-          <li><strong>EU AI Act · DORA · NIS2</strong> compliance checkers</li>
-          <li><strong>RFC-001 SovereigntyManifest</strong> — Python reference (Rust experimental; DRAFT paused)</li>
-          <li><strong>Full CLI</strong> — demo, scan, compliance, report, attestation, evidence-pack</li>
-          <li><strong>Docker Compose</strong> — Grafana + LangFuse + OTel</li>
-        </ul>
+<section class="countdown">
+  <div class="container countdown-inner">
+    <div class="countdown-text">
+      <div class="countdown-icon">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="m12 17 .01 0"/><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/></svg>
       </div>
       <div>
-        <table class="compliance-table">
-          <thead>
-            <tr><th>Article</th><th>Requirement</th><th>Sentinel</th><th>What to do</th></tr>
-          </thead>
-          <tbody>
-            <tr><td class="art">Art. 12</td><td>Automatic logging</td><td class="full">✓ Full</td><td>Nothing — automated</td></tr>
-            <tr><td class="art">Art. 13</td><td>Transparency</td><td class="full">✓ Full</td><td>Nothing — automated</td></tr>
-            <tr><td class="art">Art. 14</td><td>Human oversight</td><td class="full">✓ Full</td><td>Name the operator of the kill switch</td></tr>
-            <tr><td class="art">Art. 9</td><td>Risk management</td><td class="partial">~ Partial</td><td>Document risk categories and plan</td></tr>
-            <tr><td class="art">Art. 11</td><td>Technical documentation</td><td class="human">→ Human action</td><td>Write the Annex IV tech doc package</td></tr>
-            <tr><td class="art">Art. 17</td><td>Quality management</td><td class="partial">~ Partial</td><td>Define change control and QMS procedures</td></tr>
-            <tr><td class="art">Art. 16</td><td>Provider obligations</td><td class="partial">~ Partial</td><td>Register, CE mark, conformity assessment</td></tr>
-            <tr><td class="art">Art. 26</td><td>Deployer obligations</td><td class="partial">~ Partial</td><td>Staff training, oversight procedures</td></tr>
-            <tr><td class="art">Art. 10</td><td>Data governance</td><td class="human">→ Human action</td><td>Document training data provenance</td></tr>
-            <tr><td class="art">Art. 15</td><td>Accuracy &amp; robustness</td><td class="human">→ Human action</td><td>Accuracy metrics and pen testing</td></tr>
-            <tr><td class="art">Art. 72</td><td>GPAI post-market</td><td class="partial">~ Conditional</td><td>Model card if deploying GPAI as high-risk</td></tr>
-          </tbody>
-        </table>
-        <div class="note" style="margin-top:1rem;">
-          Sentinel is honest about what can and cannot be automated.
-          Articles requiring human action are clearly marked — we never overclaim.
+        <strong>EU AI Act Annex III enforcement — 2 August 2026.</strong>
+        High-risk AI systems must produce automatic tamper-resistant evidence.
+        Penalties up to €15M or 3% of global annual turnover.
+      </div>
+    </div>
+    <div class="countdown-days">
+      <div class="countdown-n" data-ci="days">104</div>
+      <div class="countdown-label">days remaining</div>
+    </div>
+  </div>
+</section>
+
+
+<section class="journey fade-section" id="journey">
+  <div class="container">
+    <div class="journey-grid">
+
+      <div class="steps-col">
+        <div class="steps-inner">
+          <div class="step" data-step="1">
+            <div class="step-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+            <div class="step-content">
+              <div class="step-title">Trace</div>
+              <div class="step-subtitle">Runtime capture</div>
+              <div class="step-bullets">
+                <div class="bullet"><span><b>Wrap</b> any agent call with a single decorator</span></div>
+                <div class="bullet"><span><b>Bind</b> input, policy, output, and jurisdiction</span></div>
+                <div class="bullet"><span><b>Instrument</b> LangChain, CrewAI, AutoGen</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-step="2">
+            <div class="step-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            <div class="step-content">
+              <div class="step-title">Attest</div>
+              <div class="step-subtitle">Cryptographic signing</div>
+              <div class="step-bullets">
+                <div class="bullet"><span><b>Ed25519</b> signature on every attestation by default</span></div>
+                <div class="bullet"><span><b>Hash-chain</b> each record to its namespace predecessor</span></div>
+                <div class="bullet"><span><b>Verify</b> independently — no vendor required</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-step="3">
+            <div class="step-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><circle cx="18" cy="18" r="3"/><path d="m22 22-1.5-1.5"/></svg>
+            </div>
+            <div class="step-content">
+              <div class="step-title">Audit</div>
+              <div class="step-subtitle">Evidence retrieval</div>
+              <div class="step-bullets">
+                <div class="bullet"><span><b>Query</b> decisions by agent, policy, or outcome</span></div>
+                <div class="bullet"><span><b>Retrieve</b> full attestation packages on demand</span></div>
+                <div class="bullet"><span><b>Stream</b> events to SIEM, GRC, or custom systems</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step" data-step="4">
+            <div class="step-icon">
+              <svg class="icon" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+            </div>
+            <div class="step-content">
+              <div class="step-title">Comply</div>
+              <div class="step-subtitle">Regulatory delivery</div>
+              <div class="step-bullets">
+                <div class="bullet"><span><b>Package</b> evidence into PAdES-signed PDF bundles</span></div>
+                <div class="bullet"><span><b>Map</b> to EU AI Act, BAIT, MaRisk, DORA</span></div>
+                <div class="bullet"><span><b>Deliver</b> what a regulator can verify as a whole</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="display-col">
+        <div class="display-sticky">
+
+          <div class="panel" data-panel="1">
+            <div class="terminal">
+              <div class="terminal-bar">
+                <div class="term-dots"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span></div>
+                <div class="term-title">credit_agent.py</div>
+                <div class="term-status">capturing</div>
+              </div>
+              <div class="terminal-body">
+<span class="tline"><span class="t-comment"># Your existing agent. Unchanged.</span></span>
+<span class="tline"><span class="t-key">from</span> sentinel <span class="t-key">import</span> <span class="t-ink">Sentinel</span></span>
+<span class="tline"><span class="t-ink">sentinel</span> <span class="t-ink">=</span> <span class="t-ink">Sentinel</span>()</span>
+<span class="tline"></span>
+<span class="tline"><span class="t-dim">@</span><span class="t-ink">sentinel</span>.<span class="t-ink">trace</span>(<span class="t-flag">policy</span>=<span class="t-str">"credit_v2"</span>)</span>
+<span class="tline"><span class="t-key">def</span> <span class="t-ink">assess_credit</span>(applicant: <span class="t-key">dict</span>) -&gt; Decision:</span>
+<span class="tline">    <span class="t-key">return</span> agent.evaluate(applicant)</span>
+<span class="tline"></span>
+<span class="tline"><span class="t-prompt">$</span> <span class="t-ink">python credit_agent.py</span></span>
+<span class="tline"><span class="t-ok">  ✓</span> <span class="t-dim">trace captured</span>      <span class="t-comment">trc_8f2a1b3c</span></span>
+<span class="tline"><span class="t-ok">  ✓</span> <span class="t-dim">input hash</span>          <span class="t-comment">sha256:3c7f..a91e</span></span>
+<span class="tline"><span class="t-ok">  ✓</span> <span class="t-dim">policy version</span>      <span class="t-comment">credit_v2@rev.a47</span></span>
+<span class="tline"><span class="t-ok">  ✓</span> <span class="t-dim">signature</span>           <span class="t-str">Ed25519</span> <span class="t-comment">· 64-byte</span></span>
+<span class="tline"><span class="t-ok">  ✓</span> <span class="t-dim">attestation ready</span>   <span class="t-comment">1.8ms</span><span class="cursor"></span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel active" data-panel="2">
+            <div class="terminal">
+              <div class="terminal-bar">
+                <div class="term-dots"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span></div>
+                <div class="term-title">att_9f2e8b1a.json</div>
+                <div class="term-status">hash-verified</div>
+              </div>
+              <div class="json-body" id="json-body">
+<span class="jline"><span class="j-comment">// Tamper-evident attestation · Ed25519 + SHA-256</span></span>
+<span class="jline"><span class="j-punct">{</span></span>
+<span class="jline">  <span class="j-key">"attestation_id"</span><span class="j-punct">:</span> <span class="j-str">"att_9f2e8b1a4c7d"</span><span class="j-punct">,</span></span>
+<span class="jline">  <span class="j-key">"timestamp"</span><span class="j-punct">:</span> <span class="j-str">"2026-04-20T14:03:22.847Z"</span><span class="j-punct">,</span></span>
+<span class="jline">  <span class="j-key">"chain_namespace"</span><span class="j-punct">:</span> <span class="j-str">"sentinel-ns:v1:credit_agent:EU-DE:credit"</span><span class="j-punct">,</span></span>
+<span class="jline">  <span class="j-key">"previous_hash"</span><span class="j-punct">:</span> <span class="j-str">"sha256:7a4e..dfc3"</span><span class="j-punct">,</span></span>
+<span class="jline">  <span class="j-key">"decision"</span><span class="j-punct">:</span> <span class="j-punct">{</span></span>
+<span class="jline">    <span class="j-key">"agent"</span><span class="j-punct">:</span> <span class="j-str">"credit_agent@v2.1.4"</span><span class="j-punct">,</span></span>
+<span class="jline">    <span class="j-key">"policy"</span><span class="j-punct">:</span> <span class="j-str">"credit_v2@rev.a47"</span><span class="j-punct">,</span></span>
+<span class="jline">    <span class="j-key">"input_hash"</span><span class="j-punct">:</span> <span class="j-str">"sha256:3c7f..a91e"</span><span class="j-punct">,</span></span>
+<span class="jline">    <span class="j-key">"output_hash"</span><span class="j-punct">:</span> <span class="j-str">"sha256:8b2d..4f6c"</span><span class="j-punct">,</span></span>
+<span class="jline">    <span class="j-key">"result"</span><span class="j-punct">:</span> <span class="j-str">"APPROVED"</span></span>
+<span class="jline">  <span class="j-punct">},</span></span>
+<span class="jline">  <span class="j-key">"signature"</span><span class="j-punct">:</span> <span class="j-str">"Ed25519:oz0PLc..SG5yZE"</span></span>
+<span class="jline"><span class="j-punct">}</span></span>
+              </div>
+            </div>
+            <div class="verify-strip">
+              <div class="check"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+              <div class="verify-text">hash verified · independently recomputable</div>
+              <div class="verify-cmd">sentinel chain verify att_9f2e</div>
+            </div>
+          </div>
+
+          <div class="panel" data-panel="3">
+            <div class="dashboard">
+              <div class="dash-header">
+                <div class="dash-title"><div class="live-dot"></div>Sentinel Control Plane</div>
+                <div class="dash-live">LIVE · last 24h</div>
+              </div>
+              <div class="dash-stats">
+                <div class="dstat"><div class="dstat-value">47,283</div><div class="dstat-label">Decisions</div></div>
+                <div class="dstat"><div class="dstat-value">47,283</div><div class="dstat-label">Attestations</div></div>
+                <div class="dstat denied"><div class="dstat-value">312</div><div class="dstat-label">Denied</div></div>
+                <div class="dstat"><div class="dstat-value">1.8<span class="small">ms</span></div><div class="dstat-label">Median latency</div></div>
+              </div>
+              <div class="dash-table-head">
+                <div>Time</div><div>Agent</div><div class="col-policy">Policy</div><div>Outcome</div><div style="text-align:right">Evidence</div>
+              </div>
+              <div id="audit-rows">
+                <div class="dash-row" data-i="1">
+                  <span class="dr-time">14:03:22</span>
+                  <span class="dr-agent">credit_agent</span>
+                  <span class="dr-policy">credit_v2@a47</span>
+                  <span class="dr-outcome"><span class="pill pill-approved">Approved</span><span>0.94</span></span>
+                  <span class="att-tag">att_9f2e</span>
+                </div>
+                <div class="dash-row" data-i="2">
+                  <span class="dr-time">14:03:24</span>
+                  <span class="dr-agent">kyc_verification</span>
+                  <span class="dr-policy">kyc_v1@c02</span>
+                  <span class="dr-outcome"><span class="pill pill-approved">Approved</span><span>0.89</span></span>
+                  <span class="att-tag">att_3a7b</span>
+                </div>
+                <div class="dash-row" data-i="3">
+                  <span class="dr-time">14:03:26</span>
+                  <span class="dr-agent">claims_processor</span>
+                  <span class="dr-policy">claims_v3@f12</span>
+                  <span class="dr-outcome"><span class="pill pill-review">Review</span><span>0.47</span></span>
+                  <span class="att-tag">att_5e9f</span>
+                </div>
+                <div class="dash-row" data-i="4">
+                  <span class="dr-time">14:03:29</span>
+                  <span class="dr-agent">credit_agent</span>
+                  <span class="dr-policy">credit_v2@a47</span>
+                  <span class="dr-outcome"><span class="pill pill-denied">Denied</span><span>0.12</span></span>
+                  <span class="att-tag">att_7c2d</span>
+                </div>
+                <div class="dash-row" data-i="5">
+                  <span class="dr-time">14:03:31</span>
+                  <span class="dr-agent">aml_monitor</span>
+                  <span class="dr-policy">aml_v4@b21</span>
+                  <span class="dr-outcome"><span class="pill pill-approved">Approved</span><span>0.91</span></span>
+                  <span class="att-tag">att_1b4a</span>
+                </div>
+                <div class="dash-row" data-i="6">
+                  <span class="dr-time">14:03:35</span>
+                  <span class="dr-agent">fraud_scorer</span>
+                  <span class="dr-policy">fraud_v2@d33</span>
+                  <span class="dr-outcome"><span class="pill pill-review">Review</span><span>0.58</span></span>
+                  <span class="att-tag">att_8d2c</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel" data-panel="4">
+            <div class="binder">
+              <div class="binder-chrome">
+                <div class="binder-chrome-actions"><span class="binder-chrome-dot"></span><span class="binder-chrome-dot"></span><span class="binder-chrome-dot"></span></div>
+                <div class="binder-filename">audit_package_att_9f2e8b1a.pdf</div>
+                <div class="binder-pages">1 / 1</div>
+              </div>
+              <div class="binder-page">
+                <div class="binder-docheader">
+                  <div>
+                    <div class="binder-doctitle">Audit Package</div>
+                    <div class="binder-docsub">att_9f2e8b1a · credit_agent@v2.1.4</div>
+                  </div>
+                  <div class="binder-docmeta">
+                    Generated 2026-04-20<br>
+                    Retention until 2036-04-20<br>
+                    PAdES-signed
+                  </div>
+                </div>
+                <div id="binder-fields">
+                  <div class="binder-field" data-i="1">
+                    <div class="binder-field-label">Decision</div>
+                    <div class="binder-field-value">APPROVED · confidence 0.94 <span class="dim">· 2026-04-20T14:03:22.847Z</span></div>
+                  </div>
+                  <div class="binder-field" data-i="2">
+                    <div class="binder-field-label">Policy Context</div>
+                    <div class="binder-field-value">credit_scoring_v2@rev.a47 <span class="dim">· signed by compliance@swentures</span></div>
+                  </div>
+                  <div class="binder-field" data-i="3">
+                    <div class="binder-field-label">Input Integrity</div>
+                    <div class="binder-field-value">sha256:3c7f..a91e <span class="dim">· 1,284 bytes</span></div>
+                  </div>
+                  <div class="binder-field" data-i="4">
+                    <div class="binder-field-label">Output Integrity</div>
+                    <div class="binder-field-value">sha256:8b2d..4f6c <span class="dim">· 412 bytes</span></div>
+                  </div>
+                  <div class="binder-field" data-i="5">
+                    <div class="binder-field-label">Jurisdiction</div>
+                    <div class="binder-field-value">EU-DE · on-premise <span class="dim">· no cross-border egress</span></div>
+                  </div>
+                  <div class="binder-field" data-i="6">
+                    <div class="binder-field-label">Regulatory Mapping</div>
+                    <div class="binder-field-value">EU AI Act Art. 12+17 <span class="dim">· MaRisk AT 4.3.1 · BAIT §6.3</span></div>
+                  </div>
+                </div>
+                <div class="binder-seal">
+                  <div class="binder-seal-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>
+                  <div class="binder-seal-text">Attestation hash independently verified · Ed25519 + SHA-256</div>
+                  <div class="binder-seal-cmd">sentinel comply verify pack.pdf</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="outcomes-bar fade-section">
+  <div class="container">
+    <div class="outcomes-eyebrow">The Consequence</div>
+    <h2 class="outcomes-line">Pilots become production. Scale is no longer blocked by audit reconstruction. The next agent is a <em>decision</em>, not a debate.</h2>
+    <p class="outcomes-sub">With evidence running at runtime, compliance moves from blocker to companion — and new AI use-cases ship through the same governed path as every other agent.</p>
+  </div>
+</section>
+
+
+<section class="architecture fade-section" id="architecture">
+  <div class="container">
+    <div class="arch-layout">
+
+      <div class="arch-text">
+        <h2>Your stack<br>already has most<br>of this.</h2>
+        <p>In most regulated organisations the AI stack is already assembled from third-party tools of different vendors: governance tools, observability platforms, LLM providers, identity systems. Each layer lives with its own vendor.</p>
+        <p>What is missing is the layer that turns this heterogeneous stack into a regulatorily usable whole — the <b>knot-resolver</b> that produces the single audit package a regulator can verify, without replacing any of your existing investments.</p>
+      </div>
+
+      <div class="arch-diagram">
+        <div class="arch-frame-label">Regulatory Frame</div>
+        <div class="arch-reg-bracket">
+          <div class="arch-reg-items">
+            <span>EU AI Act</span><span>BAIT</span><span>MaRisk</span>
+            <span>DORA</span><span>NIS2</span><span>BSI IT-Grundschutz</span><span>GDPR</span>
+          </div>
+          <div class="arch-reg-note">Defines what must be auditable</div>
+        </div>
+
+        <div class="arch-arrow-down">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+        </div>
+
+        <div class="arch-layers">
+          <div class="arch-layer">
+            <div class="arch-layer-name">Identity &amp; Access</div>
+            <div class="arch-layer-desc">Agent authorization</div>
+            <div class="arch-layer-tools"><span class="arch-tool">SPIFFE</span><span class="arch-tool">Keycloak</span><span class="arch-tool">Entra</span></div>
+          </div>
+          <div class="arch-layer">
+            <div class="arch-layer-name">Governance</div>
+            <div class="arch-layer-desc">Policy enforcement</div>
+            <div class="arch-layer-tools"><span class="arch-tool">Microsoft AGT</span><span class="arch-tool">OPA</span><span class="arch-tool">Cedar</span></div>
+          </div>
+          <div class="arch-layer sentinel">
+            <div class="arch-layer-name">Evidence <span class="runtime-tag">Runtime</span></div>
+            <div class="arch-layer-desc">Signed audit packages</div>
+            <div class="arch-layer-tools"><span class="arch-tool">Sentinel</span></div>
+          </div>
+          <div class="arch-layer">
+            <div class="arch-layer-name">Observability</div>
+            <div class="arch-layer-desc">Trace &amp; telemetry</div>
+            <div class="arch-layer-tools"><span class="arch-tool">Langfuse</span><span class="arch-tool">OpenTelemetry</span></div>
+          </div>
+          <div class="arch-layer">
+            <div class="arch-layer-name">LLM &amp; Agent</div>
+            <div class="arch-layer-desc">Execution layer</div>
+            <div class="arch-layer-tools"><span class="arch-tool">Anthropic</span><span class="arch-tool">Mistral</span><span class="arch-tool">LangChain</span></div>
+          </div>
+        </div>
+
+        <div class="arch-gap-caption">
+          Layers 1, 2, 4, 5 are typically third-party in most enterprises. Layer 3 is the gap. <b>Sentinel is not a new bottleneck — it is the knot-resolver that holds the heterogeneous third-party stack together, regulatorily.</b>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<section class="quickstart fade-section" id="quickstart">
+  <div class="container">
+    <div class="quickstart-head">
+      <div class="quickstart-eyebrow">Start in 2 minutes</div>
+      <h2 class="quickstart-title">Four commands.<br>Zero accounts. Zero network.</h2>
+      <p class="quickstart-lede">Scaffold a local pilot, run ten decisions through <code style="font-family:'JetBrains Mono',monospace;font-size:14px;background:var(--bg-subtle);padding:2px 6px;border-radius:3px">@sentinel.trace</code>, write a signed PDF evidence pack, score yourself against EU AI Act Art. 12.</p>
+    </div>
+
+    <div class="quickstart-grid">
+      <div class="qs-col">
+        <h3>
+          <svg class="icon" viewBox="0 0 24 24"><polyline points="8 17 12 21 16 17"/><line x1="12" x2="12" y1="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
+          Install
+        </h3>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="term-dots"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span></div>
+            <div class="term-title">shell</div>
+          </div>
+          <div class="terminal-body" style="min-height:auto;padding:20px 24px">
+<span class="tline"><span class="t-prompt">$</span> pipx install <span class="t-str">'sentinel-kernel[pdf]'</span></span>
+<span class="tline"><span class="t-ok">  ✓</span> <span class="t-dim">sentinel-kernel installed (Apache 2.0)</span></span>
+<span class="tline"></span>
+<span class="tline"><span class="t-prompt">$</span> sentinel key init</span>
+<span class="tline"><span class="t-ok">  ✓</span> <span class="t-dim">Ed25519 key written to</span> <span class="t-comment">~/.sentinel/ed25519.key</span></span>
+<span class="tline"></span>
+<span class="tline"><span class="t-prompt">$</span> sentinel quickstart</span>
+<span class="tline"><span class="t-ok">  ✓</span> <span class="t-dim">hello_sentinel.py scaffolded</span></span>
+          </div>
+        </div>
+        <div class="qs-caption">
+          The <code>[pdf]</code> extra pulls <code>reportlab</code>, <code>cryptography</code>, and <code>pyhanko</code> — everything needed for signed PDF evidence packs. The bare install still works; <code>evidence-pack</code> tells you what to add.
+        </div>
+      </div>
+
+      <div class="qs-col">
+        <h3>
+          <svg class="icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          Wrap one function
+        </h3>
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="term-dots"><span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span></div>
+            <div class="term-title">hello_sentinel.py</div>
+          </div>
+          <div class="terminal-body" style="min-height:auto;padding:20px 24px">
+<span class="tline"><span class="t-key">from</span> sentinel <span class="t-key">import</span> <span class="t-ink">Sentinel</span></span>
+<span class="tline"></span>
+<span class="tline"><span class="t-ink">sentinel</span> <span class="t-ink">=</span> <span class="t-ink">Sentinel</span>()</span>
+<span class="tline"></span>
+<span class="tline"><span class="t-dim">@</span><span class="t-ink">sentinel</span>.<span class="t-ink">trace</span></span>
+<span class="tline"><span class="t-key">async def</span> <span class="t-ink">approve</span>(request: <span class="t-key">dict</span>) -&gt; <span class="t-key">dict</span>:</span>
+<span class="tline">    <span class="t-key">return</span> <span class="t-key">await</span> your_agent.run(request)</span>
+<span class="tline"></span>
+<span class="tline"><span class="t-comment"># Every call is now a signed, verifiable attestation.</span></span>
+          </div>
+        </div>
+        <div class="qs-caption">
+          One decorator. One line. Your LLM, ML classifier, rule engine, or robot control loop — Sentinel does not care what the function does, only that its decisions can be recomputed and verified later.
         </div>
       </div>
     </div>
@@ -1314,142 +1538,434 @@ att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
 </section>
 
 
-<section class="block">
+<section class="compliance-articles fade-section" id="compliance">
   <div class="container">
-    <h2>Roadmap</h2>
-    <p class="sub">Phase 1 done. Phase 2 in motion. Phase 3 designed. Every version reflects shipped code, not plans.</p>
+    <div class="compliance-head">
+      <div class="compliance-eyebrow">EU AI Act Coverage</div>
+      <h2 class="compliance-title">What Sentinel covers.<br>What it does not.</h2>
+      <p class="compliance-lede">Sentinel automates EU AI Act Art. 12/13/14/17 — the logging, transparency, oversight, and quality-management obligations. Other articles require organisational action. We mark the split honestly.</p>
+    </div>
+
+    <div class="compliance-table">
+      <div class="ct-head"><span>Article</span><span>Requirement</span><span style="text-align:right">Sentinel</span></div>
+      <div class="ct-row"><span class="ct-article">Art. 12</span><span class="ct-req">Automatic tamper-resistant logging</span><span class="ct-status full">Full</span></div>
+      <div class="ct-row"><span class="ct-article">Art. 13</span><span class="ct-req">Transparency to deployer / user</span><span class="ct-status full">Full</span></div>
+      <div class="ct-row"><span class="ct-article">Art. 14</span><span class="ct-req">Human oversight (kill switch)</span><span class="ct-status full">Full</span></div>
+      <div class="ct-row"><span class="ct-article">Art. 17</span><span class="ct-req">Quality-management traceability</span><span class="ct-status full">Full</span></div>
+      <div class="ct-row"><span class="ct-article">Art. 9</span><span class="ct-req">Risk management</span><span class="ct-status partial">Partial</span></div>
+      <div class="ct-row"><span class="ct-article">Art. 16</span><span class="ct-req">Provider obligations</span><span class="ct-status partial">Partial</span></div>
+      <div class="ct-row"><span class="ct-article">Art. 26</span><span class="ct-req">Deployer obligations</span><span class="ct-status partial">Partial</span></div>
+      <div class="ct-row"><span class="ct-article">Art. 72</span><span class="ct-req">GPAI post-market monitoring</span><span class="ct-status conditional">Conditional</span></div>
+      <div class="ct-row"><span class="ct-article">Art. 11</span><span class="ct-req">Technical documentation (Annex IV)</span><span class="ct-status human">Human action</span></div>
+      <div class="ct-row"><span class="ct-article">Art. 10</span><span class="ct-req">Data governance</span><span class="ct-status human">Human action</span></div>
+      <div class="ct-row"><span class="ct-article">Art. 15</span><span class="ct-req">Accuracy &amp; robustness</span><span class="ct-status human">Human action</span></div>
+    </div>
+
+    <div class="compliance-note">
+      <strong>Sentinel never overclaims.</strong> Articles requiring human action are clearly marked. Partial articles are those where Sentinel produces the evidence but an organisational deliverable must still be written. Run <code style="font-family:'JetBrains Mono',monospace;font-size:13px;background:var(--bg-subtle);padding:2px 6px;border-radius:3px">sentinel audit-gap</code> to see the exact split for your setup.
+    </div>
+  </div>
+</section>
+
+
+<section class="industry fade-section" id="industry">
+  <div class="container">
+    <div class="industry-head">
+      <div class="industry-eyebrow">Built for regulated industries</div>
+      <h2 class="industry-title">Where the<br>deadline bites first.</h2>
+      <p class="industry-lede">EU AI Act enforcement applies to decisions that touch rights, access to services, safety, or meaningful financial outcomes. The architecture is technology-agnostic; the sectors below are where procurement is already active.</p>
+    </div>
+
+    <div class="industry-grid">
+      <div class="industry-card"><h4>Defence &amp; aerospace</h4><p>Procurement, logistics, dual-use assessment. Air-gapped and classified deployments with VS-NfD path.</p><div class="industry-card-tags"><span class="industry-card-tag">EU AI Act</span><span class="industry-card-tag">BSI IT-Grundschutz</span><span class="industry-card-tag">VS-NfD</span></div></div>
+      <div class="industry-card"><h4>Financial services</h4><p>Credit decisioning, fraud scoring, AML, transaction approval. DORA-aligned logging, BaFin BAIT evidence.</p><div class="industry-card-tags"><span class="industry-card-tag">EU AI Act</span><span class="industry-card-tag">DORA</span><span class="industry-card-tag">BaFin BAIT</span><span class="industry-card-tag">MaRisk</span></div></div>
+      <div class="industry-card"><h4>Insurance</h4><p>Underwriting, claims triage, pricing. GDPR Art. 22 explainable decision records for regulated customer outcomes.</p><div class="industry-card-tags"><span class="industry-card-tag">EU AI Act</span><span class="industry-card-tag">GDPR Art. 22</span><span class="industry-card-tag">Solvency II</span></div></div>
+      <div class="industry-card"><h4>Public sector &amp; KRITIS</h4><p>Benefit eligibility, permit approval, critical-infrastructure AI. Statutory transparency under NIS2 and sector law.</p><div class="industry-card-tags"><span class="industry-card-tag">EU AI Act</span><span class="industry-card-tag">NIS2</span><span class="industry-card-tag">E-Government law</span></div></div>
+      <div class="industry-card"><h4>Healthcare</h4><p>Clinical decision support, diagnostic triage, prior-authorisation. Evidence suitable for medical-device auditors.</p><div class="industry-card-tags"><span class="industry-card-tag">EU AI Act</span><span class="industry-card-tag">GDPR</span><span class="industry-card-tag">MDR</span></div></div>
+      <div class="industry-card"><h4>Industrial manufacturing</h4><p>Quality control, predictive maintenance, robotic decisioning. Standards-aligned retention across plant lifetimes.</p><div class="industry-card-tags"><span class="industry-card-tag">EU AI Act</span><span class="industry-card-tag">ISO 42001</span><span class="industry-card-tag">IEC 62443</span></div></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="content-blocks">
+
+  <div class="cblock fade-section">
+    <div class="container">
+      <div class="cblock-grid">
+        <div class="cblock-left">
+          <div class="cblock-eyebrow">Runtime</div>
+          <h3>Evidence at runtime, not after the fact</h3>
+        </div>
+        <div>
+          <p class="cblock-body">Sentinel wraps each agent decision as it happens. Input, policy, output, and jurisdiction are bound into a signed attestation before the next call begins. No log collection, no post-hoc reconstruction, no manual mapping under audit pressure.</p>
+          <div class="cblock-bullets">
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+              <div class="cbullet-text"><b>Capture</b> input hash, output hash, policy version, jurisdiction at the moment of decision</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div>
+              <div class="cbullet-text"><b>Bind</b> every decision to a reproducible attestation with Ed25519 integrity</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+              <div class="cbullet-text"><b>Decorate</b> existing agents — LangChain, CrewAI, AutoGen — with one line</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div>
+              <div class="cbullet-text"><b>Sub-millisecond</b> overhead per attestation on commodity hardware</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cblock fade-section">
+    <div class="container">
+      <div class="cblock-grid">
+        <div class="cblock-left">
+          <div class="cblock-eyebrow">Independent</div>
+          <h3>Verifiable without operator trust</h3>
+        </div>
+        <div>
+          <p class="cblock-body">An auditor can only trust evidence as far as they trust whoever produced it. Sentinel runs as an independent layer — not owned by the operator, not owned by the LLM vendor, not owned by the cloud provider. The signature chain holds whether anyone trusts you or not.</p>
+          <div class="cblock-bullets">
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
+              <div class="cbullet-text"><b>Vendor-neutral</b> — structurally independent of governance, observability, and LLM layers</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg></div>
+              <div class="cbullet-text"><b>EU-jurisdiction native</b> — on-premise deployment, no CLOUD-Act exposure</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg></div>
+              <div class="cbullet-text"><b>Audit integrity</b> — evidence operated and evaluated by different parties, no structural conflict of interest</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg></div>
+              <div class="cbullet-text"><b>Apache 2.0, hash-verified</b> — inspect the kernel, recompute any attestation, own your evidence</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cblock fade-section">
+    <div class="container">
+      <div class="cblock-grid">
+        <div class="cblock-left">
+          <div class="cblock-eyebrow">Integration</div>
+          <h3>Built for your existing stack</h3>
+        </div>
+        <div>
+          <p class="cblock-body">Sentinel does not replace your governance tools, observability platform, or LLM provider. It sits between them — receiving policy results, enriching with traces, emitting signed evidence. Bidirectional by design: allow signals feed innovation, kill signals gate risk.</p>
+          <div class="cblock-bullets">
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg></div>
+              <div class="cbullet-text"><b>Python-native</b> kernel with OpenTelemetry-compatible span export</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
+              <div class="cbullet-text"><b>Langfuse, OpenTelemetry, Prometheus</b> — trace ingestion hooks ready today</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+              <div class="cbullet-text"><b>Microsoft AGT, OPA, Cedar</b> — governance bridges for bidirectional flow</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg></div>
+              <div class="cbullet-text"><b>SIEM, GRC, SOAR</b> — stream events to existing enterprise infrastructure</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cblock fade-section">
+    <div class="container">
+      <div class="cblock-grid">
+        <div class="cblock-left">
+          <div class="cblock-eyebrow">Lifecycle</div>
+          <h3>Stable across LLM generations</h3>
+        </div>
+        <div>
+          <p class="cblock-body">Regulatory retention runs ten years or longer. Your LLMs and agents will not. The evidence layer must outlive every model, every framework, every vendor swap — stable signature format, stable storage interface, stable regulatory mapping.</p>
+          <div class="cblock-bullets">
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg></div>
+              <div class="cbullet-text"><b>10-year retention</b> by default — EU AI Act Article 17 compliant</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg></div>
+              <div class="cbullet-text"><b>Storage-agnostic</b> — SQLite, PostgreSQL, S3-compatible, filesystem</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg></div>
+              <div class="cbullet-text"><b>Air-gapped deployment</b> — evidence stays inside your security boundary</div>
+            </div>
+            <div class="cbullet">
+              <div class="cbullet-icon-wrap"><svg class="icon" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M17 12h-2l-2 5-2-10-2 5H7"/></svg></div>
+              <div class="cbullet-text"><b>BSI IT-Grundschutz</b> preparation and VS-NfD-capable deployment path</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<section class="roadmap fade-section" id="roadmap">
+  <div class="container">
+    <div class="roadmap-head">
+      <div class="roadmap-eyebrow">Roadmap</div>
+      <h2 class="roadmap-title">Primitives today.<br>Ecosystem with the community.</h2>
+      <p class="roadmap-lede">We are building Sentinel the way HashiCorp built Terraform: primitive hooks in the kernel, the ecosystem grows through the community. Three stages, honestly labelled.</p>
+    </div>
 
     <div class="roadmap-grid">
-      <div class="roadmap-col done">
-        <h3>Trace · Policy · Evidence · v3.0–v3.3 ✓</h3>
-        <ul class="roadmap-list">
-          <li><span class="tag">trace</span> Tamper-resistant decision records</li>
-          <li><span class="tag">policy</span> Policy-as-code · kill switch (Art. 14)</li>
-          <li><span class="tag">evid</span> Signed PDF evidence packs · CI check</li>
-          <li><span class="tag">v3.2</span> Privacy by default (hash-only storage)</li>
-          <li><span class="tag">v3.3</span> Four-module refactor (Trace · Policy · Evidence · Federation)</li>
-        </ul>
-        <div class="foot">Shipped and verified on main.</div>
+
+      <div class="stage today">
+        <div class="stage-status">Available today</div>
+        <h3 class="stage-title">Kernel primitives</h3>
+        <p class="stage-description">Production-ready, Apache 2.0, <span data-ci="tests">838 tests passing</span>. Install with <code>pip install sentinel-kernel</code>.</p>
+        <div class="stage-items">
+          <span class="stage-item">@sentinel.trace decorator</span>
+          <span class="stage-item">Ed25519 attestations (default)</span>
+          <span class="stage-item">Hash-chain linkage</span>
+          <span class="stage-item">PAdES PDF signing</span>
+          <span class="stage-item">RFC-3161 timestamping</span>
+          <span class="stage-item">LangChain · CrewAI · AutoGen</span>
+          <span class="stage-item">SQLite · PostgreSQL · Filesystem</span>
+          <span class="stage-item">OpenTelemetry spans</span>
+          <span class="stage-item">Optional ML-DSA-65 signing (<code>[pqc]</code>)</span>
+        </div>
       </div>
-      <div class="roadmap-col now">
-        <h3>Certify · 2026 →</h3>
-        <ul class="roadmap-list">
-          <li><span class="tag">v3.x</span> LF Europe stewardship application</li>
-          <li><span class="tag">v3.x</span> BSI IT-Grundschutz formal assessment</li>
-          <li><span class="tag">v3.x</span> First lighthouse design-partner deployments</li>
-        </ul>
-        <div class="foot">Issues #19, #20 open.</div>
+
+      <div class="stage soon">
+        <div class="stage-status">Next months</div>
+        <h3 class="stage-title">Ecosystem bridges</h3>
+        <p class="stage-description">Bidirectional integrations with established governance and observability players. Actively in development.</p>
+        <div class="stage-items">
+          <span class="stage-item">MCP gateway integration</span>
+          <span class="stage-item">Microsoft AGT bridge</span>
+          <span class="stage-item">Langfuse ingestion hooks</span>
+          <span class="stage-item">OPA decision log</span>
+          <span class="stage-item">Cedar policy binding</span>
+          <span class="stage-item">Redis · S3-compatible storage</span>
+        </div>
       </div>
-      <div class="roadmap-col future">
-        <h3>Federation · Ecosystem · 2027+</h3>
-        <ul class="roadmap-list">
-          <li><span class="tag">v4.0</span> Federation module — multi-institution aggregation (RFC-002 planned)</li>
-          <li><span class="tag">pipe</span> EU-sovereign build pipeline (Gitea/Forgejo)</li>
-          <li><span class="tag">pkg</span> EU package registry instead of PyPI</li>
-          <li><span class="tag">sign</span> Signed build artefacts, keys on EU hardware</li>
-        </ul>
-        <div class="foot">Close the last acknowledged gap in the supply chain.</div>
+
+      <div class="stage future">
+        <div class="stage-status">With the community</div>
+        <h3 class="stage-title">Enterprise ecosystem</h3>
+        <p class="stage-description">The devil sits in the details of complex enterprise landscapes. These integrations we build <em>with</em> the community, not <em>for</em> it.</p>
+        <div class="stage-items">
+          <span class="stage-item">SAP agents</span>
+          <span class="stage-item">Salesforce Agentforce</span>
+          <span class="stage-item">Azure AI Foundry</span>
+          <span class="stage-item">Google ADK</span>
+          <span class="stage-item">AWS Bedrock Agents</span>
+          <span class="stage-item">ServiceNow GRC · OneTrust · Archer</span>
+          <span class="stage-item">your use-case</span>
+        </div>
       </div>
+
     </div>
 
-    <div class="roadmap-bar">
-      ⚠ <strong><span id="days-count-3">104</span> days</strong> until EU AI Act Annex III enforcement (2 August 2026)
+    <div class="roadmap-note">
+      <strong>Enterprise AI infrastructure is complex.</strong> Sentinel solves one layer — the regulatory evidence layer. The other layers need other tools, and those tools work best when integrated. We build the hooks for the ecosystem. The community fills them.
     </div>
   </div>
 </section>
 
 
-<section class="block">
+<section class="cta-block">
   <div class="container">
-    <div class="try">
-      <h2>Try it now</h2>
-      <div class="small" style="margin-bottom:0.4rem;opacity:0.8">macOS (recommended)</div>
-      <div><div class="step">$ brew install pipx &amp;&amp; pipx install sentinel-kernel</div></div>
-      <div><div class="step">$ sentinel demo</div></div>
-      <div class="sep">Linux / Docker / CI</div>
-      <div><div class="step">$ pip install sentinel-kernel</div></div>
-      <div><div class="step">$ sentinel demo</div></div>
-      <div class="small">Runs 50 decisions · Kill switch demo · Compliance check<br>
-        Generates a self-contained HTML evidence report · No Docker required</div>
-      <div class="sep">or — full Grafana demo (requires Docker)</div>
-      <pre>git clone https://github.com/sebastianweiss83/sentinel-kernel
-cd sentinel-kernel/demo
-docker compose -f docker-compose.minimal.yml up</pre>
-      <div class="small">Then open http://localhost:3001 (Grafana · admin / sentinel)</div>
+    <div class="cta-eyebrow">Get Started</div>
+    <h2 class="cta-title">Ready to use Sentinel?</h2>
+    <p class="cta-body">Sentinel is onboarding a select group of regulated enterprises building production-grade AI. Request a design-partner conversation, or read the technical documentation to see how Sentinel fits your stack.</p>
+    <div class="cta-buttons">
+      <a href="mailto:sebastian@swentures.com" class="btn-primary">
+        Request a conversation
+        <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+      <a href="https://github.com/sebastianweiss83/sentinel-kernel" class="btn-secondary">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+        View on GitHub
+      </a>
+      <a href="runtime-briefing.html" class="btn-secondary">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Runtime briefing
+      </a>
     </div>
   </div>
 </section>
 
 
-<footer>
+<footer class="footer">
   <div class="container">
-    <div class="links">
-      <a href="https://github.com/sebastianweiss83/sentinel-kernel">GitHub</a>
-      <a href="https://pypi.org/project/sentinel-kernel/">PyPI</a>
-      <a href="report.html">Documentation</a>
-      <a href="https://github.com/sebastianweiss83/sentinel-kernel/blob/main/docs/rfcs/RFC-001-sovereignty-manifest.md">RFC-001</a>
-      <a href="https://github.com/sebastianweiss83/sentinel-kernel/discussions">Discussions</a>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <div class="logo-mark"></div>
+          Sentinel
+        </div>
+        <p class="footer-tagline">Evidence infrastructure for the regulated AI era. Apache 2.0, on-premise, EU-jurisdiction native.</p>
+        <a href="mailto:sebastian@swentures.com" class="footer-contact">sebastian@swentures.com</a>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#journey">Platform</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+          <li><a href="#quickstart">Quickstart</a></li>
+          <li><a href="#compliance">Compliance</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Developer</h4>
+        <ul>
+          <li><a href="https://github.com/sebastianweiss83/sentinel-kernel">GitHub</a></li>
+          <li><a href="https://pypi.org/project/sentinel-kernel">PyPI</a></li>
+          <li><a href="runtime-briefing.html">Runtime briefing</a></li>
+          <li><a href="mailto:sebastian@swentures.com">Contact</a></li>
+        </ul>
+      </div>
     </div>
-    <div><span class="sentinel-mark-sm"><svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='#34d399' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='#34d399' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='#34d399' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='#34d399'/></svg></span>sentinel-kernel · Swentures UG · Apache 2.0</div>
-    <div class="motto">No BSL. No commercial-only features. No relicensing. Ever.</div>
-    <div style="margin-top:1rem;font-size:0.75rem;">Generated from HEAD commit: 2026-04-20</div>
+    <div class="footer-bottom">
+      © 2026 Swentures UG · A Sentinel project
+      <a href="https://github.com/sebastianweiss83/sentinel-kernel/blob/main/LICENSE">LICENSE</a>
+    </div>
   </div>
 </footer>
 
 <script>
-// Copy-to-clipboard install button
 (function() {
-  var btn = document.getElementById('install-btn');
-  if (!btn) return;
-  btn.addEventListener('click', function() {
-    var txt = 'pipx install sentinel-kernel && sentinel demo';
-    if (navigator.clipboard) navigator.clipboard.writeText(txt);
-    var original = btn.innerHTML;
-    btn.innerHTML = '\u2713 Copied!';
-    setTimeout(function() { btn.innerHTML = original; }, 2000);
-  });
-})();
+  const steps = document.querySelectorAll('.step');
+  const panels = document.querySelectorAll('.panel');
+  let currentStep = 2;
 
-// Tab switching
-(function() {
-  var btns = document.querySelectorAll('.tab-btn');
-  btns.forEach(function(b) {
-    b.addEventListener('click', function() {
-      var target = b.getAttribute('data-tab');
-      document.querySelectorAll('.tab-btn').forEach(function(x) { x.classList.remove('active'); });
-      document.querySelectorAll('.tab-panel').forEach(function(x) { x.classList.remove('active'); });
-      b.classList.add('active');
-      document.getElementById('tab-' + target).classList.add('active');
+  function animateJSON() {
+    const lines = document.querySelectorAll('#json-body .jline');
+    lines.forEach((line, i) => {
+      line.classList.remove('shown');
+      setTimeout(() => line.classList.add('shown'), 80 + i * 55);
     });
+  }
+  function animateRows() {
+    const rows = document.querySelectorAll('#audit-rows .dash-row');
+    rows.forEach((row, i) => {
+      row.classList.remove('shown');
+      setTimeout(() => row.classList.add('shown'), 200 + i * 140);
+    });
+  }
+  function animateBinder() {
+    const fields = document.querySelectorAll('#binder-fields .binder-field');
+    fields.forEach((f, i) => {
+      f.classList.remove('shown');
+      setTimeout(() => f.classList.add('shown'), 120 + i * 110);
+    });
+  }
+  function triggerPanel(n) {
+    if (n === 2) animateJSON();
+    if (n === 3) animateRows();
+    if (n === 4) animateBinder();
+  }
+  function activateStep(n) {
+    if (currentStep === n) return;
+    currentStep = n;
+    steps.forEach(s => {
+      const sn = parseInt(s.dataset.step);
+      s.classList.remove('active', 'completed');
+      if (sn < n) s.classList.add('completed');
+      if (sn === n) s.classList.add('active');
+    });
+    panels.forEach(p => {
+      p.classList.toggle('active', parseInt(p.dataset.panel) === n);
+    });
+    triggerPanel(n);
+  }
+  steps.forEach(step => {
+    step.addEventListener('click', () => activateStep(parseInt(step.dataset.step)));
   });
-})();
 
-// Live enforcement countdown (recalculated in browser so it ages gracefully)
-(function() {
-  var d = Math.ceil((new Date('2026-08-02') - new Date()) / 86400000);
-  if (d < 0) d = 0;
-  ['days-count', 'days-count-2', 'days-count-3', 'hero-days'].forEach(function(id) {
-    var el = document.getElementById(id);
-    if (el) el.textContent = d;
-  });
-})();
+  const journey = document.querySelector('.journey');
+  function updateOnScroll() {
+    if (!journey) return;
+    const rect = journey.getBoundingClientRect();
+    const viewportH = window.innerHeight;
+    if (rect.top > viewportH * 0.5) return;
+    if (rect.bottom < viewportH * 0.3) return;
+    const total = rect.height - viewportH * 0.4;
+    const progress = Math.max(0, Math.min(1, (viewportH * 0.3 - rect.top) / total));
+    let activeStep;
+    if (progress < 0.25) activeStep = 1;
+    else if (progress < 0.5) activeStep = 2;
+    else if (progress < 0.75) activeStep = 3;
+    else activeStep = 4;
+    activateStep(activeStep);
+  }
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => { updateOnScroll(); ticking = false; });
+      ticking = true;
+    }
+  }, { passive: true });
 
-// Same-origin data.json refresh — air-gap safe, no external fetch
-(function() {
-  if (!window.fetch) return;
-  fetch('data.json', { cache: 'no-store' }).then(function(r) {
-    return r.ok ? r.json() : null;
-  }).then(function(d) {
-    if (!d) return;
-    var set = function(id, text) {
-      var el = document.getElementById(id);
-      if (el && text != null) el.textContent = text;
-    };
-    if (d.version) set('stat-version', 'v' + d.version);
-    if (d.tests != null)    set('stat-tests', d.tests + ' passing');
-    if (d.coverage)         set('stat-coverage', d.coverage + ' coverage');
-    if (d.smoke)            set('stat-smoke', d.smoke + ' smoke');
-  }).catch(function() { /* offline: static render is already correct */ });
+  const nav = document.getElementById('nav');
+  function updateNav() {
+    if (window.scrollY > 20) nav.classList.add('scrolled');
+    else nav.classList.remove('scrolled');
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
+  const faders = document.querySelectorAll('.fade-section');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+    faders.forEach(el => io.observe(el));
+  } else {
+    faders.forEach(el => el.classList.add('visible'));
+  }
+
+  // CI-authoritative hydration — live values replace any build-time
+  // defaults. Air-gapped builds skip the fetch silently.
+  try {
+    fetch('data.json', { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : null)
+      .then(data => {
+        if (!data) return;
+        const setText = (sel, txt) => {
+          document.querySelectorAll(sel).forEach(el => { el.textContent = txt; });
+        };
+        if (data.tests) setText('[data-ci=tests]', data.tests + ' tests passing');
+        if (data.version) setText('[data-ci=version]', 'v' + data.version);
+        if (data.coverage) setText('[data-ci=coverage]', data.coverage + ' branch coverage');
+        if (typeof data.days_to_enforcement === 'number') {
+          setText('[data-ci=days]', String(data.days_to_enforcement));
+        }
+      })
+      .catch(() => { /* offline — silent */ });
+  } catch (e) { /* no fetch — silent */ }
+
+  activateStep(2);
+  triggerPanel(2);
 })();
 </script>
 </body>
