@@ -53,41 +53,55 @@ Each stage is idempotent and side-effect-free on the underlying
 trace store. Evidence packs do not mutate traces; they
 snapshot a window.
 
-## Signatures — HMAC default, ML-DSA-65 optional for ten-plus-year retention
+## Signatures — unsigned by default, ML-DSA-65 optional for long-retention archival
 
-Sentinel ships with three signing modes, chosen by deployment
-posture rather than by product tier.
+Sentinel ships one signing class today, activated at the
+operator's discretion. The default is unsigned traces protected
+by SHA-256 content hashing.
 
 ### Default — unsigned traces
 
-The zero-config `Sentinel()` emits unsigned traces. The SHA-256
-hash chain on `inputs_hash` and `output_hash` proves append-only
-integrity; it does not authenticate the producer. This is
+The zero-config `Sentinel()` emits unsigned traces. Each trace
+carries independent SHA-256 digests over inputs and outputs
+(`inputs_hash`, `output_hash`) — these prove per-trace content
+integrity, verifiable offline by hash recomputation. This is
 appropriate for development and for deployments where trust in
 the storage operator is already established.
 
-### Ephemeral signer — single-process tamper detection
+Note the precise security property: SHA-256 content hashing
+proves *integrity* against modification, but does not
+*authenticate the producer*. An actor with write access to the
+trace store can edit content and recompute hashes. Producer
+authenticity and non-repudiation require the opt-in signing
+path below.
 
-`Sentinel(signer=EphemeralSigner())` generates a per-process
-keypair. Traces written during the process lifetime can be
-verified against the in-memory public key. Useful for intra-
-process audit; not verifiable across process restarts by
-design.
+### Opt-in — `QuantumSafeSigner` with ML-DSA-65 (FIPS 204)
 
-### Persistent signer — operator-controlled keypair
+```python
+from sentinel import Sentinel
+from sentinel.crypto import QuantumSafeSigner
 
-`Sentinel(signer=PersistentSigner(key_path=..., public_key_path=...))`
-loads a long-lived keypair the operator generated offline. Two
-algorithms are supported via the `sentinel-kernel[pqc]` extra:
+signer = QuantumSafeSigner(
+    key_path="/etc/sentinel/keys/signing.key",
+    public_key_path="/etc/sentinel/keys/signing.pub",
+)
+sentinel = Sentinel(signer=signer)
+```
 
-- **ECDSA-P256** — traditional elliptic-curve signing.
-  Widely-deployed, well-understood, no `[pqc]` extra required
-  for verification-only scenarios.
-- **ML-DSA-65 (FIPS 204)** — NIST-standardised lattice-based
-  post-quantum signature. BSI TR-02102-1 recommended for
-  long-term cryptographic integrity. Requires `sentinel-kernel[pqc]`
-  (liboqs backend). Keys stay operator-side; all operations run
-  in-process; no external service, no network call.
+`QuantumSafeSigner` loads a long-lived keypair the operator
+generated offline via `sentinel keygen`. The default algorithm
+is **ML-DSA-65** (FIPS 204, NIST post-quantum standard, BSI
+TR-02102-1 recommended). `ML-DSA-44` and `ML-DSA-87` are also
+supported via the `algorithm` constructor argument. Requires the
+`sentinel-kernel[pqc]` extra (liboqs backend). Keys stay
+operator-side; all operations run in-process; no external
+service, no network call.
+
+When a signer is configured, every trace acquires a
+`signature` field (e.g. `"ML-DSA-65:<base64>"`) and a
+`signature_algorithm` field. Signing failure is non-fatal —
+storage always succeeds; a crypto error is captured as a trace
+tag, not raised.
 
 ML-DSA-65 is the correct choice when:
 
@@ -98,10 +112,20 @@ ML-DSA-65 is the correct choice when:
 - Quantum-era adversary models are part of the operator's
   threat matrix.
 
-For most deployments with retention under ten years, ECDSA-P256
-is sufficient. Sentinel does not lead with ML-DSA-65 as a
-headline feature — it is a footnote for the audience that asks
-for it specifically.
+Sentinel does not lead with ML-DSA-65 as a headline feature —
+it is available for the audience that asks for it specifically.
+
+### Bring-your-own signer
+
+The signer protocol is minimal: a `sign(data: bytes) -> str`
+method (returning `"{algorithm}:{base64(sig)}"`), a
+`verify(data: bytes, signature: str) -> bool` method, and an
+`algorithm` attribute. Operators who need ECDSA, Ed25519, RSA,
+or HSM-backed signing can implement this protocol and pass the
+instance to `Sentinel(signer=...)`. See
+[docs/security-posture.md](security-posture.md) for an HSM
+adapter sketch — Sentinel does not ship an HSM abstraction
+today.
 
 ## RFC-3161 timestamping via EU Timestamping Authorities
 
@@ -166,9 +190,12 @@ addresses requirements that regulated enterprise buyers
 actually have:
 
 - **HSM integration** for key material — AWS CloudHSM, Azure
-  Key Vault, Thales PKCS#11, Utimaco, Futurex. The
-  `HSMSigner` abstraction is documented in
-  [docs/security-posture.md](security-posture.md).
+  Key Vault, Thales PKCS#11, Utimaco, Futurex. Sentinel does
+  not ship an HSM abstraction today; the operator-side adapter
+  pattern is sketched in
+  [docs/security-posture.md](security-posture.md). A first-class
+  `HSMSigner` class is a commercial-tier roadmap item, not yet
+  shipped.
 - **Multi-party signing** for critical decisions, with quorum
   policies configured per evidence pack.
 - **Legal-hold management** — retention-window overrides for

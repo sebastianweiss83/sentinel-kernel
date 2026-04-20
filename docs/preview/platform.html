@@ -918,7 +918,8 @@
     <div class="trust-row">
       <div class="trust-item"><span class="trust-dot"></span>Apache 2.0</div>
       <div class="trust-item"><span class="trust-dot"></span>773 tests passing</div>
-      <div class="trust-item"><span class="trust-dot"></span>Ed25519 signatures</div>
+      <div class="trust-item"><span class="trust-dot"></span>SHA-256 content hashing</div>
+      <div class="trust-item"><span class="trust-dot"></span>RFC-3161 timestamping</div>
       <div class="trust-item"><span class="trust-dot"></span>Air-gapped deployable</div>
       <div class="trust-item"><span class="trust-dot"></span>BSI IT-Grundschutz preparation</div>
     </div>
@@ -955,7 +956,7 @@
               <div class="step-title">Attest</div>
               <div class="step-subtitle">Cryptographic signing</div>
               <div class="step-bullets">
-                <div class="bullet"><span><b>Sign</b> every decision with an Ed25519 key</span></div>
+                <div class="bullet"><span><b>Hash</b> every decision into a tamper-evident attestation</span></div>
                 <div class="bullet"><span><b>Chain</b> policy version, input hash, output hash</span></div>
                 <div class="bullet"><span><b>Verify</b> independently without operator trust</span></div>
               </div>
@@ -1032,10 +1033,10 @@
                   <span class="term-dot"></span><span class="term-dot"></span><span class="term-dot"></span>
                 </div>
                 <div class="term-title">att_9f2e8b1a.json</div>
-                <div class="term-status">signed</div>
+                <div class="term-status">hash-verified</div>
               </div>
               <div class="json-body" id="json-body">
-<span class="jline"><span class="j-comment">// Signed attestation · Ed25519</span></span>
+<span class="jline"><span class="j-comment">// Tamper-evident attestation · SHA-256</span></span>
 <span class="jline"><span class="j-punct">{</span></span>
 <span class="jline">  <span class="j-key">"attestation_id"</span><span class="j-punct">:</span> <span class="j-str">"att_9f2e8b1a4c7d"</span><span class="j-punct">,</span></span>
 <span class="jline">  <span class="j-key">"timestamp"</span><span class="j-punct">:</span> <span class="j-str">"2026-04-20T14:03:22.847Z"</span><span class="j-punct">,</span></span>
@@ -1048,10 +1049,9 @@
 <span class="jline">    <span class="j-key">"result"</span><span class="j-punct">:</span> <span class="j-str">"APPROVED"</span><span class="j-punct">,</span></span>
 <span class="jline">    <span class="j-key">"confidence"</span><span class="j-punct">:</span> <span class="j-num">0.94</span></span>
 <span class="jline">  <span class="j-punct">},</span></span>
-<span class="jline">  <span class="j-key">"signature"</span><span class="j-punct">:</span> <span class="j-punct">{</span></span>
-<span class="jline">    <span class="j-key">"algorithm"</span><span class="j-punct">:</span> <span class="j-str">"Ed25519"</span><span class="j-punct">,</span></span>
-<span class="jline">    <span class="j-key">"signer"</span><span class="j-punct">:</span> <span class="j-str">"sentinel-kernel-v3.3.1"</span><span class="j-punct">,</span></span>
-<span class="jline">    <span class="j-key">"value"</span><span class="j-punct">:</span> <span class="j-str">"a8f3..9c7d"</span></span>
+<span class="jline">  <span class="j-key">"integrity"</span><span class="j-punct">:</span> <span class="j-punct">{</span></span>
+<span class="jline">    <span class="j-key">"algorithm"</span><span class="j-punct">:</span> <span class="j-str">"SHA-256"</span><span class="j-punct">,</span></span>
+<span class="jline">    <span class="j-key">"hash"</span><span class="j-punct">:</span> <span class="j-str">"sha256:a8f3..9c7d"</span></span>
 <span class="jline">  <span class="j-punct">}</span></span>
 <span class="jline"><span class="j-punct">}</span></span>
               </div>
@@ -1060,8 +1060,8 @@
               <div class="check">
                 <svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
               </div>
-              <div class="verify-text">signature valid · independently verifiable</div>
-              <div class="verify-cmd">sentinel verify att_9f2e</div>
+              <div class="verify-text">hash verified · independently recomputable</div>
+              <div class="verify-cmd">sentinel attestation verify att_9f2e</div>
             </div>
           </div>
 
@@ -1185,8 +1185,8 @@
                   <div class="binder-seal-icon">
                     <svg class="icon" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
                   </div>
-                  <div class="binder-seal-text">Signature chain independently verified · Ed25519</div>
-                  <div class="binder-seal-cmd">sentinel verify att_9f2e</div>
+                  <div class="binder-seal-text">Attestation hash independently verified · SHA-256</div>
+                  <div class="binder-seal-cmd">sentinel attestation verify att_9f2e</div>
                 </div>
               </div>
             </div>
@@ -1367,7 +1367,7 @@
               <div class="cbullet-icon-wrap">
                 <svg class="icon" viewBox="0 0 24 24"><path d="m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
               </div>
-              <div class="cbullet-text"><b>Apache 2.0, Ed25519-signed</b> — inspect the kernel, verify any attestation, own your evidence</div>
+              <div class="cbullet-text"><b>Apache 2.0, hash-verified</b> — inspect the kernel, recompute any attestation, own your evidence</div>
             </div>
           </div>
         </div>
@@ -1478,7 +1478,9 @@
           <span class="stage-item">CrewAI integration</span>
           <span class="stage-item">AutoGen integration</span>
           <span class="stage-item">SQLite · PostgreSQL · Filesystem</span>
-          <span class="stage-item">Ed25519 signatures</span>
+          <span class="stage-item">SHA-256 content hashing</span>
+          <span class="stage-item">RFC-3161 timestamping (EU-sovereign TSA allowlist)</span>
+          <span class="stage-item">Optional ML-DSA-65 signing (<code>[pqc]</code> extra)</span>
         </div>
       </div>
 

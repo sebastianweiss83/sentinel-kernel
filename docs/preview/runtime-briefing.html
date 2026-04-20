@@ -993,7 +993,7 @@ footer.btm a:hover { color: var(--text-2); }
         <tr>
           <td class="num">4</td>
           <td class="strong">Attestation</td>
-          <td>A self-contained JSON document with a SHA-256 digest over canonical content. Verifiable offline with <code>sentinel attestation verify</code>. No external service, no phone-home.</td>
+          <td>A self-contained JSON document with a SHA-256 digest over canonical content. Verifiable offline with <code>sentinel attestation verify</code>. Optional RFC-3161 countersignature from an EU-sovereign TSA (DFN-CERT, D-Trust) when non-repudiation is required. No external service required by default.</td>
           <td class="mono">generate_attestation(…)</td>
         </tr>
         <tr>

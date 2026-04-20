@@ -62,30 +62,37 @@ during steps 1–3.
 
 ## Key management
 
-- **Default (no signer).** Traces are unsigned. The hash chain proves
-  append-only integrity; it does not authenticate the producer.
-- **Ephemeral signer (not recommended for production).** Generated
-  per-process. Cannot be verified across process restarts. Useful
-  only for intra-process tamper detection.
-- **Persistent signer (recommended).** Generate once with
-  `sentinel keygen`, store the private key outside the repo (HSM,
-  CI-secret store, filesystem with mode 600), pass the key path to
-  the `Sentinel(signer=...)` constructor.
+- **Default (no signer).** Traces are unsigned by default. Per-trace
+  SHA-256 content hashes combined with append-only storage provide
+  tamper-evidence. This proves integrity against modification but does
+  not authenticate the producer.
+- **Persistent signer (recommended for non-repudiation).** Generate once
+  with `sentinel keygen`, store the private key outside the repo (HSM,
+  CI-secret store, filesystem with mode 600), pass the key path to the
+  `Sentinel(signer=...)` constructor.
 
 Algorithm default: `ML-DSA-65` (FIPS 204, BSI TR-02102-1 recommended,
 post-quantum safe). Requires `sentinel-kernel[pqc]` extra
 (liboqs backend).
 
-### HSM integration pattern
+### Custom signer pattern (e.g. HSM-backed)
 
-Sentinel does not ship an HSM abstraction today. The operator-side
-pattern is:
+Sentinel does not ship an HSM abstraction today. Operators who need
+HSM-backed signing, or any algorithm other than ML-DSA-{44,65,87},
+implement the minimal signer protocol themselves and pass the instance
+to `Sentinel(signer=...)`. A sketch:
 
 ```python
 from sentinel import Sentinel
 
-class HSMSigner:
-    """Thin adapter — HSM vendor library goes here."""
+class CustomSigner:
+    """Illustrative adapter — operator-authored, not shipped by Sentinel.
+
+    Implements the three-member signer protocol: ``sign``, ``verify``
+    (omitted here for brevity), and an ``algorithm`` attribute.
+    Replace the body of ``sign`` with your HSM vendor call, KMS call,
+    or classical-algorithm backend of choice.
+    """
     algorithm = "ML-DSA-65"
 
     def __init__(self, hsm_key_handle):
@@ -95,7 +102,7 @@ class HSMSigner:
         raw_sig = hsm_sign(self._handle, payload)   # vendor call
         return f"{self.algorithm}:{b64encode(raw_sig).decode()}"
 
-sentinel = Sentinel(signer=HSMSigner(hsm_key_handle=...))
+sentinel = Sentinel(signer=CustomSigner(hsm_key_handle=...))
 ```
 
 Tested integration examples for AWS CloudHSM, Azure Key Vault, and

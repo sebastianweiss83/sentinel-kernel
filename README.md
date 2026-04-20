@@ -374,7 +374,7 @@ Sentinel's critical path contains no US-owned components. Sovereignty is the con
 |---|---|---|
 | **Trace** | ✓ shipped (v1.0 → v3.3) | `@sentinel.trace`, SQLite / PostgreSQL / Filesystem backends, SHA-256 hashing, hash-only privacy by default |
 | **Policy** | ✓ shipped (v1.0 → v3.3) | Policy-as-code, OPA/Rego + Python rules, kill switch (EU AI Act Art. 14), preflight checks |
-| **Evidence** | ✓ shipped (v3.1 → v3.3) | Signed PDF evidence packs, portable attestations, provability + compliance reports, optional long-term-retention signing |
+| **Evidence** | ✓ shipped (v3.1 → v3.3) | Signed PDF evidence packs, portable attestations, provability + compliance reports, optional long-term-retention signing (ML-DSA-65, FIPS 204), RFC-3161 timestamping via EU-sovereign TSAs (DFN-CERT, D-Trust) |
 | **Federation** | → roadmap | Multi-institution, concern-group, and supervisory aggregation. Architecturally anchored, RFC-002 planned. |
 
 Phase detail in [docs/roadmap.md](docs/roadmap.md).

@@ -20,6 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Cleaned historical v3.3.0 CHANGELOG entry to remove partner
   names.
 
+### Corrected
+
+- v3.3.0 release notes mentioned "HMAC default" and "ECDSA-P256"
+  signing modes. These were documentation errors; only ML-DSA-65
+  (FIPS 204) via the optional `[pqc]` extra is implemented. See
+  internal AUDIT.md for full reconciliation.
+
 ### Notes
 
 - Current published version on PyPI: 3.3.1 (unchanged).
