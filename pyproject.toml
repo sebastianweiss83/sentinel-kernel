@@ -94,13 +94,19 @@ autogen = ["pyautogen>=0.2"]
 # Recommended for every production install; bundled into [pdf] and [dev].
 ed25519 = ["cryptography>=42.0"]
 
+# PAdES PDF signing (pyhanko — MIT, community-maintained, works offline).
+# Makes the "signed PDF evidence pack" claim truthful in the Adobe /
+# Foxit verification sense, not just hash-manifest sense.
+pades = ["pyhanko>=0.22", "cryptography>=42.0"]
+
 # Quantum-safe signing (ML-DSA-65 via liboqs)
 pqc = ["oqs-python>=0.8"]
 
 # PDF evidence pack (reportlab — BSD-3-Clause, UK-based, pure Python)
 # Includes Ed25519 by default since evidence packs are the primary
-# artefact that benefits from cryptographic attestation.
-pdf = ["reportlab>=4.0", "cryptography>=42.0"]
+# artefact that benefits from cryptographic attestation. Includes
+# pyhanko for PAdES signing of the generated PDFs.
+pdf = ["reportlab>=4.0", "cryptography>=42.0", "pyhanko>=0.22"]
 
 # Development — pulls every optional extra so `pytest --cov` hits the
 # happy-path branches of all optional-dep guards.
@@ -125,6 +131,7 @@ dev = [
     "httpx>=0.27",
     "reportlab>=4.0",
     "cryptography>=42.0",
+    "pyhanko>=0.22",
 ]
 
 [project.scripts]

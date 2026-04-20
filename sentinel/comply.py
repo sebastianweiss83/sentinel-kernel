@@ -75,7 +75,68 @@ def export(
     return render_evidence_pdf(sentinel, options, output, manifesto=manifesto)
 
 
+def sign(
+    pdf_path: Union[str, Path],
+    output_path: Union[str, Path] | None = None,
+    *,
+    reason: str = "Sentinel evidence pack signature",
+    location: str = "sentinel-kernel",
+) -> Path:
+    """PAdES-sign an evidence-pack PDF.
+
+    Uses the default self-signed cert at
+    ``~/.sentinel/pdf_cert.pem`` — auto-created on first use. For
+    real-root-trust scenarios build a :class:`PAdESSigner` explicitly
+    via :meth:`PAdESSigner.from_paths`.
+
+    :param pdf_path: the PDF to sign.
+    :param output_path: where to write the signed PDF. Defaults to a
+        sibling path with ``.signed.pdf`` suffix.
+    :returns: the path the signed PDF was written to.
+    :raises RuntimeError: if the PAdES extra is not installed or the
+        default cert path is unwriteable.
+    """
+    from sentinel.crypto.pades_signer import PAdESSigner
+
+    signer = PAdESSigner.from_default_cert()
+    if signer is None:  # pragma: no cover - only hit when extra missing
+        raise RuntimeError(
+            "PAdES signing requires the `[pades]` or `[pdf]` extra. "
+            "Install: pip install 'sentinel-kernel[pdf]'"
+        )
+
+    src = Path(pdf_path).expanduser()
+    if output_path is None:
+        output_path = src.with_suffix(".signed.pdf")
+    return signer.sign_pdf(src, output_path, reason=reason, location=location)
+
+
+def verify(pdf_path: Union[str, Path]) -> "PDFSignatureVerification":
+    """Verify the PAdES signature(s) on a PDF.
+
+    :returns: :class:`PDFSignatureVerification` describing the outcome.
+    :raises RuntimeError: if the PAdES extra is not installed.
+    """
+    from sentinel.crypto.pades_signer import PAdESSigner
+
+    # Construct a throwaway signer just to reuse the class's verify
+    # method — verification only needs the PDF, not a key.
+    signer = PAdESSigner.from_default_cert()
+    if signer is None:  # pragma: no cover - only hit when extra missing
+        raise RuntimeError(
+            "PAdES verification requires the `[pades]` or `[pdf]` extra. "
+            "Install: pip install 'sentinel-kernel[pdf]'"
+        )
+    return signer.verify_pdf(pdf_path)
+
+
+if TYPE_CHECKING:
+    from sentinel.crypto.pades_signer import PDFSignatureVerification
+
+
 __all__ = [
     "EvidencePackOptions",
     "export",
+    "sign",
+    "verify",
 ]

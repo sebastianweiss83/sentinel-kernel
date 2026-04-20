@@ -189,6 +189,38 @@ def main(argv: list[str] | None = None) -> int:
         help="Directory to write signing.key and signing.pub",
     )
 
+    # --- comply — PAdES PDF sign / verify -----------------------------------
+    p_comply = sub.add_parser(
+        "comply",
+        help="PAdES PDF signing and verification (v3.4)",
+    )
+    comply_sub = p_comply.add_subparsers(dest="comply_command")
+    p_comply_sign = comply_sub.add_parser(
+        "sign",
+        help="PAdES-sign an evidence-pack PDF",
+    )
+    p_comply_sign.add_argument("input", help="Path to the PDF to sign")
+    p_comply_sign.add_argument(
+        "--output",
+        default=None,
+        help="Output path (default: <input>.signed.pdf)",
+    )
+    p_comply_sign.add_argument(
+        "--reason",
+        default="Sentinel evidence pack signature",
+        help="PAdES signature reason field",
+    )
+    p_comply_verify = comply_sub.add_parser(
+        "verify",
+        help="Verify the PAdES signature(s) on a PDF",
+    )
+    p_comply_verify.add_argument("input", help="Path to the signed PDF")
+    p_comply_verify.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit JSON output",
+    )
+
     # --- chain — attestation hash-chain verification ------------------------
     p_chain = sub.add_parser(
         "chain",
@@ -432,6 +464,13 @@ def main(argv: list[str] | None = None) -> int:
         if args.chain_command == "verify":
             return _cmd_chain_verify(args)
         p_chain.print_help()
+        return 1
+    if args.command == "comply":
+        if args.comply_command == "sign":
+            return _cmd_comply_sign(args)
+        if args.comply_command == "verify":
+            return _cmd_comply_verify(args)
+        p_comply.print_help()
         return 1
     if args.command == "key":
         if args.key_command == "init":
@@ -1169,6 +1208,51 @@ def _cmd_evidence_pack(args: argparse.Namespace) -> int:
 
 
 _PARSE_ERROR = object()
+
+
+def _cmd_comply_sign(args: argparse.Namespace) -> int:
+    """PAdES-sign a PDF using the default self-signed cert."""
+    from sentinel import comply
+
+    src = Path(args.input).expanduser()
+    if not src.exists():
+        print(f"comply sign: {src} not found", file=sys.stderr)
+        return 2
+
+    output = Path(args.output).expanduser() if args.output else None
+    try:
+        signed = comply.sign(src, output, reason=args.reason)
+    except RuntimeError as exc:  # pragma: no cover - only hit when extra missing
+        print(f"comply sign: {exc}", file=sys.stderr)
+        return 2
+
+    print(f"Wrote signed PDF: {signed}")
+    _print_open_hint(signed)
+    return 0
+
+
+def _cmd_comply_verify(args: argparse.Namespace) -> int:
+    """Verify PAdES signatures on a PDF."""
+    from sentinel import comply
+
+    src = Path(args.input).expanduser()
+    if not src.exists():
+        print(f"comply verify: {src} not found", file=sys.stderr)
+        return 2
+
+    try:
+        result = comply.verify(src)
+    except RuntimeError as exc:  # pragma: no cover - only hit when extra missing
+        print(f"comply verify: {exc}", file=sys.stderr)
+        return 2
+
+    if args.json:
+        print(json.dumps(result.to_dict(), indent=2))
+    else:
+        status = "✓ valid" if result.valid else "✗ invalid"
+        print(f"{status}: {result.detail}")
+
+    return 0 if result.valid else 1
 
 
 def _cmd_chain_verify(args: argparse.Namespace) -> int:
