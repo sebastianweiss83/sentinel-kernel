@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.3.1` |
-| Tests | 773 passing |
+| Tests | 877 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-20 17:01 UTC |
+| Last updated | 2026-04-20 23:05 UTC |
 
 ## Last 5 commits
 
-- `2c7499a` docs(claude): rewrite visual design chapter to V8 canonical
-- `5c6d4a5` feat(positioning): migrate to Evidence infrastructure canonical (v3.4 prep)
-- `8d30cec` Phase 1 doc-hygiene: align cryptographic claims with actual code
-- `96dae3c` Add platform.html marketing page for champion conversations
-- `635cd3c` docs: surface live preview link prominently in README hero
+- `7236ddd` fix(ci): resolve mypy errors in Ed25519 + PAdES signers
+- `e6c82e8` fix(ci): resolve ruff lint errors blocking CI on Phase 3–6 commits
+- `da5ef1d` docs: BLOCKERS.md — document Phase 7/8 state for v3.4.0 Evidence Release
+- `30b5ce0` feat(comply): PAdES PDF signing (v3.4 Evidence Release, Phase 6)
+- `5bd0797` feat(chain): hash-chain across attestations within agent namespace
 
 ## Open issues
 
