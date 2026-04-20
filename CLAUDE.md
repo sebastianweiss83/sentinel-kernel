@@ -200,33 +200,75 @@ If 2 and 3 are both yes: not in the critical path.
 - Breaking changes to the trace schema require an RFC (/project:rfc)
 - Never swallow errors silently — a missing trace is worse than a crash
 
-## Visual design language
+## Visual design language — V8 canonical
 
-The preview page (`scripts/generate_preview.py`) is the design source of
-truth. All tokens are CSS custom properties in the `:root` block.
+The canonical source of truth for Sentinel's visual design is
+`docs/preview/platform.html` (V8). When `scripts/generate_preview.py`
+or any new surface contradicts V8, align the surface to V8, not the
+other way around.
 
-**Tone:** Institutional infrastructure — not AI startup. Think Linear
-plus a German federal agency: institutional confidence, operational
-precision, European restraint. Never name specific partners, customers,
-or agencies in this file (Manifesto Chapter X).
+**Register: Dome-level marketing polish combined with operational
+honesty.** Marketing surfaces (hero, outcomes, content blocks,
+architecture, roadmap, CTA, footer) are warm and confident — cream
+background, deep green accent, generous whitespace. Operational
+widgets (dashboards, terminal demos, code examples, live-state
+panels) remain dark and precise — they are product artefacts, not
+marketing elements. The contrast is intentional: marketing invites,
+operations document.
 
 **Palette:**
-- `--green: #34d399` (emerald-400 — cooler, less "crypto mint")
-- `--green-dim: #059669` (emerald-600)
-- `--bg: #0a0e14`, `--surface: #111827`, `--surface2: #1a2332`
-- Accent is used sparingly: status indicators, prompts, active states
+- `--bg: #FAF7F2` — cream background for public marketing surfaces
+- `--fg: #111111` — absolute black headlines
+- `--accent: #2D5A4F` — deep green (primary accent)
+- `--accent-2: #3A7466` — deep green (softer tint)
+- `--signal-red: #C0392B` — Deny states only
+- `--signal-amber: #D68910` — Review states only
+- Dark-mode operational widgets keep the graphite palette
+  (`--bg-op: #0a0e14`, `--surface-op: #111827`) — these are product
+  artefacts, not the marketing aesthetic
 
-**Shape:** `border-radius: 4-6px` everywhere. No consumer-style pill shapes
-(`999px`) or oversized rounded corners (`12px+`). Sharper = more architectural.
+**Typography:**
+- Inter Tight — display / hero headlines
+- Inter — body
+- JetBrains Mono — code, data, stat pills
+- Letter-spacing: `-0.038em` display, `-0.03em` titles, `-0.005em`
+  body
 
-**Motion:** Near-instant reveals (`0.2s`, no translateY bounce). Information
-appears, it does not perform. Terminal lines stagger at 0.3s intervals max.
+**Spacing:** Generous. 120-160px between major marketing sections.
+40px container padding. 32px card internal padding. The cream
+surface is load-bearing whitespace — do not crowd it.
 
-**Components:** Stat pills are monospace rectangles, not consumer badges.
-Buttons have no hover lift — just colour shift. Kill switch is a solid-state
-circle, no pulse animation.
+**Iconography:** Lucide SVG system. Stroke-width 1.75. 20px default,
+16px small, 24px large. Favour a small, consistent icon set over ad-
+hoc decorative glyphs.
 
-**Rule:** When in doubt, remove decoration. The content is the proof.
+**Motion:** Scroll-triggered reveals via Intersection Observer. Easing
+`cubic-bezier(0.4, 0, 0.2, 1)`. Journey activation follows scroll
+progression. **Forbidden:** decorative pulse, parallax, bounce,
+translateY fly-ins.
+
+**Shape:** 6-14px border-radius. Soft shadows, layered hierarchy. No
+consumer-pill shapes (`999px`) except for navigation pills. No
+oversized rounded corners.
+
+**Components:**
+- Stat pills — monospace rectangles, JetBrains Mono, not consumer
+  badges.
+- Buttons — colour shift on hover, no lift.
+- Kill switch — solid-state circle, no pulse.
+- Journey panels — sticky operational widgets (terminal, JSON
+  attestation, dashboard, PDF binder) that activate as the reader
+  scrolls.
+
+**Retired aesthetics (do not produce):**
+- "Linear + German federal agency" as the sole register — the old
+  CLAUDE.md framing. Retired in v3.4. Use V8's cream + Dome-level
+  polish for marketing surfaces.
+- Consumer-SaaS aesthetics — bright gradients, rounded pills
+  everywhere, emoji-heavy copy.
+
+**Rule:** When in doubt, align to V8. The content is the proof; the
+design carries it without competing with it.
 
 ## Auto-sync contract (non-negotiable)
 
