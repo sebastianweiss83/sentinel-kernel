@@ -189,6 +189,29 @@ def main(argv: list[str] | None = None) -> int:
         help="Directory to write signing.key and signing.pub",
     )
 
+    # --- chain — attestation hash-chain verification ------------------------
+    p_chain = sub.add_parser(
+        "chain",
+        help="Attestation hash-chain verification (v3.4)",
+    )
+    chain_sub = p_chain.add_subparsers(dest="chain_command")
+    p_chain_verify = chain_sub.add_parser(
+        "verify",
+        help="Verify a chain of attestations from a JSON file",
+    )
+    p_chain_verify.add_argument(
+        "input",
+        help=(
+            "Path to a JSON file containing a list of attestations "
+            "(ordered genesis-first)"
+        ),
+    )
+    p_chain_verify.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit JSON output",
+    )
+
     # --- key — Ed25519 default attestation signing --------------------------
     p_ed_key = sub.add_parser(
         "key",
@@ -405,6 +428,11 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     if args.command == "keygen":
         return _cmd_keygen(args)
+    if args.command == "chain":
+        if args.chain_command == "verify":
+            return _cmd_chain_verify(args)
+        p_chain.print_help()
+        return 1
     if args.command == "key":
         if args.key_command == "init":
             return _cmd_key_init(args)
@@ -1141,6 +1169,41 @@ def _cmd_evidence_pack(args: argparse.Namespace) -> int:
 
 
 _PARSE_ERROR = object()
+
+
+def _cmd_chain_verify(args: argparse.Namespace) -> int:
+    """Verify a chain of attestations read from a JSON file."""
+    from sentinel.chain import verify_chain
+
+    try:
+        raw = Path(args.input).expanduser().read_text(encoding="utf-8")
+        attestations = json.loads(raw)
+    except FileNotFoundError:
+        print(f"chain verify: {args.input} not found", file=sys.stderr)
+        return 2
+    except json.JSONDecodeError as exc:
+        print(f"chain verify: invalid JSON — {exc}", file=sys.stderr)
+        return 2
+
+    if not isinstance(attestations, list):
+        print(
+            "chain verify: input must be a JSON list of attestations",
+            file=sys.stderr,
+        )
+        return 2
+
+    result = verify_chain(attestations)
+
+    if args.json:
+        print(json.dumps(result.to_dict(), indent=2))
+    else:
+        status = "✓ verified" if result.verified else "✗ failed"
+        print(f"{status}: {result.detail}")
+        print(f"steps checked: {result.steps_checked}")
+        if result.first_failure_index is not None:
+            print(f"first failure at index: {result.first_failure_index}")
+
+    return 0 if result.verified else 1
 
 
 def _cmd_key_init(args: argparse.Namespace) -> int:

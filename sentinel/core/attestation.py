@@ -66,12 +66,26 @@ def generate_attestation(
     manifesto: Any | None = None,
     compliance_report: Any | None = None,
     title: str = "Sentinel Governance Attestation",
+    *,
+    chain_namespace: "Any | None" = None,
+    previous_hash: str | None = None,
 ) -> dict[str, Any]:
     """Generate a portable self-contained attestation document.
 
     The returned dict contains an ``attestation_hash`` field that is a
     SHA-256 of all other fields (sorted keys). Anyone can recompute
     the hash offline to verify the document is unmodified.
+
+    When ``chain_namespace`` is provided, the envelope is linked into
+    the attestation chain for that namespace: a ``previous_hash``
+    field is populated. If ``previous_hash`` is not explicitly
+    supplied, the deterministic genesis hash of the namespace is used
+    (i.e. this is the first attestation in the chain).
+
+    :param chain_namespace: a :class:`ChainNamespace` or its canonical
+        string form.
+    :param previous_hash: hex digest of the prior attestation in the
+        same chain. Ignored when ``chain_namespace`` is None.
     """
     from sentinel import __version__ as sentinel_version
 
@@ -101,6 +115,19 @@ def generate_attestation(
         "sovereignty_assertions": sovereignty_assertions,
         "kill_switch_active": sentinel.kill_switch_active,
     }
+
+    if chain_namespace is not None:
+        from sentinel.chain.namespace import (
+            _coerce_namespace,
+            compute_genesis_hash,
+        )
+
+        ns_string = _coerce_namespace(chain_namespace)
+        payload["chain_namespace"] = ns_string
+        if previous_hash is None:
+            payload["previous_hash"] = compute_genesis_hash(ns_string)
+        else:
+            payload["previous_hash"] = previous_hash
 
     if manifesto is not None:
         try:
