@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.3.1` |
-| Tests | 734 passing |
+| Tests | 773 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-20 16:07 UTC |
+| Last updated | 2026-04-20 17:01 UTC |
 
 ## Last 5 commits
 
+- `2c7499a` docs(claude): rewrite visual design chapter to V8 canonical
+- `5c6d4a5` feat(positioning): migrate to Evidence infrastructure canonical (v3.4 prep)
 - `8d30cec` Phase 1 doc-hygiene: align cryptographic claims with actual code
 - `96dae3c` Add platform.html marketing page for champion conversations
 - `635cd3c` docs: surface live preview link prominently in README hero
-- `6b39d45` fix: align customer-facing test count to CI authority (773)
-- `617f0a5` chore: cosmetic cleanup — stubs, stale numbers, smoke regex, Chapter X follow-up
 
 ## Open issues
 

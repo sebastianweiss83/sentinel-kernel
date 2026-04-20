@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-20 16:07 UTC_
+_Last generated from HEAD commit: 2026-04-20 17:01 UTC_
 
 ## Version
 
@@ -18,7 +18,7 @@ Evidence infrastructure for the regulated AI era. Trace every decision, attest i
 
 | | |
 |---|---|
-| Tests | 734 passing |
+| Tests | 773 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
 
