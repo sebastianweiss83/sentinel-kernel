@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sentinel-kernel"
-version = "3.3.1"
+version = "3.4.0"
 description = "Evidence infrastructure for the regulated AI era. Trace every decision, attest it cryptographically, audit the record, comply with EU AI Act Art. 12/13/14/17 via a signed evidence pack. Air-gapped, offline-first, Apache 2.0."
 readme = "README.md"
 license = { file = "LICENSE" }

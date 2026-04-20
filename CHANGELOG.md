@@ -7,6 +7,98 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.4.0] — 2026-04-20 — Evidence Release
+
+This release turns V8's canonical trust signals into code. Every
+claim on the homepage is now backed by a runtime primitive with
+tests and a CLI.
+
+### Added
+
+- **Ed25519 signatures as default.** A new
+  `sentinel.crypto.ed25519_signer.Ed25519Signer` wraps
+  `pyca/cryptography`. `Sentinel()` now loads or creates a default
+  key at `~/.sentinel/ed25519.key` (0600) unless the user passes
+  an explicit `signer=None`. Every trace acquires a `signature`
+  and `signature_algorithm` field by default. New CLI:
+  `sentinel key init / path / public`.
+- **Hash-chain across attestations.** `sentinel.chain` introduces
+  `ChainNamespace(agent_id, jurisdiction, policy_family)`, a
+  deterministic `compute_genesis_hash(namespace)`, and a
+  `verify_chain(list[dict])` walker. `generate_attestation()`
+  accepts `chain_namespace=` and `previous_hash=` kwargs. The
+  chain fields participate in `attestation_hash` so tampering
+  breaks self-verify. CLI: `sentinel chain verify <pack.json>`.
+- **PAdES PDF signing.** `sentinel.crypto.pades_signer.PAdESSigner`
+  wraps `pyhanko` to produce PDF Advanced Electronic Signatures
+  on evidence-pack PDFs. Default self-signed Ed25519 cert at
+  `~/.sentinel/pdf_cert.pem`. CLI: `sentinel comply sign/verify`.
+- **RFC-3161 timestamping surfaced** as a first-class trust signal
+  alongside Ed25519 in the homepage and docs. No code change — the
+  existing `RFC3161Timestamper` already shipped in v3.1.
+- **Canonical API verb modules.** `from sentinel import trace,
+  attest, audit, comply` now works. Each module is a narrow,
+  well-documented surface over the underlying primitives. Long-
+  form names (`generate_attestation`, `render_evidence_pdf`) are
+  preserved as aliases. No breaking changes.
+- **Unified V8 homepage.** `scripts/generate_preview.py` rewritten
+  modularly against V8's canonical CSS + JS. One homepage at
+  `docs/preview/index.html` merges V8's marketing register (cream
+  surfaces, Inter Tight, deep green, Lucide icons,
+  scroll-triggered journey) with operational substance (CI-
+  authoritative stat pills, EU AI Act enforcement countdown,
+  quickstart terminals, 11-row compliance articles table, six
+  industry cards). `docs/preview/platform.html` merged into `/`
+  with a meta-refresh redirect.
+
+### Changed
+
+- **Canonical positioning migrated** from "Agility infrastructure
+  for regulated AI" / "Record. Enforce. Prove." to **"Evidence
+  infrastructure for the regulated AI era" / "Trace. Attest.
+  Audit. Comply."** across every non-CHANGELOG surface. Historical
+  CHANGELOG entries preserved.
+- **CLAUDE.md visual-design chapter rewritten** to V8 canonical.
+  The old "Linear + German federal agency" aesthetic is retired
+  for public marketing surfaces; dark operational widgets
+  (terminal, dashboard, code examples) remain as product
+  artefacts by design.
+- `Sentinel.__init__` signer default changed from `None` to a
+  lazily-loaded `Ed25519Signer.from_default_key()`. Explicit
+  `signer=None` preserves the pre-v3.4 behaviour. Set
+  `SENTINEL_DEFAULT_SIGNER=off` to disable globally.
+
+### Dependencies
+
+- New optional extras: `[ed25519]` (`cryptography>=42.0`),
+  `[pades]` (`pyhanko>=0.22` + `cryptography>=42.0`). Both
+  bundled into the `[pdf]` and `[dev]` extras. Zero-hard-deps
+  invariant preserved — bare `pip install sentinel-kernel`
+  continues to work; Ed25519 and PAdES silently stay off until
+  the extras are present. `pyca/cryptography` and `pyhanko` both
+  satisfy the CLAUDE.md dependency gate (not US-incorporated, no
+  runtime network calls, work air-gapped, OSI-approved licences).
+
+### Tests
+
+Suite grew from 734 to **838 passing**, **100 % line + branch
+coverage**, 6 skipped (optional framework-integration paths).
+New test files: `test_verb_modules.py`, `test_ed25519_signer.py`,
+`test_chain.py`, `test_pades_signer.py`.
+
+### Migration
+
+- `from sentinel import generate_attestation, verify_attestation`
+  continues to work; the shorter `attest.generate / attest.verify`
+  are the new canonical names.
+- `render_evidence_pdf` continues to work; the shorter
+  `comply.export` is the new canonical name.
+- Evidence-pack PDFs from v3.4 carry a PAdES signature when the
+  operator ran `sentinel comply sign` on them; unsigned packs
+  remain readable by every consumer.
+
+See also: `RELEASE_NOTES_v3.4.md` for an end-user migration guide.
+
 ### Fixed
 
 - Strategic content consolidation: removed revenue projections,
