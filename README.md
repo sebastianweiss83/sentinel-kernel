@@ -5,8 +5,8 @@
 *One decorator. One command. One signed PDF evidence pack. Runs fully
 offline. No US cloud dependency. Apache 2.0, forever.*
 
-*Agility infrastructure for regulated AI. Move like a startup. Prove
-like a regulated bank.*
+*Evidence infrastructure for the regulated AI era. Move like a startup.
+Prove like a regulated bank.*
 
 **EU AI Act enforcement starts 2 August 2026.**
 
@@ -36,10 +36,10 @@ sentinel demo                  # 20 seconds, no config
 
 ## What Sentinel is. What it is not.
 
-Sentinel is **agility infrastructure for regulated AI** — the decision
-trace, policy enforcement, and evidence layer for EU AI Act Art. 12
-(logging), Art. 13 (transparency), Art. 14 (human oversight), and Art. 17
-(quality-management traceability).
+Sentinel is **evidence infrastructure for the regulated AI era** — the
+decision trace, policy enforcement, and evidence layer for EU AI Act
+Art. 12 (logging), Art. 13 (transparency), Art. 14 (human oversight),
+and Art. 17 (quality-management traceability).
 
 Sentinel does **not** replace Art. 9 risk management, Art. 10 data
 governance, Art. 11 technical documentation, or Art. 15 accuracy and
@@ -54,7 +54,7 @@ layer. Run `sentinel audit-gap` to see the exact split for your setup.
 [![PyPI](https://img.shields.io/pypi/v/sentinel-kernel)](https://pypi.org/project/sentinel-kernel/)
 [![Version](https://img.shields.io/badge/version-v3.3.1-blue)](CHANGELOG.md)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Tests](https://img.shields.io/badge/tests-773%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
+[![Tests](https://img.shields.io/badge/tests-734%20passing-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)](https://github.com/sebastianweiss83/sentinel-kernel/actions)
 [![Status](https://img.shields.io/badge/status-production%2Fstable-brightgreen)](CHANGELOG.md)
 [![EU AI Act](https://img.shields.io/badge/EU%20AI%20Act-Art.%2012%2F13%2F14%2F17-green)](docs/eu-ai-act.md)
@@ -205,35 +205,47 @@ three questions:
    decision instantly. Overrides are recorded as linked trace entries;
    the original record is never mutated.
 
-That is the Record. Enforce. Prove. loop. Art. 12, Art. 13, and Art. 14
-of the EU AI Act are automated side-effects of this mechanism, not a
-separate project. For the deeper framing (Agility Infrastructure, the
-three operative levels, the four modules) see
+Those three questions are what the *Trace → Attest → Audit → Comply*
+lifecycle answers operationally. Art. 12, Art. 13, and Art. 14 of the
+EU AI Act are automated side-effects of this mechanism, not a separate
+project. For the deeper framing — the Evidence Infrastructure thesis,
+the three operative levels, and the four modules — see
 [docs/vision.md](docs/vision.md).
 
 ---
 
-## Record. Enforce. Prove.
+## Trace. Attest. Audit. Comply.
 
-Three verbs. Each a clearly defined operation. Together, the full
-lifecycle of an AI decision in a regulated environment.
+Four verbs. A causal chain. Together, the complete lifecycle of an AI
+decision in a regulated environment.
 
-**Record.** Every AI decision is recorded with context, input hash,
-timestamp, and outcome. Append-only, tamper-resistant, privacy-by-
-default (SHA-256 hash instead of raw input unless explicitly
+**Trace.** Every AI decision is captured with context, input hash,
+timestamp, policy result, and output. Append-only, tamper-resistant,
+privacy-by-default (SHA-256 hash instead of raw input unless explicitly
 configured), stored under the operator's jurisdiction. The
 `@sentinel.trace` decorator shipped in v1.0 delivers this in one line.
 
-**Enforce.** Every AI decision passes through a policy layer before it
-executes. Policy-as-code — OPA/Rego or Python rules. Versioned,
-testable, CI/CD-deployable. EU AI Act Art. 14 kill-switch is a
-first-class primitive. Multi-party approval gates are available via
-`HumanOverride`.
+Policy-as-code — OPA/Rego or Python rules — gates every call before it
+executes. Versioned, testable, CI/CD-deployable. EU AI Act Art. 14
+kill-switch is a first-class primitive. Multi-party approval gates are
+available via `HumanOverride`.
 
-**Prove.** Every record, every policy decision can be aggregated into
-an evidence pack — cryptographically signed, mapped to EU AI Act,
-DORA, NIS2, and BSI IT-Grundschutz, in a format an auditor accepts.
-`sentinel evidence-pack --output audit.pdf` is the one command.
+**Attest.** Every decision trace is cryptographically attested —
+SHA-256 over the canonical payload, signed with the operator's key,
+optionally RFC-3161 timestamped via EU-sovereign TSAs (DFN-CERT,
+D-Trust). Post-quantum ML-DSA-65 (FIPS 204) is available for long-term
+retention scenarios. Attestations are portable, JSON-serialisable, and
+independently verifiable.
+
+**Audit.** Every attestation is independently verifiable without vendor
+dependency. Integrity checks and counterfactual replay are
+deterministic and offline. The auditor reproduces verification from
+the artefact alone — no call-home, no cloud, no lock-in.
+
+**Comply.** Every relevant subset of attestations aggregates into a
+signed PDF evidence pack — mapped to EU AI Act, DORA, NIS2, and BSI
+IT-Grundschutz, in a format an auditor accepts. `sentinel
+evidence-pack --output audit.pdf` is the one command.
 
 ---
 
@@ -386,7 +398,7 @@ Phase detail in [docs/roadmap.md](docs/roadmap.md).
 | **v3.0** | ✓ shipped | API freeze, BSI pre-engagement package |
 | **v3.1** | ✓ shipped | Evidence module — signed PDF evidence pack, one-stop CI check, honest-scope framing |
 | **v3.2** | ✓ shipped | Privacy by default, customer-validation release |
-| **v3.3** | ✓ shipped | Four-module refactor (Trace, Policy, Evidence, Federation), Agility Infrastructure positioning |
+| **v3.3** | ✓ shipped | Four-module refactor (Trace, Policy, Evidence, Federation), positioning refinement |
 | **v3.x** | → 2026 | LF Europe stewardship application, BSI IT-Grundschutz assessment |
 | **v4.0** | → roadmap | Federation — multi-institution aggregation |
 
@@ -426,12 +438,12 @@ Your business logic
         ▼
 ┌─────────────────────────────────────────┐
 │              SENTINEL                   │
-│   Agility infrastructure for AI         │
+│   Evidence infrastructure for AI        │
 │                                         │
 │  ┌────────┐ ┌────────┐ ┌────────┐       │
 │  │ TRACE  │ │ POLICY │ │EVIDENCE│       │
 │  │   ✓    │ │   ✓    │ │   ✓    │       │
-│  │ Record │ │Enforce │ │  Prove │       │
+│  │ Trace  │ │Enforce │ │ Attest │       │
 │  └────────┘ └────────┘ └────────┘       │
 │                                         │
 │  ┌───────────────────────────────┐      │
@@ -653,7 +665,7 @@ See [docs/commercial.md](docs/commercial.md).
 ## Documentation
 
 **Core**
-- [docs/vision.md](docs/vision.md) — Sentinel vision: agility infrastructure for regulated AI, in full
+- [docs/vision.md](docs/vision.md) — Sentinel vision: evidence infrastructure for the regulated AI era, in full
 - [docs/roadmap.md](docs/roadmap.md) — four modules, phase plan
 - [docs/sentinel-evidence.md](docs/sentinel-evidence.md) — Evidence module in depth (evidence packs, attestations, long-term retention)
 - [docs/getting-started.md](docs/getting-started.md) — two-minute quickstart

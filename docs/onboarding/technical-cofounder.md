@@ -5,15 +5,16 @@ productive in one afternoon.
 
 ## The one-paragraph pitch
 
-Sentinel is agility infrastructure for regulated AI. You wrap any
-autonomous decision function with `@sentinel.trace`, we record a
-tamper-resistant decision record to local storage, and you get the
-artefact your EU AI Act / DORA / NIS2 auditor accepts. The three
-non-negotiable invariants are: no US CLOUD Act exposure in the
-critical path, the air-gapped path must always work, and Apache 2.0
-forever. The product is agility — the implementation is a decorator,
-a policy engine, and an evidence generator. Provability is the
-product; sovereignty, portability, and openness are its consequences.
+Sentinel is evidence infrastructure for the regulated AI era. You wrap
+any autonomous decision function with `@sentinel.trace`, we capture a
+tamper-resistant decision record to local storage, attest it
+cryptographically, and you get the artefact your EU AI Act / DORA /
+NIS2 auditor accepts. The three non-negotiable invariants are: no US
+CLOUD Act exposure in the critical path, the air-gapped path must
+always work, and Apache 2.0 forever. The product is provability — the
+implementation is a decorator, a policy engine, and an evidence
+generator. Provability is the product; sovereignty, portability, and
+openness are its consequences.
 
 ## Architecture in 5 minutes
 

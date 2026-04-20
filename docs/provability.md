@@ -90,5 +90,5 @@ tests. Cylake (US-incorporated) claims *Sovereignty* as its
 headline word in the cybersecurity category with billions of
 marketing weight; a European open-source project cannot and
 should not compete for that word. *Provability* is the
-operational thesis; *Record. Enforce. Prove.* is the formula;
+operational thesis; *Trace. Attest. Audit. Comply.* is the formula;
 and sovereignty follows from both.

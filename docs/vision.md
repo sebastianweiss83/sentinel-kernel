@@ -1,6 +1,6 @@
-# Sentinel Vision — Agility Infrastructure for Regulated AI
+# Sentinel Vision — Evidence Infrastructure for the Regulated AI Era
 
-*Strategic reference. Last updated for v3.3.0. Drawn from the
+*Strategic reference. Last updated for v3.4.0. Drawn from the
 Sentinel positioning memo (April 2026).*
 
 ---
@@ -104,9 +104,9 @@ base instead of being redistributed.
 
 ## The central thesis
 
-**Sentinel is the agility infrastructure for regulated European
-enterprises, enabling them to move like startups and prove like
-banks.**
+**Sentinel is the evidence infrastructure for the regulated AI era —
+for regulated European enterprises, enabling them to move like startups
+and prove like banks.**
 
 This thesis has three operative levels that engage in sequence
 and build on each other.
@@ -143,13 +143,12 @@ delivers level one is exactly the infrastructure that enables
 level two, which is exactly the infrastructure that carries
 level three.
 
-## Record. Enforce. Prove.
+## Trace. Attest. Audit. Comply.
 
-Three verbs. Each a clearly defined operation. Together the
-complete lifecycle of an AI decision in a regulated
-environment.
+Four verbs. A causal chain. Together the complete lifecycle
+of an AI decision in a regulated environment.
 
-**Record.** Every AI decision is recorded with context,
+**Trace.** Every AI decision is captured with context,
 input hash, timestamp, and outcome. Append-only, tamper-
 resistant, privacy-by-default (SHA-256 hash instead of raw
 input, unless explicitly configured), stored under the
@@ -170,13 +169,30 @@ await approve({"amount": 50_000})
 #   inputs_hash=sha256:..., policy_result=ALLOW
 ```
 
-**Enforce.** Every AI decision passes through a policy layer
-before it executes. Policy-as-Code — OPA/Rego or Python.
-Versioned, testable, CI/CD-deployable. The EU AI Act Art. 14
-kill-switch primitive is first-class. Multi-party approval
-gates are available. Sentinel implements this today.
+Policy enforcement runs in the same critical path — every AI
+decision passes through a policy layer before it executes.
+Policy-as-Code — OPA/Rego or Python. Versioned, testable,
+CI/CD-deployable. The EU AI Act Art. 14 kill-switch primitive
+is first-class. Multi-party approval gates are available.
 
-**Prove.** Every record, every policy decision can be
+**Attest.** Every decision trace is cryptographically attested
+— SHA-256 over the canonical payload, signed with the
+operator's key, hash-chained to the prior attestation within
+its agent namespace, optionally RFC-3161 timestamped via EU-
+sovereign TSAs (DFN-CERT, D-Trust). Post-quantum ML-DSA-65
+(FIPS 204) is available for long-term retention scenarios.
+Attestations are portable, JSON-serialisable, and
+independently verifiable.
+
+**Audit.** Every attestation is independently verifiable
+without vendor dependency. Integrity checks, hash-chain
+verification, and counterfactual replay are deterministic and
+offline. The auditor reproduces verification from the
+artefact alone — no call-home, no cloud, no lock-in. The
+`sentinel.audit` API exposes decisions for review: policy
+compliance, counterfactual analysis, and regulator access.
+
+**Comply.** Every record, every policy decision can be
 aggregated into an evidence pack — cryptographically signed,
 mapped to EU AI Act, DORA, NIS2, and BSI IT-Grundschutz, in a
 format an auditor accepts. The basic generator is open source.
@@ -188,9 +204,9 @@ commercial.
 This formula is distinctive. Dome Systems uses "Connect.
 Secure. Operate." as its agent-governance lifecycle. That is
 good but general — it could apply to IoT or classical
-microservices equally. *Record. Enforce. Prove.* is specific to
-the AI-decision context and leads directly to the evidence
-artefact European regulation requires.
+microservices equally. *Trace. Attest. Audit. Comply.* is
+specific to the AI-decision context and leads directly to the
+evidence artefact European regulation requires.
 
 ## The four modules
 
@@ -206,12 +222,12 @@ Your business logic
         ▼
 ┌─────────────────────────────────────────┐
 │              SENTINEL                   │
-│   Agility infrastructure for AI         │
+│   Evidence infrastructure for AI        │
 │                                         │
 │  ┌────────┐ ┌────────┐ ┌────────┐       │
 │  │ TRACE  │ │ POLICY │ │EVIDENCE│       │
 │  │   ✓    │ │   ✓    │ │   ✓    │       │
-│  │ Record │ │Enforce │ │  Prove │       │
+│  │ Trace  │ │Enforce │ │ Attest │       │
 │  └────────┘ └────────┘ └────────┘       │
 │                                         │
 │  ┌───────────────────────────────┐      │
@@ -299,8 +315,8 @@ under-positioning.
 
 Sentinel is not an AI platform. Sentinel hosts no models,
 calls no LLMs, runs no inference. Sentinel is the layer that
-records, enforces, and proves the decisions of other AI
-systems.
+traces, attests, audits, and delivers compliance evidence for
+the decisions of other AI systems.
 
 Sentinel is not a complete compliance solution. EU AI Act
 compliance spans Articles 9 through 17 and more. Sentinel
@@ -362,8 +378,9 @@ not a direct competitor but is currently claiming the word
 *Sovereignty* in the cybersecurity context with billions of
 marketing weight. The semantic shadow is real. That is why
 Sentinel does not lead with Sovereignty — it leads with
-*Provability*, operationalised as *Record. Enforce. Prove.*,
-with Sovereignty as a consequence rather than a thesis.
+*Provability*, operationalised as *Trace. Attest. Audit.
+Comply.*, with Sovereignty as a consequence rather than a
+thesis.
 
 **Native cloud governance — Azure AI Foundry, AWS Bedrock
 Guardrails, GCP Vertex AI.** Deeply integrated. Excellent

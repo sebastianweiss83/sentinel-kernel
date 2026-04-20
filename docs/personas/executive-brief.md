@@ -14,9 +14,9 @@ and KRITIS operators in the EU.
 
 ## The solution
 
-**Sentinel is agility infrastructure for regulated AI.** One Python
-decorator on any decision function records every outcome. A policy
-layer enforces every rule. One command produces the signed PDF
+**Sentinel is evidence infrastructure for the regulated AI era.** One
+Python decorator on any decision function traces every outcome. A
+policy layer enforces every rule. One command produces the signed PDF
 evidence pack your auditor accepts. Runs fully offline. Apache 2.0
 forever. Under EU jurisdiction.
 

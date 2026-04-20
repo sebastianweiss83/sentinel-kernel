@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Agility infrastructure for regulated European enterprises.
+Evidence infrastructure for the regulated AI era — for regulated European enterprises.
 
 ## Decisions
 

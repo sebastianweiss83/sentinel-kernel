@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Agility infrastructure for regulated AI v3.3.1. Record every decision, Enforce every policy, Prove it to your auditor. EU AI Act Art. 12/13/14/17. Apache 2.0. Air-gapped capable.">
+<meta name="description" content="Evidence infrastructure for the regulated AI era v3.3.1. Trace every decision, attest it cryptographically, audit the record, comply with EU AI Act Art. 12/13/14/17. Apache 2.0. Air-gapped capable.">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='%2334d399' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='%2334d399' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='%2334d399' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='%2334d399'/></svg>">
-<title>Sentinel v3.3.1 — Agility infrastructure for regulated AI</title>
+<title>Sentinel v3.3.1 — Evidence infrastructure for the regulated AI era</title>
 <style>
 :root {
   --bg: #0a0e14;
@@ -727,22 +727,24 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
   <div class="container hero-grid">
     <div>
       <div class="sentinel-mark"><svg viewBox='0 0 40 48' xmlns='http://www.w3.org/2000/svg' aria-hidden='true'><path d='M20 2 L38 12 L38 36 L20 46 L2 36 L2 12 Z' fill='none' stroke='#34d399' stroke-width='2.5' stroke-linejoin='round'/><line x1='20' y1='10' x2='20' y2='38' stroke='#34d399' stroke-width='2.5' stroke-linecap='round'/><line x1='13' y1='22' x2='27' y2='22' stroke='#34d399' stroke-width='2' stroke-linecap='round'/><circle cx='20' cy='14' r='2' fill='#34d399'/></svg></div>
-      <div class="eyebrow">v3.3.1 · EU AI Act 2026-08-02 · Agility infrastructure · Apache 2.0 permanent</div>
+      <div class="eyebrow">v3.3.1 · EU AI Act 2026-08-02 · Evidence infrastructure · Apache 2.0 permanent</div>
       <h1>
-        <span>Record.</span>
-        <span class="underline">Enforce.</span>
-        <span>Prove.</span>
+        <span>Trace.</span>
+        <span class="underline">Attest.</span>
+        <span>Audit.</span>
+        <span>Comply.</span>
       </h1>
       <p class="lead">
-        Sentinel is agility infrastructure for regulated AI. Wrap any
-        autonomous decision function with <code>@sentinel.trace</code>,
-        evaluate policy in-process, and produce an auditor-grade evidence
-        pack. Zero cloud. Zero US CLOUD Act exposure.
+        Sentinel is evidence infrastructure for the regulated AI era.
+        Wrap any autonomous decision function with <code>@sentinel.trace</code>,
+        cryptographically attest every record, and deliver an audit
+        package your auditor can verify independently. Zero cloud. Zero
+        US CLOUD Act exposure.
         <strong><span id="hero-days">104</span> days to EU AI Act enforcement.</strong>
       </p>
       <div class="stats">
         <span class="stat-pill"><span class="ok">✓</span><span id="stat-version">v3.3.1</span></span>
-        <span class="stat-pill"><span class="ok">✓</span><span id="stat-tests">773 passing</span></span>
+        <span class="stat-pill"><span class="ok">✓</span><span id="stat-tests">734 passing</span></span>
         <span class="stat-pill"><span class="ok">✓</span><span id="stat-coverage">100% coverage</span></span>
         <span class="stat-pill"><span class="ok">✓</span><span id="stat-smoke">42/42 smoke</span></span>
       </div>
@@ -768,7 +770,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
     <div class="line l1"><span class="prompt">$</span> pipx install sentinel-kernel</div>
     <div class="line l2"><span class="prompt">$</span> sentinel demo</div>
     <div class="line l3" style="opacity:0.5">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-    <div class="line l4" style="opacity:0.5">&nbsp; SENTINEL DEMO — Record. Enforce. Prove.</div>
+    <div class="line l4" style="opacity:0.5">&nbsp; SENTINEL DEMO — Trace. Attest. Audit. Comply.</div>
     <div class="line l5" style="opacity:0.5">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
     <div class="line l6"><span class="ok">✓</span> 50 decisions recorded (EU jurisdiction)</div>
     <div class="line l7"><span class="ok">✓</span> Kill switch tested (Art. 14)</div>
@@ -829,7 +831,7 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
     </div>
 
     <div class="note" style="margin-top:1.5rem;">
-      Test suite: <strong>773 tests, 100% line and branch coverage enforced in CI</strong>.
+      Test suite: <strong>734 tests, 100% line and branch coverage enforced in CI</strong>.
       Policy-as-code runs as <strong>5 CI gates</strong> on every PR.
       No new hard dependencies — reportlab is an optional <code>[pdf]</code> extra.
     </div>
@@ -978,15 +980,15 @@ footer .motto { color: var(--text2); margin-top: 0.6rem; }
     <div class="kernel-taglines">
       <div class="tagline-card trace">
         <h4>Trace</h4>
-        <p>Record every decision. EU AI Act Art. 12 automated. <code>@sentinel.trace</code> in one line.</p>
+        <p>Trace every decision. EU AI Act Art. 12 automated. <code>@sentinel.trace</code> in one line.</p>
       </div>
       <div class="tagline-card govern">
         <h4>Policy</h4>
-        <p>Enforce every policy. Kill switch (Art. 14), OPA/Rego, Python rules, preflight.</p>
+        <p>Enforce policy in-process. Kill switch (Art. 14), OPA/Rego, Python rules, preflight.</p>
       </div>
       <div class="tagline-card trace">
         <h4>Evidence</h4>
-        <p>Prove to your auditor. Signed PDF packs, portable attestations, compliance reports.</p>
+        <p>Attest, audit, comply. Signed PDF evidence packs, portable attestations, compliance reports.</p>
       </div>
       <div class="tagline-card route">
         <h4>Federation</h4>
@@ -1325,7 +1327,7 @@ att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
           <li><span class="tag">policy</span> Policy-as-code · kill switch (Art. 14)</li>
           <li><span class="tag">evid</span> Signed PDF evidence packs · CI check</li>
           <li><span class="tag">v3.2</span> Privacy by default (hash-only storage)</li>
-          <li><span class="tag">v3.3</span> Agility Infrastructure positioning</li>
+          <li><span class="tag">v3.3</span> Four-module refactor (Trace · Policy · Evidence · Federation)</li>
         </ul>
         <div class="foot">Shipped and verified on main.</div>
       </div>

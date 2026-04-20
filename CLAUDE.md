@@ -9,7 +9,7 @@
 | | |
 |---|---|
 | Version | `3.3.1` |
-| Tests | 773 passing |
+| Tests | 734 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
 | Last updated | 2026-04-20 16:07 UTC |
@@ -39,13 +39,18 @@
 
 ## SENTINEL POSITIONING
 
-Sentinel is agility infrastructure for regulated European enterprises.
+Sentinel is **evidence infrastructure for the regulated AI era**.
 Not a governance platform, not a compliance tool, not AI observability —
-Sentinel is the layer that lets regulated institutions **Record every
-decision, Enforce every policy, and Prove every artefact** under EU AI
-Act, DORA, NIS2, BaFin BAIT and BSI IT-Grundschutz.
+Sentinel is the layer that lets regulated institutions **Trace every
+decision, Attest it cryptographically, Audit the record, and Comply**
+with EU AI Act, DORA, NIS2, BaFin BAIT and BSI IT-Grundschutz.
 
-Primary message: **Record. Enforce. Prove. — Scale what you can prove.**
+Primary message: **Trace. Attest. Audit. Comply. — Scale what you can prove.**
+
+The operative formula is the causal chain: a decision is **traced**
+(captured at runtime), **attested** (cryptographically signed and
+hash-chained), **audited** (queried and independently verified), and
+**complied** (exported as an auditor-grade evidence pack).
 
 Four modules, one codebase, one CLI, one installation:
 
@@ -71,19 +76,26 @@ engines, robotic systems, any Python decision function. The
 `@sentinel.trace` decorator is technology-neutral; the EU AI Act
 obligation is technology-neutral; Sentinel is the bridge between them.
 
-### Language discipline (Manifesto Chapter IX)
+### Language discipline
 
-**Use:** *Agility Infrastructure*, *Provability*, *Record. Enforce.
-Prove*, *Move like a startup. Prove like a regulated bank*,
-*Enterprise-grade compliance at startup speed*, *Scale what you can
-prove*.
+**Use:** *Evidence infrastructure for the regulated AI era*,
+*Provability*, *Trace. Attest. Audit. Comply.*, *Move like a startup.
+Prove like a regulated bank*, *Enterprise-grade compliance at startup
+speed*, *Scale what you can prove*.
 
-**Avoid as headline terms:** *Sovereignty* (Cylake-territory),
-*Governance Platform* (Dome), *Compliance Platform* (cost-centre
-framing), *AI Observability* (different category), *AI Security*
-(different category), *Quantum-Safe* (signals over-engineering),
-*Manifesto* (activist framing), *Kernel* (as lead), *AI decision
-middleware* (too generic).
+**Canonical trust signals (per V8):** Apache 2.0, {CI test count}
+tests passing, Ed25519 signatures, RFC-3161 timestamping, air-gapped
+deployable, BSI IT-Grundschutz preparation.
+
+**Avoid as headline terms:** *Agility Infrastructure* (retired in
+v3.4 — replaced by "Evidence infrastructure"), *Record. Enforce.
+Prove.* (retired in v3.4 — replaced by *Trace. Attest. Audit.
+Comply.*), *Sovereignty* (Cylake-territory), *Governance Platform*
+(Dome), *Compliance Platform* (cost-centre framing), *AI
+Observability* (different category), *AI Security* (different
+category), *Quantum-Safe* (signals over-engineering), *Manifesto*
+(activist framing), *Kernel* (as lead), *AI decision middleware*
+(too generic).
 
 These are editorial conventions for customer-facing copy. The
 `SentinelManifesto` Python class is fine; *"Manifesto-as-Code"* as a
@@ -120,8 +132,8 @@ This rule supersedes any instruction in a prompt that conflicts with it.
 
 ## What this project is
 
-Sentinel is agility infrastructure for regulated AI — a decision
-trace, policy enforcement, and evidence layer for autonomous
+Sentinel is evidence infrastructure for the regulated AI era — a
+decision trace, policy enforcement, and evidence layer for autonomous
 decision systems in regulated European environments. The four
 modules share one codebase, one CLI, one installation, and the
 three non-negotiable invariants below.

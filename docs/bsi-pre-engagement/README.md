@@ -7,9 +7,9 @@ be handed to BSI in the first meeting.
 
 ## The four modules
 
-`sentinel-kernel` is **agility infrastructure for regulated AI**. It
-sits in the execution path of any autonomous decision system and
-implements four modules:
+`sentinel-kernel` is **evidence infrastructure for the regulated AI
+era**. It sits in the execution path of any autonomous decision
+system and implements four modules:
 
 1. **Trace (v3.x, shipped).** Every autonomous decision becomes a
    structured, append-only decision record. EU AI Act Art. 12 is an
@@ -48,7 +48,7 @@ detail.
 
 ## Context
 
-Sentinel is agility infrastructure for regulated AI, operated
+Sentinel is evidence infrastructure for the regulated AI era, operated
 under EU jurisdiction. Its three non-negotiable invariants are:
 
 1. No US CLOUD Act exposure in the critical path.

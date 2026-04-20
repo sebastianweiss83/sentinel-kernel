@@ -920,17 +920,19 @@ def _section_hero(
   <div class="container hero-grid">
     <div>
       <div class="sentinel-mark">{MARK_SVG}</div>
-      <div class="eyebrow">v{version} · EU AI Act 2026-08-02 · Agility infrastructure · Apache 2.0 permanent</div>
+      <div class="eyebrow">v{version} · EU AI Act 2026-08-02 · Evidence infrastructure · Apache 2.0 permanent</div>
       <h1>
-        <span>Record.</span>
-        <span class="underline">Enforce.</span>
-        <span>Prove.</span>
+        <span>Trace.</span>
+        <span class="underline">Attest.</span>
+        <span>Audit.</span>
+        <span>Comply.</span>
       </h1>
       <p class="lead">
-        Sentinel is agility infrastructure for regulated AI. Wrap any
-        autonomous decision function with <code>@sentinel.trace</code>,
-        evaluate policy in-process, and produce an auditor-grade evidence
-        pack. Zero cloud. Zero US CLOUD Act exposure.
+        Sentinel is evidence infrastructure for the regulated AI era.
+        Wrap any autonomous decision function with <code>@sentinel.trace</code>,
+        cryptographically attest every record, and deliver an audit
+        package your auditor can verify independently. Zero cloud. Zero
+        US CLOUD Act exposure.
         <strong><span id="hero-days">{days}</span> days to EU AI Act enforcement.</strong>
       </p>
       <div class="stats">
@@ -969,7 +971,7 @@ def _terminal_block() -> str:
     <div class="line l1"><span class="prompt">$</span> pipx install sentinel-kernel</div>
     <div class="line l2"><span class="prompt">$</span> sentinel demo</div>
     <div class="line l3" style="opacity:0.5">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-    <div class="line l4" style="opacity:0.5">&nbsp; SENTINEL DEMO — Record. Enforce. Prove.</div>
+    <div class="line l4" style="opacity:0.5">&nbsp; SENTINEL DEMO — Trace. Attest. Audit. Comply.</div>
     <div class="line l5" style="opacity:0.5">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
     <div class="line l6"><span class="ok">✓</span> 50 decisions recorded (EU jurisdiction)</div>
     <div class="line l7"><span class="ok">✓</span> Kill switch tested (Art. 14)</div>
@@ -1192,15 +1194,15 @@ def _section_kernel() -> str:
     <div class="kernel-taglines">
       <div class="tagline-card trace">
         <h4>Trace</h4>
-        <p>Record every decision. EU AI Act Art. 12 automated. <code>@sentinel.trace</code> in one line.</p>
+        <p>Trace every decision. EU AI Act Art. 12 automated. <code>@sentinel.trace</code> in one line.</p>
       </div>
       <div class="tagline-card govern">
         <h4>Policy</h4>
-        <p>Enforce every policy. Kill switch (Art. 14), OPA/Rego, Python rules, preflight.</p>
+        <p>Enforce policy in-process. Kill switch (Art. 14), OPA/Rego, Python rules, preflight.</p>
       </div>
       <div class="tagline-card trace">
         <h4>Evidence</h4>
-        <p>Prove to your auditor. Signed PDF packs, portable attestations, compliance reports.</p>
+        <p>Attest, audit, comply. Signed PDF evidence packs, portable attestations, compliance reports.</p>
       </div>
       <div class="tagline-card route">
         <h4>Federation</h4>
@@ -1558,7 +1560,7 @@ def _section_roadmap(days: int) -> str:
           <li><span class="tag">policy</span> Policy-as-code · kill switch (Art. 14)</li>
           <li><span class="tag">evid</span> Signed PDF evidence packs · CI check</li>
           <li><span class="tag">v3.2</span> Privacy by default (hash-only storage)</li>
-          <li><span class="tag">v3.3</span> Agility Infrastructure positioning</li>
+          <li><span class="tag">v3.3</span> Four-module refactor (Trace · Policy · Evidence · Federation)</li>
         </ul>
         <div class="foot">Shipped and verified on main.</div>
       </div>
@@ -1673,9 +1675,9 @@ def _render_index(
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Agility infrastructure for regulated AI v{version}. Record every decision, Enforce every policy, Prove it to your auditor. EU AI Act Art. 12/13/14/17. Apache 2.0. Air-gapped capable.">
+<meta name="description" content="Evidence infrastructure for the regulated AI era v{version}. Trace every decision, attest it cryptographically, audit the record, comply with EU AI Act Art. 12/13/14/17. Apache 2.0. Air-gapped capable.">
 <link rel="icon" type="image/svg+xml" href="{FAVICON_DATA_URI}">
-<title>Sentinel v{version} — Agility infrastructure for regulated AI</title>
+<title>Sentinel v{version} — Evidence infrastructure for the regulated AI era</title>
 <style>{CSS}</style>
 </head>
 <body>

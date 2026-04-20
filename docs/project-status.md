@@ -12,13 +12,13 @@ _Last generated from HEAD commit: 2026-04-20 16:07 UTC_
 
 **`3.3.1`** — Production/Stable
 
-Prove your AI decisions to the auditor. Agility infrastructure for regulated AI — Trace every decision, Enforce every policy, Prove it to your auditor. EU AI Act Art. 12/13/14/17 evidence. Air-gapped, offline-first, Apache 2.0.
+Evidence infrastructure for the regulated AI era. Trace every decision, attest it cryptographically, audit the record, comply with EU AI Act Art. 12/13/14/17 via a signed evidence pack. Air-gapped, offline-first, Apache 2.0.
 
 ## Test suite
 
 | | |
 |---|---|
-| Tests | 773 passing |
+| Tests | 734 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
 

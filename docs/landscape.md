@@ -1,6 +1,6 @@
 # LLMOps and AI Agent Landscape
 
-Sentinel sits at the intersection of LLM tracing and regulated-enterprise infrastructure. This document clarifies where it fits, what it does not do, and where it is headed. For the strategic framing — agility infrastructure for regulated AI, the Record / Enforce / Prove formula, the four modules — see [docs/vision.md](vision.md).
+Sentinel sits at the intersection of LLM tracing and regulated-enterprise infrastructure. This document clarifies where it fits, what it does not do, and where it is headed. For the strategic framing — evidence infrastructure for the regulated AI era, the Trace / Attest / Audit / Comply formula, the four modules — see [docs/vision.md](vision.md).
 
 ---
 
@@ -26,7 +26,7 @@ Sentinel sits at the intersection of LLM tracing and regulated-enterprise infras
 
 ## What Sentinel does
 
-Sentinel occupies a category with a distinctive shape: **agility infrastructure for regulated AI**. It produces a structured, append-only, auditor-grade artefact for every autonomous decision — capturing what was decided, under which policy, by which system, and under whose jurisdiction.
+Sentinel occupies a category with a distinctive shape: **evidence infrastructure for the regulated AI era**. It produces a structured, append-only, auditor-grade artefact for every autonomous decision — capturing what was decided, under which policy, by which system, and under whose jurisdiction.
 
 This is complementary to observability and LLMOps, not competing with them. A team can use Langfuse for prompt debugging and Sentinel for compliance records. They answer different questions:
 

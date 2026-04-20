@@ -2,7 +2,7 @@
 
 Four modules. Three shipped, one on the roadmap. Every version
 reflects shipped code, not plans. For the deeper strategic
-picture — the Agility Infrastructure thesis, the four-module
+picture — the Evidence Infrastructure thesis, the four-module
 architecture, and the market timing — see
 [docs/vision.md](vision.md).
 
@@ -67,8 +67,9 @@ The three shipped modules, one set of capabilities each.
 
 ### v3.3 — positioning refinement
 
-- Customer-facing language aligned to *Agility Infrastructure
-  for Regulated AI* and the *Record. Enforce. Prove.* formula.
+- Customer-facing language aligned to *Evidence infrastructure
+  for the regulated AI era* and the *Trace. Attest. Audit.
+  Comply.* formula.
 - Four-module architecture (Trace / Policy / Evidence /
   Federation) replaces the earlier Three-Layer (Trace / Govern /
   Route) framing as a refinement, not reversal — Evidence is
