@@ -1213,7 +1213,10 @@ att = <span class="fn">generate_attestation</span>(sentinel=sentinel)
 <span class="kw">assert</span> <span class="fn">verify_attestation</span>(att).valid
 
 <span class="cm"># Optional long-term-retention signing (ML-DSA-65, FIPS 204)</span>
-<span class="cm"># lives in sentinel-kernel[pqc] — see docs/sentinel-evidence.md</span></pre></div>
+<span class="cm"># lives in sentinel-kernel[pqc] — see docs/sentinel-evidence.md</span>
+
+<span class="cm"># Optional RFC-3161 timestamping via EU-sovereign TSAs</span>
+<span class="cm"># (DFN-CERT, D-Trust) — sentinel.crypto.RFC3161Timestamper</span></pre></div>
 
     </div>
   </div>

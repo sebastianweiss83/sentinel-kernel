@@ -12,15 +12,15 @@
 | Tests | 773 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-20 14:28 UTC |
+| Last updated | 2026-04-20 16:07 UTC |
 
 ## Last 5 commits
 
+- `8d30cec` Phase 1 doc-hygiene: align cryptographic claims with actual code
 - `96dae3c` Add platform.html marketing page for champion conversations
 - `635cd3c` docs: surface live preview link prominently in README hero
 - `6b39d45` fix: align customer-facing test count to CI authority (773)
 - `617f0a5` chore: cosmetic cleanup — stubs, stale numbers, smoke regex, Chapter X follow-up
-- `1c51aa3` docs: strategic content consolidation (Chapter X full sweep, no release)
 
 ## Open issues
 
