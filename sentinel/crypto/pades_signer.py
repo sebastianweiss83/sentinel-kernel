@@ -164,7 +164,7 @@ class PAdESSigner:
         _check_deps()
         cert = Path(cert_path).expanduser()
         key = Path(key_path).expanduser()
-        signer = SimpleSigner.load(str(key), str(cert))
+        signer = SimpleSigner.load(str(key), str(cert))  # type: ignore[no-untyped-call]
         return cls(signer)
 
     @classmethod

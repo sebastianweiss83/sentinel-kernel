@@ -208,10 +208,11 @@ class Ed25519Signer:
 
     def public_key_pem(self) -> bytes:
         """Return the PEM-encoded SubjectPublicKeyInfo for verifiers."""
-        return self._public_key.public_bytes(
+        pem: bytes = self._public_key.public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo,
         )
+        return pem
 
     # ------------------------------------------------------------------
     # Core sign / verify
@@ -228,8 +229,12 @@ class Ed25519Signer:
             return False
         encoded = signature[len(self._SIGNATURE_PREFIX):]
         try:
+            # ``binascii.Error`` is a ``ValueError`` subclass; catching
+            # ``ValueError`` alone covers both garbage-input and
+            # non-base64 decoder failures without relying on the
+            # mypy-unfriendly ``base64.binascii`` attribute path.
             raw = base64.b64decode(encoded, validate=True)
-        except (ValueError, base64.binascii.Error):
+        except ValueError:
             return False
         try:
             self._public_key.verify(raw, payload)
