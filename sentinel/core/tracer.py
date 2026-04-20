@@ -68,7 +68,7 @@ class Sentinel:
         policy_evaluator: PolicyEvaluator | None = None,
         store_inputs: Any = _DEFAULT,
         store_outputs: Any = _DEFAULT,
-        signer: Any | None = None,
+        signer: Any = _DEFAULT,
     ):
         """
         Construct a Sentinel kernel.
@@ -136,7 +136,17 @@ class Sentinel:
         self.policy_evaluator = policy_evaluator or NullPolicyEvaluator()
         self.store_inputs = False if store_inputs is _DEFAULT else bool(store_inputs)
         self.store_outputs = False if store_outputs is _DEFAULT else bool(store_outputs)
-        self._signer = signer
+        if signer is _DEFAULT:
+            # v3.4 default: Ed25519 signer loaded / created at the
+            # canonical path. Returns None gracefully when the
+            # cryptography extra isn't installed or the filesystem
+            # isn't writable — preserving pre-v3.4 behaviour in those
+            # environments.
+            from sentinel.crypto.ed25519_signer import Ed25519Signer
+
+            self._signer = Ed25519Signer.from_default_key()
+        else:
+            self._signer = signer
 
         # Kill switch state (EU AI Act Art. 14 — human oversight halt)
         self._kill_switch_lock = threading.Lock()

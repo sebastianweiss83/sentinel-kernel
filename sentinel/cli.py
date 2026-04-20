@@ -189,6 +189,43 @@ def main(argv: list[str] | None = None) -> int:
         help="Directory to write signing.key and signing.pub",
     )
 
+    # --- key — Ed25519 default attestation signing --------------------------
+    p_ed_key = sub.add_parser(
+        "key",
+        help="Manage the default Ed25519 attestation signing key",
+    )
+    ed_key_sub = p_ed_key.add_subparsers(dest="key_command")
+    p_ed_init = ed_key_sub.add_parser(
+        "init",
+        help="Create the default Ed25519 key if it does not exist",
+    )
+    p_ed_init.add_argument(
+        "--path",
+        default=None,
+        help=(
+            "Override key path (default: $SENTINEL_KEY_PATH or "
+            "~/.sentinel/ed25519.key)"
+        ),
+    )
+    p_ed_init.add_argument(
+        "--force",
+        action="store_true",
+        help="Overwrite an existing key at the target path",
+    )
+    p_ed_where = ed_key_sub.add_parser(
+        "path",
+        help="Print the resolved default Ed25519 key path",
+    )
+    p_ed_pub = ed_key_sub.add_parser(
+        "public",
+        help="Print the PEM-encoded Ed25519 public key",
+    )
+    p_ed_pub.add_argument(
+        "--path",
+        default=None,
+        help="Override key path",
+    )
+
     # --- manifesto check ----------------------------------------------------
     p_man = sub.add_parser("manifesto", help="Manifesto utilities")
     man_sub = p_man.add_subparsers(dest="manifesto_command")
@@ -368,6 +405,15 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     if args.command == "keygen":
         return _cmd_keygen(args)
+    if args.command == "key":
+        if args.key_command == "init":
+            return _cmd_key_init(args)
+        if args.key_command == "path":
+            return _cmd_key_path(args)
+        if args.key_command == "public":
+            return _cmd_key_public(args)
+        p_ed_key.print_help()
+        return 1
     if args.command == "ci-check":
         return _cmd_ci_check(args)
     if args.command == "evidence-pack":
@@ -1095,6 +1141,78 @@ def _cmd_evidence_pack(args: argparse.Namespace) -> int:
 
 
 _PARSE_ERROR = object()
+
+
+def _cmd_key_init(args: argparse.Namespace) -> int:
+    """Create the default Ed25519 attestation key if it does not exist."""
+    try:
+        from sentinel.crypto.ed25519_signer import (
+            Ed25519Signer,
+            _default_key_path,
+        )
+    except ImportError as exc:  # pragma: no cover - only hit when extra missing
+        print(str(exc), file=sys.stderr)
+        return 2
+
+    path = Path(args.path).expanduser() if args.path else _default_key_path()
+
+    if path.exists() and not args.force:
+        print(f"key already exists at {path}", file=sys.stderr)
+        print("pass --force to overwrite", file=sys.stderr)
+        return 1
+
+    try:
+        signer = Ed25519Signer.generate()
+        signer.save(path)
+    except ImportError as exc:  # pragma: no cover - only hit when extra missing
+        print(str(exc), file=sys.stderr)
+        return 2
+
+    print(f"Wrote Ed25519 private key: {path} (mode 0o600)")
+    print("This key signs every decision attestation by default.")
+    print("Public key (share freely with verifiers):")
+    print(signer.public_key_pem().decode("ascii").rstrip())
+    return 0
+
+
+def _cmd_key_path(args: argparse.Namespace) -> int:
+    """Print the resolved default Ed25519 key path."""
+    _ = args
+    from sentinel.crypto.ed25519_signer import _default_key_path
+
+    print(str(_default_key_path()))
+    return 0
+
+
+def _cmd_key_public(args: argparse.Namespace) -> int:
+    """Print the PEM-encoded Ed25519 public key."""
+    try:
+        from sentinel.crypto.ed25519_signer import (
+            Ed25519Signer,
+            _default_key_path,
+        )
+    except ImportError as exc:  # pragma: no cover - only hit when extra missing
+        print(str(exc), file=sys.stderr)
+        return 2
+
+    path = Path(args.path).expanduser() if args.path else _default_key_path()
+    if not path.exists():
+        print(f"no Ed25519 key at {path}", file=sys.stderr)
+        print("run `sentinel key init` to create one", file=sys.stderr)
+        return 1
+
+    try:
+        signer = Ed25519Signer.from_path(path)
+    except (ImportError, ValueError) as exc:  # pragma: no branch
+        # ImportError only fires when the cryptography extra is
+        # missing (covered by a dedicated install-path check, not a
+        # unit test). ValueError is covered by the non-Ed25519-key
+        # test. The branch discrimination is irrelevant to coverage.
+        print(str(exc), file=sys.stderr)
+        return 2
+
+    print(signer.public_key_pem().decode("ascii").rstrip())
+    return 0
 
 
 def _cmd_keygen(args: argparse.Namespace) -> int:

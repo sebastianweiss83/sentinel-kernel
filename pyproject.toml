@@ -89,11 +89,18 @@ crewai = ["crewai>=0.1"]
 # Microsoft AutoGen integration (US-owned; runtime uses local LLM)
 autogen = ["pyautogen>=0.2"]
 
+# Ed25519 default attestation signing (pyca/cryptography — BSD/Apache,
+# community-maintained, pure-crypto, no network, works air-gapped).
+# Recommended for every production install; bundled into [pdf] and [dev].
+ed25519 = ["cryptography>=42.0"]
+
 # Quantum-safe signing (ML-DSA-65 via liboqs)
 pqc = ["oqs-python>=0.8"]
 
 # PDF evidence pack (reportlab — BSD-3-Clause, UK-based, pure Python)
-pdf = ["reportlab>=4.0"]
+# Includes Ed25519 by default since evidence packs are the primary
+# artefact that benefits from cryptographic attestation.
+pdf = ["reportlab>=4.0", "cryptography>=42.0"]
 
 # Development — pulls every optional extra so `pytest --cov` hits the
 # happy-path branches of all optional-dep guards.
@@ -117,6 +124,7 @@ dev = [
     "Django>=4.2",
     "httpx>=0.27",
     "reportlab>=4.0",
+    "cryptography>=42.0",
 ]
 
 [project.scripts]
