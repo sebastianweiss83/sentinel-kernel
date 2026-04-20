@@ -8,10 +8,12 @@ to a deterministic genesis hash per namespace.
 from __future__ import annotations
 
 import hashlib
+import json
+from pathlib import Path
 
 import pytest
 
-from sentinel import Sentinel
+from sentinel import Sentinel, cli
 from sentinel.chain import (
     ChainNamespace,
     ChainVerification,
@@ -25,7 +27,6 @@ from sentinel.chain.namespace import (
 )
 from sentinel.core.attestation import generate_attestation
 from sentinel.storage import SQLiteStorage
-
 
 # ---------------------------------------------------------------------------
 # Namespace
@@ -296,12 +297,6 @@ def test_chain_verification_to_dict_roundtrips() -> None:
 # ---------------------------------------------------------------------------
 # CLI — `sentinel chain verify <file>`
 # ---------------------------------------------------------------------------
-
-
-import json
-from pathlib import Path
-
-from sentinel import cli
 
 
 def _write_chain(path: Path, chain: list[dict]) -> None:

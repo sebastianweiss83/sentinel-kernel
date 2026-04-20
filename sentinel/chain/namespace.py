@@ -48,7 +48,7 @@ class ChainNamespace:
         )
 
 
-def _coerce_namespace(ns: "ChainNamespace | str") -> str:
+def _coerce_namespace(ns: ChainNamespace | str) -> str:
     if isinstance(ns, ChainNamespace):
         return ns.as_string()
     if isinstance(ns, str) and ns:
@@ -58,7 +58,7 @@ def _coerce_namespace(ns: "ChainNamespace | str") -> str:
     )
 
 
-def compute_genesis_hash(namespace: "ChainNamespace | str") -> str:
+def compute_genesis_hash(namespace: ChainNamespace | str) -> str:
     """Return the deterministic genesis hash for a namespace.
 
     Hash = SHA-256(``sentinel-genesis:`` + canonical-namespace-string).

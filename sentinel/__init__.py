@@ -26,6 +26,9 @@ Apache 2.0 License. See LICENSE.
 
 __version__ = "3.3.1"
 
+# Canonical v3.4 verb-named modules. Each is a first-class surface of
+# the Trace → Attest → Audit → Comply lifecycle.
+from sentinel import attest, audit, comply, trace
 from sentinel.core.attestation import (
     AttestationResult,
     generate_attestation,
@@ -47,10 +50,6 @@ from sentinel.core.tracer import (
     PreflightResult,
     Sentinel,
 )
-
-# Canonical v3.4 verb-named modules. Each is a first-class surface of
-# the Trace → Attest → Audit → Comply lifecycle.
-from sentinel import attest, audit, comply, trace
 
 __all__ = [
     "Sentinel",

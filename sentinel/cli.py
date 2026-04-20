@@ -267,7 +267,7 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Overwrite an existing key at the target path",
     )
-    p_ed_where = ed_key_sub.add_parser(
+    ed_key_sub.add_parser(
         "path",
         help="Print the resolved default Ed25519 key path",
     )

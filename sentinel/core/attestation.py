@@ -67,7 +67,7 @@ def generate_attestation(
     compliance_report: Any | None = None,
     title: str = "Sentinel Governance Attestation",
     *,
-    chain_namespace: "Any | None" = None,
+    chain_namespace: Any | None = None,
     previous_hash: str | None = None,
 ) -> dict[str, Any]:
     """Generate a portable self-contained attestation document.

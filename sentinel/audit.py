@@ -37,7 +37,7 @@ local storage backend.
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from sentinel.core.trace import DecisionTrace, PolicyResult
 
@@ -46,13 +46,13 @@ if TYPE_CHECKING:
 
 
 def query(
-    sentinel: "Sentinel",
+    sentinel: Sentinel,
     *,
-    project: Optional[str] = None,
-    agent: Optional[str] = None,
-    policy_result: Optional[PolicyResult] = None,
-    since: Optional[datetime] = None,
-    until: Optional[datetime] = None,
+    project: str | None = None,
+    agent: str | None = None,
+    policy_result: PolicyResult | None = None,
+    since: datetime | None = None,
+    until: datetime | None = None,
     limit: int = 100,
 ) -> list[DecisionTrace]:
     """Retrieve decision traces matching the given filters.
@@ -87,9 +87,9 @@ def query(
         started = trace.started_at
         if since is not None and started is not None and started < since:
             return False
-        if until is not None and started is not None and started >= until:
-            return False
-        return True
+        return not (
+            until is not None and started is not None and started >= until
+        )
 
     filtered = [t for t in raw if _in_window(t)]
 
@@ -102,7 +102,7 @@ def query(
     return filtered[:limit]
 
 
-def verify_trace(sentinel: "Sentinel", trace_id: str) -> "IntegrityResult":
+def verify_trace(sentinel: Sentinel, trace_id: str) -> IntegrityResult:
     """Verify the integrity of a single stored trace.
 
     Returns an :class:`IntegrityResult` describing whether the trace

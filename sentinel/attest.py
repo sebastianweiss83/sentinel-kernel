@@ -39,7 +39,7 @@ if TYPE_CHECKING:
 
 
 def generate(
-    sentinel: "Sentinel",
+    sentinel: Sentinel,
     *,
     manifesto: Any | None = None,
     compliance_report: Any | None = None,

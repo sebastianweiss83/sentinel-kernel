@@ -25,7 +25,7 @@ the artefact in hand.
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any
 
 from sentinel.compliance.evidence_pack import (
     EvidencePackOptions,
@@ -38,11 +38,11 @@ if TYPE_CHECKING:
 
 
 def export(
-    sentinel: "Sentinel",
-    output: Union[str, Path],
+    sentinel: Sentinel,
+    output: str | Path,
     *,
     options: EvidencePackOptions | None = None,
-    manifesto: "SentinelManifesto | None" = None,
+    manifesto: SentinelManifesto | None = None,
     **option_overrides: Any,
 ) -> Path:
     """Export a signed PDF evidence pack.
@@ -76,8 +76,8 @@ def export(
 
 
 def sign(
-    pdf_path: Union[str, Path],
-    output_path: Union[str, Path] | None = None,
+    pdf_path: str | Path,
+    output_path: str | Path | None = None,
     *,
     reason: str = "Sentinel evidence pack signature",
     location: str = "sentinel-kernel",
@@ -111,7 +111,7 @@ def sign(
     return signer.sign_pdf(src, output_path, reason=reason, location=location)
 
 
-def verify(pdf_path: Union[str, Path]) -> "PDFSignatureVerification":
+def verify(pdf_path: str | Path) -> PDFSignatureVerification:
     """Verify the PAdES signature(s) on a PDF.
 
     :returns: :class:`PDFSignatureVerification` describing the outcome.

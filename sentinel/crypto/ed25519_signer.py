@@ -110,7 +110,7 @@ class Ed25519Signer:
     # ------------------------------------------------------------------
 
     @classmethod
-    def generate(cls) -> "Ed25519Signer":
+    def generate(cls) -> Ed25519Signer:
         """Generate a fresh Ed25519 keypair in memory (no disk I/O)."""
         if not _HAS_CRYPTOGRAPHY:  # pragma: no cover - only hit when extra missing
             raise ImportError(_MISSING_DEP_MESSAGE)
@@ -119,7 +119,7 @@ class Ed25519Signer:
         return cls(private_key, public_key)
 
     @classmethod
-    def from_path(cls, path: Path | str) -> "Ed25519Signer":
+    def from_path(cls, path: Path | str) -> Ed25519Signer:
         """Load a signer from a PEM-encoded private key at ``path``.
 
         The public key is derived from the private key.
@@ -144,7 +144,7 @@ class Ed25519Signer:
         cls,
         *,
         create_if_missing: bool = True,
-    ) -> "Ed25519Signer | None":
+    ) -> Ed25519Signer | None:
         """Load or create the default signer.
 
         The default key path is ``SENTINEL_KEY_PATH`` if set, otherwise

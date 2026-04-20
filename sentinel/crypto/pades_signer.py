@@ -159,7 +159,7 @@ class PAdESSigner:
     @classmethod
     def from_paths(
         cls, cert_path: Path | str, key_path: Path | str
-    ) -> "PAdESSigner":
+    ) -> PAdESSigner:
         """Load a PAdES signer from existing PEM cert + key paths."""
         _check_deps()
         cert = Path(cert_path).expanduser()
@@ -172,7 +172,7 @@ class PAdESSigner:
         cls,
         *,
         create_if_missing: bool = True,
-    ) -> "PAdESSigner | None":
+    ) -> PAdESSigner | None:
         """Load or create the default self-signed PAdES signer.
 
         Returns None if the required extras aren't installed or the

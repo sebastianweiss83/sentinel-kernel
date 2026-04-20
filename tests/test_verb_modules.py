@@ -18,8 +18,7 @@ import pytest
 import sentinel as sentinel_pkg
 from sentinel import Sentinel, attest, audit, comply, trace
 from sentinel.storage import SQLiteStorage
-from sentinel.trace import DecisionTrace, PolicyResult
-
+from sentinel.trace import DecisionTrace
 
 # ---------------------------------------------------------------------------
 # Import surface
@@ -150,7 +149,7 @@ def test_audit_query_orders_most_recent_first(sentinel_instance: Sentinel) -> No
     traces = audit.query(sentinel_instance)
     # Most-recent-first ordering — allow for equal timestamps in a
     # tight loop by checking monotonic non-increase.
-    for earlier, later in zip(traces, traces[1:]):
+    for earlier, later in zip(traces, traces[1:], strict=False):
         a = earlier.started_at or datetime.min.replace(tzinfo=UTC)
         b = later.started_at or datetime.min.replace(tzinfo=UTC)
         assert a >= b

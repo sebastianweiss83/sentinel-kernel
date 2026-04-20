@@ -13,15 +13,18 @@ from pathlib import Path
 
 import pytest
 
-from sentinel import Sentinel
-from sentinel.crypto.ed25519_signer import (
+# Skip the whole module when the [ed25519] extra isn't installed —
+# the smoke-test / bare-install CI path does not pull `cryptography`.
+pytest.importorskip("cryptography")
+
+from sentinel import Sentinel  # noqa: E402
+from sentinel.crypto.ed25519_signer import (  # noqa: E402
     _ENV_DISABLE,
     _ENV_KEY_PATH,
     Ed25519Signer,
     _default_key_path,
 )
-from sentinel.storage import SQLiteStorage
-
+from sentinel.storage import SQLiteStorage  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Keypair generation + persistence
@@ -95,7 +98,10 @@ def test_save_and_load_roundtrip(tmp_path: Path) -> None:
 def test_from_path_rejects_non_ed25519_key(tmp_path: Path) -> None:
     not_a_key = tmp_path / "not-a-key.pem"
     not_a_key.write_bytes(b"this is not a key")
-    with pytest.raises(Exception):
+    # pyca/cryptography raises a ValueError subclass on unparseable
+    # PEM input; any exception is acceptable here — the guarantee is
+    # that ``from_path`` does not silently return a broken signer.
+    with pytest.raises(Exception):  # noqa: B017 - any exception fails the load
         Ed25519Signer.from_path(not_a_key)
 
 
