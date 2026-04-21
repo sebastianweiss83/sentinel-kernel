@@ -81,10 +81,12 @@ tests and a CLI.
 
 ### Tests
 
-Suite grew from 734 to **838 passing**, **100 % line + branch
+Suite grew from 734 to **855 passing** in the standard `[pdf]`
+install (877 with the full `[dev]` extras that pull every
+optional framework integration), **100 % line + branch
 coverage**, 6 skipped (optional framework-integration paths).
 New test files: `test_verb_modules.py`, `test_ed25519_signer.py`,
-`test_chain.py`, `test_pades_signer.py`.
+`test_chain.py`, `test_pades_signer.py`, `test_rfc3161_verify.py`.
 
 ### Migration
 

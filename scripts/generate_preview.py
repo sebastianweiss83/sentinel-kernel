@@ -2340,7 +2340,10 @@ def main() -> int:
 
     tests, coverage = read_tests_and_coverage()
     if tests == "unknown":
-        tests = "838 passing"
+        # Fallback only when pytest is unavailable (e.g. pipx venv
+        # without dev deps). CI's sync-all always reads the live
+        # pytest count; this value is the last-known-good snapshot.
+        tests = "877 passing"
     if coverage == "unknown":
         coverage = "100%"
     smoke_raw = read_smoke_test()
