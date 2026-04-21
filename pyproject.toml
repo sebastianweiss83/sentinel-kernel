@@ -157,6 +157,7 @@ dev = [
     "cryptography>=42.0",
     "pyhanko>=0.22",
     "pyld>=2.0",
+    "types-PyYAML>=6.0",
 ]
 
 [project.scripts]
