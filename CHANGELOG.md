@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Planning (v3.5 — Architecture Release)
+
+- See [`BACKLOG_v3.5.md`](BACKLOG_v3.5.md) for v3.5 architectural
+  directions.
+- Implementation pending design-partner feedback.
+
 ## [3.4.1] — 2026-04-21 — Audit Fixes
 
 Patch release addressing every finding from the pre-release
