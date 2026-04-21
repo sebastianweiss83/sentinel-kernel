@@ -52,17 +52,22 @@ See the honest reasoning: [docs/provability.md](../provability.md) and
 
 ## Framework integrations
 
-| Framework   | Import                                          |
-|-------------|-------------------------------------------------|
-| LangChain   | `from sentinel.integrations.langchain import SentinelCallbackHandler` |
-| CrewAI      | `from sentinel.integrations.crewai import trace_crew` |
-| AutoGen     | `from sentinel.integrations.autogen import SentinelAutogenHook` |
-| Haystack    | `from sentinel.integrations.haystack import SentinelHook` |
-| OpenTelemetry | `from sentinel.integrations.otel import SentinelOTelExporter` |
-| FastAPI     | `from sentinel.integrations.fastapi import SentinelMiddleware` |
-| Django      | `from sentinel.integrations.django import SentinelMiddleware` |
+| Framework     | Import                                                                           | Extra          |
+|---------------|----------------------------------------------------------------------------------|----------------|
+| LangChain     | `from sentinel.integrations.langchain import SentinelCallbackHandler`            | `[langchain]`  |
+| CrewAI        | `from sentinel.integrations.crewai import SentinelCrewCallback`                  | `[crewai]`     |
+| AutoGen       | `from sentinel.integrations.autogen import SentinelAutoGenHook`                  | `[autogen]`    |
+| Haystack      | `from sentinel.integrations.haystack import SentinelHaystackCallback`            | `[haystack]`   |
+| OpenTelemetry | `from sentinel.integrations.otel import OTelExporter`                            | `[otel]`       |
+| LangFuse      | `from sentinel.integrations.langfuse import LangFuseEnricher`                    | `[langfuse]`   |
+| Prometheus    | `from sentinel.integrations.prometheus import PrometheusExporter`                | `[prometheus]` |
+| FastAPI       | `from sentinel.integrations.fastapi import SentinelMiddleware`                   | `[fastapi]`    |
+| Django        | `from sentinel.integrations.django import SentinelMiddleware`                    | `[django]`     |
+| Jupyter       | `from sentinel.integrations.jupyter import SentinelWidget`                       | `[jupyter]`    |
 
-Detail: [docs/integration-guide.md](../integration-guide.md).
+Detail: [docs/integration-guide.md](../integration-guide.md). Every
+class name above is a real, imported symbol in v3.4 — each table row
+is copy-paste safe.
 
 ## Debug / day-to-day commands
 

@@ -548,7 +548,10 @@ def _render_html(
 
     # Executive summary — plain English
     if score >= 0.9:
-        summary_headline = "Your system produces EU-jurisdiction evidence under the Record-Enforce-Prove model."
+        summary_headline = (
+            "Your system produces EU-jurisdiction evidence under the "
+            "Trace → Attest → Audit → Comply lifecycle."
+        )
     elif score >= 0.6:
         summary_headline = "Your system has partial provability. Action required."
     else:
