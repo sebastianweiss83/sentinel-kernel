@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `3.4.2` |
-| Tests | 911 passing |
+| Version | `3.4.3` |
+| Tests | 923 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-22 00:38 UTC |
+| Last updated | 2026-04-22 00:59 UTC |
 
 ## Last 5 commits
 
+- `9427a92` fix(mypy): silence untyped-call on HTTPTimeStamper
+- `6999503` fix(crypto): wire RFC-3161 TSA into PAdES default sign (v3.4.3)
+- `892ae25` docs(v3.5): Phase 2 audit complete, Phase 3 opened
 - `de6feef` docs(v3.5): initialize V35_PROGRESS_LOG.md (Phase 0 complete, Phase 1 recorded)
 - `c95f694` docs: add ED25519_DEFAULT_TEST_REPORT.md (v3.4.2 reality-test log)
-- `0d58a04` docs: bump performance.md version header to v3.4.2
-- `a80f990` fix(packaging): move cryptography to core deps (v3.4.2)
-- `308c39b` docs(v3.5): add BACKLOG_v3.5.md describing open architectural questions
 
 ## Open issues
 
