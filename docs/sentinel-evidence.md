@@ -230,3 +230,28 @@ management plan (Art. 9), data governance documentation
 and robustness controls (Art. 15), conformity assessment, or
 post-market monitoring — that sit above the kernel layer. See
 [docs/eu-ai-act.md](eu-ai-act.md) for the full scope split.
+
+## What's next — v3.5 Architecture Release
+
+v3.5 (design phase, targeted next months) aligns Sentinel
+Evidence with the **OpenTelemetry GenAI conventions** and
+strengthens long-term retention:
+
+- **OpenTelemetry GenAI integration** — parent-child trace
+  context propagation; Sentinel attestations emitted as span
+  events with `gen_ai.*` semantic attributes so Langfuse /
+  Phoenix / Datadog / Grafana Tempo treat Sentinel evidence as
+  first-class telemetry.
+- **JSON-LD + PROV-O output format** — attestations written as
+  W3C PROV-O JSON-LD, keeping ten-year archives machine-
+  interpretable without a Sentinel-specific parser.
+- **Fine-grained retention policies** — per-decision raw-vs-hash
+  choice declared by the manifesto, informed by GDPR Art. 6/9
+  legal basis and sector-specific retention law.
+- **Write-once storage backends** — S3 Object Lock (compliance
+  mode), Azure Blob Immutable Storage, POSIX append-only
+  filesystem. WORM adherence for regulators that require
+  operational tamper-evidence in addition to cryptographic.
+
+See [docs/roadmap.md](roadmap.md) for the full phase plan. No
+breaking changes to the v3.4 public API.

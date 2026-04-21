@@ -94,6 +94,42 @@ into "independently verifiable". LF Europe stewardship gives
 the project an EU-governed home. BSI assessment produces a
 profile that every German public-sector buyer can reference.
 
+### v3.5 — Architecture Release (next months)
+
+**Status: design.** Senior design-partner architectural review
+(April 2026) confirmed four gaps that must close before
+Sentinel is deployable inside modern enterprise observability
+stacks. v3.5 addresses all four. Not a breaking release; the
+v3.4 public API remains stable.
+
+1. **OpenTelemetry GenAI integration** — parent-child trace
+   context (`W3C Trace Context` propagation), `gen_ai.*`
+   semantic attributes per the OpenTelemetry GenAI conventions,
+   Sentinel attestation emitted as a span event rather than a
+   sibling record. Removes the "island solution" risk; lets
+   Langfuse / Phoenix / Datadog / Grafana Tempo see Sentinel
+   evidence as first-class telemetry.
+2. **JSON-LD + PROV-O output format** — long-term semantic
+   retention. Attestations written as JSON-LD documents with
+   the W3C PROV-O vocabulary mapped over the existing schema,
+   so ten-year archives remain machine-interpretable by any
+   PROV-aware tool regardless of Sentinel's own fate.
+3. **Fine-grained retention policies** — per-decision choice of
+   raw-payload vs hash-only storage. Today's privacy-by-default
+   flag is global; v3.5 lets a manifesto declare "payload retain
+   for credit decisions, hash-only for claims triage" based on
+   GDPR Art. 6/9 legal basis and sector-specific retention law.
+4. **Write-once storage backend support** — S3 Object Lock in
+   compliance mode, Azure Blob Immutable Storage, POSIX append-
+   only filesystem. WORM adherence for regulators that require
+   cryptographic-and-operational tamper-evidence, not only
+   cryptographic.
+
+The existing ecosystem-bridge items (MCP gateway, Microsoft AGT,
+Langfuse, OPA decision log, Cedar, Redis/S3-compatible storage)
+remain on the roadmap as v3.6+ work or community contributions,
+queued behind the four architecture priorities above.
+
 ## Phase 3: Federation (v4.x, roadmap)
 
 **Status: architecturally anchored. Not committing to a ship

@@ -1012,6 +1012,25 @@ h1.hero-title {
 }
 .stage-item:hover { border-color: var(--border-strong); }
 .stage.today .stage-item { background: white; color: var(--accent); border-color: rgba(45, 90, 79, 0.2); }
+/* Secondary sub-group inside a stage card — used to demote bridge
+   integrations below the v3.5 architecture items in the "Next months"
+   column without breaking the three-column roadmap grid. */
+.stage-subgroup {
+  margin-top: 22px; padding-top: 16px;
+  border-top: 1px solid var(--border-soft);
+}
+.stage-subgroup-label {
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 9.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-dim);
+  margin-bottom: 10px; font-weight: 600;
+}
+.stage-subgroup .stage-item {
+  background: transparent; color: var(--ink-dim);
+  border: 1px dashed var(--border-strong);
+  opacity: 0.88;
+}
+.stage-subgroup .stage-item:hover { opacity: 1; border-color: var(--ink-muted); }
 .roadmap-note {
   margin-top: 40px; padding: 22px 26px;
   background: var(--bg-card);
@@ -2069,16 +2088,25 @@ def _section_roadmap(tests_n: str) -> str:
       </div>
 
       <div class="stage soon">
-        <div class="stage-status">Next months</div>
-        <h3 class="stage-title">Ecosystem bridges</h3>
-        <p class="stage-description">Bidirectional integrations with established governance and observability players. Actively in development.</p>
+        <div class="stage-status">Next months — v3.5 Architecture Release</div>
+        <h3 class="stage-title">OTEL-native evidence layer</h3>
+        <p class="stage-description">Four architecture items that make Sentinel a first-class citizen of the OpenTelemetry GenAI ecosystem and a credible ten-year evidence layer. Actively in design.</p>
         <div class="stage-items">
-          <span class="stage-item">MCP gateway integration</span>
-          <span class="stage-item">Microsoft AGT bridge</span>
-          <span class="stage-item">Langfuse ingestion hooks</span>
-          <span class="stage-item">OPA decision log</span>
-          <span class="stage-item">Cedar policy binding</span>
-          <span class="stage-item">Redis · S3-compatible storage</span>
+          <span class="stage-item">OpenTelemetry GenAI integration · parent-child trace context, <code>gen_ai.*</code> attributes</span>
+          <span class="stage-item">JSON-LD + PROV-O output format · semantic retention</span>
+          <span class="stage-item">Fine-grained retention policies · per-decision raw vs hash</span>
+          <span class="stage-item">Write-once storage backends · S3 Object Lock, WORM compliance</span>
+        </div>
+        <div class="stage-subgroup">
+          <div class="stage-subgroup-label">Ecosystem bridges · v3.6+ or community</div>
+          <div class="stage-items">
+            <span class="stage-item">MCP gateway integration</span>
+            <span class="stage-item">Microsoft AGT bridge</span>
+            <span class="stage-item">Langfuse ingestion hooks</span>
+            <span class="stage-item">OPA decision log</span>
+            <span class="stage-item">Cedar policy binding</span>
+            <span class="stage-item">Redis · S3-compatible storage</span>
+          </div>
         </div>
       </div>
 
