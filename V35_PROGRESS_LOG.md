@@ -15,8 +15,8 @@ Single source of truth for Sebastian's morning check. Updated at every phase bou
 | 2 | Full audit of current state | ✅ done | 2026-04-22 | 0.9 / 3 h |
 | 3 | Close audit gaps (v3.4.3) | ✅ done | 2026-04-22 | 1.8 / 8 h |
 | 4 | Berthold item 1: causal context (OTEL bridge) | ✅ done | 2026-04-22 | 1.5 / 16 h |
-| 5 | Berthold item 2: JSON-LD + PROV-O | 🏗 in progress | — | — / 12 h |
-| 6 | Berthold item 3: retention policies | ⏸ blocked by Phase 5 | — | — / 10 h |
+| 5 | Berthold item 2: JSON-LD + PROV-O | ✅ done | 2026-04-22 | 1.2 / 12 h |
+| 6 | Berthold item 3: retention policies | 🏗 in progress | — | — / 10 h |
 | 7 | Berthold item 4: write-once storage | ⏸ blocked by Phase 6 | — | — / 14 h |
 | 8 | Homepage update (Marc-visible) | ⏸ blocked by Phase 7 | — | — / 4 h |
 | 9 | v3.5.0 release | ⏸ blocked by Phase 8 | — | — / 4 h |
@@ -154,9 +154,31 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 **Tests:** 934 passing, 100% coverage, 42/42 smoke.
 
-## Phase 5 — Berthold item 2: JSON-LD + PROV-O semantic export
+## Phase 5 — Berthold item 2: JSON-LD + PROV-O semantic export ✅
 
-**Status:** 🏗 in progress. 12h budget.
+**Started / completed:** 2026-04-22, ~1.2h of 12h budget.
+
+**Commits on main:**
+
+- `e10b101` — `docs(arch): v3.5 Item 2 — JSON-LD + PROV-O semantic export design`
+- `7fa74e1` — `feat(v3.5 item 2): JSON-LD + PROV-O semantic export` (+631 lines, 13 new tests)
+
+**CI:** run `24751746764` green.
+
+**What shipped:**
+
+- `comply.export(..., format="jsonld")` — maps each `DecisionTrace` to a `prov:Activity` node with its inputs/outputs as `prov:Entity` nodes and `prov:wasDerivedFrom` linkage between them. Shared `prov:SoftwareAgent` node per distinct agent name.
+- Minimal Sentinel vocabulary (extension of W3C PROV-O) at `docs/ontology/v1/context.jsonld`. Will be served from GitHub Pages at `https://sebastianweiss83.github.io/sentinel-kernel/ontology/v1/`.
+- `@context` is inlined into every emitted document — evidence pack verifies offline, no network round-trip for term resolution.
+- New module `sentinel/comply_semantic.py` — pure-python builder + `pyld`-based canonical validation before write.
+- OTEL fields from Item 1 surface as `sntl:otelTraceId` / `otelSpanId` / `otelParentSpanId` properties.
+- New `[jsonld]` optional extra pulls `pyld>=2.0` (MIT, pure python, no native deps). Missing-extra path raises actionable ImportError.
+
+**Tests:** 947 passing, 100% coverage, 42/42 smoke. 13 new tests cover document shape, PROV wiring, agent deduplication, fully-populated trace round-trip, bare trace emission, output-only trace, OTEL fields, `pyld.expand()` validation, file-write correctness, format dispatch, unknown format, default `pdf` preserved.
+
+## Phase 6 — Berthold item 3: retention policies
+
+**Status:** 🏗 in progress. 10h budget.
 
 ## Operating notes
 
