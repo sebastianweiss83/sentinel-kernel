@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `3.4.1` |
+| Version | `3.4.2` |
 | Tests | 911 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-21 23:18 UTC |
+| Last updated | 2026-04-22 00:22 UTC |
 
 ## Last 5 commits
 
+- `0d58a04` docs: bump performance.md version header to v3.4.2
+- `a80f990` fix(packaging): move cryptography to core deps (v3.4.2)
 - `308c39b` docs(v3.5): add BACKLOG_v3.5.md describing open architectural questions
 - `54c7c7c` feat(positioning): sharpen Evidence Layer positioning, add "what Sentinel is not"
 - `3100337` refactor: reduce docstring bloat in verb modules, chain, ed25519
-- `d8db6fd` chore: reconcile BACKLOG with v3.5 roadmap, fix push.sh, polish text
-- `2404d57` feat(roadmap): prioritise v3.5 Architecture Release (OTEL, JSON-LD, retention policies)
 
 ## Open issues
 
