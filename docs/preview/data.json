@@ -28,6 +28,6 @@
     "Prometheus"
   ],
   "smoke": "42/42",
-  "tests": 855,
+  "tests": 911,
   "version": "3.4.0"
 }
