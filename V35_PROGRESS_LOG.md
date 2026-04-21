@@ -16,8 +16,8 @@ Single source of truth for Sebastian's morning check. Updated at every phase bou
 | 3 | Close audit gaps (v3.4.3) | ✅ done | 2026-04-22 | 1.8 / 8 h |
 | 4 | Berthold item 1: causal context (OTEL bridge) | ✅ done | 2026-04-22 | 1.5 / 16 h |
 | 5 | Berthold item 2: JSON-LD + PROV-O | ✅ done | 2026-04-22 | 1.2 / 12 h |
-| 6 | Berthold item 3: retention policies | 🏗 in progress | — | — / 10 h |
-| 7 | Berthold item 4: write-once storage | ⏸ blocked by Phase 6 | — | — / 14 h |
+| 6 | Berthold item 3: retention policies | ✅ done | 2026-04-22 | 1.6 / 10 h |
+| 7 | Berthold item 4: write-once storage | 🏗 in progress | — | — / 14 h |
 | 8 | Homepage update (Marc-visible) | ⏸ blocked by Phase 7 | — | — / 4 h |
 | 9 | v3.5.0 release | ⏸ blocked by Phase 8 | — | — / 4 h |
 | 10 | Berthold handoff package | ⏸ blocked by Phase 9 | — | — / 2 h |
@@ -176,9 +176,34 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 **Tests:** 947 passing, 100% coverage, 42/42 smoke. 13 new tests cover document shape, PROV wiring, agent deduplication, fully-populated trace round-trip, bare trace emission, output-only trace, OTEL fields, `pyld.expand()` validation, file-write correctness, format dispatch, unknown format, default `pdf` preserved.
 
-## Phase 6 — Berthold item 3: retention policies
+## Phase 6 — Berthold item 3: retention policies ✅
 
-**Status:** 🏗 in progress. 10h budget.
+**Started / completed:** 2026-04-22, ~1.6h of 10h budget.
+
+**Commits on main:**
+
+- `f42d450` — `docs(arch): v3.5 Item 3 — retention policies design`
+- `c384c0f` — `feat(v3.5 item 3): per-decision retention policies` (+929 lines, 32 new tests)
+- `96069f0` — `fix(ci): add types-PyYAML to [dev] so mypy has stubs`
+
+**CI:** run `24752232017` green.
+
+**What shipped:**
+
+- YAML retention policy at `~/.sentinel/retention-policy.yaml`, env-overridable via `SENTINEL_RETENTION_POLICY`.
+- Match on: `agent` (exact or trailing `*` wildcard), `sovereign_scope`, `data_residency`, `tags.<key>`. First-match-wins.
+- Actions: `store_inputs`, `store_outputs`, `retention_days` (advisory; surfaced on `trace.tags`), `redact_fields` (dotted paths).
+- Strict schema validation — typos in policy files raise `ValueError` at construction time, never silent no-op.
+- Hashes computed **before** redaction so integrity verifiers still work against the original payload; redacted fields never reach storage.
+- Layered precedence with existing `Sentinel(store_inputs=...)`: YAML rule wins on the keys it sets; constructor governs the rest; no rule matches → constructor fully governs (v3.4.x behaviour preserved).
+
+**Core dep added:** `pyyaml>=6.0` (LibYAML/MIT, one of the most universally installed Python packages).
+
+**Tests:** 983 passing, 100% coverage, 42/42 smoke.
+
+## Phase 7 — Berthold item 4: write-once storage
+
+**Status:** 🏗 in progress. 14h budget.
 
 ## Operating notes
 
