@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-21 22:40 UTC_
+_Last generated from HEAD commit: 2026-04-21 23:11 UTC_
 
 ## Version
 
@@ -18,7 +18,7 @@ Evidence infrastructure for the regulated AI era. Trace every decision, attest i
 
 | | |
 |---|---|
-| Tests | 872 passing |
+| Tests | 911 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
 
@@ -43,9 +43,20 @@ Evidence infrastructure for the regulated AI era. Trace every decision, attest i
 - **#17** deferred: TypeScript/Node implementation of RFC-001 _(labels: deferred)_
 - **#19** v3.2: Linux Foundation Europe formal application _(labels: roadmap)_
 - **#20** v3.2: BSI IT-Grundschutz formal assessment submission _(labels: roadmap)_
-- **#21** v3.3: EU-sovereign build pipeline (Phase 3) _(labels: roadmap)_
+- **#21** v4.x: EU-sovereign build pipeline (Phase 4) _(labels: roadmap)_
 - **#24** v4.x: model-routing sub-capability under Sentinel Federation _(labels: enhancement, roadmap)_
 - **#25** [Pilot] Welcome — what this intake is and how it works _(labels: pilot)_
+- **#26** v3.5: OpenTelemetry GenAI integration (parent-child trace context + gen_ai.* attributes) _(labels: enhancement, roadmap, integration, v3.5)_
+- **#27** v3.5: JSON-LD + PROV-O attestation format for long-term semantic retention _(labels: enhancement, roadmap, v3.5)_
+- **#28** v3.5: Fine-grained retention policies (per-decision raw vs hash) _(labels: enhancement, roadmap, v3.5)_
+- **#29** v3.5: Write-once storage backends (S3 Object Lock, Azure Immutable, append-only FS) _(labels: enhancement, roadmap, v3.5)_
+- **#30** v3.5: end-to-end Trace→Attest→Audit→Comply composite integration test _(labels: enhancement, v3.5-secondary)_
+- **#31** v3.5: examples/15_credit_agent.py matching the homepage credit-agent narrative _(labels: documentation, v3.5-secondary)_
+- **#32** v3.5: docs/key-management.md — rotation, revocation, HSM contract _(labels: documentation, bsi, v3.5-secondary)_
+- **#33** v3.5: concurrent chain-append race (get_latest_for_namespace atomicity) _(labels: bug, v3.5-secondary)_
+- **#34** v3.5: full PAdES-B-LT verification (CMS + OCSP + TSA chain) _(labels: enhancement, v3.5-secondary)_
+- **#35** v3.5: airgap test coverage for v3.4 features (Ed25519, chain, PAdES) _(labels: bsi, v3.5-secondary)_
+- **#36** v3.5: docs/api-stability.md covers all 23 CLI commands _(labels: documentation, v3.5-secondary)_
 
 ## Recent releases
 
