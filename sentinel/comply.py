@@ -23,17 +23,46 @@ def export(
     *,
     options: EvidencePackOptions | None = None,
     manifesto: SentinelManifesto | None = None,
+    format: str = "pdf",
     **option_overrides: Any,
 ) -> Path:
-    """Write an evidence-pack PDF. Keyword args without ``options=``
-    are forwarded to a default ``EvidencePackOptions``."""
+    """Write an evidence pack.
+
+    ``format`` selects the output format:
+
+    - ``"pdf"`` (default, existing behaviour): renders an
+      auditor-ready evidence-pack PDF via the ``[pdf]`` extra.
+    - ``"jsonld"`` (v3.5+): emits a W3C PROV-O-mapped JSON-LD
+      document for long-term semantic retention. Requires the
+      ``[jsonld]`` extra. See
+      ``docs/architecture/v3.5-item-2-semantic-export.md``.
+
+    Keyword args without ``options=`` are forwarded to a default
+    :class:`EvidencePackOptions`. ``options`` and kwarg overrides
+    are mutually exclusive.
+    """
     if options is None:
         options = EvidencePackOptions(**option_overrides)
     elif option_overrides:
         raise TypeError(
             "pass `options=` or keyword overrides, not both"
         )
-    return render_evidence_pdf(sentinel, options, output, manifesto=manifesto)
+
+    if format == "pdf":
+        return render_evidence_pdf(sentinel, options, output, manifesto=manifesto)
+    if format == "jsonld":
+        from sentinel.comply_semantic import render_evidence_jsonld
+
+        traces = sentinel.query(
+            project=options.project or sentinel.project,
+            limit=options.max_traces,
+        )
+        return render_evidence_jsonld(traces, output)
+
+    raise ValueError(
+        f"unknown evidence-pack format {format!r}; "
+        f"expected 'pdf' or 'jsonld'"
+    )
 
 
 def sign(

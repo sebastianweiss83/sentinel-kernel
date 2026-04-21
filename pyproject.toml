@@ -105,6 +105,13 @@ autogen = ["pyautogen>=0.2"]
 # sentinel-kernel[ed25519]` keeps working but adds nothing new.
 ed25519 = ["cryptography>=42.0"]
 
+# JSON-LD + PROV-O semantic export (v3.5 Item 2). Pulls pyld for
+# canonical JSON-LD validation. MIT-licensed, pure Python, no native
+# deps. Evidence packs exported this way are intelligible decades
+# later against the published Sentinel vocabulary at
+# https://sebastianweiss83.github.io/sentinel-kernel/ontology/v1/.
+jsonld = ["pyld>=2.0"]
+
 # PAdES PDF signing (pyhanko — MIT, community-maintained, works offline).
 # Makes the "signed PDF evidence pack" claim truthful in the Adobe /
 # Foxit verification sense, not just hash-manifest sense.
@@ -143,6 +150,7 @@ dev = [
     "reportlab>=4.0",
     "cryptography>=42.0",
     "pyhanko>=0.22",
+    "pyld>=2.0",
 ]
 
 [project.scripts]
