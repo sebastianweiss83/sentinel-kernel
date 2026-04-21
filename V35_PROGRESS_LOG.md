@@ -13,8 +13,8 @@ Single source of truth for Sebastian's morning check. Updated at every phase bou
 | 0 | Pre-flight | ✅ done | 2026-04-22 | 0.1 / 0.5 h |
 | 1 | v3.4.2 packaging fix | ✅ done | 2026-04-22 | ~1.1 / 1.5 h |
 | 2 | Full audit of current state | ✅ done | 2026-04-22 | 0.9 / 3 h |
-| 3 | Close audit gaps (v3.4.3) | 🏗 in progress | — | — / 8 h |
-| 4 | Berthold item 1: causal context (OTEL bridge) | ⏸ blocked by Phase 3 | — | — / 16 h |
+| 3 | Close audit gaps (v3.4.3) | ✅ done | 2026-04-22 | 1.8 / 8 h |
+| 4 | Berthold item 1: causal context (OTEL bridge) | 🏗 in progress | — | — / 16 h |
 | 5 | Berthold item 2: JSON-LD + PROV-O | ⏸ blocked by Phase 4 | — | — / 12 h |
 | 6 | Berthold item 3: retention policies | ⏸ blocked by Phase 5 | — | — / 10 h |
 | 7 | Berthold item 4: write-once storage | ⏸ blocked by Phase 6 | — | — / 14 h |
@@ -93,9 +93,46 @@ Until yanked, `pip install sentinel-kernel` still resolves to `3.4.2` (newer win
 
 **Everything else:** Ed25519 default (re-confirmed post-v3.4.2), hash-chain attestations (tamper-detected), SHA-256 hashing, air-gapped (smoke step 22), 8 integrations (correct class names), 4 verb modules, 23 CLI subcommands, kill switch, Apache 2.0, 911 tests / 100% coverage — all verified.
 
-## Phase 3 — Close audit gaps (v3.4.3)
+## Phase 3 — Close audit gaps (v3.4.3) ✅
 
-**Status:** 🏗 in progress. Scope: wire `RFC3161Timestamper` into `comply.sign()` so evidence PDFs actually carry a TSA timestamp by default. Homepage clarification on `[pdf]` extra.
+**Started / completed:** 2026-04-22. ~1.8h of 8h budget used.
+
+**Commits on main:**
+
+- `6999503` — `fix(crypto): wire RFC-3161 TSA into PAdES default sign (v3.4.3)` (+411 lines, 12 new tests)
+- `9427a92` — `fix(mypy): silence untyped-call on HTTPTimeStamper` (mypy doesn't have stubs for pyhanko)
+- `6cf75ae` — sync-all auto
+
+**Tag:** `v3.4.3` on `9427a92` (last non-sync release commit).
+
+**CI:** run `24750851044` green (9 jobs). Release workflow `24751033572` green — PyPI publish + attestations.
+
+**PyPI:** `sentinel-kernel==3.4.3` live.
+
+**End-to-end reality test** on fresh venv with `pip install sentinel-kernel[pdf]==3.4.3`, TSA override to DigiCert (reachable from test network; default DFN unreachable from this macOS network but fallback path covered in unit tests):
+
+```
+version: 3.4.3
+evidence PDF: /var/folders/.../evidence.pdf
+TST embedded: True
+warnings: (none)
+SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
+```
+
+**Design decisions adopted in v3.4.3:**
+
+- `PAdESSigner.sign_pdf(..., timestamper=_SENTINEL_NO_TSA)` — sentinel default argument distinguishes "no kwarg" (use env-resolved default) from explicit `None` (opt out silently).
+- `_default_timestamper()` resolves in priority: `SENTINEL_TIMESTAMP=off` → None; `SENTINEL_TIMESTAMP_TSA=<url>` → that URL; default → DFN `http://timestamp.dfn.de/`.
+- On TSA network failure during signing: emit `UserWarning`, retry without timestamper, produce a TST-less but otherwise-valid signature. Air-gap operators set `SENTINEL_TIMESTAMP=off` to silence the warning and skip the call entirely.
+- `comply.sign()` unchanged at the public API level; automatically benefits from the new default.
+
+**Tests:** `tests/test_pades_timestamp.py` (12 new tests) — resolver resolution, env overrides, opt-out, fallback, explicit-None forwarding, explicit-stamper forwarding, non-TSA error re-raise guard. 923 total passing, 100% coverage, smoke test 42/42.
+
+**Deferred from Phase 3 (moved to Phase 8):** homepage one-line clarification that `[pdf]` extra is required for PAdES. Audit flagged this as ⚠️ PARTIAL — not a runtime bug, just copy polish.
+
+## Phase 4 — Berthold item 1: causal context (OTEL bridge)
+
+**Status:** 🏗 in progress. 16h budget.
 
 ## Operating notes
 
