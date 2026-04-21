@@ -1,10 +1,4 @@
-"""Namespace and genesis-hash helpers for the attestation chain.
-
-An agent namespace is the tuple that groups attestations into a
-single chain. The canonical serialisation is a colon-separated string
-prefixed with ``sentinel-ns:v1:`` so that hash inputs are self-
-describing.
-"""
+"""Agent-namespace identity and genesis-hash derivation."""
 
 from __future__ import annotations
 
@@ -17,9 +11,10 @@ GENESIS_PREFIX = "sentinel-genesis:"
 
 @dataclass(frozen=True)
 class ChainNamespace:
-    """An attestation-chain namespace.
+    """The tuple that groups attestations into a single chain.
 
-    Immutable and hashable — safe to use as a dict key.
+    Immutable, hashable, usable as a dict key. Fields must be
+    non-empty and must not contain ``:`` (reserved separator).
     """
 
     agent_id: str
@@ -41,7 +36,6 @@ class ChainNamespace:
                 )
 
     def as_string(self) -> str:
-        """Return the canonical ``sentinel-ns:v1:...`` serialisation."""
         return (
             f"{NAMESPACE_PREFIX}"
             f"{self.agent_id}:{self.jurisdiction}:{self.policy_family}"
@@ -59,14 +53,12 @@ def _coerce_namespace(ns: ChainNamespace | str) -> str:
 
 
 def compute_genesis_hash(namespace: ChainNamespace | str) -> str:
-    """Return the deterministic genesis hash for a namespace.
+    """SHA-256 of ``sentinel-genesis:`` + the canonical namespace string.
 
-    Hash = SHA-256(``sentinel-genesis:`` + canonical-namespace-string).
-    Recomputable by any verifier with only the namespace definition.
+    Any verifier with just the namespace definition can recompute this.
     """
     ns_str = _coerce_namespace(namespace)
-    payload = f"{GENESIS_PREFIX}{ns_str}".encode()
-    return hashlib.sha256(payload).hexdigest()
+    return hashlib.sha256(f"{GENESIS_PREFIX}{ns_str}".encode()).hexdigest()
 
 
 __all__ = [

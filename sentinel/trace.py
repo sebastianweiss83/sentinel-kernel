@@ -1,27 +1,9 @@
-"""sentinel.trace — decision-trace primitives.
+"""Trace verb of Trace → Attest → Audit → Comply.
 
-This module exposes the *Trace* verb of the canonical
-Trace → Attest → Audit → Comply lifecycle. The primary runtime
-interface is the :class:`~sentinel.Sentinel` decorator
-(``@Sentinel().trace``); this module re-exports the decision-trace
-data types for users who prefer the module-level namespace.
-
-Example
--------
-.. code-block:: python
-
-    from sentinel import Sentinel
-    from sentinel.trace import DecisionTrace, PolicyResult
-
-    sentinel = Sentinel()
-
-    @sentinel.trace
-    async def approve(req: dict) -> dict:
-        ...
-
-Sovereignty guarantees
-----------------------
-No network calls. Fully offline. Trace schema is portable NDJSON.
+Re-exports the decision-trace data types. The runtime interface is
+`@Sentinel().trace` (see sentinel.Sentinel); this module exists so
+`from sentinel import trace` works as a namespace alongside the
+other verb modules.
 """
 
 from __future__ import annotations

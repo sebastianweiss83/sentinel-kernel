@@ -1,27 +1,8 @@
-"""sentinel.attest — cryptographic attestation of decision records.
+"""Attest verb of Trace → Attest → Audit → Comply.
 
-This module exposes the *Attest* verb of the canonical
-Trace → Attest → Audit → Comply lifecycle. An attestation is a
-portable, JSON-serialisable envelope that binds a canonical hash to
-the identity and configuration of the Sentinel instance at the
-moment it was produced. The envelope is independently verifiable.
-
-Example
--------
-.. code-block:: python
-
-    from sentinel import Sentinel
-    from sentinel import attest
-
-    sentinel = Sentinel()
-    envelope = attest.generate(sentinel, title="Q2 governance attestation")
-    result = attest.verify(envelope)
-    assert result.valid
-
-Sovereignty guarantees
-----------------------
-Fully offline. No network calls. Verification is deterministic and
-reproducible from the envelope alone.
+Thin module around `sentinel.core.attestation.generate_attestation` /
+`verify_attestation` — re-exported as `generate` / `verify` to match
+the verb formula while keeping the long-form names importable.
 """
 
 from __future__ import annotations
@@ -45,21 +26,7 @@ def generate(
     compliance_report: Any | None = None,
     title: str = "Sentinel Governance Attestation",
 ) -> dict[str, Any]:
-    """Generate a portable, self-contained attestation envelope.
-
-    The returned dict contains an ``attestation_hash`` field — a
-    SHA-256 of all other fields (sorted keys, canonical JSON). Anyone
-    can recompute the hash offline to verify the envelope is
-    unmodified.
-
-    :param sentinel: the configured :class:`Sentinel` instance.
-    :param manifesto: optional :class:`SentinelManifesto` — included
-        in the attestation summary.
-    :param compliance_report: optional compliance report — its
-        overall outcome is folded into the envelope.
-    :param title: human-readable title for the envelope.
-    :returns: attestation envelope (dict, portable, JSON-serialisable).
-    """
+    """Produce a portable attestation envelope for ``sentinel``."""
     return generate_attestation(
         sentinel,
         manifesto=manifesto,
@@ -69,12 +36,7 @@ def generate(
 
 
 def verify(attestation: dict[str, Any]) -> AttestationResult:
-    """Verify an attestation envelope's integrity.
-
-    Fully offline. Zero network calls. Returns an
-    :class:`AttestationResult` indicating whether the envelope is
-    valid and, if not, what failed.
-    """
+    """Recompute the envelope's hash and report whether it still matches."""
     return verify_attestation(attestation)
 
 
@@ -82,7 +44,6 @@ __all__ = [
     "AttestationResult",
     "generate",
     "verify",
-    # Long-form aliases preserved for backward compatibility.
     "generate_attestation",
     "verify_attestation",
 ]
