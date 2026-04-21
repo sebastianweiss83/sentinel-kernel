@@ -34,6 +34,26 @@ sentinel demo                  # 20 seconds, no config
 
 ---
 
+## Positioning
+
+Sentinel is **the cryptographic evidence layer for regulated AI**.
+
+It complements your existing observability stack (Langfuse, Datadog,
+Arize, LangSmith, Microsoft Application Insights) and your governance
+tools (Microsoft Agent Governance Toolkit, OPA, Cedar, AWS Bedrock
+Guardrails). It does **not** compete with them. It solves a different
+problem: producing cryptographically signed, court-defensible evidence
+that maps directly to EU AI Act Art. 12 / Art. 17 and BSI IT-Grundschutz.
+
+| If you need | Use |
+|---|---|
+| Performance, cost, debugging, drift detection | observability tools |
+| Runtime policy enforcement, access control, guardrails | governance tools |
+| Cryptographic, court-defensible, EU-sovereign evidence of agent decisions | **Sentinel** |
+
+v3.5 items on the roadmap are framed as **bridges** to those adjacent
+ecosystems — never replacements.
+
 ## What Sentinel is. What it is not.
 
 Sentinel is **evidence infrastructure for the regulated AI era** — the

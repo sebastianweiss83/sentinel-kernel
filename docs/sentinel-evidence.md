@@ -233,25 +233,31 @@ post-market monitoring — that sit above the kernel layer. See
 
 ## What's next — v3.5 Architecture Release
 
-v3.5 (design phase, targeted next months) aligns Sentinel
-Evidence with the **OpenTelemetry GenAI conventions** and
-strengthens long-term retention:
+v3.5 (design phase, targeted next months) adds four **bridges** to
+the observability and governance tools already running in regulated
+enterprise stacks. Bridges, not replacements — Sentinel remains the
+cryptographic evidence layer; the adjacent tools keep doing what
+they do best:
 
-- **OpenTelemetry GenAI integration** — parent-child trace
-  context propagation; Sentinel attestations emitted as span
-  events with `gen_ai.*` semantic attributes so Langfuse /
-  Phoenix / Datadog / Grafana Tempo treat Sentinel evidence as
-  first-class telemetry.
-- **JSON-LD + PROV-O output format** — attestations written as
-  W3C PROV-O JSON-LD, keeping ten-year archives machine-
-  interpretable without a Sentinel-specific parser.
-- **Fine-grained retention policies** — per-decision raw-vs-hash
-  choice declared by the manifesto, informed by GDPR Art. 6/9
-  legal basis and sector-specific retention law.
+- **OpenTelemetry context bridge** — when OTEL traces flow through
+  the application, Sentinel reads the W3C Trace Context to preserve
+  parent-child causal relationships in cryptographic attestations.
+  Sentinel is not becoming an OTEL-native tool; OTEL-observed stacks
+  gain causality in their Sentinel evidence without rewiring.
+- **JSON-LD + PROV-O semantic export** — attestations emitted as
+  W3C PROV-O JSON-LD for 10-15 year retention scenarios where the
+  archive must remain machine-interpretable across system
+  generations, regardless of Sentinel's own fate.
+- **Fine-grained retention policies** — per-decision storage rules
+  driven by jurisdiction, policy family, or decision type. YAML-
+  configurable, informed by GDPR Art. 6/9 legal basis and sector-
+  specific retention law.
 - **Write-once storage backends** — S3 Object Lock (compliance
-  mode), Azure Blob Immutable Storage, POSIX append-only
-  filesystem. WORM adherence for regulators that require
-  operational tamper-evidence in addition to cryptographic.
+  mode), Azure Blob Immutable Storage, POSIX append-only filesystem.
+  WORM adherence for environments where evidence integrity must be
+  enforced at the storage layer, not only verified after the fact.
 
-See [docs/roadmap.md](roadmap.md) for the full phase plan. No
-breaking changes to the v3.4 public API.
+See [docs/roadmap.md](roadmap.md) for the full phase plan and
+[BACKLOG_v3.5.md](../BACKLOG_v3.5.md) for the open architectural
+questions under each item. No breaking changes to the v3.4 public
+API.

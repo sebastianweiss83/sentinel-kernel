@@ -760,6 +760,40 @@ h1.hero-title {
 }
 .arch-gap-caption b { color: var(--accent); font-weight: 600; }
 
+/* POSITIONING (what Sentinel is / is not) */
+.positioning { padding: 120px 0; border-top: 1px solid var(--border); background: var(--bg); }
+.positioning-grid {
+  display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px;
+  align-items: start;
+}
+.positioning-eyebrow {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600;
+  color: var(--accent); letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 18px;
+}
+.positioning-is h2 {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 40px; line-height: 1.08; font-weight: 700;
+  letter-spacing: -0.032em; color: var(--ink); margin-bottom: 22px;
+}
+.positioning-is p { font-size: 16px; line-height: 1.65; color: var(--ink-muted); margin-bottom: 16px; }
+.positioning-is em { color: var(--accent); font-style: italic; }
+.positioning-isnot h3 {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 20px; font-weight: 600; letter-spacing: -0.02em;
+  color: var(--ink); margin: 22px 0 10px;
+}
+.positioning-isnot h3:first-child { margin-top: 46px; }
+.positioning-isnot p { font-size: 15px; line-height: 1.65; color: var(--ink-muted); }
+.positioning-closer {
+  margin-top: 26px; padding: 20px 22px;
+  background: white; border-left: 3px solid var(--accent);
+  border-radius: 0 4px 4px 0;
+  font-size: 15px !important; line-height: 1.65;
+}
+.positioning-closer b { color: var(--accent); font-weight: 600; }
+
 /* QUICKSTART (operational widget — code lives in dark console) */
 .quickstart { padding: 120px 0; border-top: 1px solid var(--border); }
 .quickstart-head { margin-bottom: 48px; max-width: 760px; }
@@ -1156,7 +1190,9 @@ h1.hero-title {
   .panel.active { display: block; }
   .outcomes-bar { padding: 64px 0; }
   .outcomes-line { font-size: 28px; }
-  .architecture, .quickstart, .compliance-articles, .industry, .roadmap { padding: 64px 0; }
+  .architecture, .quickstart, .compliance-articles, .industry, .roadmap, .positioning { padding: 64px 0; }
+  .positioning-grid { grid-template-columns: 1fr; gap: 40px; }
+  .positioning-is h2 { font-size: 30px; }
   .arch-layout { grid-template-columns: 1fr; gap: 40px; }
   .arch-text h2 { font-size: 32px; }
   .quickstart-title, .compliance-title, .industry-title, .roadmap-title { font-size: 32px; }
@@ -1749,6 +1785,31 @@ def _section_architecture() -> str:
 """
 
 
+def _section_positioning() -> str:
+    return """
+<section class="positioning fade-section" id="positioning">
+  <div class="container">
+    <div class="positioning-grid">
+      <div class="positioning-col positioning-is">
+        <div class="positioning-eyebrow">What Sentinel is</div>
+        <h2>The cryptographic evidence layer for regulated AI.</h2>
+        <p>Every agent decision becomes a signed, hash-linked attestation. Every evidence pack PDF carries a PAdES signature with EU-sovereign RFC-3161 timestamp. Every chain of decisions can be verified independently by your auditor — air-gapped, offline, no vendor lock-in.</p>
+        <p>Sentinel maps directly to EU AI Act Art. 12 (record-keeping) and Art. 17 (quality management). It supports BSI IT-Grundschutz preparation, BaFin and MaRisk requirements, and any regulator who asks the fundamental question: <em>&ldquo;Can you prove what your AI did, and when?&rdquo;</em></p>
+      </div>
+      <div class="positioning-col positioning-isnot">
+        <div class="positioning-eyebrow">What Sentinel is not</div>
+        <h3>Not an observability platform.</h3>
+        <p>Sentinel does not replace Langfuse, Datadog, Arize, LangSmith, or Microsoft Application Insights. Use those for performance, cost, debugging, and drift detection.</p>
+        <h3>Not an AI governance enforcement tool.</h3>
+        <p>Sentinel does not replace Microsoft Agent Governance Toolkit, OPA, Cedar, or AWS Bedrock Guardrails. Use those for runtime policy enforcement, access control, and guardrails.</p>
+        <p class="positioning-closer"><b>Sentinel produces the cryptographic evidence those tools cannot.</b> When your auditor asks for proof in a courtroom-defensible form, that is the question Sentinel answers — and the question no observability or governance tool was designed to solve.</p>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+
+
 def _section_quickstart() -> str:
     return """
 <section class="quickstart fade-section" id="quickstart">
@@ -2089,16 +2150,16 @@ def _section_roadmap(tests_n: str) -> str:
 
       <div class="stage soon">
         <div class="stage-status">Next months — v3.5 Architecture Release</div>
-        <h3 class="stage-title">OTEL-native evidence layer</h3>
-        <p class="stage-description">Four architecture items that make Sentinel a first-class citizen of the OpenTelemetry GenAI ecosystem and a credible ten-year evidence layer. Actively in design.</p>
+        <h3 class="stage-title">Bridges to observability and governance ecosystems</h3>
+        <p class="stage-description">Four enrichments that let Sentinel's cryptographic evidence layer sit cleanly beside the observability and governance tools already in your stack. Bridges, not replacements — your developers keep what they use today, Sentinel adds what those tools were never designed to produce. Actively in design.</p>
         <div class="stage-items">
-          <span class="stage-item">OpenTelemetry GenAI integration · parent-child trace context, <code>gen_ai.*</code> attributes</span>
-          <span class="stage-item">JSON-LD + PROV-O output format · semantic retention</span>
-          <span class="stage-item">Fine-grained retention policies · per-decision raw vs hash</span>
-          <span class="stage-item">Write-once storage backends · S3 Object Lock, WORM compliance</span>
+          <span class="stage-item"><b>OpenTelemetry context bridge</b> · when OTEL traces exist, Sentinel reads the context to preserve causal relationships in cryptographic attestations</span>
+          <span class="stage-item"><b>JSON-LD + PROV-O semantic export</b> · for 10-15 year retention scenarios where attestations must remain machine-readable across system generations</span>
+          <span class="stage-item"><b>Fine-grained retention policies</b> · per-decision storage rules driven by jurisdiction, policy family, or decision type — configurable via YAML</span>
+          <span class="stage-item"><b>Write-once storage backends</b> · S3 Object Lock and WORM-compliant backends for environments where evidence integrity must be enforced at the storage layer</span>
         </div>
         <div class="stage-subgroup">
-          <div class="stage-subgroup-label">Ecosystem bridges · v3.6+ or community</div>
+          <div class="stage-subgroup-label">Further ecosystem bridges · v3.6+ or community</div>
           <div class="stage-items">
             <span class="stage-item">MCP gateway integration</span>
             <span class="stage-item">Microsoft AGT bridge</span>
@@ -2233,6 +2294,7 @@ def _render_index(
             _section_journey(),
             _section_outcomes(),
             _section_architecture(),
+            _section_positioning(),
             _section_quickstart(),
             _section_compliance_articles(),
             _section_industry(),

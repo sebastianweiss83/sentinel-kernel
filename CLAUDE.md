@@ -50,8 +50,27 @@
 
 ## SENTINEL POSITIONING
 
-Sentinel is **evidence infrastructure for the regulated AI era**.
-Not a governance platform, not a compliance tool, not AI observability —
+Sentinel is **the cryptographic evidence layer for regulated AI**.
+Full stop.
+
+It is **not** an observability platform (Langfuse, Datadog, Arize,
+LangSmith, Microsoft Application Insights). It is **not** an AI
+governance enforcement tool (Microsoft Agent Governance Toolkit, OPA,
+Cedar, AWS Bedrock Guardrails). Those categories are crowded, well-
+funded, and technically solved. Sentinel does not compete in them.
+
+Sentinel sits **beside** those stacks and produces what they cannot:
+court-defensible cryptographic audit packs — backed by Ed25519
+signatures, hash-chain linkage, PAdES-signed PDFs, RFC-3161
+timestamps, and EU jurisdiction sovereignty — mappable directly to
+EU AI Act Art. 12 / Art. 17, BSI IT-Grundschutz, BaFin, MaRisk.
+
+The v3.5 roadmap items (OTEL context bridge, JSON-LD + PROV-O
+export, fine-grained retention, write-once storage) are **bridges**
+to adjacent ecosystems. They are never replacements, never
+"OTEL-native" re-branding, never positioning Sentinel as anything
+other than the Evidence Layer.
+
 Sentinel is the layer that lets regulated institutions **Trace every
 decision, Attest it cryptographically, Audit the record, and Comply**
 with EU AI Act, DORA, NIS2, BaFin BAIT and BSI IT-Grundschutz.
@@ -103,10 +122,14 @@ v3.4 — replaced by "Evidence infrastructure"), *Record. Enforce.
 Prove.* (retired in v3.4 — replaced by *Trace. Attest. Audit.
 Comply.*), *Sovereignty* (Cylake-territory), *Governance Platform*
 (Dome), *Compliance Platform* (cost-centre framing), *AI
-Observability* (different category), *AI Security* (different
-category), *Quantum-Safe* (signals over-engineering), *Manifesto*
-(activist framing), *Kernel* (as lead), *AI decision middleware*
-(too generic).
+Observability* (different category — Langfuse, Datadog, Arize and
+LangSmith are peers, not competitors), *AI Security* (different
+category), *Governance enforcement* (Microsoft AGT, OPA, Cedar
+territory — peers, not competitors), *OTEL-native* (Sentinel is
+not an OTEL-native tool; v3.5 provides a context *bridge*, not
+native status), *Quantum-Safe* (signals over-engineering),
+*Manifesto* (activist framing), *Kernel* (as lead), *AI decision
+middleware* (too generic).
 
 These are editorial conventions for customer-facing copy. The
 `SentinelManifesto` Python class is fine; *"Manifesto-as-Code"* as a

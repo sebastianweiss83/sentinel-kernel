@@ -97,33 +97,41 @@ profile that every German public-sector buyer can reference.
 ### v3.5 — Architecture Release (next months)
 
 **Status: design.** Senior design-partner architectural review
-(April 2026) confirmed four gaps that must close before
-Sentinel is deployable inside modern enterprise observability
-stacks. v3.5 addresses all four. Not a breaking release; the
-v3.4 public API remains stable.
+(April 2026) confirmed four enrichments that let Sentinel's
+cryptographic evidence layer sit cleanly beside the observability
+and governance tools already present in regulated enterprise
+stacks. All four are **bridges**, not replacements: your
+developers keep the observability and governance tooling they
+use today, Sentinel adds what those tools were never designed to
+produce. Not a breaking release; the v3.4 public API remains
+stable.
 
-1. **OpenTelemetry GenAI integration** — parent-child trace
-   context (`W3C Trace Context` propagation), `gen_ai.*`
-   semantic attributes per the OpenTelemetry GenAI conventions,
-   Sentinel attestation emitted as a span event rather than a
-   sibling record. Removes the "island solution" risk; lets
-   Langfuse / Phoenix / Datadog / Grafana Tempo see Sentinel
-   evidence as first-class telemetry.
-2. **JSON-LD + PROV-O output format** — long-term semantic
-   retention. Attestations written as JSON-LD documents with
-   the W3C PROV-O vocabulary mapped over the existing schema,
-   so ten-year archives remain machine-interpretable by any
-   PROV-aware tool regardless of Sentinel's own fate.
-3. **Fine-grained retention policies** — per-decision choice of
-   raw-payload vs hash-only storage. Today's privacy-by-default
-   flag is global; v3.5 lets a manifesto declare "payload retain
-   for credit decisions, hash-only for claims triage" based on
-   GDPR Art. 6/9 legal basis and sector-specific retention law.
+1. **OpenTelemetry context bridge** — when OTEL traces flow
+   through the application, Sentinel reads the W3C Trace
+   Context and `gen_ai.*` semantic attributes to preserve
+   parent-child causal relationships in cryptographic
+   attestations. Sentinel is *not* becoming an OTEL-native tool;
+   OTEL-observed stacks gain causality in their Sentinel
+   evidence without rewiring anything. Langfuse / Phoenix /
+   Datadog / Grafana Tempo continue doing what they do best.
+2. **JSON-LD + PROV-O semantic export** — for 10-15 year
+   retention scenarios where attestations must remain machine-
+   readable and independently interpretable across system
+   generations. Attestations emitted as JSON-LD with the W3C
+   PROV-O vocabulary mapped over the existing schema, so
+   decade-long archives remain interpretable by any PROV-aware
+   tool regardless of Sentinel's own fate.
+3. **Fine-grained retention policies** — per-decision storage
+   rules driven by jurisdiction, policy family, or decision
+   type. Today's privacy-by-default flag is global; v3.5 lets a
+   manifesto declare *"payload retain for credit decisions,
+   hash-only for claims triage"* via YAML, based on GDPR
+   Art. 6/9 legal basis and sector-specific retention law.
 4. **Write-once storage backend support** — S3 Object Lock in
    compliance mode, Azure Blob Immutable Storage, POSIX append-
-   only filesystem. WORM adherence for regulators that require
-   cryptographic-and-operational tamper-evidence, not only
-   cryptographic.
+   only filesystem. WORM adherence for environments where
+   evidence integrity must be enforced at the storage layer,
+   not only verified after the fact.
 
 The existing ecosystem-bridge items (MCP gateway, Microsoft AGT,
 Langfuse ingestion, OPA native decision-log export format,
