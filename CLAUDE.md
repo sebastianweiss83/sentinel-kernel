@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.4.3` |
-| Tests | 923 passing |
+| Tests | 934 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-22 00:59 UTC |
+| Last updated | 2026-04-22 01:13 UTC |
 
 ## Last 5 commits
 
+- `f8ecf00` feat(v3.5 item 1): OTEL causal-context bridge
+- `54d59a8` docs(arch): v3.5 Item 1 — causal context OTEL bridge design
+- `939ba13` docs(v3.5): record Phase 3 v3.4.3 release + open Phase 4 OTEL bridge
 - `9427a92` fix(mypy): silence untyped-call on HTTPTimeStamper
 - `6999503` fix(crypto): wire RFC-3161 TSA into PAdES default sign (v3.4.3)
-- `892ae25` docs(v3.5): Phase 2 audit complete, Phase 3 opened
-- `de6feef` docs(v3.5): initialize V35_PROGRESS_LOG.md (Phase 0 complete, Phase 1 recorded)
-- `c95f694` docs: add ED25519_DEFAULT_TEST_REPORT.md (v3.4.2 reality-test log)
 
 ## Open issues
 
