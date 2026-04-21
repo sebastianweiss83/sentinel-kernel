@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sentinel-kernel"
-version = "3.4.1"
+version = "3.4.2"
 description = "Evidence infrastructure for the regulated AI era. Trace every decision, attest it cryptographically, audit the record, comply with EU AI Act Art. 12/13/14/17 via a signed evidence pack. Air-gapped, offline-first, Apache 2.0."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -40,8 +40,17 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
-# Zero hard dependencies — works out of the box
-dependencies = []
+# Core dependencies.
+#
+# `cryptography` is required so that default `Sentinel()` can sign
+# every trace with Ed25519 out of the box — the canonical trust
+# signal per CLAUDE.md. pyca/cryptography is BSD/Apache, community-
+# maintained, pure-crypto (no network at runtime), and works air-
+# gapped via wheel install. Moved from optional `[ed25519]` extra in
+# v3.4.2 after v3.4.1 shipped the code path but not the dependency.
+dependencies = [
+    "cryptography>=42.0",
+]
 
 [project.optional-dependencies]
 # LangChain callback handler integration
@@ -89,9 +98,11 @@ crewai = ["crewai>=0.1"]
 # Microsoft AutoGen integration (US-owned; runtime uses local LLM)
 autogen = ["pyautogen>=0.2"]
 
-# Ed25519 default attestation signing (pyca/cryptography — BSD/Apache,
-# community-maintained, pure-crypto, no network, works air-gapped).
-# Recommended for every production install; bundled into [pdf] and [dev].
+# Ed25519 default attestation signing.
+#
+# `cryptography` is now a core dependency (v3.4.2+) so this extra is
+# retained only as a compatibility alias — `pip install
+# sentinel-kernel[ed25519]` keeps working but adds nothing new.
 ed25519 = ["cryptography>=42.0"]
 
 # PAdES PDF signing (pyhanko — MIT, community-maintained, works offline).

@@ -24,7 +24,7 @@ Example
 Apache 2.0 License. See LICENSE.
 """
 
-__version__ = "3.4.1"
+__version__ = "3.4.2"
 
 # Canonical v3.4 verb-named modules. Each is a first-class surface of
 # the Trace → Attest → Audit → Comply lifecycle.

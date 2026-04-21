@@ -13,6 +13,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   directions.
 - Implementation pending design-partner feedback.
 
+## [3.4.2] — 2026-04-22 — Packaging Fix
+
+Patch release fixing a v3.4.1 packaging bug that silently disabled
+the advertised Ed25519 default signing for every user who installed
+via `pip install sentinel-kernel` without the `[ed25519]` extra.
+
+### Fixed
+
+- **Ed25519 default signing now actually works on a fresh install.**
+  v3.4.1 shipped the `Ed25519Signer.from_default_key()` code path
+  and the `Sentinel.__init__` sentinel-default wiring, but
+  `cryptography` remained in the optional `[ed25519]` extra, so on
+  every default install `_HAS_CRYPTOGRAPHY` was `False`,
+  `from_default_key()` returned `None`, and traces shipped with
+  `signature=None` and `signature_algorithm=None`. Moved
+  `cryptography>=42.0` into core `dependencies`. The `[ed25519]`
+  extra is retained as a compatibility alias. The canonical trust
+  signal "Ed25519 signatures" now matches the default runtime on
+  every install.
+
+### Verification
+
+Reality test on a fresh venv with `pip install sentinel-kernel==3.4.2`:
+
+```python
+from sentinel import Sentinel
+s = Sentinel()
+@s.trace
+def decide(x): return {"r": x}
+decide("hello")
+t = s.query()[0]
+assert t.signature_algorithm == "Ed25519"
+assert t.signature is not None
+```
+
+### Note on v3.4.1
+
+`3.4.1` has been yanked from PyPI. It remains importable for anyone
+who pinned it, but `pip install sentinel-kernel` will resolve to
+`3.4.2` or later.
+
 ## [3.4.1] — 2026-04-21 — Audit Fixes
 
 Patch release addressing every finding from the pre-release
