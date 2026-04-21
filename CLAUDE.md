@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.4.3` |
-| Tests | 934 passing |
+| Tests | 947 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-22 01:13 UTC |
+| Last updated | 2026-04-22 01:26 UTC |
 
 ## Last 5 commits
 
+- `c7fb6e5` feat(v3.5 item 2): JSON-LD + PROV-O semantic export
+- `b12c036` docs(arch): v3.5 Item 2 — JSON-LD + PROV-O semantic export design
+- `7df6193` docs(v3.5): Phase 4 complete, Phase 5 JSON-LD/PROV-O opened
 - `f8ecf00` feat(v3.5 item 1): OTEL causal-context bridge
 - `54d59a8` docs(arch): v3.5 Item 1 — causal context OTEL bridge design
-- `939ba13` docs(v3.5): record Phase 3 v3.4.3 release + open Phase 4 OTEL bridge
-- `9427a92` fix(mypy): silence untyped-call on HTTPTimeStamper
-- `6999503` fix(crypto): wire RFC-3161 TSA into PAdES default sign (v3.4.3)
 
 ## Open issues
 
