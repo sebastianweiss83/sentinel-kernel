@@ -138,7 +138,7 @@ def _default_timestamper() -> Any | None:
     if os.environ.get(_ENV_TIMESTAMP_DISABLE, "").lower() in {"off", "0", "no"}:
         return None
     url = os.environ.get(_ENV_TIMESTAMP_TSA) or _DEFAULT_TSA_URL
-    return HTTPTimeStamper(url, timeout=_DEFAULT_TSA_TIMEOUT_SECONDS)
+    return HTTPTimeStamper(url, timeout=_DEFAULT_TSA_TIMEOUT_SECONDS)  # type: ignore[no-untyped-call]
 
 
 class PAdESSigner:
