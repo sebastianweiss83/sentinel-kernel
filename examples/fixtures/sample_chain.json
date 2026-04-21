@@ -1,0 +1,65 @@
+[
+  {
+    "schema_version": "1.0.0",
+    "title": "Credit decision batch #1",
+    "generated_at": "2026-04-21T17:46:41.650572+00:00",
+    "sentinel_version": "3.4.0",
+    "project": "sample-chain-fixture",
+    "data_residency": "local",
+    "sovereign_scope": "local",
+    "storage_backend": "sqlite",
+    "trace_count": 0,
+    "sovereignty_assertions": [
+      "apache-2.0-licensed",
+      "zero-us-cloud-act-in-critical-path",
+      "air-gap-capable",
+      "tamper-resistant-trace-schema"
+    ],
+    "kill_switch_active": false,
+    "chain_namespace": "sentinel-ns:v1:credit_agent:EU-DE:credit-v2",
+    "previous_hash": "627bef5efbc206fa8233a69c169094346a2908d468ec16ed1ce88d002612370e",
+    "attestation_hash": "719fbe0e7a11c1021f9fe16973305f0d8bbfb1a9c9da545c59104c5357689d23"
+  },
+  {
+    "schema_version": "1.0.0",
+    "title": "Credit decision batch #2",
+    "generated_at": "2026-04-21T17:46:41.650794+00:00",
+    "sentinel_version": "3.4.0",
+    "project": "sample-chain-fixture",
+    "data_residency": "local",
+    "sovereign_scope": "local",
+    "storage_backend": "sqlite",
+    "trace_count": 0,
+    "sovereignty_assertions": [
+      "apache-2.0-licensed",
+      "zero-us-cloud-act-in-critical-path",
+      "air-gap-capable",
+      "tamper-resistant-trace-schema"
+    ],
+    "kill_switch_active": false,
+    "chain_namespace": "sentinel-ns:v1:credit_agent:EU-DE:credit-v2",
+    "previous_hash": "719fbe0e7a11c1021f9fe16973305f0d8bbfb1a9c9da545c59104c5357689d23",
+    "attestation_hash": "77785daf854ad0d380100b9f5e8220cd4f7f274e452d95b9f25d3f4cbbd3d44b"
+  },
+  {
+    "schema_version": "1.0.0",
+    "title": "Credit decision batch #3",
+    "generated_at": "2026-04-21T17:46:41.650819+00:00",
+    "sentinel_version": "3.4.0",
+    "project": "sample-chain-fixture",
+    "data_residency": "local",
+    "sovereign_scope": "local",
+    "storage_backend": "sqlite",
+    "trace_count": 0,
+    "sovereignty_assertions": [
+      "apache-2.0-licensed",
+      "zero-us-cloud-act-in-critical-path",
+      "air-gap-capable",
+      "tamper-resistant-trace-schema"
+    ],
+    "kill_switch_active": false,
+    "chain_namespace": "sentinel-ns:v1:credit_agent:EU-DE:credit-v2",
+    "previous_hash": "77785daf854ad0d380100b9f5e8220cd4f7f274e452d95b9f25d3f4cbbd3d44b",
+    "attestation_hash": "7382f0546ddfd8eb57b3ce83ec6cddabdfad05968e57a2e6195fe90f289ed036"
+  }
+]

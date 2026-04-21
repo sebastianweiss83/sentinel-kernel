@@ -195,6 +195,56 @@ def main(argv: list[str] | None = None) -> int:
         help="PAdES PDF signing and verification (v3.4)",
     )
     comply_sub = p_comply.add_subparsers(dest="comply_command")
+
+    p_comply_export = comply_sub.add_parser(
+        "export",
+        help=(
+            "Export an auditor-grade evidence pack — the v3.4 canonical "
+            "name for `sentinel evidence-pack`"
+        ),
+    )
+    p_comply_export.add_argument(
+        "--output", "-o",
+        default=None,
+        help="Output PDF path (default: audit.pdf in the current directory)",
+    )
+    p_comply_export.add_argument(
+        "--since", help="ISO 8601 — window start (default: no lower bound)"
+    )
+    p_comply_export.add_argument(
+        "--until", help="ISO 8601 — window end (default: no upper bound)"
+    )
+    p_comply_export.add_argument("--project", help="Filter by project name")
+    p_comply_export.add_argument(
+        "--financial-sector",
+        action="store_true",
+        help="Include the DORA section",
+    )
+    p_comply_export.add_argument(
+        "--critical-infrastructure",
+        action="store_true",
+        help="Include the NIS2 section",
+    )
+    p_comply_export.add_argument(
+        "--max-traces",
+        type=int,
+        default=10_000,
+        help="Maximum number of traces to include (default 10000)",
+    )
+    p_comply_export.add_argument(
+        "--db", help="SQLite path (default: in-memory)"
+    )
+    p_comply_export.add_argument(
+        "--manifesto",
+        default=None,
+        help="Optional manifesto reference (module:Class or path.py:Class)",
+    )
+    p_comply_export.add_argument(
+        "--title",
+        default="Sentinel Evidence Pack",
+        help="Pack title used on the cover page",
+    )
+
     p_comply_sign = comply_sub.add_parser(
         "sign",
         help="PAdES-sign an evidence-pack PDF",
@@ -219,6 +269,57 @@ def main(argv: list[str] | None = None) -> int:
         "--json",
         action="store_true",
         help="Emit JSON output",
+    )
+
+    # --- audit — query, show, verify individual traces ---------------------
+    p_audit = sub.add_parser(
+        "audit",
+        help="Query, inspect, and verify stored decision traces (v3.4.1)",
+    )
+    audit_sub = p_audit.add_subparsers(dest="audit_command")
+
+    p_audit_list = audit_sub.add_parser(
+        "list",
+        help="List decision traces matching filters",
+    )
+    p_audit_list.add_argument("--db", help="SQLite path (default: in-memory)")
+    p_audit_list.add_argument("--agent", help="Filter by agent name")
+    p_audit_list.add_argument("--project", help="Filter by project name")
+    p_audit_list.add_argument(
+        "--policy-result",
+        choices=["ALLOW", "DENY", "EXCEPTION_REQUIRED"],
+        help="Filter by policy outcome",
+    )
+    p_audit_list.add_argument(
+        "--since", help="ISO 8601 — only traces at/after this time"
+    )
+    p_audit_list.add_argument(
+        "--until", help="ISO 8601 — only traces before this time"
+    )
+    p_audit_list.add_argument(
+        "--limit", type=int, default=100, help="Max rows (default 100)"
+    )
+    p_audit_list.add_argument(
+        "--json", action="store_true", help="Emit JSON instead of a table"
+    )
+
+    p_audit_show = audit_sub.add_parser(
+        "show",
+        help="Print the full JSON for a single trace",
+    )
+    p_audit_show.add_argument("trace_id", help="The trace ID to retrieve")
+    p_audit_show.add_argument("--db", help="SQLite path (default: in-memory)")
+
+    p_audit_verify = audit_sub.add_parser(
+        "verify",
+        help="Verify the integrity of a single trace",
+    )
+    p_audit_verify.add_argument(
+        "trace_id", help="The trace ID whose integrity to verify"
+    )
+    p_audit_verify.add_argument("--db", help="SQLite path (default: in-memory)")
+    p_audit_verify.add_argument(
+        "--json", action="store_true", help="Emit JSON"
     )
 
     # --- chain — attestation hash-chain verification ------------------------
@@ -460,12 +561,23 @@ def main(argv: list[str] | None = None) -> int:
         return 1
     if args.command == "keygen":
         return _cmd_keygen(args)
+    if args.command == "audit":
+        if args.audit_command == "list":
+            return _cmd_audit_list(args)
+        if args.audit_command == "show":
+            return _cmd_audit_show(args)
+        if args.audit_command == "verify":
+            return _cmd_audit_verify(args)
+        p_audit.print_help()
+        return 1
     if args.command == "chain":
         if args.chain_command == "verify":
             return _cmd_chain_verify(args)
         p_chain.print_help()
         return 1
     if args.command == "comply":
+        if args.comply_command == "export":
+            return _cmd_evidence_pack(args)
         if args.comply_command == "sign":
             return _cmd_comply_sign(args)
         if args.comply_command == "verify":
@@ -484,6 +596,16 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "ci-check":
         return _cmd_ci_check(args)
     if args.command == "evidence-pack":
+        import warnings
+
+        warnings.warn(
+            "`sentinel evidence-pack` is the pre-v3.4 command name; use "
+            "`sentinel comply export` going forward. The old name remains "
+            "available for backward compatibility and will not be removed "
+            "before v4.0.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         return _cmd_evidence_pack(args)
     if args.command == "quickstart":
         return _cmd_quickstart(args)
@@ -1253,6 +1375,104 @@ def _cmd_comply_verify(args: argparse.Namespace) -> int:
         print(f"{status}: {result.detail}")
 
     return 0 if result.valid else 1
+
+
+def _parse_iso_arg(value: str | None) -> datetime | None:
+    """Parse an ISO-8601 argument; return None when value is None.
+
+    Naive datetimes are coerced to UTC so downstream filters are
+    timezone-safe.
+    """
+    if value is None:
+        return None
+    parsed = datetime.fromisoformat(value)
+    if parsed.tzinfo is None:  # pragma: no cover - naive inputs defensive path
+        from datetime import UTC
+
+        parsed = parsed.replace(tzinfo=UTC)
+    return parsed
+
+
+def _cmd_audit_list(args: argparse.Namespace) -> int:
+    """List decision traces matching the given filters."""
+    from sentinel import audit
+    from sentinel.core.trace import PolicyResult
+
+    sentinel_obj = _audit_sentinel_from_args(args)
+    try:
+        since = _parse_iso_arg(args.since)
+        until = _parse_iso_arg(args.until)
+    except ValueError as exc:
+        print(f"audit list: invalid ISO date — {exc}", file=sys.stderr)
+        return 2
+
+    policy_result: PolicyResult | None = None
+    if args.policy_result:
+        policy_result = PolicyResult(args.policy_result)
+
+    traces = audit.query(
+        sentinel_obj,
+        project=args.project,
+        agent=args.agent,
+        policy_result=policy_result,
+        since=since,
+        until=until,
+        limit=args.limit,
+    )
+
+    if args.json:
+        print(json.dumps([t.to_dict() for t in traces], indent=2, default=str))
+        return 0
+
+    if not traces:
+        print("(no traces matched)")
+        return 0
+
+    print(f"{'TRACE ID':14s} {'AGENT':22s} {'RESULT':10s} {'TIME':20s}")
+    for t in traces:
+        ts = t.started_at.isoformat(timespec="seconds") if t.started_at else "?"
+        result = "?"
+        if t.policy_evaluation is not None:
+            result = t.policy_evaluation.result.value
+        print(f"{t.trace_id[:12]:14s} {t.agent[:20]:22s} {result:10s} {ts}")
+    return 0
+
+
+def _cmd_audit_show(args: argparse.Namespace) -> int:
+    """Print the full trace as JSON."""
+    sentinel_obj = _audit_sentinel_from_args(args)
+    trace = sentinel_obj.storage.get(args.trace_id)
+    if trace is None:
+        print(f"audit show: no trace with id {args.trace_id!r}", file=sys.stderr)
+        return 1
+    print(json.dumps(trace.to_dict(), indent=2, default=str))
+    return 0
+
+
+def _cmd_audit_verify(args: argparse.Namespace) -> int:
+    """Verify the integrity of a single trace."""
+    from sentinel import audit
+
+    sentinel_obj = _audit_sentinel_from_args(args)
+    result = audit.verify_trace(sentinel_obj, args.trace_id)
+
+    if args.json:
+        print(json.dumps(result.to_dict(), indent=2))
+    else:
+        status = "✓ verified" if result.verified else "✗ failed"
+        print(f"{status}: {result.detail}")
+        print(f"  trace_id:     {result.trace_id}")
+        print(f"  found:        {result.found}")
+        print(f"  inputs_match: {result.inputs_match}")
+        print(f"  output_match: {result.output_match}")
+    return 0 if result.verified else 1
+
+
+def _audit_sentinel_from_args(args: argparse.Namespace) -> Sentinel:
+    """Build a Sentinel bound to the user-specified storage backend."""
+    storage = SQLiteStorage(args.db) if args.db else SQLiteStorage(":memory:")
+    storage.initialise()
+    return Sentinel(storage=storage, project="audit-cli", signer=None)
 
 
 def _cmd_chain_verify(args: argparse.Namespace) -> int:

@@ -64,31 +64,50 @@ layer. Run `sentinel audit-gap` to see the exact split for your setup.
 
 ## The 5-minute pilot
 
-Four commands. Zero accounts. Zero API keys. Zero network.
+One install. Six commands. Zero accounts. Zero network.
+Every v3.4 headline feature runs end-to-end:
 
 ```bash
-pipx install 'sentinel-kernel[pdf]'   # or: pip install 'sentinel-kernel[pdf]'
-sentinel quickstart                   # scaffolds hello_sentinel.py + ./.sentinel/
-python hello_sentinel.py              # runs 10 decisions, writes traces to SQLite
-sentinel evidence-pack                # writes audit.pdf from those traces
-sentinel audit-gap                    # scores how audit-ready you actually are
+pipx install 'sentinel-kernel[pdf]'    # or: pip install 'sentinel-kernel[pdf]'
+
+# 1. Trace — initialise the default Ed25519 signing key
+sentinel key init                      # writes ~/.sentinel/ed25519.key (0600)
+
+# 2. Scaffold a traced agent + run ten decisions
+sentinel quickstart                    # writes hello_sentinel.py + .sentinel/
+python hello_sentinel.py               # ten signed traces in .sentinel/traces.db
+
+# 3. Attest + Audit — verify a single decision trace end-to-end
+sentinel verify --db .sentinel/traces.db --all
+
+# 4. Comply — export a signed PDF evidence pack auditors accept
+sentinel comply export -o audit.pdf --db .sentinel/traces.db
+sentinel comply sign audit.pdf                 # PAdES-signed audit.signed.pdf
+sentinel comply verify audit.signed.pdf        # structural check, exit 0
+
+# 5. Where do you stand against EU AI Act?
+sentinel audit-gap                     # honest readiness split
 ```
 
-The `[pdf]` extra pulls [reportlab](https://www.reportlab.com/) (BSD-3,
-UK-based, pure Python) so `sentinel evidence-pack` can produce a
-signed PDF your auditor can read. If you prefer to keep dependencies
-to the absolute minimum, `pip install sentinel-kernel` still works —
-every command except `evidence-pack` runs unchanged, and
-`evidence-pack` itself tells you how to add the PDF extra.
+Every command above is implemented in v3.4. `sentinel comply export`
+is the v3.4 canonical name for evidence-pack generation; the older
+`sentinel evidence-pack` remains as an alias.
 
-`sentinel quickstart` generates a 12-line Python file wrapping a plain
-function with `@sentinel.trace`. Running it produces ten immutable,
-EU AI Act Art. 12-conformant decision records in
-`./.sentinel/traces.db`. `sentinel evidence-pack` turns those records
-into a signed PDF a compliance auditor can read. `sentinel audit-gap`
-then tells you exactly what else is still missing — and whether you
-can close it with the library, a deployment decision, or human
-authorship.
+The `[pdf]` extra pulls [reportlab](https://www.reportlab.com/)
+(BSD-3, UK-based, pure Python), `cryptography` (Ed25519 signatures),
+and `pyhanko` (PAdES). If you prefer minimal dependencies,
+`pip install sentinel-kernel` still works — traces are captured,
+just without Ed25519 signing or PAdES PDF signing until the extra
+is installed.
+
+`sentinel quickstart` generates a 12-line Python file wrapping a
+plain function with `@sentinel.trace`. Running it produces ten
+immutable, EU AI Act Art. 12-conformant decision records signed
+with Ed25519 by default. `sentinel comply export` turns those
+records into a signed PDF a compliance auditor can read.
+`sentinel audit-gap` then tells you exactly what else is still
+missing — and whether you can close it with the library, a
+deployment decision, or human authorship.
 
 ### Why the plain-Python example is the golden path
 
