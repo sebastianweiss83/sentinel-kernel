@@ -280,6 +280,16 @@ class Sentinel:
             tags=tags,
         )
 
+        # v3.5 Item 1: capture cross-system causal context from any
+        # active OpenTelemetry span. No-op when opentelemetry-api is
+        # not installed or no span is active.
+        from sentinel.core.otel_context import capture_current_otel_context
+
+        if (otel_ctx := capture_current_otel_context()) is not None:
+            trace.otel_trace_id = otel_ctx.trace_id
+            trace.otel_span_id = otel_ctx.span_id
+            trace.otel_parent_span_id = otel_ctx.parent_span_id
+
         # Kill switch check — happens BEFORE policy eval and BEFORE execution
         with self._kill_switch_lock:
             ks_active = self._kill_switch_active

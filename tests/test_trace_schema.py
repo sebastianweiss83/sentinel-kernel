@@ -77,6 +77,7 @@ def test_to_dict_produces_correct_structure():
         "precedent_trace_ids",
         "signature",
         "signature_algorithm",
+        "otel_context",  # v3.5 causal-context bridge — always present, None when absent
     }
     assert expected_keys == set(d.keys())
 
