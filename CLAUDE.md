@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.4.3` |
-| Tests | 947 passing |
+| Tests | 983 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-22 01:31 UTC |
+| Last updated | 2026-04-22 01:41 UTC |
 
 ## Last 5 commits
 
+- `96069f0` fix(ci): add types-PyYAML to [dev] so mypy has stubs
+- `324411e` feat(v3.5 item 3): per-decision retention policies
+- `1289a79` docs(arch): v3.5 Item 3 — retention policies design
 - `5f43818` docs(v3.5): Phase 5 complete, Phase 6 retention opened
 - `c7fb6e5` feat(v3.5 item 2): JSON-LD + PROV-O semantic export
-- `b12c036` docs(arch): v3.5 Item 2 — JSON-LD + PROV-O semantic export design
-- `7df6193` docs(v3.5): Phase 4 complete, Phase 5 JSON-LD/PROV-O opened
-- `f8ecf00` feat(v3.5 item 1): OTEL causal-context bridge
 
 ## Open issues
 
