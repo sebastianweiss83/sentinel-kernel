@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | Version | `3.4.1` |
-| Tests | 872 passing |
+| Tests | 911 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-21 19:57 UTC |
+| Last updated | 2026-04-21 20:05 UTC |
 
 ## Last 5 commits
 
+- `61407df` release: v3.4.1 patch — audit findings addressed (re-apply)
 - `3c60c4a` feat(v3.4.1): sentinel audit + comply export CLI, fixture, README rewrite
 - `5c44ff8` fix(v3.4.1): align test-count disclosures to CI-authoritative source
 - `e18d432` feat(crypto): real RFC 3161 timestamp verification
 - `e35631b` fix(v3.4.1): runtime positioning + developer persona imports
-- `b9348ba` chore: resolve BLOCKERS.md — Phases 7 & 8 landed
 
 ## Open issues
 
