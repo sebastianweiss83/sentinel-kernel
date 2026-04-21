@@ -12,8 +12,8 @@ Single source of truth for Sebastian's morning check. Updated at every phase bou
 |-------|-------|--------|-----------|---------------------|
 | 0 | Pre-flight | ✅ done | 2026-04-22 | 0.1 / 0.5 h |
 | 1 | v3.4.2 packaging fix | ✅ done | 2026-04-22 | ~1.1 / 1.5 h |
-| 2 | Full audit of current state | ⏸ awaiting authorization | — | — / 3 h |
-| 3 | Close audit gaps (v3.4.3 if needed) | ⏸ blocked by Phase 2 | — | — / 8 h |
+| 2 | Full audit of current state | ✅ done | 2026-04-22 | 0.9 / 3 h |
+| 3 | Close audit gaps (v3.4.3) | 🏗 in progress | — | — / 8 h |
 | 4 | Berthold item 1: causal context (OTEL bridge) | ⏸ blocked by Phase 3 | — | — / 16 h |
 | 5 | Berthold item 2: JSON-LD + PROV-O | ⏸ blocked by Phase 4 | — | — / 12 h |
 | 6 | Berthold item 3: retention policies | ⏸ blocked by Phase 5 | — | — / 10 h |
@@ -77,11 +77,25 @@ Until yanked, `pip install sentinel-kernel` still resolves to `3.4.2` (newer win
 
 **Exit:** E2E SUCCESS on fresh venv, v3.4.2 on PyPI, marketing-code sync gap closed. Yank is a one-click operator task, not a code blocker.
 
-## Phase 2 — Full audit of current state
+## Phase 2 — Full audit of current state ✅
 
-**Status:** awaiting authorization. Per master plan's own rule ("Sebastian authorizes this plan by pasting ... `Execute SENTINEL_v3.5_MASTER_PLAN.md fully autonomously...`"), the explicit trigger phrase has not yet been submitted. Phase 0 setup and Phase 1 completion were both in-scope for independent micro-authorizations already granted; the multi-day autonomous arc starting at Phase 2 requires the trigger paste.
+**Started / completed:** 2026-04-22 (post-explicit-"go-go-go" authorization), ~50 min elapsed under 3h budget.
 
-Phase 2 is read-only (no commits, no pushes) but 3 hours of focused audit work and produces the foundation for every later decision. I'll start it on the next explicit go-ahead.
+**Deliverable:** `AUDIT_v3.4.2.md` at repo root (gitignored). Fresh-venv `pip install sentinel-kernel==3.4.2` tested 13 marketing claims.
+
+**Scorecard:** 10 ✅ VERIFIED · 2 ⚠️ PARTIAL · 1 🟥 BROKEN.
+
+**Key finding (🟥 BROKEN):** Homepage says *"Every evidence pack PDF carries a PAdES signature with EU-sovereign RFC-3161 timestamp."* Code reality: `sentinel.crypto.timestamp.RFC3161Timestamper` exists as a class, but is **not called** from `comply.sign()`, `comply.export()`, `generate_attestation()`, or `render_evidence_pdf()`. `grep -rn` across compliance / core / comply / attest returns zero hits. Inspection of a signed PDF via `pyhanko`: `attached_timestamp_data is None`. Same anti-pattern class as v3.4.1 Ed25519 — capability shipped as standalone class, not wired into default lifecycle. This motivates v3.4.3.
+
+**Partial findings:**
+- `[pdf]` extra required for PAdES — honest ImportError, arguably by-design. Will add one-line homepage clarification in Phase 3.
+- BSI wording already accurate — says "preparation", not "certified". No change.
+
+**Everything else:** Ed25519 default (re-confirmed post-v3.4.2), hash-chain attestations (tamper-detected), SHA-256 hashing, air-gapped (smoke step 22), 8 integrations (correct class names), 4 verb modules, 23 CLI subcommands, kill switch, Apache 2.0, 911 tests / 100% coverage — all verified.
+
+## Phase 3 — Close audit gaps (v3.4.3)
+
+**Status:** 🏗 in progress. Scope: wire `RFC3161Timestamper` into `comply.sign()` so evidence PDFs actually carry a TSA timestamp by default. Homepage clarification on `[pdf]` extra.
 
 ## Operating notes
 
