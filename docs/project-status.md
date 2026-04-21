@@ -6,7 +6,7 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-21 20:05 UTC_
+_Last generated from HEAD commit: 2026-04-21 22:40 UTC_
 
 ## Version
 
