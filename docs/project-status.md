@@ -10,7 +10,7 @@ _Last generated from HEAD commit: 2026-04-21 19:57 UTC_
 
 ## Version
 
-**`3.4.0`** — Production/Stable
+**`3.4.1`** — Production/Stable
 
 Evidence infrastructure for the regulated AI era. Trace every decision, attest it cryptographically, audit the record, comply with EU AI Act Art. 12/13/14/17 via a signed evidence pack. Air-gapped, offline-first, Apache 2.0.
 
@@ -18,7 +18,7 @@ Evidence infrastructure for the regulated AI era. Trace every decision, attest i
 
 | | |
 |---|---|
-| Tests | 911 passing |
+| Tests | 872 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
 

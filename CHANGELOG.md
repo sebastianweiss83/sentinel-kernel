@@ -7,6 +7,93 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [3.4.1] — 2026-04-21 — Audit Fixes
+
+Patch release addressing every finding from the pre-release
+hostile-review audit (see `AUDIT_v3.4.md`). No breaking changes.
+Same Evidence Release feature set, better evidence for the
+release's own claims.
+
+### Fixed
+
+- **Runtime HTML output retired the old positioning.** The
+  executive-summary headline in `sentinel report` — fired for
+  every sovereignty score ≥ 0.9 — hardcoded "Record-Enforce-Prove
+  model". Swapped to the canonical V8 lifecycle
+  "Trace → Attest → Audit → Comply". Also regenerated the sample
+  `docs/preview/report.html` served live on GitHub Pages.
+- **Developer persona integration table.** Four of the seven
+  class names were wrong (`trace_crew`, `SentinelAutogenHook`,
+  haystack `SentinelHook`, `SentinelOTelExporter`). Fixed against
+  the real class names in `sentinel.integrations.*`, plus added
+  the three integrations that were shipped but missing from the
+  table (LangFuse, Prometheus, Jupyter). Every row now copy-paste
+  verified in a fresh venv.
+- **Test-count disclosures.** CHANGELOG v3.4.0 entry rephrased
+  to disclose both the `[pdf]`-install count (~855) and the full
+  `[dev]`-extras CI count (~877). The live homepage hydrates from
+  `data.json`, which is the single source of truth and always
+  reflects the latest CI count.
+- **README 5-minute pilot.** Rewritten to showcase every v3.4
+  headline feature: `sentinel key init` → traced agent → `sentinel
+  verify --all` → `sentinel comply export` → `sentinel comply
+  sign/verify` → `sentinel audit-gap`. Every command copy-paste
+  verified against v3.4.1.
+- **`examples/fixtures/sample_chain.json`** now exists. The
+  verification command in `RELEASE_NOTES_v3.4.md` works as
+  written.
+
+### Added
+
+- **Real RFC 3161 timestamp verification.** `RFC3161Timestamper.verify`
+  was a structural stub in v3.4.0 — it confirmed the base64 decoded
+  and the timestamp was a `datetime`, then returned True. The
+  homepage nonetheless listed "RFC-3161 timestamping" as a trust
+  signal. v3.4.1 replaces the stub with a full CMS + TSTInfo +
+  signature verifier:
+  - Parses the token as `asn1crypto.cms.ContentInfo` (or unwraps a
+    `TimeStampResp` envelope).
+  - Verifies the `messageImprint` hash matches `hash(data)` —
+    binds the token to exactly the caller-supplied bytes.
+  - Checks the embedded signer certificate is from an allow-listed
+    EU-sovereign TSA (DFN-CERT, D-Trust, Bundesdruckerei) via
+    DN-marker matching on subject + issuer.
+  - Verifies the signer certificate is within its validity window
+    at `genTime`.
+  - Rejects `genTime` more than 5 minutes in the future.
+  - Verifies the CMS signature over `signedAttrs` using the
+    signer's public key — supports RSA-PKCS1, RSA-PSS, ECDSA, and
+    Ed25519 signature algorithms.
+  - Local-fallback tokens (air-gapped, no TSA reachable) verify
+    structurally only; policy layer must decide if that's
+    acceptable.
+  - 17 new tests in `tests/test_rfc3161_verify.py`.
+- **`sentinel audit` CLI subcommand.** Brings the CLI to parity
+  with the Trace/Attest/Audit/Comply canonical formula. Three
+  subcommands:
+  - `sentinel audit list` — query with `--agent`, `--project`,
+    `--policy-result`, `--since`, `--until`, `--limit`, `--json`.
+  - `sentinel audit show <trace_id>` — print full trace as JSON.
+  - `sentinel audit verify <trace_id>` — run integrity check and
+    report hash-match details.
+- **`sentinel comply export` CLI** as the canonical v3.4 name for
+  evidence-pack generation. The legacy `sentinel evidence-pack`
+  remains available and now emits a `DeprecationWarning` pointing
+  to the new name. Same handler under the hood; no functional
+  change.
+- **`BACKLOG.md`** documents the 7 v3.5 deferred items from the
+  audit (composite integration test, credit-agent example,
+  key-management doc, concurrent chain-append fix, full PAdES-B-LT
+  verify, v3.4-feature airgap tests, api-stability.md update).
+
+### Tests
+
+Suite grew from 855 (v3.4.0 standard install) to **872 passing**
+(`[pdf]` install) / ~894 expected (full `[dev]` in CI), **100 %
+line + branch coverage** maintained. 2 new test files:
+`test_rfc3161_verify.py` (17 tests), `test_cli_audit_comply_v34_1.py`
+(17 tests).
+
 ## [3.4.0] — 2026-04-20 — Evidence Release
 
 This release turns V8's canonical trust signals into code. Every

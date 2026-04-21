@@ -18,15 +18,16 @@ fails if any measurement is more than 20% below baseline.
 | `decorator_overhead_ms_p50` | ≤ 1.0 ms | Median wall-clock overhead of `@sentinel.trace` |
 | `memory_per_1000_traces_kb` | ≤ 2048 KiB | Peak traced-memory delta for 1000 traces |
 
-## Current results (v3.4.0, 2026-04-20)
+## Current results (v3.4.1, 2026-04-21)
 
 Measured on: Apple Silicon M-series laptop, Python 3.14, SQLite 3.x.
-Baselines above were not touched; v3.4.0 adds Ed25519 signing,
-PAdES PDF signing, and hash-chain linkage on top of the existing
-trace hot-path. The signing step adds a sub-millisecond operation
-per trace (Ed25519 on commodity hardware) — the
-v3.1.0 / v3.2.0 throughput measurement runs below remain
-representative within the stated ±5 % envelope.
+Baselines above were not touched; v3.4.x adds Ed25519 signing,
+PAdES PDF signing, hash-chain linkage, and real RFC-3161
+timestamp verification on top of the existing trace hot-path. The
+signing step adds a sub-millisecond operation per trace (Ed25519
+on commodity hardware) — the v3.1.0 / v3.2.0 throughput
+measurement runs below remain representative within the stated
+±5 % envelope.
 
 | Metric | Measured | vs baseline |
 |---|---|---|

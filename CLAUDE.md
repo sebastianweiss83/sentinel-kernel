@@ -8,8 +8,8 @@
 
 | | |
 |---|---|
-| Version | `3.4.0` |
-| Tests | 911 passing |
+| Version | `3.4.1` |
+| Tests | 872 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
 | Last updated | 2026-04-21 19:57 UTC |
