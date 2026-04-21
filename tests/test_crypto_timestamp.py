@@ -56,16 +56,23 @@ def test_timestamper_airgap_does_not_crash(monkeypatch: pytest.MonkeyPatch) -> N
 
 
 def test_verify_rejects_none_and_bad_tokens() -> None:
+    """v3.4.1: verify performs full RFC 3161 CMS verification; any
+    token that isn't a properly signed TSA-issued TimeStampToken is
+    rejected — even if the base64 happens to decode to valid bytes.
+    Positive verification cases are covered in test_rfc3161_verify.py.
+    """
     t = RFC3161Timestamper()
     assert t.verify(None, b"x") is False  # type: ignore[arg-type]
 
-    good = TimestampToken(
+    # Arbitrary bytes that happen to be valid base64 are not a CMS
+    # structure. Pre-v3.4.1 the stub returned True here — that was
+    # the overclaim the audit caught.
+    arbitrary = TimestampToken(
         tsa_url="http://timestamp.dfn.de/",
         timestamp=datetime.now(UTC),
-        token_b64="aGVsbG8=",
+        token_b64="aGVsbG8=",  # base64 of b"hello"
     )
-    assert t.verify(good, b"x") is True
-    assert t.verify(good, b"") is False
+    assert t.verify(arbitrary, b"x") is False
 
     bad_b64 = TimestampToken(
         tsa_url="http://timestamp.dfn.de/",

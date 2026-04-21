@@ -35,3 +35,6 @@ SENTINEL_PHASE_*.md
 SENTINEL_REPORT_HTML_FIX.md
 v3.4-MASTERPLAN.md
 AUDIT.md
+AUDIT_v3.4.md
+hello_sentinel.py
+.sentinel/
