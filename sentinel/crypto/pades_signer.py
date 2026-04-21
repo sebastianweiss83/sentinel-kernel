@@ -56,10 +56,12 @@ try:  # pragma: no cover - environment dependent
     from pyhanko.pdf_utils.reader import PdfFileReader
     from pyhanko.sign import signers
     from pyhanko.sign.signers import SimpleSigner
+    from pyhanko.sign.timestamps import HTTPTimeStamper
 
     _HAS_PYHANKO = True
 except ImportError:  # pragma: no cover - only when extra missing
     _HAS_PYHANKO = False
+    HTTPTimeStamper = None  # type: ignore[assignment,misc]
 
 
 DEFAULT_CERT_DIR = Path.home() / ".sentinel"
@@ -70,6 +72,16 @@ DEFAULT_CERT_VALIDITY_DAYS = 3650
 
 _ENV_CERT_PATH = "SENTINEL_PDF_CERT_PATH"
 _ENV_CERT_KEY_PATH = "SENTINEL_PDF_CERT_KEY_PATH"
+
+# RFC-3161 TSA wiring (v3.4.3+). Default to DFN (German research
+# network, EU-sovereign); operator can override via env or opt out of
+# timestamping entirely. Air-gapped deployments should set
+# ``SENTINEL_TIMESTAMP=off`` to skip the network attempt.
+_ENV_TIMESTAMP_TSA = "SENTINEL_TIMESTAMP_TSA"
+_ENV_TIMESTAMP_DISABLE = "SENTINEL_TIMESTAMP"
+_DEFAULT_TSA_URL = "http://timestamp.dfn.de/"
+_DEFAULT_TSA_TIMEOUT_SECONDS = 5
+_SENTINEL_NO_TSA = object()  # distinguishes "no kwarg" from explicit None
 
 
 def _default_cert_paths() -> tuple[Path, Path]:
@@ -105,6 +117,28 @@ class PDFSignatureVerification:
 def _check_deps() -> None:
     if not _HAS_CRYPTOGRAPHY or not _HAS_PYHANKO:  # pragma: no cover - only when extra missing
         raise ImportError(_MISSING_DEP_MESSAGE)
+
+
+def _default_timestamper() -> Any | None:
+    """Build the default RFC-3161 TSA timestamper, or None to skip.
+
+    Resolution order:
+
+    1. ``SENTINEL_TIMESTAMP`` in ``{"off", "0", "no"}`` → None (opt-out,
+       the air-gapped path).
+    2. ``SENTINEL_TIMESTAMP_TSA`` set → use that URL.
+    3. Default: DFN (German research network, EU-sovereign).
+
+    Returns None when ``[pdf]`` extras aren't installed. Returns an
+    :class:`HTTPTimeStamper` configured with a short default timeout
+    so a down TSA can't block the signing flow indefinitely.
+    """
+    if not _HAS_PYHANKO:  # pragma: no cover - only when extra missing
+        return None
+    if os.environ.get(_ENV_TIMESTAMP_DISABLE, "").lower() in {"off", "0", "no"}:
+        return None
+    url = os.environ.get(_ENV_TIMESTAMP_TSA) or _DEFAULT_TSA_URL
+    return HTTPTimeStamper(url, timeout=_DEFAULT_TSA_TIMEOUT_SECONDS)
 
 
 class PAdESSigner:
@@ -213,8 +247,21 @@ class PAdESSigner:
         field_name: str = "SentinelEvidenceSignature",
         reason: str = "Sentinel evidence pack signature",
         location: str = "sentinel-kernel",
+        timestamper: Any = _SENTINEL_NO_TSA,
     ) -> Path:
-        """PAdES-sign a PDF and write to ``output_path``."""
+        """PAdES-sign a PDF and write to ``output_path``.
+
+        By default (``timestamper`` not passed), the signature embeds
+        an RFC-3161 timestamp token from an EU-sovereign TSA (DFN by
+        default, override via ``SENTINEL_TIMESTAMP_TSA``). If the TSA
+        is unreachable the signature is written without a TST and a
+        :class:`UserWarning` is emitted — the evidence pack still
+        verifies, just without a trusted-time witness.
+
+        Air-gapped deployments should set ``SENTINEL_TIMESTAMP=off``
+        to skip the network attempt entirely; pass ``timestamper=None``
+        for the same effect at the call site.
+        """
         src = Path(input_path).expanduser()
         dst = Path(output_path).expanduser()
         dst.parent.mkdir(parents=True, exist_ok=True)
@@ -225,9 +272,42 @@ class PAdESSigner:
             location=location,
         )
 
-        with src.open("rb") as f_in, dst.open("wb") as f_out:
-            writer = IncrementalPdfFileWriter(f_in)
-            signers.sign_pdf(writer, meta, signer=self._signer, output=f_out)
+        tsa = (
+            _default_timestamper()
+            if timestamper is _SENTINEL_NO_TSA
+            else timestamper
+        )
+
+        def _sign_to(out_stream: Any, tsa_to_use: Any) -> None:
+            with src.open("rb") as f_in:
+                writer = IncrementalPdfFileWriter(f_in)
+                signers.sign_pdf(
+                    writer,
+                    meta,
+                    signer=self._signer,
+                    timestamper=tsa_to_use,
+                    output=out_stream,
+                )
+
+        try:
+            with dst.open("wb") as f_out:
+                _sign_to(f_out, tsa)
+        except Exception as exc:
+            if tsa is None:
+                raise
+            import warnings
+
+            warnings.warn(
+                f"RFC-3161 timestamper at {getattr(tsa, 'url', '<unknown>')!r} "
+                f"failed ({type(exc).__name__}: {exc}); "
+                f"signing without a trusted-time token. "
+                f"Set SENTINEL_TIMESTAMP=off to silence this warning in "
+                f"air-gapped deployments.",
+                UserWarning,
+                stacklevel=2,
+            )
+            with dst.open("wb") as f_out:
+                _sign_to(f_out, None)
 
         return dst
 
@@ -280,4 +360,5 @@ __all__ = [
     "DEFAULT_CERT_PATH",
     "DEFAULT_CERT_KEY_PATH",
     "_default_cert_paths",
+    "_default_timestamper",
 ]

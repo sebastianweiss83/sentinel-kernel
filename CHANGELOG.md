@@ -13,6 +13,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
   directions.
 - Implementation pending design-partner feedback.
 
+## [3.4.3] — 2026-04-22 — RFC-3161 Timestamp Wiring
+
+Patch release closing the second marketing-code sync gap surfaced
+by the v3.5 audit. v3.4.0 – v3.4.2 shipped
+`sentinel.crypto.timestamp.RFC3161Timestamper` as a standalone
+class, and the homepage advertised *"Every evidence pack PDF
+carries a PAdES signature with EU-sovereign RFC-3161 timestamp"*,
+but no default code path actually embedded a TSA timestamp token.
+Inspection of a signed PDF via pyhanko confirmed
+`attached_timestamp_data is None`.
+
+### Changed
+
+- **`PAdESSigner.sign_pdf()` now embeds an RFC-3161 timestamp token
+  by default**, using DFN (German research network) as the default
+  EU-sovereign TSA. The capability the homepage promised is now
+  real on every `pip install sentinel-kernel[pdf]==3.4.3` default
+  call.
+- `SENTINEL_TIMESTAMP_TSA` env var overrides the default TSA URL.
+- `SENTINEL_TIMESTAMP=off` (accepts `off`, `0`, `no`) disables the
+  TSA attempt entirely — the right setting for air-gapped
+  deployments that should not attempt network calls during signing.
+- Explicit `timestamper=None` at the call site opts out
+  programmatically with no warning.
+- When the configured TSA is unreachable, the signer emits a
+  `UserWarning` describing the failure and falls back to a
+  TST-less signature so evidence generation is never blocked by a
+  downed TSA. The fallback path points the operator at
+  `SENTINEL_TIMESTAMP=off` to silence future warnings.
+
+### Fixed
+
+- Homepage claim *"PAdES signature with EU-sovereign RFC-3161
+  timestamp"* now matches default runtime behaviour on reachable
+  networks. Same class of fix as v3.4.1 → v3.4.2 (Ed25519 default
+  signing): capability shipped as a class, now wired into the
+  default lifecycle.
+
+### Tests
+
+- New: `tests/test_pades_timestamp.py` (12 tests) covers the
+  default-resolver, env-var overrides and opt-out, graceful
+  fallback on TSA failure, explicit-None opt-out, explicit-stamper
+  forwarding to pyhanko, and the non-TSA error re-raise guard.
+- Suite: 923 passing, 100% coverage. No regressions.
+
 ## [3.4.2] — 2026-04-22 — Packaging Fix
 
 Patch release fixing a v3.4.1 packaging bug that silently disabled
