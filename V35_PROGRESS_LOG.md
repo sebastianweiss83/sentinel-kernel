@@ -14,8 +14,8 @@ Single source of truth for Sebastian's morning check. Updated at every phase bou
 | 1 | v3.4.2 packaging fix | ✅ done | 2026-04-22 | ~1.1 / 1.5 h |
 | 2 | Full audit of current state | ✅ done | 2026-04-22 | 0.9 / 3 h |
 | 3 | Close audit gaps (v3.4.3) | ✅ done | 2026-04-22 | 1.8 / 8 h |
-| 4 | Berthold item 1: causal context (OTEL bridge) | 🏗 in progress | — | — / 16 h |
-| 5 | Berthold item 2: JSON-LD + PROV-O | ⏸ blocked by Phase 4 | — | — / 12 h |
+| 4 | Berthold item 1: causal context (OTEL bridge) | ✅ done | 2026-04-22 | 1.5 / 16 h |
+| 5 | Berthold item 2: JSON-LD + PROV-O | 🏗 in progress | — | — / 12 h |
 | 6 | Berthold item 3: retention policies | ⏸ blocked by Phase 5 | — | — / 10 h |
 | 7 | Berthold item 4: write-once storage | ⏸ blocked by Phase 6 | — | — / 14 h |
 | 8 | Homepage update (Marc-visible) | ⏸ blocked by Phase 7 | — | — / 4 h |
@@ -130,9 +130,33 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 **Deferred from Phase 3 (moved to Phase 8):** homepage one-line clarification that `[pdf]` extra is required for PAdES. Audit flagged this as ⚠️ PARTIAL — not a runtime bug, just copy polish.
 
-## Phase 4 — Berthold item 1: causal context (OTEL bridge)
+## Phase 4 — Berthold item 1: causal context (OTEL bridge) ✅
 
-**Status:** 🏗 in progress. 16h budget.
+**Started / completed:** 2026-04-22, ~1.5h of 16h budget.
+
+**Commits on main:**
+
+- `54d59a8` — `docs(arch): v3.5 Item 1 — causal context OTEL bridge design` (architecture doc committed **before** code per plan rule)
+- `f8ecf00` — `feat(v3.5 item 1): OTEL causal-context bridge` (+396 lines, 11 new tests)
+
+**CI:** run `24751328624` green (9/9 jobs).
+
+**What shipped:**
+
+- New module `sentinel/core/otel_context.py` — `OtelContext` dataclass and `capture_current_otel_context()` function. Soft dependency on `opentelemetry-api`; returns `None` gracefully when absent.
+- Three new optional `DecisionTrace` fields: `otel_trace_id` (32 hex), `otel_span_id` (16 hex), `otel_parent_span_id` (16 hex or None). Additive schema change per ADR-003.
+- `Sentinel._execute_traced` captures OTEL context at trace start; no behavior change when OTEL absent or no active span.
+- `to_dict` adds an `otel_context` envelope (None when no context captured), `from_dict` restores fields (backward-compatible with v3.4.x traces).
+
+**Design decision (accepted in architecture doc):** Sentinel is the *ingress* side of the OTEL bridge. The existing `sentinel.integrations.otel.OTelExporter` remains the egress. No OTEL-native rewrite; the bridge does not create OTEL spans in this direction.
+
+**Precedence:** Sentinel-native `parent_trace_id` continues to govern chain verification. OTEL IDs are *joinable identifiers* for cross-system reconstruction, not a replacement for the hash-chain.
+
+**Tests:** 934 passing, 100% coverage, 42/42 smoke.
+
+## Phase 5 — Berthold item 2: JSON-LD + PROV-O semantic export
+
+**Status:** 🏗 in progress. 12h budget.
 
 ## Operating notes
 
