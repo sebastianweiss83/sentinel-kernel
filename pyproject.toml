@@ -48,8 +48,14 @@ classifiers = [
 # maintained, pure-crypto (no network at runtime), and works air-
 # gapped via wheel install. Moved from optional `[ed25519]` extra in
 # v3.4.2 after v3.4.1 shipped the code path but not the dependency.
+#
+# `pyyaml` is required so v3.5 Item 3 retention policies (YAML-based,
+# per-decision retention rules) are a first-class capability and not
+# gated behind an extra. PyYAML is LibYAML/MIT-compatible, offline-
+# safe, one of the most universally installed Python packages.
 dependencies = [
     "cryptography>=42.0",
+    "pyyaml>=6.0",
 ]
 
 [project.optional-dependencies]
