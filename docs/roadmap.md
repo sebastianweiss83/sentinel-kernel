@@ -126,9 +126,15 @@ v3.4 public API remains stable.
    cryptographic.
 
 The existing ecosystem-bridge items (MCP gateway, Microsoft AGT,
-Langfuse, OPA decision log, Cedar, Redis/S3-compatible storage)
-remain on the roadmap as v3.6+ work or community contributions,
-queued behind the four architecture priorities above.
+Langfuse ingestion, OPA native decision-log export format,
+Cedar, Redis/S3-compatible storage) remain on the roadmap as
+v3.6+ work or community contributions, queued behind the four
+architecture priorities above.
+
+*(Note: the OPA *evaluator* already shipped in v3.1 — see
+``LocalRegoEvaluator``. The roadmap item refers to the separate
+OPA native decision-log export format that exposes Sentinel
+attestations in OPA's own audit schema, distinct from evaluation.)*
 
 ## Phase 3: Federation (v4.x, roadmap)
 

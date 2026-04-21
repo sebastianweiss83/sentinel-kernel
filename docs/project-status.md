@@ -18,7 +18,7 @@ Evidence infrastructure for the regulated AI era. Trace every decision, attest i
 
 | | |
 |---|---|
-| Tests | 911 passing |
+| Tests | 872 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
 

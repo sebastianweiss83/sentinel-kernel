@@ -1,14 +1,121 @@
 # Sentinel v3.5+ Backlog
 
-*Issues deferred from the v3.4.1 patch-release audit. Each entry
-has priority, rough scope, and acceptance criteria. Not yet issues
-in the tracker.*
+*Planning doc. Each entry has priority, rough scope, and
+acceptance criteria. Items with a GitHub Issue number are in the
+tracker; the rest are captured here until filed.*
 
-Last updated: 2026-04-21 (post-v3.4.1).
+Last updated: 2026-04-22.
 
 ---
 
-## v3.5 — Must-land before first production pilot
+## v3.5 "Architecture Release" — four items on the public roadmap
+
+These four items appear in the "Next months" column of the live
+homepage and in `docs/roadmap.md § v3.5 — Architecture Release`.
+They take priority over the audit-deferrals below because they
+address a structural gap (OTEL ecosystem alignment) that design-
+partner review flagged as a deployment blocker inside modern
+observability stacks.
+
+### A1 — OpenTelemetry GenAI integration
+
+**Scope:** make Sentinel a first-class OTEL GenAI producer.
+
+- Honour W3C Trace Context propagation — inbound `traceparent`
+  becomes the `parent_trace_id` on the Sentinel trace, outbound
+  calls from the wrapped function carry the Sentinel trace ID.
+- Emit Sentinel attestations as OTEL span events (rather than
+  parallel sidecar records) with `gen_ai.*` semantic attributes
+  per the OpenTelemetry GenAI conventions
+  (`gen_ai.system`, `gen_ai.request.model`, `gen_ai.response.*`,
+  `gen_ai.operation.name`, etc.).
+- Maintain a stable mapping from `DecisionTrace` fields to
+  `gen_ai.*` attributes so downstream viewers (Grafana Tempo,
+  Langfuse, Datadog, Phoenix) render Sentinel evidence natively.
+- Document a reference deployment with OpenTelemetry Collector
+  + Grafana Tempo.
+
+**Acceptance:** a wrapped agent emits both (a) a Sentinel
+attestation and (b) an OTEL span with `gen_ai.*` attributes
+pointing at the same trace ID. Integration test confirms a
+downstream Tempo backend receives both and links them.
+
+**Budget:** ~3 days.
+
+### A2 — JSON-LD + PROV-O output format
+
+**Scope:** long-term semantic retention. An attestation must
+remain machine-interpretable in 2036 without a Sentinel-specific
+parser.
+
+- Emit attestations as JSON-LD with a W3C PROV-O context.
+- Map existing schema fields: `agent`, `policy`, `inputs_hash`,
+  `output`, `signature` → PROV-O `Activity`, `Plan`, `Entity`,
+  `wasDerivedFrom`, `wasGeneratedBy`, `wasAssociatedWith`.
+- Publish a stable `@context` document at a versioned URL under
+  `sentinel-kernel.eu/ns/` (or equivalent) so archived
+  attestations remain dereferenceable.
+- Backward compat: legacy JSON envelope remains the default
+  output until v4.0; JSON-LD is an opt-in flag.
+
+**Acceptance:** `attest.generate(..., format="jsonld")` produces
+a valid PROV-O JSON-LD document that passes
+`pyld.jsonld.expand` and round-trips through `prov.model.ProvDocument`.
+
+**Budget:** ~2 days design + 2 days implementation.
+
+### A3 — Fine-grained retention policies
+
+**Scope:** per-decision raw-vs-hash storage, not the current
+global flag.
+
+- Manifesto DSL extension:
+  ```python
+  class MyManifesto(SentinelManifesto):
+      retention = FineGrainedRetention({
+          "credit_decisions": RawPayload(legal_basis="GDPR Art. 6(1)(b)"),
+          "claims_triage":    HashOnly(),
+          "fraud_alerts":     RawPayload(retention_days=2555),
+      })
+  ```
+- `@sentinel.trace(retention_key="credit_decisions")` picks the
+  policy; omitted → global default.
+- `audit-gap` reports per-key retention posture.
+
+**Acceptance:** two traces in the same run land with different
+storage shapes (one with raw inputs, one hash-only) per a
+manifesto-declared policy.
+
+**Budget:** ~2 days.
+
+### A4 — Write-once storage backend support
+
+**Scope:** WORM storage for regulators that require operational
+tamper-evidence, not only cryptographic.
+
+- `sentinel.storage.s3_object_lock.S3ObjectLockStorage` — write-
+  once via S3 Object Lock compliance mode.
+- `sentinel.storage.azure_immutable.AzureImmutableStorage` — Azure
+  Blob Immutable Storage.
+- `sentinel.storage.append_only_filesystem.AppendOnlyStorage` —
+  POSIX append-only (`chattr +a`) for on-premise.
+- Each backend ships a "storage claim" auditors can read:
+  cryptographic hash chain + operational write-once attestation.
+
+**Acceptance:** a manifesto declaring `OnPremiseOnly` +
+`WriteOnceRequired` validates against any of the three
+backends; deleting a trace post-write fails with a clear error.
+
+**Budget:** ~4 days (one per backend + docs).
+
+---
+
+## Audit-deferred items — targeted for v3.5 secondary priority
+
+*All carried forward from AUDIT_v3.4.md. Each is concrete,
+actionable, and small enough for a single-session PR. Ship any
+of these that closes a champion's concrete question first; ship
+the rest when A1–A4 land.*
 
 ### P1 — End-to-end composite integration test
 

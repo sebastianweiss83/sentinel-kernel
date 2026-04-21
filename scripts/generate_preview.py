@@ -2103,7 +2103,7 @@ def _section_roadmap(tests_n: str) -> str:
             <span class="stage-item">MCP gateway integration</span>
             <span class="stage-item">Microsoft AGT bridge</span>
             <span class="stage-item">Langfuse ingestion hooks</span>
-            <span class="stage-item">OPA decision log</span>
+            <span class="stage-item">OPA native decision-log export format</span>
             <span class="stage-item">Cedar policy binding</span>
             <span class="stage-item">Redis · S3-compatible storage</span>
           </div>
