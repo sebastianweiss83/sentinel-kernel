@@ -7,11 +7,68 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### Planning (v3.5 — Architecture Release)
+### Planning (v3.6)
 
-- See [`BACKLOG_v3.5.md`](BACKLOG_v3.5.md) for v3.5 architectural
-  directions.
-- Implementation pending design-partner feedback.
+- S3 Object Lock + Azure Immutable Blob backends (cloud-immutable
+  storage) — deferred from v3.5 Item 4 because they need AWS
+  credentials for end-to-end testing.
+- Retention enforcement (automatic sweep past declared
+  `retention_days`) — v3.5 captures the intended window, v3.6
+  enforces it.
+- Bi-directional OTEL bridge (Sentinel → caller span attributes).
+
+## [3.5.0] — 2026-04-22 — Architecture Release
+
+The four Berthold-feedback architectural items land together.
+Zero breaking changes for v3.4.x callers; every new capability is
+additive and opt-in at the point of use.
+
+### Added
+
+- **Item 1: OpenTelemetry causal-context bridge.** When a caller
+  has an active OTEL span at decorator time, the corresponding
+  `otel_trace_id`, `otel_span_id`, and `otel_parent_span_id` are
+  captured into the DecisionTrace. Soft dependency on
+  `opentelemetry-api`; absent-OTEL path is a safe no-op.
+  Design: `docs/architecture/v3.5-item-1-causal-context.md`.
+
+- **Item 2: JSON-LD + PROV-O semantic export.**
+  `comply.export(format="jsonld")` emits a document mapping every
+  trace onto `prov:Activity` with input/output hashes as
+  `prov:Entity` and `prov:wasDerivedFrom` linkage. `@context` is
+  inlined so the evidence pack verifies offline. Ontology published
+  at <https://sebastianweiss83.github.io/sentinel-kernel/ontology/v1/>.
+  New `[jsonld]` extra (pulls `pyld>=2.0`).
+  Design: `docs/architecture/v3.5-item-2-semantic-export.md`.
+
+- **Item 3: Per-decision retention policies.** YAML-declared
+  rules at `~/.sentinel/retention-policy.yaml` (override via
+  `SENTINEL_RETENTION_POLICY`). Match on agent name (exact or
+  trailing `*` wildcard), sovereign scope, data residency, and
+  tag values. Actions: `store_inputs`, `store_outputs`,
+  `retention_days` (advisory), `redact_fields` (dotted paths).
+  First-match-wins. Strict schema validation — typos fail loudly.
+  Core dep: `pyyaml>=6.0`.
+  Design: `docs/architecture/v3.5-item-3-retention-policies.md`.
+
+- **Item 4: Write-once filesystem storage backend.**
+  `WriteOnceFilesystemStorage` at `sentinel.storage.writeonce_filesystem`
+  rejects any `save()` of a trace_id already on disk. Atomic
+  first-write + best-effort OS-level immutable flag
+  (`chflags uchg` on macOS, `chattr +i` on Linux) as defense in
+  depth. Software-level rejection is the primary guarantee.
+  New `DecisionTrace.storage_mode` field (default `"writeable"`,
+  set to `"writeonce_fs"` by this backend).
+  Design: `docs/architecture/v3.5-item-4-writeonce-storage.md`.
+
+### Changed
+
+- No breaking changes. All v3.4.x code continues to work unchanged.
+
+### Tests & verification
+
+- 1012 passing, 100% coverage, 42/42 smoke test.
+- Fresh-venv E2E exercised per Phase 9 of the v3.5 master plan.
 
 ## [3.4.3] — 2026-04-22 — RFC-3161 Timestamp Wiring
 

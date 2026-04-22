@@ -2132,31 +2132,34 @@ def _section_roadmap(tests_n: str) -> str:
     <div class="roadmap-grid">
 
       <div class="stage today">
-        <div class="stage-status">Available today</div>
-        <h3 class="stage-title">Kernel primitives</h3>
+        <div class="stage-status">Available today — v3.5 Architecture Release</div>
+        <h3 class="stage-title">Kernel primitives + architecture bridges</h3>
         <p class="stage-description">Production-ready, Apache 2.0, <span data-ci="tests">{tests_n} tests passing</span>. Install with <code>pip install sentinel-kernel</code>.</p>
         <div class="stage-items">
           <span class="stage-item">@sentinel.trace decorator</span>
           <span class="stage-item">Ed25519 attestations (default)</span>
           <span class="stage-item">Hash-chain linkage</span>
-          <span class="stage-item">PAdES PDF signing</span>
-          <span class="stage-item">RFC-3161 timestamping</span>
-          <span class="stage-item">LangChain · CrewAI · AutoGen</span>
+          <span class="stage-item">PAdES PDF signing · RFC-3161 timestamping (default)</span>
+          <span class="stage-item"><b>OpenTelemetry causal-context bridge</b> · parent-child linkage across system boundaries</span>
+          <span class="stage-item"><b>JSON-LD + PROV-O semantic export</b> · 10-15 year retention, W3C-standard ontology</span>
+          <span class="stage-item"><b>Per-decision retention policies</b> · YAML-driven, per agent / jurisdiction / policy-family</span>
+          <span class="stage-item"><b>Write-once filesystem storage</b> · application-layer + OS-level tamper prevention</span>
+          <span class="stage-item">LangChain · CrewAI · AutoGen · Haystack · FastAPI · Django</span>
           <span class="stage-item">SQLite · PostgreSQL · Filesystem</span>
-          <span class="stage-item">OpenTelemetry spans</span>
+          <span class="stage-item">OpenTelemetry span export</span>
           <span class="stage-item">Optional ML-DSA-65 signing (<code>[pqc]</code>)</span>
         </div>
       </div>
 
       <div class="stage soon">
-        <div class="stage-status">Next months — v3.5 Architecture Release</div>
-        <h3 class="stage-title">Bridges to observability and governance ecosystems</h3>
-        <p class="stage-description">Four enrichments that let Sentinel's cryptographic evidence layer sit cleanly beside the observability and governance tools already in your stack. Bridges, not replacements — your developers keep what they use today, Sentinel adds what those tools were never designed to produce. Actively in design.</p>
+        <div class="stage-status">Next months — v3.6</div>
+        <h3 class="stage-title">Cloud-immutable backends and policy enforcement</h3>
+        <p class="stage-description">Sentinel v3.5 ships the filesystem-layer write-once discipline as an application-tier guarantee. v3.6 brings cloud-immutable storage and the enforcement tier that makes retention policies automatically delete expired traces.</p>
         <div class="stage-items">
-          <span class="stage-item"><b>OpenTelemetry context bridge</b> · when OTEL traces exist, Sentinel reads the context to preserve causal relationships in cryptographic attestations</span>
-          <span class="stage-item"><b>JSON-LD + PROV-O semantic export</b> · for 10-15 year retention scenarios where attestations must remain machine-readable across system generations</span>
-          <span class="stage-item"><b>Fine-grained retention policies</b> · per-decision storage rules driven by jurisdiction, policy family, or decision type — configurable via YAML</span>
-          <span class="stage-item"><b>Write-once storage backends</b> · S3 Object Lock and WORM-compliant backends for environments where evidence integrity must be enforced at the storage layer</span>
+          <span class="stage-item"><b>S3 Object Lock backend</b> · WORM-compliant AWS-side evidence retention</span>
+          <span class="stage-item"><b>Azure Immutable Blob storage</b> · EU-sovereign equivalent</span>
+          <span class="stage-item"><b>Retention enforcement</b> · automatic sweep of traces past their declared retention window</span>
+          <span class="stage-item"><b>Bi-directional OTEL bridge</b> · surface Sentinel trace IDs onto the caller's active span for bi-directional observability joins</span>
         </div>
         <div class="stage-subgroup">
           <div class="stage-subgroup-label">Further ecosystem bridges · v3.6+ or community</div>
@@ -2166,7 +2169,7 @@ def _section_roadmap(tests_n: str) -> str:
             <span class="stage-item">Langfuse ingestion hooks</span>
             <span class="stage-item">OPA native decision-log export format</span>
             <span class="stage-item">Cedar policy binding</span>
-            <span class="stage-item">Redis · S3-compatible storage</span>
+            <span class="stage-item">Redis · Legal-hold APIs</span>
           </div>
         </div>
       </div>
