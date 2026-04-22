@@ -142,9 +142,10 @@ without `--pre` / explicit ignore.
 1. Run the exact reality test above on a brand-new venv. Confirm
    `algorithm=Ed25519` and a signature string.
 2. One-click yank v3.4.1 at the URL above.
-3. If confirmed: v3.4.2 is ready for the Berthold meeting — the
-   "Ed25519 signatures" canonical trust signal matches runtime
-   behaviour on every install, not just `[ed25519]`-extra installs.
+3. If confirmed: v3.4.2 is ready for the upcoming design-partner
+   review — the "Ed25519 signatures" canonical trust signal matches
+   runtime behaviour on every install, not just `[ed25519]`-extra
+   installs.
 4. If the reality test fails despite this report claiming success,
    the report is lying and needs investigation. The signature line
    above was produced verbatim by the test; grep shows it in this

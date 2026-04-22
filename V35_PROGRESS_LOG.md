@@ -14,19 +14,19 @@ Single source of truth for Sebastian's morning check. Updated at every phase bou
 | 1 | v3.4.2 packaging fix | ✅ done | 2026-04-22 | ~1.1 / 1.5 h |
 | 2 | Full audit of current state | ✅ done | 2026-04-22 | 0.9 / 3 h |
 | 3 | Close audit gaps (v3.4.3) | ✅ done | 2026-04-22 | 1.8 / 8 h |
-| 4 | Berthold item 1: causal context (OTEL bridge) | ✅ done | 2026-04-22 | 1.5 / 16 h |
-| 5 | Berthold item 2: JSON-LD + PROV-O | ✅ done | 2026-04-22 | 1.2 / 12 h |
-| 6 | Berthold item 3: retention policies | ✅ done | 2026-04-22 | 1.6 / 10 h |
-| 7 | Berthold item 4: write-once storage | ✅ done | 2026-04-22 | 1.5 / 14 h |
-| 8 | Homepage update (Marc-visible) | ✅ done | 2026-04-22 | 0.4 / 4 h |
+| 4 | Design-partner item 1: causal context (OTEL bridge) | ✅ done | 2026-04-22 | 1.5 / 16 h |
+| 5 | Design-partner item 2: JSON-LD + PROV-O | ✅ done | 2026-04-22 | 1.2 / 12 h |
+| 6 | Design-partner item 3: retention policies | ✅ done | 2026-04-22 | 1.6 / 10 h |
+| 7 | Design-partner item 4: write-once storage | ✅ done | 2026-04-22 | 1.5 / 14 h |
+| 8 | Homepage update (public-facing) | ✅ done | 2026-04-22 | 0.4 / 4 h |
 | 9 | v3.5.0 release | ✅ done | 2026-04-22 | 0.6 / 4 h |
-| 10 | Berthold handoff package | ✅ done | 2026-04-22 | 0.5 / 2 h |
+| 10 | Design-partner handoff package | ✅ done | 2026-04-22 | 0.5 / 2 h |
 
 **Total plan budget: 74.5 h. Consumed: ~9.1 h. All phases complete.**
 
 v3.5.0 live on PyPI (`pip install sentinel-kernel==3.5.0`).
-Fresh-venv E2E for all four Berthold items PASSED.
-Berthold handoff package at `~/Library/Mobile Documents/com~apple~CloudDocs/Sentinel Strategy/BERTHOLD_HANDOFF.md`.
+Fresh-venv E2E for all four design-partner items PASSED.
+Design-partner handoff package at `~/Library/Mobile Documents/com~apple~CloudDocs/Sentinel Strategy/DESIGN_PARTNER_HANDOFF.md`.
 
 ## Phase 0 — Pre-flight
 
@@ -134,7 +134,7 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 **Deferred from Phase 3 (moved to Phase 8):** homepage one-line clarification that `[pdf]` extra is required for PAdES. Audit flagged this as ⚠️ PARTIAL — not a runtime bug, just copy polish.
 
-## Phase 4 — Berthold item 1: causal context (OTEL bridge) ✅
+## Phase 4 — Design-partner item 1: causal context (OTEL bridge) ✅
 
 **Started / completed:** 2026-04-22, ~1.5h of 16h budget.
 
@@ -158,7 +158,7 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 **Tests:** 934 passing, 100% coverage, 42/42 smoke.
 
-## Phase 5 — Berthold item 2: JSON-LD + PROV-O semantic export ✅
+## Phase 5 — Design-partner item 2: JSON-LD + PROV-O semantic export ✅
 
 **Started / completed:** 2026-04-22, ~1.2h of 12h budget.
 
@@ -180,7 +180,7 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 **Tests:** 947 passing, 100% coverage, 42/42 smoke. 13 new tests cover document shape, PROV wiring, agent deduplication, fully-populated trace round-trip, bare trace emission, output-only trace, OTEL fields, `pyld.expand()` validation, file-write correctness, format dispatch, unknown format, default `pdf` preserved.
 
-## Phase 6 — Berthold item 3: retention policies ✅
+## Phase 6 — Design-partner item 3: retention policies ✅
 
 **Started / completed:** 2026-04-22, ~1.6h of 10h budget.
 
@@ -205,7 +205,7 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 **Tests:** 983 passing, 100% coverage, 42/42 smoke.
 
-## Phase 7 — Berthold item 4: write-once storage ✅
+## Phase 7 — Design-partner item 4: write-once storage ✅
 
 **Started / completed:** 2026-04-22, ~1.5h of 14h budget (filesystem scope; S3 deferred to v3.6).
 
@@ -227,7 +227,7 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 **Tests:** 1012 passing, 100% coverage, 42/42 smoke.
 
-## Phase 8 — Homepage update (Marc-visible) ✅
+## Phase 8 — Homepage update (public-facing) ✅
 
 **Commits on main:**
 
@@ -237,7 +237,7 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 - `scripts/generate_preview.py::_section_roadmap` rewritten so the "Available today" column now includes the four bold v3.5 items (OTEL bridge, JSON-LD + PROV-O, retention policies, write-once storage). The "Next months" column repopulates with v3.6 items (S3 Object Lock, Azure Immutable Blob, retention enforcement sweep, bi-directional OTEL).
 - CLAUDE.md auto-regenerates on next CI push; the positioning copy already matches v3.5 reality.
-- The Marc-visible result: when the Commerzbank working group reads the homepage, the four items are shipped, not aspirational.
+- The public-facing result: when a banking-sector reviewer opens the homepage, the four items appear as shipped, not aspirational.
 
 ## Phase 9 — v3.5.0 release ✅
 
@@ -251,7 +251,7 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 **PyPI:** `sentinel-kernel==3.5.0` live.
 
-**Comprehensive fresh-venv E2E — all four Berthold items back-to-back:**
+**Comprehensive fresh-venv E2E — all four design-partner items back-to-back:**
 
 ```
 [1/4] ✓ OTEL causal-context bridge: otel_trace_id=e4759ababd5a0abd...
@@ -262,16 +262,16 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 v3.5.0 fresh-venv E2E — ALL 4 ITEMS PASS
 ```
 
-## Phase 10 — Berthold handoff package ✅
+## Phase 10 — Design-partner handoff package ✅
 
-**File:** `~/Library/Mobile Documents/com~apple~CloudDocs/Sentinel Strategy/BERTHOLD_HANDOFF.md` (iCloud, not in git per CLAUDE.md content boundary).
+**File:** `~/Library/Mobile Documents/com~apple~CloudDocs/Sentinel Strategy/DESIGN_PARTNER_HANDOFF.md` (iCloud, not in git per CLAUDE.md content boundary).
 
 **Contents:**
 
-1. Recap of Berthold's four points.
+1. Recap of the design partner's four architectural points.
 2. How each is addressed in v3.5.0 with line-level references to architecture docs, modules, and test suites.
 3. Suggested < 10-minute evaluation path for his developers against PyPI.
-4. Four open v3.6 architectural questions where Berthold's operational perspective would materially improve the design (retention enforcement, bi-directional OTEL, EU-sovereign cloud backends, chain namespace governance).
+4. Four open v3.6 architectural questions where the design partner's operational perspective would materially improve the design (retention enforcement, bi-directional OTEL, EU-sovereign cloud backends, chain namespace governance).
 5. Ready-to-send email draft.
 6. Outstanding on Sebastian's side: one-click yank of v3.4.1 from PyPI (inherited from Phase 1).
 
