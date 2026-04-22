@@ -6,11 +6,11 @@
 > `python scripts/sync_all.py` locally and commit the result.
 
 <!-- SYNC_ALL_STATUS_START -->
-_Last generated from HEAD commit: 2026-04-22 01:54 UTC_
+_Last generated from HEAD commit: 2026-04-22 02:02 UTC_
 
 ## Version
 
-**`3.4.3`** — Production/Stable
+**`3.5.0`** — Production/Stable
 
 Evidence infrastructure for the regulated AI era. Trace every decision, attest it cryptographically, audit the record, comply with EU AI Act Art. 12/13/14/17 via a signed evidence pack. Air-gapped, offline-first, Apache 2.0.
 

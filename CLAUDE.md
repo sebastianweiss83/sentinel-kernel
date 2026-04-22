@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `3.4.3` |
+| Version | `3.5.0` |
 | Tests | 1012 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-22 01:54 UTC |
+| Last updated | 2026-04-22 02:02 UTC |
 
 ## Last 5 commits
 
+- `ad8859d` feat(v3.5.0): homepage roadmap + version bump
+- `a3be4f2` docs(v3.5): Phase 7 complete, Phase 8 homepage opened
 - `a347ae5` feat(v3.5 item 4): write-once filesystem storage backend
 - `ee44ed4` docs(arch): v3.5 Item 4 — write-once storage design
 - `0a0690b` docs(v3.5): Phase 6 complete, Phase 7 write-once opened
-- `96069f0` fix(ci): add types-PyYAML to [dev] so mypy has stubs
-- `324411e` feat(v3.5 item 3): per-decision retention policies
 
 ## Open issues
 
