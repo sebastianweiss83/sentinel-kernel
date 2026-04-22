@@ -17,8 +17,8 @@ Single source of truth for Sebastian's morning check. Updated at every phase bou
 | 4 | Berthold item 1: causal context (OTEL bridge) | ✅ done | 2026-04-22 | 1.5 / 16 h |
 | 5 | Berthold item 2: JSON-LD + PROV-O | ✅ done | 2026-04-22 | 1.2 / 12 h |
 | 6 | Berthold item 3: retention policies | ✅ done | 2026-04-22 | 1.6 / 10 h |
-| 7 | Berthold item 4: write-once storage | 🏗 in progress | — | — / 14 h |
-| 8 | Homepage update (Marc-visible) | ⏸ blocked by Phase 7 | — | — / 4 h |
+| 7 | Berthold item 4: write-once storage | ✅ done | 2026-04-22 | 1.5 / 14 h |
+| 8 | Homepage update (Marc-visible) | 🏗 in progress | — | — / 4 h |
 | 9 | v3.5.0 release | ⏸ blocked by Phase 8 | — | — / 4 h |
 | 10 | Berthold handoff package | ⏸ blocked by Phase 9 | — | — / 2 h |
 
@@ -201,9 +201,31 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 **Tests:** 983 passing, 100% coverage, 42/42 smoke.
 
-## Phase 7 — Berthold item 4: write-once storage
+## Phase 7 — Berthold item 4: write-once storage ✅
 
-**Status:** 🏗 in progress. 14h budget.
+**Started / completed:** 2026-04-22, ~1.5h of 14h budget (filesystem scope; S3 deferred to v3.6).
+
+**Commits on main:**
+
+- `248c711` — `docs(arch): v3.5 Item 4 — write-once storage design`
+- `64ca413` — `feat(v3.5 item 4): write-once filesystem storage backend` (+695 lines, 30 new tests)
+
+**CI:** run `24752620519` green.
+
+**What shipped:**
+
+- `WriteOnceFilesystemStorage` — new backend at `sentinel/storage/writeonce_filesystem.py`. One `<trace_id>.ndjson` file per trace; `save()` of an already-existing trace_id raises `WriteOnceViolation`. Atomic writes, path-traversal sanitisation.
+- Best-effort OS-level immutable flag: `chflags uchg` on macOS, `chattr +i` on Linux, silently skipped on Windows/unsupported filesystems. Defense in depth — software-level rejection is the primary guarantee.
+- New `storage_mode: str = "writeable"` field on `DecisionTrace`. Backend sets it to `"writeonce_fs"` before signing so the signed payload reflects the claimed storage discipline. `"writeonce_s3"` reserved for v3.6.
+- `WriteOnceViolation` exception — always surfaces, never silently swallowed.
+
+**Scope restriction:** S3 Object Lock and Azure Immutable Blob deferred to v3.6 as the plan permits ("S3 requires AWS credentials, may be tested separately"). v3.5.0 ships the filesystem-layer tamper-prevention proof; cloud-immutable backends require separate testing infrastructure (moto + live AWS creds).
+
+**Tests:** 1012 passing, 100% coverage, 42/42 smoke.
+
+## Phase 8 — Homepage update (Marc-visible)
+
+**Status:** 🏗 in progress. 4h budget.
 
 ## Operating notes
 
