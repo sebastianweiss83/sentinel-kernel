@@ -8,19 +8,19 @@
 
 | | |
 |---|---|
-| Version | `3.5.0` |
-| Tests | 1012 passing |
+| Version | `3.4.3` |
+| Tests | 923 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-22 02:12 UTC |
+| Last updated | 2026-04-22 09:35 UTC |
 
 ## Last 5 commits
 
+- `90fe613` docs: correct homepage to match v3.4.3 reality, not v3.5.0 (yanked)
 - `ceb1dda` docs(v3.5): all 11 phases complete — v3.5.0 shipped, Berthold handoff ready
 - `ad8859d` feat(v3.5.0): homepage roadmap + version bump
 - `a3be4f2` docs(v3.5): Phase 7 complete, Phase 8 homepage opened
 - `a347ae5` feat(v3.5 item 4): write-once filesystem storage backend
-- `ee44ed4` docs(arch): v3.5 Item 4 — write-once storage design
 
 ## Open issues
 
