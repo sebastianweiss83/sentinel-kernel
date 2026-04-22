@@ -94,17 +94,29 @@ into "independently verifiable". LF Europe stewardship gives
 the project an EU-governed home. BSI assessment produces a
 profile that every German public-sector buyer can reference.
 
-### v3.5 — Architecture Release (next months)
+### v3.5 — Architecture Release (back to planning)
 
-**Status: design.** Senior design-partner architectural review
-(April 2026) confirmed four enrichments that let Sentinel's
-cryptographic evidence layer sit cleanly beside the observability
-and governance tools already present in regulated enterprise
-stacks. All four are **bridges**, not replacements: your
-developers keep the observability and governance tooling they
-use today, Sentinel adds what those tools were never designed to
-produce. Not a breaking release; the v3.4 public API remains
-stable.
+**Status: architecture planning.** A first v3.5.0 implementation
+shipped to PyPI on 2026-04-22 and was **yanked the same day**
+after fresh-venv verification surfaced three critical issues
+(OTEL asyncio nested-trace bug, undocumented `[jsonld]` extra,
+`WriteOnceFilesystemStorage` not re-exported from
+`sentinel.storage`). The four architecture items are back in
+planning; the design docs remain committed at
+[`docs/architecture/v3.5-item-*.md`](architecture/). When the
+items re-land, a fresh-venv E2E harness will sign off on every
+claim before anything ships to PyPI.
+
+Current stable release is **v3.4.3**. The v3.4 public API
+remains stable; the v3.5 re-implementation will not break it.
+
+The April 2026 design-partner architectural review confirmed
+four enrichments that let Sentinel's cryptographic evidence
+layer sit cleanly beside the observability and governance tools
+already present in regulated enterprise stacks. All four are
+**bridges**, not replacements: your developers keep the
+observability and governance tooling they use today, Sentinel
+adds what those tools were never designed to produce.
 
 1. **OpenTelemetry context bridge** — when OTEL traces flow
    through the application, Sentinel reads the W3C Trace

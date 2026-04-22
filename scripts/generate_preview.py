@@ -1832,18 +1832,24 @@ def _section_quickstart() -> str:
             <div class="term-title">shell</div>
           </div>
           <div class="terminal-body" style="min-height:auto;padding:20px 24px">
-<span class="tline"><span class="t-prompt">$</span> pipx install <span class="t-str">'sentinel-kernel[pdf]'</span></span>
-<span class="tline"><span class="t-ok">  ✓</span> <span class="t-dim">sentinel-kernel installed (Apache 2.0)</span></span>
+<span class="tline"><span class="t-comment"># Core — @sentinel.trace, Ed25519 signing, hash chain, RFC-3161</span></span>
+<span class="tline"><span class="t-prompt">$</span> pip install <span class="t-str">sentinel-kernel</span></span>
 <span class="tline"></span>
-<span class="tline"><span class="t-prompt">$</span> sentinel key init</span>
-<span class="tline"><span class="t-ok">  ✓</span> <span class="t-dim">Ed25519 key written to</span> <span class="t-comment">~/.sentinel/ed25519.key</span></span>
+<span class="tline"><span class="t-comment"># With PDF evidence packs</span></span>
+<span class="tline"><span class="t-prompt">$</span> pip install <span class="t-str">'sentinel-kernel[pdf]'</span></span>
 <span class="tline"></span>
-<span class="tline"><span class="t-prompt">$</span> sentinel quickstart</span>
-<span class="tline"><span class="t-ok">  ✓</span> <span class="t-dim">hello_sentinel.py scaffolded</span></span>
+<span class="tline"><span class="t-comment"># With PAdES PDF signing only (lighter than [pdf])</span></span>
+<span class="tline"><span class="t-prompt">$</span> pip install <span class="t-str">'sentinel-kernel[pades]'</span></span>
+<span class="tline"></span>
+<span class="tline"><span class="t-comment"># With post-quantum signing (ML-DSA-65)</span></span>
+<span class="tline"><span class="t-prompt">$</span> pip install <span class="t-str">'sentinel-kernel[pqc]'</span></span>
+<span class="tline"></span>
+<span class="tline"><span class="t-comment"># Or everything at once</span></span>
+<span class="tline"><span class="t-prompt">$</span> pip install <span class="t-str">'sentinel-kernel[pdf,pades,pqc]'</span></span>
           </div>
         </div>
         <div class="qs-caption">
-          The <code>[pdf]</code> extra pulls <code>reportlab</code>, <code>cryptography</code>, and <code>pyhanko</code> — everything needed for signed PDF evidence packs. The bare install still works; <code>evidence-pack</code> tells you what to add.
+          The core install produces a fully working Sentinel with Ed25519 default signing, RFC-3161 EU-sovereign timestamping, hash-chain attestations, and SQLite / PostgreSQL / filesystem storage. Extras opt in to heavier or optional capabilities: <code>[pdf]</code> pulls <code>reportlab</code> + <code>pyhanko</code> for evidence-pack PDFs; <code>[pades]</code> is <code>[pdf]</code> without <code>reportlab</code>; <code>[pqc]</code> adds ML-DSA-65 post-quantum signing via <code>oqs-python</code>.
         </div>
       </div>
 
@@ -2132,37 +2138,38 @@ def _section_roadmap(tests_n: str) -> str:
     <div class="roadmap-grid">
 
       <div class="stage today">
-        <div class="stage-status">Available today — v3.5 Architecture Release</div>
-        <h3 class="stage-title">Kernel primitives + architecture bridges</h3>
+        <div class="stage-status">Currently shipping in v3.4.3</div>
+        <h3 class="stage-title">Kernel primitives</h3>
         <p class="stage-description">Production-ready, Apache 2.0, <span data-ci="tests">{tests_n} tests passing</span>. Install with <code>pip install sentinel-kernel</code>.</p>
         <div class="stage-items">
           <span class="stage-item">@sentinel.trace decorator</span>
-          <span class="stage-item">Ed25519 attestations (default)</span>
-          <span class="stage-item">Hash-chain linkage</span>
-          <span class="stage-item">PAdES PDF signing · RFC-3161 timestamping (default)</span>
-          <span class="stage-item"><b>OpenTelemetry causal-context bridge</b> · parent-child linkage across system boundaries</span>
-          <span class="stage-item"><b>JSON-LD + PROV-O semantic export</b> · 10-15 year retention, W3C-standard ontology</span>
-          <span class="stage-item"><b>Per-decision retention policies</b> · YAML-driven, per agent / jurisdiction / policy-family</span>
-          <span class="stage-item"><b>Write-once filesystem storage</b> · application-layer + OS-level tamper prevention</span>
-          <span class="stage-item">LangChain · CrewAI · AutoGen · Haystack · FastAPI · Django</span>
-          <span class="stage-item">SQLite · PostgreSQL · Filesystem</span>
+          <span class="stage-item">Ed25519 attestations (default, out of the box)</span>
+          <span class="stage-item">Hash-chain attestation linkage</span>
+          <span class="stage-item">RFC-3161 EU-sovereign timestamping (default)</span>
+          <span class="stage-item">SHA-256 content hashing (hash-only privacy default)</span>
+          <span class="stage-item">Kill switch (EU AI Act Art. 14)</span>
+          <span class="stage-item">PAdES PDF signing (<code>[pdf]</code> extra)</span>
+          <span class="stage-item">Optional ML-DSA-65 post-quantum signing (<code>[pqc]</code> extra)</span>
+          <span class="stage-item">LangChain · CrewAI · AutoGen · Haystack · FastAPI · Django integrations</span>
+          <span class="stage-item">SQLite · PostgreSQL · Filesystem storage backends</span>
           <span class="stage-item">OpenTelemetry span export</span>
-          <span class="stage-item">Optional ML-DSA-65 signing (<code>[pqc]</code>)</span>
+          <span class="stage-item">Air-gapped / VS-NfD / EU-sovereign deployment paths</span>
+          <span class="stage-item">BSI IT-Grundschutz preparation scaffolding</span>
         </div>
       </div>
 
       <div class="stage soon">
-        <div class="stage-status">Next months — v3.6</div>
-        <h3 class="stage-title">Cloud-immutable backends and policy enforcement</h3>
-        <p class="stage-description">Sentinel v3.5 ships the filesystem-layer write-once discipline as an application-tier guarantee. v3.6 brings cloud-immutable storage and the enforcement tier that makes retention policies automatically delete expired traces.</p>
+        <div class="stage-status">In development (v3.5+)</div>
+        <h3 class="stage-title">Architecture bridges for enterprise stacks</h3>
+        <p class="stage-description">Four architectural items raised by design partners. All four have committed design docs under <a href="https://github.com/sebastianweiss83/sentinel-kernel/tree/main/docs/architecture">docs/architecture/</a>. A first v3.5.0 implementation was yanked from PyPI after fresh-install verification surfaced critical gaps; the items are back in architecture planning and will re-land when a fresh-venv E2E harness signs off on every claim end to end.</p>
         <div class="stage-items">
-          <span class="stage-item"><b>S3 Object Lock backend</b> · WORM-compliant AWS-side evidence retention</span>
-          <span class="stage-item"><b>Azure Immutable Blob storage</b> · EU-sovereign equivalent</span>
-          <span class="stage-item"><b>Retention enforcement</b> · automatic sweep of traces past their declared retention window</span>
-          <span class="stage-item"><b>Bi-directional OTEL bridge</b> · surface Sentinel trace IDs onto the caller's active span for bi-directional observability joins</span>
+          <span class="stage-item"><b>OpenTelemetry causal-context bridge</b> · when OTEL spans exist, read context and preserve parent-child linkage in cryptographic attestations</span>
+          <span class="stage-item"><b>JSON-LD + PROV-O semantic export</b> · 10-15 year retention format, W3C-standard ontology, offline-verifiable evidence packs</span>
+          <span class="stage-item"><b>Fine-grained retention policies</b> · YAML rules per agent / jurisdiction / policy family, with field-level redaction</span>
+          <span class="stage-item"><b>Write-once storage backends</b> · application-layer tamper prevention (filesystem, S3 Object Lock, Azure Immutable Blob)</span>
         </div>
         <div class="stage-subgroup">
-          <div class="stage-subgroup-label">Further ecosystem bridges · v3.6+ or community</div>
+          <div class="stage-subgroup-label">Further ecosystem bridges · community-driven</div>
           <div class="stage-items">
             <span class="stage-item">MCP gateway integration</span>
             <span class="stage-item">Microsoft AGT bridge</span>

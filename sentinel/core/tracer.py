@@ -153,13 +153,6 @@ class Sentinel:
         self._kill_switch_active = False
         self._kill_switch_reason: str | None = None
 
-        # v3.5 Item 3 — retention policy resolved once per Sentinel
-        # instance. Empty policy (no rules) when no YAML file present,
-        # so v3.4.x behaviour is preserved.
-        from sentinel.retention import load_retention_policy
-
-        self._retention_policy = load_retention_policy()
-
         self.storage.initialise()
 
     def _finalise_trace(self, trace: DecisionTrace) -> None:
@@ -181,26 +174,10 @@ class Sentinel:
             trace.inputs_hash = DecisionTrace._hash(trace.inputs)
         if trace.output and not trace.output_hash:
             trace.output_hash = DecisionTrace._hash(trace.output)
-
-        # v3.5 Item 3 — retention policy. When a YAML rule matches, its
-        # store_inputs / store_outputs / redact_fields / retention_days
-        # override the constructor-level defaults. When no rule matches,
-        # the constructor's store_inputs / store_outputs values govern
-        # (v3.4.x behaviour).
-        action = self._retention_policy.match(trace)
-        if action is not None:
-            from sentinel.retention import apply_retention_action
-
-            apply_retention_action(trace, action)
-            if action.store_inputs is None and not self.store_inputs:
-                trace.inputs = {}
-            if action.store_outputs is None and not self.store_outputs:
-                trace.output = {}
-        else:
-            if not self.store_inputs:
-                trace.inputs = {}
-            if not self.store_outputs:
-                trace.output = {}
+        if not self.store_inputs:
+            trace.inputs = {}
+        if not self.store_outputs:
+            trace.output = {}
 
     @property
     def kill_switch_active(self) -> bool:
@@ -302,16 +279,6 @@ class Sentinel:
             storage_backend=self.storage.backend_name,
             tags=tags,
         )
-
-        # v3.5 Item 1: capture cross-system causal context from any
-        # active OpenTelemetry span. No-op when opentelemetry-api is
-        # not installed or no span is active.
-        from sentinel.core.otel_context import capture_current_otel_context
-
-        if (otel_ctx := capture_current_otel_context()) is not None:
-            trace.otel_trace_id = otel_ctx.trace_id
-            trace.otel_span_id = otel_ctx.span_id
-            trace.otel_parent_span_id = otel_ctx.parent_span_id
 
         # Kill switch check — happens BEFORE policy eval and BEFORE execution
         with self._kill_switch_lock:

@@ -65,11 +65,22 @@ signatures, hash-chain linkage, PAdES-signed PDFs, RFC-3161
 timestamps, and EU jurisdiction sovereignty — mappable directly to
 EU AI Act Art. 12 / Art. 17, BSI IT-Grundschutz, BaFin, MaRisk.
 
-The v3.5 roadmap items (OTEL context bridge, JSON-LD + PROV-O
-export, fine-grained retention, write-once storage) are **bridges**
-to adjacent ecosystems. They are never replacements, never
-"OTEL-native" re-branding, never positioning Sentinel as anything
-other than the Evidence Layer.
+The four v3.5 roadmap items (OTEL context bridge, JSON-LD + PROV-O
+export, fine-grained retention, write-once storage) are **architecture
+planning, not shipped**. A first v3.5.0 implementation was published
+to PyPI on 2026-04-22 and yanked the same day after fresh-venv
+verification surfaced critical gaps. The design docs live under
+[`docs/architecture/v3.5-item-*.md`](docs/architecture/); implementation
+will re-land when a fresh-venv E2E harness signs off end to end.
+
+When they do re-land, they remain **bridges** to adjacent ecosystems.
+They are never replacements, never "OTEL-native" re-branding, never
+positioning Sentinel as anything other than the Evidence Layer.
+
+**Current stable release: v3.4.3** — Ed25519 default signing,
+RFC-3161 EU-sovereign timestamping, hash-chain attestations,
+SHA-256 content hashing, kill switch, and PAdES PDF signing
+(`[pdf]` extra). That's the full shipped capability surface.
 
 Sentinel is the layer that lets regulated institutions **Trace every
 decision, Attest it cryptographically, Audit the record, and Comply**

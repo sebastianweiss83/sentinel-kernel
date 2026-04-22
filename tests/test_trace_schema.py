@@ -77,8 +77,6 @@ def test_to_dict_produces_correct_structure():
         "precedent_trace_ids",
         "signature",
         "signature_algorithm",
-        "storage_mode",  # v3.5 Item 4 — write-once storage discipline claim
-        "otel_context",  # v3.5 causal-context bridge — always present, None when absent
     }
     assert expected_keys == set(d.keys())
 

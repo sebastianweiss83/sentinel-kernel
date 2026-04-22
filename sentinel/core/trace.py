@@ -132,23 +132,6 @@ class DecisionTrace:
     signature: str | None = None
     signature_algorithm: str | None = None
 
-    # Cross-system causal context — W3C Trace Context, captured at
-    # trace time when the caller has an active OpenTelemetry span.
-    # Optional; absent means the caller was not inside an OTEL context
-    # (or did not have ``opentelemetry-api`` installed). v3.5 bridge —
-    # ingress only, Sentinel does not emit OTEL spans in this direction.
-    # Design: docs/architecture/v3.5-item-1-causal-context.md
-    otel_trace_id: str | None = None
-    otel_span_id: str | None = None
-    otel_parent_span_id: str | None = None
-
-    # Storage discipline under which this trace was persisted.
-    # "writeable" — traditional storage (default, backward compat).
-    # "writeonce_fs" — WriteOnceFilesystemStorage (v3.5 Item 4).
-    # "writeonce_s3" — reserved for v3.6+ S3 Object Lock backend.
-    # Design: docs/architecture/v3.5-item-4-writeonce-storage.md
-    storage_mode: str = "writeable"
-
     def __post_init__(self) -> None:
         if self.inputs and not self.inputs_hash:
             self.inputs_hash = self._hash(self.inputs)
@@ -224,18 +207,6 @@ class DecisionTrace:
             "precedent_trace_ids": self.precedent_trace_ids,
             "signature": self.signature,
             "signature_algorithm": self.signature_algorithm,
-            "storage_mode": self.storage_mode,
-            "otel_context": {
-                "trace_id": self.otel_trace_id,
-                "span_id": self.otel_span_id,
-                "parent_span_id": self.otel_parent_span_id,
-            }
-            if (
-                self.otel_trace_id
-                or self.otel_span_id
-                or self.otel_parent_span_id
-            )
-            else None,
         }
 
     def to_json(self) -> str:
@@ -260,12 +231,6 @@ class DecisionTrace:
         trace.latency_ms = data.get("latency_ms")
         trace.signature = data.get("signature")
         trace.signature_algorithm = data.get("signature_algorithm")
-        trace.storage_mode = data.get("storage_mode", "writeable")
-
-        if otel := data.get("otel_context"):
-            trace.otel_trace_id = otel.get("trace_id")
-            trace.otel_span_id = otel.get("span_id")
-            trace.otel_parent_span_id = otel.get("parent_span_id")
         if started := data.get("started_at"):
             from datetime import datetime
             trace.started_at = datetime.fromisoformat(started)

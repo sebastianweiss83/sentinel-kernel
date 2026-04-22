@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "sentinel-kernel"
-version = "3.5.0"
+version = "3.4.3"
 description = "Evidence infrastructure for the regulated AI era. Trace every decision, attest it cryptographically, audit the record, comply with EU AI Act Art. 12/13/14/17 via a signed evidence pack. Air-gapped, offline-first, Apache 2.0."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -48,14 +48,8 @@ classifiers = [
 # maintained, pure-crypto (no network at runtime), and works air-
 # gapped via wheel install. Moved from optional `[ed25519]` extra in
 # v3.4.2 after v3.4.1 shipped the code path but not the dependency.
-#
-# `pyyaml` is required so v3.5 Item 3 retention policies (YAML-based,
-# per-decision retention rules) are a first-class capability and not
-# gated behind an extra. PyYAML is LibYAML/MIT-compatible, offline-
-# safe, one of the most universally installed Python packages.
 dependencies = [
     "cryptography>=42.0",
-    "pyyaml>=6.0",
 ]
 
 [project.optional-dependencies]
@@ -111,13 +105,6 @@ autogen = ["pyautogen>=0.2"]
 # sentinel-kernel[ed25519]` keeps working but adds nothing new.
 ed25519 = ["cryptography>=42.0"]
 
-# JSON-LD + PROV-O semantic export (v3.5 Item 2). Pulls pyld for
-# canonical JSON-LD validation. MIT-licensed, pure Python, no native
-# deps. Evidence packs exported this way are intelligible decades
-# later against the published Sentinel vocabulary at
-# https://sebastianweiss83.github.io/sentinel-kernel/ontology/v1/.
-jsonld = ["pyld>=2.0"]
-
 # PAdES PDF signing (pyhanko — MIT, community-maintained, works offline).
 # Makes the "signed PDF evidence pack" claim truthful in the Adobe /
 # Foxit verification sense, not just hash-manifest sense.
@@ -156,8 +143,6 @@ dev = [
     "reportlab>=4.0",
     "cryptography>=42.0",
     "pyhanko>=0.22",
-    "pyld>=2.0",
-    "types-PyYAML>=6.0",
 ]
 
 [project.scripts]
