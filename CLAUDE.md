@@ -12,15 +12,15 @@
 | Tests | 923 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-22 14:55 UTC |
+| Last updated | 2026-04-22 15:02 UTC |
 
 ## Last 5 commits
 
+- `952ac8e` docs: homepage polish report — 7 changes applied, live on Pages
 - `0019e0e` docs: homepage content polish to match hero-level quality
 - `abc5503` docs: scrub named-partner references from public repo
 - `90fe613` docs: correct homepage to match v3.4.3 reality, not v3.5.0 (yanked)
 - `ceb1dda` docs(v3.5): all 11 phases complete — v3.5.0 shipped, Berthold handoff ready
-- `ad8859d` feat(v3.5.0): homepage roadmap + version bump
 
 ## Open issues
 
