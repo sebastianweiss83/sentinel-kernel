@@ -12,15 +12,15 @@
 | Tests | 1012 passing |
 | Coverage | 100% |
 | Smoke test | 42/42 ✓ |
-| Last updated | 2026-04-22 02:02 UTC |
+| Last updated | 2026-04-22 02:12 UTC |
 
 ## Last 5 commits
 
+- `ceb1dda` docs(v3.5): all 11 phases complete — v3.5.0 shipped, Berthold handoff ready
 - `ad8859d` feat(v3.5.0): homepage roadmap + version bump
 - `a3be4f2` docs(v3.5): Phase 7 complete, Phase 8 homepage opened
 - `a347ae5` feat(v3.5 item 4): write-once filesystem storage backend
 - `ee44ed4` docs(arch): v3.5 Item 4 — write-once storage design
-- `0a0690b` docs(v3.5): Phase 6 complete, Phase 7 write-once opened
 
 ## Open issues
 
