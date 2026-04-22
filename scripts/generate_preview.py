@@ -245,13 +245,38 @@ h1.hero-title {
 }
 .hero-subtitle {
   font-size: 21px; line-height: 1.5;
-  color: var(--ink-muted); max-width: 600px;
+  color: var(--ink-muted); max-width: 620px;
   font-weight: 400; letter-spacing: -0.005em;
   opacity: 0; animation: reveal 0.8s var(--ease) 0.35s forwards;
 }
 @keyframes reveal {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
+}
+.hero-benefits {
+  margin-top: 36px; max-width: 720px;
+  opacity: 0; animation: reveal 0.8s var(--ease) 0.45s forwards;
+}
+.hero-benefits-label {
+  font-size: 12px; font-weight: 600; color: var(--ink);
+  letter-spacing: 0.08em; text-transform: uppercase;
+  margin: 0 0 16px;
+}
+.hero-benefits ul {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.hero-benefits li {
+  font-size: 16px; line-height: 1.55;
+  color: var(--ink-muted); padding-left: 18px; position: relative;
+}
+.hero-benefits li::before {
+  content: ""; position: absolute; left: 0; top: 10px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent);
+}
+.hero-benefits li b {
+  color: var(--ink); font-weight: 600;
 }
 .trust-row {
   margin-top: 44px; padding-top: 32px;
@@ -289,6 +314,10 @@ h1.hero-title {
   color: var(--signal-amber);
 }
 .countdown-text strong { color: var(--ink); font-weight: 600; }
+.countdown-tagline {
+  margin-top: 8px; font-size: 13.5px; color: var(--ink-muted);
+  font-style: italic; line-height: 1.5;
+}
 .countdown-days {
   display: flex; align-items: baseline; gap: 10px;
   font-family: 'Inter Tight', 'Inter', sans-serif;
@@ -779,12 +808,16 @@ h1.hero-title {
 }
 .positioning-is p { font-size: 16px; line-height: 1.65; color: var(--ink-muted); margin-bottom: 16px; }
 .positioning-is em { color: var(--accent); font-style: italic; }
-.positioning-isnot h3 {
+.positioning-isnot h3.positioning-claim {
   font-family: 'Inter Tight', 'Inter', sans-serif;
-  font-size: 20px; font-weight: 600; letter-spacing: -0.02em;
-  color: var(--ink); margin: 22px 0 10px;
+  font-size: 26px; font-weight: 600; letter-spacing: -0.025em;
+  color: var(--ink); margin: 46px 0 24px; line-height: 1.3;
 }
-.positioning-isnot h3:first-child { margin-top: 46px; }
+.positioning-isnot h4 {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 18px; font-weight: 600; letter-spacing: -0.01em;
+  color: var(--ink); margin: 22px 0 8px;
+}
 .positioning-isnot p { font-size: 15px; line-height: 1.65; color: var(--ink-muted); }
 .positioning-closer {
   margin-top: 26px; padding: 20px 22px;
@@ -1180,6 +1213,8 @@ h1.hero-title {
   .hero-subtitle { font-size: 17px; }
   .trust-row { gap: 10px 22px; margin-top: 32px; padding-top: 24px; }
   .trust-item { font-size: 10.5px; }
+  .hero-benefits { margin-top: 28px; }
+  .hero-benefits li { font-size: 15px; }
   .countdown-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
   .journey { padding: 60px 0 80px; }
   .journey-grid { grid-template-columns: 1fr; gap: 36px; }
@@ -1410,9 +1445,17 @@ def _section_hero(version: str, tests_n: str, coverage: str) -> str:
     return f"""
 <section class="hero">
   <div class="container">
-    <div class="eyebrow">The Sentinel Platform · <span data-ci="version">v{version}</span></div>
-    <h1 class="hero-title">Evidence infrastructure<br>for the regulated AI era</h1>
-    <p class="hero-subtitle">Every agent decision, turned into a signed and independently verifiable audit package: on-premise, under your jurisdiction, compatible with your existing stack.</p>
+    <div class="eyebrow">Sentinel · <span data-ci="version">v{version}</span> · Trace-to-Trust kernel for regulated AI</div>
+    <h1 class="hero-title">The evidence infrastructure<br>for regulated AI.</h1>
+    <p class="hero-subtitle">Sentinel is the Trace-to-Trust kernel that turns EU AI Act compliance from a blocker into a baseline. Every agent decision is traced, attested, and sealed at runtime — so your teams stop fighting audits and keep shipping.</p>
+    <div class="hero-benefits">
+      <div class="hero-benefits-label">Key benefits</div>
+      <ul>
+        <li><b>Pre-execution, not post-mortem.</b> Evidence is produced the moment each agent acts — not reconstructed when auditors arrive.</li>
+        <li><b>Cryptographically bound, legally durable.</b> Ed25519 signatures, RFC-3161 timestamps, and PAdES-sealed packs provide long-term verifiable proof, designed for 10+ year retention.</li>
+        <li><b>One baseline for every stakeholder.</b> Product, Risk, Security and Legal work from the same Trace-to-Trust layer — no more reconciling conflicting audit trails.</li>
+      </ul>
+    </div>
     <div class="trust-row">
       <div class="trust-item"><span class="trust-dot"></span>Apache 2.0</div>
       <div class="trust-item"><span class="trust-dot"></span><span data-ci="tests">{tests_n} tests passing</span></div>
@@ -1436,14 +1479,15 @@ def _section_countdown(days: int) -> str:
         <svg class="icon" viewBox="0 0 24 24"><path d="M12 9v4"/><path d="m12 17 .01 0"/><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/></svg>
       </div>
       <div>
-        <strong>EU AI Act Annex III enforcement — 2 August 2026.</strong>
-        High-risk AI systems must produce automatic tamper-resistant evidence.
+        <strong>EU AI Act Annex III enforcement — 2 August 2026</strong>
+        <br>High-risk AI systems must produce automatic tamper-resistant evidence.
         Penalties up to €15M or 3% of global annual turnover.
+        <div class="countdown-tagline">Sentinel customers are already shipping production AI through the same governed path they'll run on August 3rd.</div>
       </div>
     </div>
     <div class="countdown-days">
       <div class="countdown-n" data-ci="days">{days}</div>
-      <div class="countdown-label">days remaining</div>
+      <div class="countdown-label">days until enforcement</div>
     </div>
   </div>
 </section>
@@ -1797,12 +1841,13 @@ def _section_positioning() -> str:
         <p>Sentinel maps directly to EU AI Act Art. 12 (record-keeping) and Art. 17 (quality management). It supports BSI IT-Grundschutz preparation, BaFin and MaRisk requirements, and any regulator who asks the fundamental question: <em>&ldquo;Can you prove what your AI did, and when?&rdquo;</em></p>
       </div>
       <div class="positioning-col positioning-isnot">
-        <div class="positioning-eyebrow">What Sentinel is not</div>
-        <h3>Not an observability platform.</h3>
-        <p>Sentinel does not replace Langfuse, Datadog, Arize, LangSmith, or Microsoft Application Insights. Use those for performance, cost, debugging, and drift detection.</p>
-        <h3>Not an AI governance enforcement tool.</h3>
-        <p>Sentinel does not replace Microsoft Agent Governance Toolkit, OPA, Cedar, or AWS Bedrock Guardrails. Use those for runtime policy enforcement, access control, and guardrails.</p>
-        <p class="positioning-closer"><b>Sentinel produces the cryptographic evidence those tools cannot.</b> When your auditor asks for proof in a courtroom-defensible form, that is the question Sentinel answers — and the question no observability or governance tool was designed to solve.</p>
+        <div class="positioning-eyebrow">Where Sentinel fits in your stack</div>
+        <h3 class="positioning-claim">Sentinel is the cryptographic evidence layer that observability and governance tools don&rsquo;t produce.</h3>
+        <h4>Not observability</h4>
+        <p>Langfuse, Datadog, Arize, and LangSmith give you performance, cost, and drift signals. Sentinel gives you legally durable evidence of what each agent decided.</p>
+        <h4>Not governance enforcement</h4>
+        <p>Microsoft AGT, OPA, Cedar, and Bedrock Guardrails enforce policies at runtime. Sentinel seals the cryptographic proof that those policies were applied.</p>
+        <p class="positioning-closer">When an auditor asks for courtroom-defensible proof, that is the question Sentinel answers — and the question no observability or governance tool was designed to solve.</p>
       </div>
     </div>
   </div>
@@ -2068,33 +2113,45 @@ def _section_compliance_articles() -> str:
 def _section_industry() -> str:
     cards = [
         (
-            "Defence &amp; aerospace",
-            "Procurement, logistics, dual-use assessment. Air-gapped and classified deployments with VS-NfD path.",
-            ["EU AI Act", "BSI IT-Grundschutz", "VS-NfD"],
-        ),
-        (
-            "Financial services",
-            "Credit decisioning, fraud scoring, AML, transaction approval. DORA-aligned logging, BaFin BAIT evidence.",
+            "Banking &amp; Financial Services",
+            "A German bank runs credit decisioning, fraud scoring, AML, and "
+            "transaction approval through Sentinel. When BaFin requests "
+            "evidence on model drift under BAIT &sect;6.3, they deliver "
+            "signed evidence packs in minutes &mdash; not weeks of log "
+            "reconstruction.",
             ["EU AI Act", "DORA", "BaFin BAIT", "MaRisk"],
         ),
         (
-            "Insurance",
-            "Underwriting, claims triage, pricing. GDPR Art. 22 explainable decision records for regulated customer outcomes.",
-            ["EU AI Act", "GDPR Art. 22", "Solvency II"],
+            "Defence &amp; Aerospace",
+            "Procurement, logistics, dual-use assessment. Air-gapped and "
+            "classified deployments with VS-NfD path. Cryptographic "
+            "evidence that survives supply-chain scrutiny and "
+            "export-control audits.",
+            ["EU AI Act", "BSI IT-Grundschutz", "VS-NfD"],
         ),
         (
-            "Public sector &amp; KRITIS",
-            "Benefit eligibility, permit approval, critical-infrastructure AI. Statutory transparency under NIS2 and sector law.",
+            "Enterprise Software &amp; AI Platform Providers",
+            "Enterprise software firms embed AI into products sold to "
+            "regulated customers. Sentinel gives their customers the "
+            "evidence packs needed to deploy those products under the "
+            "EU AI Act &mdash; without reinventing compliance "
+            "infrastructure per vendor.",
+            ["EU AI Act", "ISO 42001", "Customer conformity assessments"],
+        ),
+        (
+            "Public Sector &amp; KRITIS",
+            "Benefit eligibility, permit approval, critical-infrastructure "
+            "AI. Statutory transparency under NIS2 and sector law. "
+            "Evidence packs that regulators, courts, and citizens can "
+            "independently verify.",
             ["EU AI Act", "NIS2", "E-Government law"],
         ),
         (
-            "Healthcare",
-            "Clinical decision support, diagnostic triage, prior-authorisation. Evidence suitable for medical-device auditors.",
-            ["EU AI Act", "GDPR", "MDR"],
-        ),
-        (
-            "Industrial manufacturing",
-            "Quality control, predictive maintenance, robotic decisioning. Standards-aligned retention across plant lifetimes.",
+            "Industrial Manufacturing",
+            "Quality control, predictive maintenance, robotic decisioning. "
+            "Standards-aligned retention across plant lifetimes &mdash; "
+            "15+ year evidence archival in formats that outlive every "
+            "vendor swap.",
             ["EU AI Act", "ISO 42001", "IEC 62443"],
         ),
     ]
@@ -2112,7 +2169,7 @@ def _section_industry() -> str:
 <section class="industry fade-section" id="industry">
   <div class="container">
     <div class="industry-head">
-      <div class="industry-eyebrow">Built for regulated industries</div>
+      <div class="industry-eyebrow">Where procurement is already active</div>
       <h2 class="industry-title">Where the<br>deadline bites first.</h2>
       <p class="industry-lede">EU AI Act enforcement applies to decisions that touch rights, access to services, safety, or meaningful financial outcomes. The architecture is technology-agnostic; the sectors below are where procurement is already active.</p>
     </div>
@@ -2161,7 +2218,7 @@ def _section_roadmap(tests_n: str) -> str:
       <div class="stage soon">
         <div class="stage-status">In development (v3.5+)</div>
         <h3 class="stage-title">Architecture bridges for enterprise stacks</h3>
-        <p class="stage-description">Four architectural items raised by design partners. All four have committed design docs under <a href="https://github.com/sebastianweiss83/sentinel-kernel/tree/main/docs/architecture">docs/architecture/</a>. A first v3.5.0 implementation was yanked from PyPI after fresh-install verification surfaced critical gaps; the items are back in architecture planning and will re-land when a fresh-venv E2E harness signs off on every claim end to end.</p>
+        <p class="stage-description">Four architectural items raised by design partners. All four have committed design docs under <a href="https://github.com/sebastianweiss83/sentinel-kernel/tree/main/docs/architecture">docs/architecture/</a>. Each item re-ships to production only after passing our fresh-venv E2E verification harness &mdash; discipline over shipping speed.</p>
         <div class="stage-items">
           <span class="stage-item"><b>OpenTelemetry causal-context bridge</b> · when OTEL spans exist, read context and preserve parent-child linkage in cryptographic attestations</span>
           <span class="stage-item"><b>JSON-LD + PROV-O semantic export</b> · 10-15 year retention format, W3C-standard ontology, offline-verifiable evidence packs</span>
@@ -2212,10 +2269,10 @@ def _section_cta() -> str:
   <div class="container">
     <div class="cta-eyebrow">Get Started</div>
     <h2 class="cta-title">Ready to use Sentinel?</h2>
-    <p class="cta-body">Sentinel is onboarding a select group of regulated enterprises building production-grade AI. Request a design-partner conversation, or read the technical documentation to see how Sentinel fits your stack.</p>
+    <p class="cta-body">Sentinel is in design partnership with a select group of regulated enterprises building production-grade agentic AI under the EU AI Act. Request a working session with our team, or explore the code on GitHub.</p>
     <div class="cta-buttons">
       <a href="mailto:sebastian@swentures.com" class="btn-primary">
-        Request a conversation
+        Request a working session
         <svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
       </a>
       <a href="https://github.com/sebastianweiss83/sentinel-kernel" class="btn-secondary">
