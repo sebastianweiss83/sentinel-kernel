@@ -18,11 +18,15 @@ Single source of truth for Sebastian's morning check. Updated at every phase bou
 | 5 | Berthold item 2: JSON-LD + PROV-O | ✅ done | 2026-04-22 | 1.2 / 12 h |
 | 6 | Berthold item 3: retention policies | ✅ done | 2026-04-22 | 1.6 / 10 h |
 | 7 | Berthold item 4: write-once storage | ✅ done | 2026-04-22 | 1.5 / 14 h |
-| 8 | Homepage update (Marc-visible) | 🏗 in progress | — | — / 4 h |
-| 9 | v3.5.0 release | ⏸ blocked by Phase 8 | — | — / 4 h |
-| 10 | Berthold handoff package | ⏸ blocked by Phase 9 | — | — / 2 h |
+| 8 | Homepage update (Marc-visible) | ✅ done | 2026-04-22 | 0.4 / 4 h |
+| 9 | v3.5.0 release | ✅ done | 2026-04-22 | 0.6 / 4 h |
+| 10 | Berthold handoff package | ✅ done | 2026-04-22 | 0.5 / 2 h |
 
-Total plan budget: **74.5 h**. Consumed: **~1.2 h** (Phases 0 + 1).
+**Total plan budget: 74.5 h. Consumed: ~9.1 h. All phases complete.**
+
+v3.5.0 live on PyPI (`pip install sentinel-kernel==3.5.0`).
+Fresh-venv E2E for all four Berthold items PASSED.
+Berthold handoff package at `~/Library/Mobile Documents/com~apple~CloudDocs/Sentinel Strategy/BERTHOLD_HANDOFF.md`.
 
 ## Phase 0 — Pre-flight
 
@@ -223,9 +227,53 @@ SUCCESS: v3.4.3 default sign path embeds RFC-3161 TST on reachable TSA
 
 **Tests:** 1012 passing, 100% coverage, 42/42 smoke.
 
-## Phase 8 — Homepage update (Marc-visible)
+## Phase 8 — Homepage update (Marc-visible) ✅
 
-**Status:** 🏗 in progress. 4h budget.
+**Commits on main:**
+
+- `a3613ea` — `feat(v3.5.0): homepage roadmap + version bump`
+
+**What shipped:**
+
+- `scripts/generate_preview.py::_section_roadmap` rewritten so the "Available today" column now includes the four bold v3.5 items (OTEL bridge, JSON-LD + PROV-O, retention policies, write-once storage). The "Next months" column repopulates with v3.6 items (S3 Object Lock, Azure Immutable Blob, retention enforcement sweep, bi-directional OTEL).
+- CLAUDE.md auto-regenerates on next CI push; the positioning copy already matches v3.5 reality.
+- The Marc-visible result: when the Commerzbank working group reads the homepage, the four items are shipped, not aspirational.
+
+## Phase 9 — v3.5.0 release ✅
+
+**Commits on main:**
+
+- `a3613ea` — version bump to 3.5.0 (bundled with Phase 8)
+
+**Tag:** `v3.5.0` on `ad8859d` (pre-sync release commit).
+
+**CI:** main run `24752868876` green. Release workflow `24753037869` green — PyPI publish + digital attestations.
+
+**PyPI:** `sentinel-kernel==3.5.0` live.
+
+**Comprehensive fresh-venv E2E — all four Berthold items back-to-back:**
+
+```
+[1/4] ✓ OTEL causal-context bridge: otel_trace_id=e4759ababd5a0abd...
+[2/4] ✓ JSON-LD + PROV-O: 4 nodes, PROV-O + Sentinel vocab both resolve
+[3/4] ✓ retention policies: credit_agent=full/3650d, chat_agent=hash-only/30d
+[4/4] ✓ write-once: overwrite correctly rejected
+
+v3.5.0 fresh-venv E2E — ALL 4 ITEMS PASS
+```
+
+## Phase 10 — Berthold handoff package ✅
+
+**File:** `~/Library/Mobile Documents/com~apple~CloudDocs/Sentinel Strategy/BERTHOLD_HANDOFF.md` (iCloud, not in git per CLAUDE.md content boundary).
+
+**Contents:**
+
+1. Recap of Berthold's four points.
+2. How each is addressed in v3.5.0 with line-level references to architecture docs, modules, and test suites.
+3. Suggested < 10-minute evaluation path for his developers against PyPI.
+4. Four open v3.6 architectural questions where Berthold's operational perspective would materially improve the design (retention enforcement, bi-directional OTEL, EU-sovereign cloud backends, chain namespace governance).
+5. Ready-to-send email draft.
+6. Outstanding on Sebastian's side: one-click yank of v3.4.1 from PyPI (inherited from Phase 1).
 
 ## Operating notes
 
