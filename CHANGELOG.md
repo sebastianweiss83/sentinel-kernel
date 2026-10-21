@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Nested `@sentinel.trace` calls.** A sync traced function called
+  from inside another traced function, or from async code, raised
+  `RuntimeError: asyncio.run() cannot be called from a running event
+  loop`. This was the root cause of the v3.5.0 OTEL causal-context
+  failure. Sync calls now run on a worker-thread event loop when a
+  loop is already running, with `contextvars` copied so an active
+  OpenTelemetry span stays visible. `Sentinel.preflight()` gets the
+  same fix. Verified on a fresh-venv install of the built wheel.
+- PAdES timestamp tests no longer depend on a pyhanko attribute that
+  newer pyhanko releases removed; a `type: ignore` in the PAdES signer
+  now works across pyhanko versions.
+
 ### v3.5 status — back to architecture planning
 
 `v3.5.0` was published on 2026-04-22 and **yanked from PyPI the same

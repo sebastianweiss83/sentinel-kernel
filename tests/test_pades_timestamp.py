@@ -113,6 +113,21 @@ def test_default_timestamper_honours_opt_out(
 # ---------------------------------------------------------------------------
 
 
+def _has_signature_timestamp(sig: object) -> bool:
+    """True if the CMS signature carries an RFC-3161 signature timestamp.
+
+    Reads the unsigned attributes directly instead of pyhanko's
+    ``attached_timestamp_data`` property, which was removed in newer
+    pyhanko releases.
+    """
+    unsigned = sig.signer_info["unsigned_attrs"]  # type: ignore[attr-defined]
+    if not unsigned.native:
+        return False
+    return any(
+        attr["type"].native == "signature_time_stamp_token" for attr in unsigned
+    )
+
+
 def test_sign_pdf_fallback_on_failing_timestamper(tmp_path: Path) -> None:
     signer = _make_signer()
     pdf_in = tmp_path / "in.pdf"
@@ -134,7 +149,7 @@ def test_sign_pdf_fallback_on_failing_timestamper(tmp_path: Path) -> None:
     with pdf_out.open("rb") as f:
         sig = PdfFileReader(f).embedded_signatures[0]
         # Fallback path: signature present, no attached TST.
-        assert sig.attached_timestamp_data is None
+        assert not _has_signature_timestamp(sig)
 
 
 def test_sign_pdf_opt_out_via_explicit_none(tmp_path: Path) -> None:
@@ -155,7 +170,7 @@ def test_sign_pdf_opt_out_via_explicit_none(tmp_path: Path) -> None:
     assert user_warnings == []
     with pdf_out.open("rb") as f:
         sig = PdfFileReader(f).embedded_signatures[0]
-        assert sig.attached_timestamp_data is None
+        assert not _has_signature_timestamp(sig)
 
 
 def test_sign_pdf_opt_out_via_env(
@@ -172,7 +187,7 @@ def test_sign_pdf_opt_out_via_env(
 
     with pdf_out.open("rb") as f:
         sig = PdfFileReader(f).embedded_signatures[0]
-        assert sig.attached_timestamp_data is None
+        assert not _has_signature_timestamp(sig)
 
 
 def test_sign_pdf_passes_default_timestamper_when_not_overridden(
