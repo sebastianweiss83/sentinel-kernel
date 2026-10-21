@@ -80,11 +80,46 @@ Open architectural questions:
 
 No code committed. Design partner input pending.
 
+## Item 5: Signed attestations for AI code attribution
+
+The need: AI agents now write a growing share of the code that runs
+in regulated systems. Auditors increasingly ask who authored that
+code — a human or an AI agent — under which policy, and who approved
+it. Open attribution formats (for example the Agent Trace
+specification) record which lines an agent produced and link them
+to the originating conversation. They do not make that record
+tamper-resistant: an attribution log can be edited or dropped after
+the fact.
+
+Sentinel's role would be the evidence layer on top of such a format,
+not a competing format: sign and timestamp attribution records so
+they become verifiable evidence instead of editable logs.
+
+Scope boundary: this targets code shipped into regulated systems,
+where the organisation controls the toolchain. It does not try to
+verify contributions from untrusted outside contributors — that
+record can only be captured on the contributor's machine and cannot
+be enforced.
+
+Open architectural questions:
+
+- Which attribution format(s) to accept as input — Agent Trace only,
+  or an adapter interface?
+- Attest per commit, per pull request, or per release?
+- Where does signing happen — CI pipeline, merge hook, or release
+  build?
+- How does code attribution map to existing `DecisionTrace` fields,
+  or does it need its own record type (RFC required)?
+
+No code committed. To be validated with design partners before
+prioritising against Items 1–4.
+
 ---
 
 ## Status
 
-These four items represent v3.5 planning. Implementation begins
+Items 1–4 represent v3.5 planning; Item 5 is a candidate, not yet
+prioritised. Implementation begins
 after architecture has been validated with at least one design
 partner. The order of implementation will be determined by
 design-partner priorities.
