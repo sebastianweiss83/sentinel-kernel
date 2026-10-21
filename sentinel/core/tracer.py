@@ -8,6 +8,8 @@ Wrap any function with @sentinel.trace and it becomes sovereign.
 from __future__ import annotations
 
 import asyncio
+import concurrent.futures
+import contextvars
 import functools
 import inspect
 import threading
@@ -35,6 +37,32 @@ from sentinel.storage.sqlite import SQLiteStorage
 _DEFAULT = object()
 _DEFAULT_DB_PATH = "./sentinel-traces.db"
 _MIGRATION_WARNING_EMITTED = False
+
+
+def _run_sync(coro: Any) -> Any:
+    """Run a coroutine to completion from synchronous code.
+
+    ``asyncio.run()`` refuses to start while an event loop is already
+    running in the current thread. That happens whenever a sync
+    ``@sentinel.trace`` function is called from inside another traced
+    function (nested agents) or from async application code. In that
+    case the coroutine runs on its own event loop in a short-lived
+    worker thread, and the caller blocks until it finishes, which is
+    the contract of a synchronous call.
+
+    ``contextvars`` are copied into the worker thread, so context such
+    as an active OpenTelemetry span stays visible to the traced
+    function.
+
+    Sovereignty: in-process only. No network. Works air-gapped.
+    """
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        return asyncio.run(coro)
+    ctx = contextvars.copy_context()
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+        return pool.submit(ctx.run, asyncio.run, coro).result()
 
 
 class Sentinel:
@@ -240,7 +268,7 @@ class Sentinel:
 
             @functools.wraps(f)
             def sync_wrapper(*args: Any, **kwargs: Any) -> Any:
-                return asyncio.run(
+                return _run_sync(
                     self._execute_traced(f, args, kwargs, name, policy, tags or {})
                 )
 
@@ -463,7 +491,7 @@ class Sentinel:
             inputs={"action_type": action_type},
         )
         try:
-            result = asyncio.run(
+            result = _run_sync(
                 evaluator.evaluate(
                     policy_path=action_type,
                     inputs={"action_type": action_type},
